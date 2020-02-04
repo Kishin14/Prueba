@@ -64,7 +64,7 @@ function autocompleteCodigoContable(){
 	
 	var encabezado_registro_id = $("#encabezado_registro_id").val();
 	
-	$("input[name=puc]").autocomplete("/application/framework/clases/ListaInteligente.php?consulta=cuentas_movimiento&encabezado_registro_id="+encabezado_registro_id, {
+	$("input[name=puc]").autocomplete("../../../framework/clases/ListaInteligente.php?consulta=cuentas_movimiento&encabezado_registro_id="+encabezado_registro_id, {
 		width: 260,
 		selectFirst: true,
 		minChars: 4,
@@ -93,7 +93,7 @@ function autocompleteCodigoContable(){
 
 function autocompleteTercero(){
 	
-	$("input[name=tercero]").autocomplete("/application/framework/clases/ListaInteligente.php?consulta=tercero", {
+	$("input[name=tercero]").autocomplete("../../../framework/clases/ListaInteligente.php?consulta=tercero", {
 		width: 260,
 		selectFirst: true
 	});
@@ -121,7 +121,7 @@ function autocompleteTercero(){
 
 function autocompleteCentroCosto(){
 	
-	$("input[name=centro_de_costo]").autocomplete("/application/framework/clases/ListaInteligente.php?consulta=centro_costo", {
+	$("input[name=centro_de_costo]").autocomplete("../../../framework/clases/ListaInteligente.php?consulta=centro_costo", {
 		width: 260,
 		selectFirst: true
 	});

@@ -1,8 +1,8 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <link rel="stylesheet" href="/application/framework/css/bootstrap1.css">
-    <script src="/application/framework/clases/tinymce_4.4.1_dev/tinymce/js/tinymce/tinymce.min.js"></script> 
+    <link rel="stylesheet" href="../../../framework/css/bootstrap1.css">
+    <script src="../../../framework/clases/tinymce_4.4.1_dev/tinymce/js/tinymce/tinymce.min.js"></script> 
     {$JAVASCRIPT}
     {$TABLEGRIDJS}
     {$CSSSYSTEM}

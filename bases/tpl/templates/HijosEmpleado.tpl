@@ -65,7 +65,7 @@
        <input type="text" autocomplete="off" name="ubicacion" id="ubicacion" value="{$d.ubicacion}" class="required saltoscrolldetalle" />     
        <input type="hidden" name="ubicacion_id" id="ubicacion_id" value="{$d.ubicacion_id}" class="required integer" />            
                </td> 
-                <td><a name="saveDetalle"><img src="/application/framework/media/images/grid/save.png" /></a></td>
+                <td><a name="saveDetalle"><img src="../../../framework/media/images/grid/save.png" /></a></td>
                 <td><input type="checkbox" name="procesar" /></td>     
             </tr>   
             {/foreach}
@@ -99,7 +99,7 @@
             <input type="hidden" name="ubicacion_id" id="ubicacion_id" value="" class="required integer">    
 
                   </td>     
-                <td><a name="saveDetalle"><img src="/application/framework/media/images/grid/save.png" /></a></td>
+                <td><a name="saveDetalle"><img src="../../../framework/media/images/grid/save.png" /></a></td>
                 <td><input type="checkbox" name="procesar" /></td>    
             </tr> 
             <tr id="clon">
@@ -134,7 +134,7 @@
        <input type="text" autocomplete="off" name="ubicacion" id="ubicacion" value="" class="required saltoscrolldetalle">     
        <input type="hidden" name="ubicacion_id" id="ubicacion_id" value="" class="required integer">            
               </td> 
-                <td><a name="saveDetalle"><img src="/application/framework/media/images/grid/save.png" /></a></td>
+                <td><a name="saveDetalle"><img src="../../../framework/media/images/grid/save.png" /></a></td>
                 <td><input type="checkbox" name="procesar" /></td>    
             </tr>      
   	       </tbody>

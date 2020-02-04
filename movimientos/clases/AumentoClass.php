@@ -96,12 +96,12 @@
 			$fecha_inicio = $_REQUEST['fecha_inicio'];
 			$fecha_final = $_REQUEST['fecha_final'];
 
-			$Layout -> setCssInclude("/application/framework/css/reset.css");
-			$Layout -> setCssInclude("/application/framework/css/general.css");
-			$Layout -> setCssInclude("/application/framework/css/bootstrap.css");
-			$Layout -> setCssInclude("/application/framework/css/generalDetalle.css");
-			$Layout	-> setJsInclude("/application/framework/js/jquery.js");
-			$Layout	-> setJsInclude("/application/nomina/movimientos/js/DetallesAumento.js");
+			$Layout -> setCssInclude("../../../framework/css/reset.css");
+			$Layout -> setCssInclude("../../../framework/css/general.css");
+			$Layout -> setCssInclude("../../../framework/css/bootstrap.css");
+			$Layout -> setCssInclude("../../../framework/css/generalDetalle.css");
+			$Layout	-> setJsInclude("../../../framework/js/jquery.js");
+			$Layout	-> setJsInclude("../js/DetallesAumento.js");
 			$Layout -> assign("CSSSYSTEM",$Layout -> getCssInclude());
 			$Layout -> assign("JAVASCRIPT",$Layout -> getJsInclude());
 

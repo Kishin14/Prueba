@@ -224,7 +224,7 @@ function NovedadOnReset(formulario){
 	
 	Reset(formulario);
     clearFind();	
-	$("#detalleNovedad").attr("src","/application/framework/tpl/blank.html");	
+	$("#detalleNovedad").attr("src","../../../framework/tpl/blank.html");	
     /*setFocusFirstFieldForm(formulario);	
     resetDetalle('detalleNovedad');	*/
 	

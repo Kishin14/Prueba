@@ -28,24 +28,24 @@ final class ConyugeEmpleadoLayout extends View{
    
    public function setIncludes(){
 	 
-     $this -> TplInclude -> IncludeCss("/application/framework/css/reset.css");
-     $this -> TplInclude -> IncludeCss("/application/framework/css/general.css");
-     $this -> TplInclude -> IncludeCss("/application/framework/css/generalDetalle.css");
+     $this -> TplInclude -> IncludeCss("../../../framework/css/reset.css");
+     $this -> TplInclude -> IncludeCss("../../../framework/css/general.css");
+     $this -> TplInclude -> IncludeCss("../../../framework/css/generalDetalle.css");
      $this -> TplInclude -> IncludeCss("https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css");
-     $this -> TplInclude -> IncludeCss("/application/framework/css/jquery.autocomplete.css");
-     $this -> TplInclude -> IncludeCss("/application/framework/css/jquery.alerts.css");
+     $this -> TplInclude -> IncludeCss("../../../framework/css/jquery.autocomplete.css");
+     $this -> TplInclude -> IncludeCss("../../../framework/css/jquery.alerts.css");
      $this -> TplInclude -> IncludeJs("https://code.jquery.com/jquery-2.2.0.min.js");
      
      $this ->  TplInclude  ->  IncludeJs("https://code.jquery.com/ui/1.11.4/jquery-ui.js");
      
-     $this -> TplInclude -> IncludeJs("/application/framework/js/jquery.autocomplete.js");
-     $this -> TplInclude -> IncludeJs("/application/framework/js/funciones.js");
-     $this -> TplInclude -> IncludeJs("/application/framework/js/funcionesDetalle.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.autocomplete.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/funciones.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/funcionesDetalle.js");
 	 
-	   $this -> TplInclude -> IncludeJs("/application/framework/js/funcionesDetalle.js");
+	   $this -> TplInclude -> IncludeJs("../../../framework/js/funcionesDetalle.js");
  
-     $this -> TplInclude -> IncludeJs("/application/nomina/bases/js/ConyugeEmpleado.js");
-     $this -> TplInclude -> IncludeJs("/application/framework/js/colResizable-1.3.min.js");
+     $this -> TplInclude -> IncludeJs("../js/ConyugeEmpleado.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/colResizable-1.3.min.js");
 	  	  
      $this -> assign("CSSSYSTEM",  $this -> TplInclude -> GetCssInclude());
      $this -> assign("JAVASCRIPT", $this -> TplInclude -> GetJsInclude());

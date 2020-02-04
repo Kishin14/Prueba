@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
   <head>
    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-   <link rel="stylesheet" href="/application/framework/css/bootstrap1.css">
+   <link rel="stylesheet" href="../../../framework/css/bootstrap1.css">
   {$JAVASCRIPT}
   {$CSSSYSTEM}
   </head>
@@ -30,7 +30,7 @@
 		 {/foreach}
 	   </select>
 	 </td>
-     <td><a name="saveDetalle"><img src="/application/framework/media/images/grid/save.png" /></a></td>
+     <td><a name="saveDetalle"><img src="../../../framework/media/images/grid/save.png" /></a></td>
      <td><input type="checkbox" name="procesar" /></td>     
     </tr>   
     {/foreach}
@@ -45,7 +45,7 @@
 		 {/foreach}
 	   </select>
 	 </td>
-     <td><a name="saveDetalle"><img src="/application/framework/media/images/grid/save.png" /></a></td>
+     <td><a name="saveDetalle"><img src="../../../framework/media/images/grid/save.png" /></a></td>
      <td><input type="checkbox" name="procesar" /></td>    
     </tr>       
 	</tbody>
@@ -63,7 +63,7 @@
 		 {/foreach}
 	   </select>
 	 </td>
-     <td><a name="saveDetalle"><img src="/application/framework/media/images/grid/save.png" /></a></td>
+     <td><a name="saveDetalle"><img src="../../../framework/media/images/grid/save.png" /></a></td>
      <td><input type="checkbox" name="procesar" /></td>      
     </tr>      
   </table>

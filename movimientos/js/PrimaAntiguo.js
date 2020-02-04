@@ -471,7 +471,7 @@ function PrimaOnReset(formulario){
     if($('#actualizar')) $('#actualizar').attr("disabled","true");
     if($('#borrar'))     $('#borrar').attr("disabled","true");
     if($('#limpiar'))    $('#limpiar').attr("disabled","");	
-	 $("#detallePrima").attr("src","/application/framework/tpl/blank.html");	
+	 $("#detallePrima").attr("src","../../../framework/tpl/blank.html");	
 	 
 	 $("#tipo_liquidacion").val('T');
 	 $("#si_empleado").val('1');
@@ -510,7 +510,7 @@ $(document).ready(function(){
 
 						   
 
-  $("#detallePrima").attr("src","/application/framework/tpl/blank.html");	
+  $("#detallePrima").attr("src","../../../framework/tpl/blank.html");	
 
 
 	 $("#fecha_dis_inicio").change(function(){

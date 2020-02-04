@@ -33,7 +33,7 @@
      <td><input type="text" autocomplete="off" name="credito" id="credito" value="{$d.credito}" class="required numeric" readonly /> </td>
 	 <td><input type="text" autocomplete="off" name="dias" id="dias" value="{$d.dias}" class="required" readonly /></td>
      <td><input type="text" autocomplete="off" name="observacion" id="observacion" value="{$d.observacion}"  /></td>
-     <td>{if $d.estado eq 'E'}<a name="saveDetalleSoliServi"><img src="/application/framework/media/images/grid/save.png" /></a>{else}&nbsp; {/if}</td>
+     <td>{if $d.estado eq 'E'}<a name="saveDetalleSoliServi"><img src="../../../framework/media/images/grid/save.png" /></a>{else}&nbsp; {/if}</td>
      <td>{if $d.estado eq 'E'}<input type="checkbox" name="procesar" />{else}&nbsp; {/if}</td>     
     </tr>   
     {/foreach}

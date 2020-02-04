@@ -53,7 +53,7 @@
 	 <td><input type="text" autocomplete="off" name="dias" id="dias" value="{$d.dias}" class="required" /></td>
      <td align="right"><input type="text" autocomplete="off" name="valor" id="valor" style="text-align:right;" value="{$d.valor}" class="required numeric" /> </td>    
      <td><input type="text" autocomplete="off" name="observacion" id="observacion" value="{$d.observacion}" class="required" /></td>
-     <td><a name="saveDetalleSoliServi"><img src="/application/framework/media/images/grid/save.png" /></a></td>
+     <td><a name="saveDetalleSoliServi"><img src="../../../framework/media/images/grid/save.png" /></a></td>
      <td><input type="checkbox" name="procesar" /></td>     
     </tr>
     </tbody>
@@ -108,7 +108,7 @@
 	 <td><input type="text" autocomplete="off" name="dias" id="dias" value="{$d.dias}" class="required" /></td>
      <td align="right"><input type="text" autocomplete="off" name="valor" id="valor" style="text-align:right;" value="{$d.valor}" class="required numeric" /> </td>    
      <td><input type="text" autocomplete="off" name="observacion" id="observacion" value="{$d.observacion}" class="required" /></td>
-     <td><a name="saveDetalleSoliServi"><img src="/application/framework/media/images/grid/save.png" /></a></td>
+     <td><a name="saveDetalleSoliServi"><img src="../../../framework/media/images/grid/save.png" /></a></td>
      <td><input type="checkbox" name="procesar" /></td>     
     </tr>
     </tbody>

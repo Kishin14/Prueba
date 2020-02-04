@@ -152,7 +152,7 @@
 
 
 
-     <td><a name="saveDetalle"><img src="/application/framework/media/images/grid/save.png" /></a></td>
+     <td><a name="saveDetalle"><img src="../../../framework/media/images/grid/save.png" /></a></td>
 
 
 
@@ -230,7 +230,7 @@
 
 
 
-     <td><a name="saveDetalle"><img src="/application/framework/media/images/grid/save.png" /></a></td>
+     <td><a name="saveDetalle"><img src="../../../framework/media/images/grid/save.png" /></a></td>
 
 
 
@@ -318,7 +318,7 @@
 
 
 
-     <td><a name="saveDetalle"><img src="/application/framework/media/images/grid/save.png" /></a></td>
+     <td><a name="saveDetalle"><img src="../../../framework/media/images/grid/save.png" /></a></td>
 
 
 

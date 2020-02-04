@@ -118,43 +118,23 @@ final class ProfesionPerfilLayout extends View{
 
 
 
-     $this -> TplInclude -> IncludeCss("/application/framework/css/reset.css");
+     $this -> TplInclude -> IncludeCss("../../../framework/css/reset.css");
 
 
 
-     $this -> TplInclude -> IncludeCss("/application/framework/css/general.css");
+     $this -> TplInclude -> IncludeCss("../../../framework/css/general.css");
 
 
 
-     $this -> TplInclude -> IncludeCss("/application/framework/css/generalDetalle.css");
+     $this -> TplInclude -> IncludeCss("../../../framework/css/generalDetalle.css");
 
 
 
-     $this -> TplInclude -> IncludeCss("/application/framework/css/jquery.autocomplete.css");
+     $this -> TplInclude -> IncludeCss("../../../framework/css/jquery.autocomplete.css");
 
 
 
-     $this -> TplInclude -> IncludeCss("/application/framework/css/jquery.alerts.css");
-
-
-
-	 
-
-
-
-     $this -> TplInclude -> IncludeJs("/application/framework/js/jquery.js");
-
-
-
-     $this -> TplInclude -> IncludeJs("/application/framework/js/jquery.autocomplete.js");
-
-
-
-     $this -> TplInclude -> IncludeJs("/application/framework/js/funciones.js");
-
-
-
-     $this -> TplInclude -> IncludeJs("/application/framework/js/funcionesDetalle.js");
+     $this -> TplInclude -> IncludeCss("../../../framework/css/jquery.alerts.css");
 
 
 
@@ -162,7 +142,27 @@ final class ProfesionPerfilLayout extends View{
 
 
 
-	      $this -> TplInclude -> IncludeJs("/application/framework/js/funcionesDetalle.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.js");
+
+
+
+     $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.autocomplete.js");
+
+
+
+     $this -> TplInclude -> IncludeJs("../../../framework/js/funciones.js");
+
+
+
+     $this -> TplInclude -> IncludeJs("../../../framework/js/funcionesDetalle.js");
+
+
+
+	 
+
+
+
+	      $this -> TplInclude -> IncludeJs("../../../framework/js/funcionesDetalle.js");
 
 
 
@@ -178,11 +178,11 @@ final class ProfesionPerfilLayout extends View{
 
 
 
-     $this -> TplInclude -> IncludeJs("/application/nomina/parametros_modulo/js/ProfesionPerfil.js");
+     $this -> TplInclude -> IncludeJs("../js/ProfesionPerfil.js");
 
 
 
-     $this -> TplInclude -> IncludeJs("/application/framework/js/colResizable-1.3.min.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/colResizable-1.3.min.js");
 
 
 

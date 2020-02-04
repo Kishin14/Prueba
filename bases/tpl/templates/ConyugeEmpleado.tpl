@@ -67,7 +67,7 @@
                       {/if}
                   
                 </select></td>
-                <td><a name="saveDetalle"><img src="/application/framework/media/images/grid/save.png" /></a></td>
+                <td><a name="saveDetalle"><img src="../../../framework/media/images/grid/save.png" /></a></td>
                 <td><input type="checkbox" name="procesar" /></td>
                 <td>&nbsp;</td>     
             </tr>   
@@ -97,7 +97,7 @@
                     <option value="0" > INACTIVO </option>
                   </select>
                 </td>
-                <td><a name="saveDetalle"><img src="/application/framework/media/images/grid/save.png" /></a></td>
+                <td><a name="saveDetalle"><img src="../../../framework/media/images/grid/save.png" /></a></td>
                 <td><input type="checkbox" name="procesar" /></td>    
             </tr> 
             <tr id="clon">
@@ -128,7 +128,7 @@
                     <option value="0" > INACTIVO </option>
                   </select>
                 </td>
-                <td><a name="saveDetalle"><img src="/application/framework/media/images/grid/save.png" /></a></td>
+                <td><a name="saveDetalle"><img src="../../../framework/media/images/grid/save.png" /></a></td>
                 <td><input type="checkbox" name="procesar" /></td>    
             </tr>       
   	       </tbody>

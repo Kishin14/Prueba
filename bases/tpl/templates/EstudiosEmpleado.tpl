@@ -36,7 +36,7 @@
             <td> <input name="fecha_terminacion" type="text" class="dtp" value="{$d.fecha_terminacion}"> </td>
             <td> <input name="institucion" type="text" value="{$d.institucion}"> </td>
             <td> <input name="acta_de_grado" type="text" value="{$d.acta_de_grado}"> </td>
-            <td><a name="saveDetalle3"><img src="/application/framework/media/images/grid/save.png" /></a></td>
+            <td><a name="saveDetalle3"><img src="../../../framework/media/images/grid/save.png" /></a></td>
             <td><input type="checkbox" name="procesar" /></td>     
         </tr>   
         {/foreach}
@@ -58,7 +58,7 @@
             <td> <input name="fecha_terminacion" class="dtp" type="text"> </td>
             <td> <input name="institucion"  type="text"> </td>
             <td> <input name="acta_de_grado"  type="text"> </td>
-            <td><a name="saveDetalle3"><img src="/application/framework/media/images/grid/save.png" /></a></td>
+            <td><a name="saveDetalle3"><img src="../../../framework/media/images/grid/save.png" /></a></td>
             <td><input type="checkbox" name="procesar" /></td>    
         </tr> 
         <tr id="clon">
@@ -80,7 +80,7 @@
              <td> <input name="institucion" type="text"> </td>
              <td> <input name="acta_de_grado" type="text"> </td>
               
-            <td><a name="saveDetalle3"><img src="/application/framework/media/images/grid/save.png" /></a></td>
+            <td><a name="saveDetalle3"><img src="../../../framework/media/images/grid/save.png" /></a></td>
             <td><input type="checkbox" name="procesar" /></td>    
         </tr>       
        </tbody>

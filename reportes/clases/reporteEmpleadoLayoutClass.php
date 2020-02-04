@@ -21,27 +21,27 @@ final class reporteEmpleadoLayout extends View{
 	 
      $this -> fields = $campos; 
 	 
-     $this -> TplInclude -> IncludeCss("/application/framework/css/ajax-dynamic-list.css");
-     $this -> TplInclude -> IncludeCss("/application/framework/css/reset.css");
-     $this -> TplInclude -> IncludeCss("/application/framework/css/general.css");
-     $this -> TplInclude -> IncludeCss("/application/framework/css/DatosBasicos.css");
-     $this -> TplInclude -> IncludeCss("/application/framework/css/jquery.alerts.css");
-     $this -> TplInclude -> IncludeCss("/application/framework/css/jqgrid/redmond/jquery-ui-1.8.2.custom.css");
-     $this -> TplInclude -> IncludeCss("/application/nomina/reportes/css/reportes.css");
+     $this -> TplInclude -> IncludeCss("../../../framework/css/ajax-dynamic-list.css");
+     $this -> TplInclude -> IncludeCss("../../../framework/css/reset.css");
+     $this -> TplInclude -> IncludeCss("../../../framework/css/general.css");
+     $this -> TplInclude -> IncludeCss("../../../framework/css/DatosBasicos.css");
+     $this -> TplInclude -> IncludeCss("../../../framework/css/jquery.alerts.css");
+     $this -> TplInclude -> IncludeCss("../../../framework/css/jqgrid/redmond/jquery-ui-1.8.2.custom.css");
+     $this -> TplInclude -> IncludeCss("../css/reportes.css");
 	 
-     $this -> TplInclude -> IncludeJs("/application/framework/js/jquery.js");	 
-     $this -> TplInclude -> IncludeJs("/application/framework/js/jqgrid/jquery-ui-1.8.2.custom.min.js");	 
-     $this -> TplInclude -> IncludeJs("/application/framework/js/jqueryform.js");
-     $this -> TplInclude -> IncludeJs("/application/framework/js/funciones.js");
-     $this -> TplInclude -> IncludeJs("/application/framework/js/ajax-list.js");
-     $this -> TplInclude -> IncludeJs("/application/framework/js/ajax-dynamic-list.js");
-     $this -> TplInclude -> IncludeJs("/application/nomina/reportes/js/reporteEmpleado.js"); 
-     $this -> TplInclude -> IncludeJs("/application/framework/js/funcionesDetalle.js");	 
-     $this -> TplInclude -> IncludeJs("/application/framework/js/jquery.alerts.js");	
-     $this -> TplInclude -> IncludeJs("/application/framework/js/jqeffects/jquery.magnifier.js");
-	 $this -> TplInclude -> IncludeJs("/application/framework/js/jquery.filestyle.js");
-	 $this -> TplInclude -> IncludeJs("/application/framework/js/ajaxupload.3.6.js");
-     $this -> TplInclude -> IncludeJs("/application/framework/js/general.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.js");	 
+     $this -> TplInclude -> IncludeJs("../../../framework/js/jqgrid/jquery-ui-1.8.2.custom.min.js");	 
+     $this -> TplInclude -> IncludeJs("../../../framework/js/jqueryform.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/funciones.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/ajax-list.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/ajax-dynamic-list.js");
+     $this -> TplInclude -> IncludeJs("../js/reporteEmpleado.js"); 
+     $this -> TplInclude -> IncludeJs("../../../framework/js/funcionesDetalle.js");	 
+     $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.alerts.js");	
+     $this -> TplInclude -> IncludeJs("../../../framework/js/jqeffects/jquery.magnifier.js");
+	 $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.filestyle.js");
+	 $this -> TplInclude -> IncludeJs("../../../framework/js/ajaxupload.3.6.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/general.js");
 	 
      $this -> assign("CSSSYSTEM",	     $this -> TplInclude -> GetCssInclude());
      $this -> assign("JAVASCRIPT",	     $this -> TplInclude -> GetJsInclude());

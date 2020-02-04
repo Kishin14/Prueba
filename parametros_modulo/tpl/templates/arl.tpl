@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <link rel="stylesheet" href="/application/framework/css/bootstrap1.css">
+    <link rel="stylesheet" href="../../../framework/css/bootstrap1.css">
     {$JAVASCRIPT}
     {$TABLEGRIDJS}
     {$CSSSYSTEM}
@@ -58,7 +58,7 @@
         <div class="modal-content" style="width:70%;">
             <span class="close">&times;</span>
             <h5 id="h5"> </h5>
-            <h4 align="center"><img src="/application/framework/media/images/alerts/info.png" /></h4>
+            <h4 align="center"><img src="../../../framework/media/images/alerts/info.png" /></h4>
             <p id="p"></p>
         </div>
     

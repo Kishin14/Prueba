@@ -7,9 +7,9 @@
         <meta http-equiv="Content-Type" content = "text/html; charset = utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Graficos</title>
-        <link rel="stylesheet"  href="/application/nomina/reportes/css/bootstrap.css">
-        <link rel="stylesheet"  href="/application/nomina/reportes/css/bootstrap.min.css">
-        <link rel="stylesheet"  href="/application/nomina/reportes/css/style.css">
+        <link rel="stylesheet"  href="../css/bootstrap.css">
+        <link rel="stylesheet"  href="../css/bootstrap.min.css">
+        <link rel="stylesheet"  href="../css/style.css">
 
       
     </head> 
@@ -31,8 +31,8 @@
             </div><!-- /.row -->
       </section><!-- /.content -->
     </div><!-- /.content-wrapper -->
-                <script src="/application/nomina/reportes/js/chart.min.js"></script>
-                <script src="/application/nomina/reportes/js/Chart.bundle.min.js"></script>
+                <script src="../js/chart.min.js"></script>
+                <script src="../js/Chart.bundle.min.js"></script>
                     <script type="text/javascript">
 
                           var ctx = document.getElementById("compras").getContext('2d'); 
@@ -70,7 +70,7 @@
                           ob_end_flush();
                           ?>  
   <!--Fin-Contenido-->
-  <script src="/application/nomina/reportes/js/bootstrap.js"></script>
-  <script src="/application/nomina/reportes/js/bootstrap.min.js"></script>
+  <script src="../js/bootstrap.js"></script>
+  <script src="../js/bootstrap.min.js"></script>
     </body>
 </html>

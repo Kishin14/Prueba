@@ -279,7 +279,7 @@
         <div class="modal-content" style="width:70%;">
             <span class="close">&times;</span>
             <h5 id="h5"> </h5>
-            <h4 align="center"><img src="/application/framework/media/images/alerts/info.png" /></h4>
+            <h4 align="center"><img src="../../../framework/media/images/alerts/info.png" /></h4>
             <p id="p"></p>
         </div>
     

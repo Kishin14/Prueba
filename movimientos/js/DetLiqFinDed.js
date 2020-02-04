@@ -178,7 +178,7 @@ function deleteDetallesSoliServi(){
 **************************************************************/
 function autocompleteUbicacion(){
 	
-	$("input[name=origen],input[name=destino]").autocomplete("/application/framework/clases/ListaInteligente.php?consulta=ciudad", {
+	$("input[name=origen],input[name=destino]").autocomplete("../../../framework/clases/ListaInteligente.php?consulta=ciudad", {
 		width: 260,
 		selectFirst: true
 	});

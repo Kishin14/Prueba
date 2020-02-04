@@ -125,7 +125,7 @@ function OnclickGenerar(formulario){
 }
 
 function ConvocadoOnReset(formulario){
-	$("#frameReporte").attr("src","/application/framework/tpl/blank.html");	
+	$("#frameReporte").attr("src","../../../framework/tpl/blank.html");	
 	Reset(formulario);
     clearFind();  
 	$("#estado").val('A');

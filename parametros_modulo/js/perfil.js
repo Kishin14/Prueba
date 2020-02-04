@@ -40,8 +40,8 @@ function PerfilOnReset(formulario){
 	 // Reset(formulario);
     clearFind();  
     // setFocusFirstFieldForm(formulario); 
-    document.getElementById('VehiculoPerfil').src = '/application/framework/tpl/blank.html'; 
-    document.getElementById('ProfesionPerfil').src = '/application/framework/tpl/blank.html'; 
+    document.getElementById('VehiculoPerfil').src = '../../../framework/tpl/blank.html'; 
+    document.getElementById('ProfesionPerfil').src = '../../../framework/tpl/blank.html'; 
 	if($('#guardar'))    $('#guardar').attr("disabled","");
 	if($('#actualizar')) $('#actualizar').attr("disabled","true");
 	if($('#borrar'))     $('#borrar').attr("disabled","true");
@@ -84,8 +84,8 @@ $(document).ready(function(){
 				if($('#actualizar')) $('#actualizar').attr("disabled","true");
 				if($('#borrar'))     $('#borrar').attr("disabled","true");
 				if($('#limpiar'))    $('#limpiar').attr("disabled","");
-				document.getElementById('VehiculoPerfil').src = '/application/framework/tpl/blank.html';
-				document.getElementById('ProfesionPerfil').src = '/application/framework/tpl/blank.html';
+				document.getElementById('VehiculoPerfil').src = '../../../framework/tpl/blank.html';
+				document.getElementById('ProfesionPerfil').src = '../../../framework/tpl/blank.html';
 			}
 		}
 	});

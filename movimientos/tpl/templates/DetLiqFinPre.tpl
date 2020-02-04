@@ -127,7 +127,7 @@
      <td><input type="text" autocomplete="off" name="fecha_entrega" id="fecha_entrega" value="{$d.fecha_entrega}" class="numeric" readonly /></td>               
      <td><input type="text" autocomplete="off" name="hora_entrega" id="hora_entrega" value="{$d.hora_entrega}" class="numeric" readonly /></td>                    
      
-     <td><a name="saveDetalleSoliServi"><img src="/application/framework/media/images/grid/save.png" /></a></td>
+     <td><a name="saveDetalleSoliServi"><img src="../../../framework/media/images/grid/save.png" /></a></td>
      <td><input type="checkbox" name="procesar" /></td>     
     </tr>   
     {/foreach}
@@ -205,7 +205,7 @@
      <td><input type="text" autocomplete="off" name="valor_unidad" id="valor_unidad" value="" class="required integer saltoscrolldetalle" /></td>  
      <td><input type="text" autocomplete="off" name="fecha_entrega" id="fecha_entrega" value="" class="numeric" readonly /></td>               
      <td><input type="text" autocomplete="off" name="hora_entrega" id="hora_entrega" value="" class="numeric" readonly /></td>                    
-     <td><a name="saveDetalleSoliServi"><img src="/application/framework/media/images/grid/save.png" /></a></td>
+     <td><a name="saveDetalleSoliServi"><img src="../../../framework/media/images/grid/save.png" /></a></td>
      <td><input type="checkbox" name="procesar" /></td>     
     </tr>
    </tbody>
@@ -284,7 +284,7 @@
      <td><input type="text" autocomplete="off" name="valor_unidad" id="valor_unidad" value="" class="required numeric saltoscrolldetalle" /></td>               
      <td><input type="text" autocomplete="off" name="fecha_entrega" id="fecha_entrega" value="" class="numeric" readonly /></td>               
      <td><input type="text" autocomplete="off" name="hora_entrega" id="hora_entrega" value="" class="numeric" readonly /></td>                    
-     <td><a name="saveDetalleSoliServi"><img src="/application/framework/media/images/grid/save.png" /></a></td>
+     <td><a name="saveDetalleSoliServi"><img src="../../../framework/media/images/grid/save.png" /></a></td>
      <td><input type="checkbox" name="procesar" /></td>     
     </tr>
   </table>

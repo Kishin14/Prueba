@@ -126,7 +126,7 @@ function OnclickGenerar(formulario){
 }
 
 function ContratoOnReset(formulario){
-	$("#frameReporte").attr("src","/application/framework/tpl/blank.html");	
+	$("#frameReporte").attr("src","../../../framework/tpl/blank.html");	
 	Reset(formulario);
     clearFind();  
 	$("#estado").val('A');

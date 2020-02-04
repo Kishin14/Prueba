@@ -193,7 +193,7 @@ function PagoOnUpdate(formulario,resp){
 }
 
 function PagoOnReset(formulario){
-	$("#detalles").attr("src","/application/framework/tpl/blank.html");
+	$("#detalles").attr("src","../../../framework/tpl/blank.html");
     if($('#guardar'))    		$('#guardar').attr("disabled","");
     if($('#actualizar')) 		$('#actualizar').attr("disabled","true");
 	if($('#contabilizar')) 		$('#contabilizar').attr("disabled","true");						

@@ -309,7 +309,7 @@ function VacacionOnReset(formulario){
     if($('#actualizar')) $('#actualizar').attr("disabled","true");
     if($('#borrar'))     $('#borrar').attr("disabled","true");
     if($('#limpiar'))    $('#limpiar').attr("disabled","");	
-	 $("#detalleVacacion").attr("src","/application/framework/tpl/blank.html");	
+	 $("#detalleVacacion").attr("src","../../../framework/tpl/blank.html");	
 
 }
 
@@ -349,7 +349,7 @@ $(document).ready(function(){
 
 						   
 
-  $("#detalleVacacion").attr("src","/application/framework/tpl/blank.html");	
+  $("#detalleVacacion").attr("src","../../../framework/tpl/blank.html");	
 
 
 	 $("#fecha_dis_inicio").change(function(){

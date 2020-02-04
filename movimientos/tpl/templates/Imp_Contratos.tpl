@@ -2,8 +2,8 @@
 <html>
    <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />   
-    <link type="text/css" rel="stylesheet" href="/application/framework/css/printer.css" /> 
-	<script language="javascript" type="text/javascript" src="/application/framework/js/printer.js"></script>
+    <link type="text/css" rel="stylesheet" href="../../../framework/css/printer.css" /> 
+	<script language="javascript" type="text/javascript" src="../../../framework/js/printer.js"></script>
     <title>Hoja de Contrato</title>
 {literal}
 <style>

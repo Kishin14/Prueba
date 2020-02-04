@@ -63,7 +63,7 @@
           <input type="text" name="base_abono_factura"   value="" maxlength="12"  size="15" {if $i.requiere_base_ofi eq '0' and $i.requiere_base_emp eq '0'} class="numeric no_requerido" readonly {else} class="numeric required" {/if}  /></td>
         <td><input type="text" name="debito" class="numeric" value="" maxlength="15" size="12" /></td>        
         <td><input type="text" name="credito" class="numeric" value="" maxlength="15" size="12" /></td>
-     <td><a name="saveDetalle"><img src="/application/framework/media/images/grid/save.png" /></a></td>
+     <td><a name="saveDetalle"><img src="../../../framework/media/images/grid/save.png" /></a></td>
       </tr>	  
 	</tbody>
   </table>

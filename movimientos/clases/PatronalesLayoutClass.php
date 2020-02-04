@@ -34,23 +34,23 @@ final class PatronalesLayout extends View{
 	 
      $this -> fields = $campos; 
 	 
-     $this -> TplInclude -> IncludeCss("/application/framework/css/ajax-dynamic-list.css");
-     $this -> TplInclude -> IncludeCss("/application/framework/css/reset.css");
-     $this -> TplInclude -> IncludeCss("/application/framework/css/general.css"); 
-     $this -> TplInclude -> IncludeCss("/application/framework/css/jquery.alerts.css");	
+     $this -> TplInclude -> IncludeCss("../../../framework/css/ajax-dynamic-list.css");
+     $this -> TplInclude -> IncludeCss("../../../framework/css/reset.css");
+     $this -> TplInclude -> IncludeCss("../../../framework/css/general.css"); 
+     $this -> TplInclude -> IncludeCss("../../../framework/css/jquery.alerts.css");	
  
-     $this -> TplInclude -> IncludeJs("/application/framework/js/jquery.js");
-     $this -> TplInclude -> IncludeJs("/application/framework/js/jquery.filestyle.js");
-     $this -> TplInclude -> IncludeJs("/application/framework/js/jqcalendar/jquery.ui.datepicker.js");
-     $this -> TplInclude -> IncludeJs("/application/framework/js/jqcalendar/jquery.ui.datepicker-es.js");
-     $this -> TplInclude -> IncludeJs("/application/framework/js/jqueryform.js");
-     $this -> TplInclude -> IncludeJs("/application/framework/js/funciones.js");
-     $this -> TplInclude -> IncludeJs("/application/framework/js/ajax-list.js");
-     $this -> TplInclude -> IncludeJs("/application/framework/js/ajax-dynamic-list.js");
-     $this -> TplInclude -> IncludeJs("/application/framework/js/jquery-uploader/swfobject.js");
-     $this -> TplInclude -> IncludeJs("/application/framework/js/jquery-uploader/jquery.uploadify.v2.1.0.min.js");
-     $this -> TplInclude -> IncludeJs("/application/nomina/movimientos/js/Patronales.js");
-     $this -> TplInclude -> IncludeJs("/application/framework/js/jquery.alerts.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.filestyle.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/jqcalendar/jquery.ui.datepicker.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/jqcalendar/jquery.ui.datepicker-es.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/jqueryform.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/funciones.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/ajax-list.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/ajax-dynamic-list.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/jquery-uploader/swfobject.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/jquery-uploader/jquery.uploadify.v2.1.0.min.js");
+     $this -> TplInclude -> IncludeJs("../js/Patronales.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.alerts.js");
 	 
      $this -> assign("CSSSYSTEM",		$this -> TplInclude -> GetCssInclude());
      $this -> assign("JAVASCRIPT",		$this -> TplInclude -> GetJsInclude());

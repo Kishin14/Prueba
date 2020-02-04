@@ -2,7 +2,7 @@
 <head>
 
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <link rel="stylesheet" href="/application/framework/css/bootstrap1.css">
+    <link rel="stylesheet" href="../../../framework/css/bootstrap1.css">
     {$JAVASCRIPT}
     {$TABLEGRIDJS}
     {$CSSSYSTEM}

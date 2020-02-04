@@ -29,28 +29,28 @@ final class AumentoLayout extends View{
 
 		$Form1	=	new Form("AumentoClass.php","AumentoForm","AumentoForm");
 		$this	->	fields		=	$campos;
-		$this	->	TplInclude	->	IncludeCss("/application/framework/css/jqgrid/redmond/jquery-ui-1.8.2.custom.css");
-		$this	->	TplInclude	->	IncludeCss("/application/framework/css/jquery.alerts.css");
-		$this	->	TplInclude	->	IncludeCss("/application/framework/css/ajax-dynamic-list.css");
-		$this	->	TplInclude	->	IncludeCss("/application/nomina/movimientos/css/Aumento.css");
-		$this	->	TplInclude	->	IncludeCss("/application/framework/css/reset.css");
-		$this	->	TplInclude	->	IncludeCss("/application/framework/css/general.css");
-		$this	->	TplInclude	->	IncludeCss("/application/framework/css/bootstrap.css");
+		$this	->	TplInclude	->	IncludeCss("../../../framework/css/jqgrid/redmond/jquery-ui-1.8.2.custom.css");
+		$this	->	TplInclude	->	IncludeCss("../../../framework/css/jquery.alerts.css");
+		$this	->	TplInclude	->	IncludeCss("../../../framework/css/ajax-dynamic-list.css");
+		$this	->	TplInclude	->	IncludeCss("../css/Aumento.css");
+		$this	->	TplInclude	->	IncludeCss("../../../framework/css/reset.css");
+		$this	->	TplInclude	->	IncludeCss("../../../framework/css/general.css");
+		$this	->	TplInclude	->	IncludeCss("../../../framework/css/bootstrap.css");
 		
 		
 
-		$this	->	TplInclude	->	IncludeJs("/application/framework/js/jquery.js");
-		$this 	-> 	TplInclude	-> 	IncludeJs("/application/framework/js/jqcalendar/jquery-ui-1.8.1.custom.min.js");	
-		$this	->	TplInclude	->	IncludeJs("/application/framework/js/jqueryform.js");
-		$this	->	TplInclude	->	IncludeJs("/application/framework/js/funciones.js");
-		$this	->	TplInclude	->	IncludeJs("/application/framework/js/ajax-list.js");
-		$this	->	TplInclude	->	IncludeJs("/application/framework/js/ajax-dynamic-list.js");
-		$this	->	TplInclude	->	IncludeJs("/application/framework/js/jquery.alerts.js");
-		$this	->	TplInclude	->	IncludeJs("/application/framework/js/jqeffects/jquery.magnifier.js");
-		$this	->	TplInclude	->	IncludeJs("/application/framework/js/jquery.filestyle.js");
-		$this	->	TplInclude	->	IncludeJs("/application/framework/js/jqgrid/jquery-ui-1.8.2.custom.min.js");
-		$this	->	TplInclude	->	IncludeJs("/application/nomina/movimientos/js/Aumento.js");
-		$this	->	TplInclude	->	IncludeJs("/application/nomina/movimientos/js/DetallesAumento.js");
+		$this	->	TplInclude	->	IncludeJs("../../../framework/js/jquery.js");
+		$this 	-> 	TplInclude	-> 	IncludeJs("../../../framework/js/jqcalendar/jquery-ui-1.8.1.custom.min.js");	
+		$this	->	TplInclude	->	IncludeJs("../../../framework/js/jqueryform.js");
+		$this	->	TplInclude	->	IncludeJs("../../../framework/js/funciones.js");
+		$this	->	TplInclude	->	IncludeJs("../../../framework/js/ajax-list.js");
+		$this	->	TplInclude	->	IncludeJs("../../../framework/js/ajax-dynamic-list.js");
+		$this	->	TplInclude	->	IncludeJs("../../../framework/js/jquery.alerts.js");
+		$this	->	TplInclude	->	IncludeJs("../../../framework/js/jqeffects/jquery.magnifier.js");
+		$this	->	TplInclude	->	IncludeJs("../../../framework/js/jquery.filestyle.js");
+		$this	->	TplInclude	->	IncludeJs("../../../framework/js/jqgrid/jquery-ui-1.8.2.custom.min.js");
+		$this	->	TplInclude	->	IncludeJs("../js/Aumento.js");
+		$this	->	TplInclude	->	IncludeJs("../js/DetallesAumento.js");
 
 		$this	->	assign("CSSSYSTEM",				$this	->	TplInclude	->	GetCssInclude());
 		$this	->	assign("JAVASCRIPT",			$this	->	TplInclude	->	GetJsInclude());

@@ -8,14 +8,14 @@ final class SolicServToConvocadoLayout extends View{
    
    public function setIncludes(){
 	 
-     $this -> TplInclude -> IncludeCss("/application/framework/css/reset.css");
-     $this -> TplInclude -> IncludeCss("/application/framework/css/general.css");
-     $this -> TplInclude -> IncludeCss("/application/framework/css/jquery.alerts.css");
+     $this -> TplInclude -> IncludeCss("../../../framework/css/reset.css");
+     $this -> TplInclude -> IncludeCss("../../../framework/css/general.css");
+     $this -> TplInclude -> IncludeCss("../../../framework/css/jquery.alerts.css");
 	 
-     $this -> TplInclude -> IncludeJs("/application/framework/js/jquery.js");
-     $this -> TplInclude -> IncludeJs("/application/framework/js/funciones.js");
-     $this -> TplInclude -> IncludeJs("/application/nomina/bases/js/SolicServToConvocado.js");
-     $this -> TplInclude -> IncludeJs("/application/framework/js/jquery.alerts.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/funciones.js");
+     $this -> TplInclude -> IncludeJs("../js/SolicServToConvocado.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.alerts.js");
 	 
 	 $this -> assign("CSSSYSTEM",	  $this -> TplInclude -> GetCssInclude());
      $this -> assign("JAVASCRIPT",	  $this -> TplInclude -> GetJsInclude());

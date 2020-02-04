@@ -86,13 +86,13 @@ function CargoOnReset(formulario){
 
   //   setFocusFirstFieldForm(formulario);
 
-    document.getElementById('detalleCargo').src = '/application/framework/tpl/blank.html'; 
+    document.getElementById('detalleCargo').src = '../../../framework/tpl/blank.html'; 
 
     // resetDetalle('detalleCargo'); 
 
     // $("#detalleCargo").html("");
 
-    // $("#detalleCargo").attr("src","/application/framework/tpl/blank.html");
+    // $("#detalleCargo").attr("src","../../../framework/tpl/blank.html");
 
 	if($('#guardar'))    $('#guardar').attr("disabled","");
 
@@ -156,7 +156,7 @@ $(document).ready(function(){
 
 				if($('#limpiar'))    $('#limpiar').attr("disabled","");
 
-				document.getElementById('detalleCargo').src = '/application/framework/tpl/blank.html';
+				document.getElementById('detalleCargo').src = '../../../framework/tpl/blank.html';
 
 			}
 

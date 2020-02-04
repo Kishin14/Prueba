@@ -35,7 +35,7 @@
      <td><input type="text" autocomplete="off" name="debito" id="debito" value="{$d.debito}" class="required numeric" /></td>     
      <td><input type="text" autocomplete="off" name="credito" id="credito" value="{$d.credito}" class="required numeric" /></td>     
      
-     <!--<td><a name="saveDetalleSoliServi"><img src="/application/framework/media/images/grid/save.png" /></a></td>
+     <!--<td><a name="saveDetalleSoliServi"><img src="../../../framework/media/images/grid/save.png" /></a></td>
      <td><input type="checkbox" name="procesar" /></td>   -->  
     </tr>   
     {/foreach}
@@ -50,7 +50,7 @@
      <td><input type="text" autocomplete="off" name="porcentaje" id="porcentaje" value="" class="numeric" /></td>
      <td><input type="text" autocomplete="off" name="debito" id="debito" value="" class="required numeric" /></td>     
      <td><input type="text" autocomplete="off" name="credito" id="credito" value="" class="required numeric" /></td>     
-     <td><a name="saveDetalleSoliServi"><img src="/application/framework/media/images/grid/save.png" /></a></td>
+     <td><a name="saveDetalleSoliServi"><img src="../../../framework/media/images/grid/save.png" /></a></td>
      <td><input type="checkbox" name="procesar" /></td>     
     </tr>
     -->
@@ -69,7 +69,7 @@
      <td><input type="text" autocomplete="off" name="debito" id="debito" value="" class="required numeric" /></td>     
      <td><input type="text" autocomplete="off" name="credito" id="credito" value="" class="required numeric" /></td>     
      
-     <td><a name="saveDetalleSoliServi"><img src="/application/framework/media/images/grid/save.png" /></a></td>
+     <td><a name="saveDetalleSoliServi"><img src="../../../framework/media/images/grid/save.png" /></a></td>
      <td><input type="checkbox" name="procesar" /></td>     
     </tr>
   </table>

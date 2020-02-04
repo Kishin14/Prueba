@@ -9,11 +9,11 @@ final class Imp_LiquidacionPrimaLayout extends View{
    
    public function setIncludes(){
    
-	 $this -> TplInclude -> IncludeCss("/application/framework/css/reset.css");
-     $this -> TplInclude -> IncludeCss("/application/nomina/movimientos/css/Imp_Extras.css");
+	 $this -> TplInclude -> IncludeCss("../../../framework/css/reset.css");
+     $this -> TplInclude -> IncludeCss("../css/Imp_Extras.css");
 	 
-	 $this -> TplInclude -> IncludeCss("/application/framework/css/reset.css","print");
-     $this -> TplInclude -> IncludeCss("/application/nomina/movimientos/css/Imp_Extras.css","print");	 
+	 $this -> TplInclude -> IncludeCss("../../../framework/css/reset.css","print");
+     $this -> TplInclude -> IncludeCss("../css/Imp_Extras.css","print");	 
 	 
 	 $this -> assign("CSSSYSTEM", $this -> TplInclude -> GetCssInclude());
 	 

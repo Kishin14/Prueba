@@ -410,7 +410,7 @@ function autocompletePuc(){
 
 	
 
-	$("input[name=puc]").autocomplete("/application/framework/clases/ListaInteligente.php?consulta=cuentas_movimiento_activas", {
+	$("input[name=puc]").autocomplete("../../../framework/clases/ListaInteligente.php?consulta=cuentas_movimiento_activas", {
 
 		width: 355,
 

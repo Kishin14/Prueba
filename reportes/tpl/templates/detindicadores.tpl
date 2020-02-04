@@ -161,10 +161,10 @@ $(function () {
 {/literal}
 
   <body>
-    <link rel="stylesheet" href="/application/framework/css/bootstrap.css">
-    <link rel="stylesheet" href="/application/framework/css/animate.css">
-  <script src="/application/nomina/reportes/Highcharts-4.1.5/js/highcharts.js"></script>
-  <script src="/application/nomina/reportes/Highcharts-4.1.5/js/modules/exporting.js"></script> 
+    <link rel="stylesheet" href="../../../framework/css/bootstrap.css">
+    <link rel="stylesheet" href="../../../framework/css/animate.css">
+  <script src="../Highcharts-4.1.5/js/highcharts.js"></script>
+  <script src="../Highcharts-4.1.5/js/modules/exporting.js"></script> 
 
         {foreach name=detalles from=$DETALLES item=i}
   <div class="container-fluid">

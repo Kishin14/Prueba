@@ -187,8 +187,8 @@
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
   {$JAVASCRIPT}
-  <link rel="stylesheet" href="/application/framework/css/bootstrap.css">
-  <link rel="stylesheet" href="/application/framework/css/animate.css">
+  <link rel="stylesheet" href="../../../framework/css/bootstrap.css">
+  <link rel="stylesheet" href="../../../framework/css/animate.css">
 </head>
 
 	

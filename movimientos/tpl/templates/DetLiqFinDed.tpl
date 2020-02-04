@@ -51,7 +51,7 @@
                     <input type="hidden" name="origen_id" id="origen_id" value="{$d.origen_id}" class="required integer" />            
                 </td>                
                 <td>
-                	<a name="saveDetalleSoliServi"><img src="/application/framework/media/images/grid/save.png" /></a>
+                	<a name="saveDetalleSoliServi"><img src="../../../framework/media/images/grid/save.png" /></a>
 				</td>
                 <td>
                 	<input type="checkbox" name="procesar" />
@@ -87,7 +87,7 @@
                 </td>          
       
                 <td>
-                	<a name="saveDetalleSoliServi"><img src="/application/framework/media/images/grid/save.png" /></a>
+                	<a name="saveDetalleSoliServi"><img src="../../../framework/media/images/grid/save.png" /></a>
 				</td>
                 <td>
                 	<input type="checkbox" name="procesar" />
@@ -125,7 +125,7 @@
             </td>          
       
             <td>
-                <a name="saveDetalleSoliServi"><img src="/application/framework/media/images/grid/save.png" /></a>
+                <a name="saveDetalleSoliServi"><img src="../../../framework/media/images/grid/save.png" /></a>
             </td>
             <td>
                 <input type="checkbox" name="procesar" />

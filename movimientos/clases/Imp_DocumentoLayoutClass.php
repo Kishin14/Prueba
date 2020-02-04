@@ -9,11 +9,11 @@ final class Imp_DocumentoLayout extends View{
    
    public function setIncludes(){
    
-	 $this -> TplInclude -> IncludeCss("/application/framework/css/reset.css");
-     $this -> TplInclude -> IncludeCss("/application/nomina/movimientos/css/Imp_Contratos.css");
+	 $this -> TplInclude -> IncludeCss("../../../framework/css/reset.css");
+     $this -> TplInclude -> IncludeCss("../css/Imp_Contratos.css");
 	 
-	 $this -> TplInclude -> IncludeCss("/application/framework/css/reset.css","print");
-     $this -> TplInclude -> IncludeCss("/application/nomina/movimientos/css/Imp_Contratos.css","print");	 
+	 $this -> TplInclude -> IncludeCss("../../../framework/css/reset.css","print");
+     $this -> TplInclude -> IncludeCss("../css/Imp_Contratos.css","print");	 
 	 
 	 $this -> assign("CSSSYSTEM", $this -> TplInclude -> GetCssInclude());
 	 

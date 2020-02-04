@@ -8,7 +8,7 @@ final class Imp_DocumentoLayout extends View{
 
    
    public function setIncludes(){   
-	 $this -> TplInclude -> IncludeCss("/application/framework/css/reset.css");	 
+	 $this -> TplInclude -> IncludeCss("../../../framework/css/reset.css");	 
 	 $this -> assign("CSSSYSTEM", $this -> TplInclude -> GetCssInclude());	 
    }
      

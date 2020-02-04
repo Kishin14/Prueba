@@ -2,7 +2,7 @@ function usuarioOnReset(formulario){
 
 	
 
-		$("#frameReporte").attr("src","/application/framework/tpl/blank.html");	
+		$("#frameReporte").attr("src","../../../framework/tpl/blank.html");	
 
 	
 

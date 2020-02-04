@@ -27,24 +27,24 @@
 			$Form1      = new Form("ConvocadosClass.php","ConvocadosForm","ConvocadosForm");
 			$this	->	fields	=	$campos;
 
-			$this	->	TplInclude	->	IncludeCss("/application/framework/css/ajax-dynamic-list.css");
-			$this	->	TplInclude	->	IncludeCss("/application/framework/css/reset.css");
-			$this	->	TplInclude	->	IncludeCss("/application/framework/css/general.css");
-			$this	->	TplInclude	->	IncludeCss("/application/framework/css/jquery.alerts.css");
+			$this	->	TplInclude	->	IncludeCss("../../../framework/css/ajax-dynamic-list.css");
+			$this	->	TplInclude	->	IncludeCss("../../../framework/css/reset.css");
+			$this	->	TplInclude	->	IncludeCss("../../../framework/css/general.css");
+			$this	->	TplInclude	->	IncludeCss("../../../framework/css/jquery.alerts.css");
 
-			$this	->	TplInclude	->	IncludeJs("/application/framework/js/jquery.js");
-			$this	->	TplInclude	->	IncludeJs("/application/framework/js/jqcalendar/jquery.ui.datepicker.js");
-			$this	->	TplInclude	->	IncludeJs("/application/framework/js/jqcalendar/jquery.ui.datepicker-es.js");
-			$this	->	TplInclude	->	IncludeJs("/application/framework/js/ajaxupload.3.6.js");
-			$this	->	TplInclude	->	IncludeJs("/application/framework/js/jqueryform.js");
-			$this	->	TplInclude	->	IncludeJs("/application/framework/js/funciones.js");
-			$this	->	TplInclude	->	IncludeJs("/application/framework/js/general.js");
-			$this	->	TplInclude	->	IncludeJs("/application/framework/js/ajax-list.js");
-			$this	->	TplInclude	->	IncludeJs("/application/framework/js/ajax-dynamic-list.js");
-			$this	->	TplInclude	->	IncludeJs("/application/nomina/bases/js/convocados.js");
-			$this	->	TplInclude	->	IncludeJs("/application/framework/js/jqeffects/jquery.magnifier.js");
-			$this	->	TplInclude	->	IncludeJs("/application/framework/js/jquery.alerts.js");
-			$this	->	TplInclude	->	IncludeJs("/application/framework/js/jquery.filestyle.js");
+			$this	->	TplInclude	->	IncludeJs("../../../framework/js/jquery.js");
+			$this	->	TplInclude	->	IncludeJs("../../../framework/js/jqcalendar/jquery.ui.datepicker.js");
+			$this	->	TplInclude	->	IncludeJs("../../../framework/js/jqcalendar/jquery.ui.datepicker-es.js");
+			$this	->	TplInclude	->	IncludeJs("../../../framework/js/ajaxupload.3.6.js");
+			$this	->	TplInclude	->	IncludeJs("../../../framework/js/jqueryform.js");
+			$this	->	TplInclude	->	IncludeJs("../../../framework/js/funciones.js");
+			$this	->	TplInclude	->	IncludeJs("../../../framework/js/general.js");
+			$this	->	TplInclude	->	IncludeJs("../../../framework/js/ajax-list.js");
+			$this	->	TplInclude	->	IncludeJs("../../../framework/js/ajax-dynamic-list.js");
+			$this	->	TplInclude	->	IncludeJs("../js/convocados.js");
+			$this	->	TplInclude	->	IncludeJs("../../../framework/js/jqeffects/jquery.magnifier.js");
+			$this	->	TplInclude	->	IncludeJs("../../../framework/js/jquery.alerts.js");
+			$this	->	TplInclude	->	IncludeJs("../../../framework/js/jquery.filestyle.js");
 
 			$this	->	assign("FORM1",						$Form1	->	FormBegin());
 			$this	->	assign("FORM1END",					$Form1	->	FormEnd());

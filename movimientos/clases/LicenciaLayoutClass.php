@@ -41,20 +41,20 @@ final class LicenciaLayout extends View{
 	 
 	 $this -> fields = $campos;       
   	 
-     $this -> TplInclude -> IncludeCss("/application/framework/css/dhtmlgoodies_calendar.css");
-     $this -> TplInclude -> IncludeCss("/application/framework/css/ajax-dynamic-list.css");
-     $this -> TplInclude -> IncludeCss("/application/framework/css/reset.css");
-     $this -> TplInclude -> IncludeCss("/application/framework/css/general.css");	
-     $this -> TplInclude -> IncludeCss("/application/framework/css/jquery.alerts.css");	
+     $this -> TplInclude -> IncludeCss("../../../framework/css/dhtmlgoodies_calendar.css");
+     $this -> TplInclude -> IncludeCss("../../../framework/css/ajax-dynamic-list.css");
+     $this -> TplInclude -> IncludeCss("../../../framework/css/reset.css");
+     $this -> TplInclude -> IncludeCss("../../../framework/css/general.css");	
+     $this -> TplInclude -> IncludeCss("../../../framework/css/jquery.alerts.css");	
 	 
-     $this -> TplInclude -> IncludeJs("/application/framework/js/jquery.js");
-     $this -> TplInclude -> IncludeJs("/application/framework/js/jqueryform.js");
-     $this -> TplInclude -> IncludeJs("/application/framework/js/funciones.js");	
-     $this -> TplInclude -> IncludeJs("/application/framework/js/dhtmlgoodies_calendar.js");
-     $this -> TplInclude -> IncludeJs("/application/framework/js/ajax-list.js");
-     $this -> TplInclude -> IncludeJs("/application/framework/js/ajax-dynamic-list.js");
-     $this -> TplInclude -> IncludeJs("/application/nomina/movimientos/js/licencia.js");
-     $this -> TplInclude -> IncludeJs("/application/framework/js/jquery.alerts.js");	 		 
+     $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/jqueryform.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/funciones.js");	
+     $this -> TplInclude -> IncludeJs("../../../framework/js/dhtmlgoodies_calendar.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/ajax-list.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/ajax-dynamic-list.js");
+     $this -> TplInclude -> IncludeJs("../js/licencia.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.alerts.js");	 		 
 	 
      $this -> assign("CSSSYSTEM",			$this -> TplInclude -> GetCssInclude());
      $this -> assign("JAVASCRIPT",			$this -> TplInclude -> GetJsInclude());
