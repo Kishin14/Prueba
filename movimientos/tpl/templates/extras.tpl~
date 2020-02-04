@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    {$JAVASCRIPT}
+    {$TABLEGRIDJS}
+    {$CSSSYSTEM}
+    {$TABLEGRIDCSS}
+    {$TITLETAB}  
+</head>
+
+<body>
+    <fieldset> 
+    <legend>{$TITLEFORM}</legend>
+        <div id="table_find">
+            <table>
+                <tr>
+                    <td><label>Busqueda : </label></td>
+                    <td>{$BUSQUEDA}</td>
+                </tr>
+            </table>
+        </div>
+    </fieldset>
+    {$FORM1}
+    <fieldset class="section">
+        <table align="center">
+            <tr>
+                <td><label>Horas Extras : </label></td>
+                <td colspan="3">{$HORAEXTRAID}</td>
+            </tr>
+            <tr>
+                <td><label>Contrato No. : </label></td>
+                <td colspan="3">{$CONTRATO}{$CONTRATOID}</td>
+            </tr>
+            <tr>
+                <td><label>Sueldo Base : </label></td>
+                <td colspan="3">{$SUELDO}</td>
+            </tr>            
+            <tr>
+                <td><label>Fecha Inicial : </label></td>
+                <td colspan="3">{$FECHAINI}</td>
+            </tr>
+            <tr>
+                <td><label>Fecha Final : </label></td>
+                <td colspan="3">{$FECHAFIN}</td>
+            </tr>
+            <tr>
+                <td><label>Horas Ext. Diurnas  : </label></td>
+                <td>{$HRSEXTDIUR}</td>
+                <td><label>Valor Ext. Diurnas  : </label></td>
+                <td>{$VREXTDIUR}</td>
+            </tr>
+            <tr>
+                <td><label>Horas Ext. Nocturnas  : </label></td>
+                <td>{$HRSEXTNOCT}</td>
+				<td><label>Valor Ext. Nocturnas  : </label></td>
+                <td>{$VREXTNOCT}</td>                
+            </tr>
+            <tr>
+                <td><label>Horas Ext. Diurnas Festivas  : </label></td>
+                <td>{$HRSEXTDIURFEST}</td>
+				<td><label>Valor Ext. Diurnas Festivas  : </label></td>
+                <td>{$VREXTDIURFEST}</td>                
+            </tr>
+            <tr>
+                <td><label>Horas Ext. Nocturnas Festivas  : </label></td>
+                <td>{$HRSEXTNOCTFEST}</td>
+				<td><label>Valor Ext. Nocturnas Festivas  : </label></td>
+                <td>{$VREXTNOCTFEST}</td>                
+            </tr>
+            <tr>
+				<td><label>Horas Recargo Nocturno  : </label></td>
+                <td>{$HRSRECNOCT}</td>            
+                <td><label>Valor Recargo Nocturno  : </label></td>
+                <td>{$VRRECNOCT}</td>
+            </tr>
+            <tr>
+                <td><label>Estado  : </label></td>
+                <td colspan="3">{$ESTADO}</td>
+            </tr>                                                                                    
+            <tr>
+                <td colspan="4">&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan="4" align="center">{$GUARDAR}&nbsp;{$ACTUALIZAR}&nbsp;{$BORRAR}&nbsp;{$IMPRIMIR}&nbsp;{$LIMPIAR}</td>
+            </tr>
+        </table>
+    {$FORM1END}
+    </fieldset>
+    <fieldset>{$GRIDEXTRAS}</fieldset>
+</body>
+</html>

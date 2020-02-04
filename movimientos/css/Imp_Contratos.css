@@ -1,0 +1,125 @@
+/* CSS Document */
+#contenedor{
+	width:572px;
+	height:752px;
+	/*background:#000000;*/
+}
+
+#cabecera{
+	width:572px;
+	height:69px;
+	/*background:#CCCCCC;*/
+}
+
+#contDatosFoto{
+	width:572px;
+	height:160px;
+}
+
+#datosBasicos{
+	width:412px;
+	height:160px;
+	/*background:#CC9999;*/
+	float:left;
+}
+
+#imgFoto{
+	width:160px;
+	height:160px;
+	/*background:#99CC99;*/
+	float:left;
+}
+
+#imgFoto img{
+	height:150px;
+	border:none;
+	padding:2px;
+}
+
+#datosgenerales{
+	width:572px;
+	height:165px;
+	/*background:#FFCCFF;*/
+}
+
+#datosgenerales table{
+	width:100%;
+	text-align:center;
+}
+
+#contImgCopias{
+	width:572px;
+	height:340px;
+	/*background:#00CCCC;*/
+}
+
+#contImgCopias .ImgCopias{
+	width:286px;
+	height:170px;
+	float:left;
+	/*background:#66FFCC;*/
+}
+
+#contImgCopias img{
+	height:160px;
+	border:none;
+	padding:2px;
+}
+
+.Tit_1{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:20px;
+	font-weight:bold;
+}
+
+.Tit_2{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:18px;
+	font-weight:bold;
+}
+
+.Tit_3{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:16px;
+	font-weight:bold;
+}
+
+.Label_1{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:14px;
+	font-weight:bold;
+}
+
+.Label_2{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+	font-weight:bold;
+}
+
+.Label_3{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:10px;
+	font-weight:bold;
+}
+
+.Dato_1{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:14px;
+}
+
+.Dato_2{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+}
+
+.Dato_3{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:10px;
+}
+#cellTotal{
+	border-bottom-color:#000;
+	border-bottom:1px solid;
+	border-right:1px solid;
+	border-left:1px solid;
+	border-top:1px solid;
+}

@@ -1,0 +1,80 @@
+<?php
+
+require_once("../../../framework/clases/ViewClass.php"); 
+
+final class reportesContratosLayout extends View{
+
+   private $fields;
+   
+   public function SetImprimir($Permiso){
+  	 $this -> Imprimir = $Permiso;
+   } 
+   
+   public function setCampos($campos){
+
+     require_once("../../../framework/clases/FormClass.php");
+	 
+     $Form1 = new Form("reportesContratosClass.php","reportesContratosForm","reportesContratosForm");
+	 
+     $this -> fields = $campos; 
+	 
+     $this -> TplInclude -> IncludeCss("/basenomina/framework/css/ajax-dynamic-list.css");
+     $this -> TplInclude -> IncludeCss("/basenomina/framework/css/reset.css");
+     $this -> TplInclude -> IncludeCss("/basenomina/framework/css/general.css");
+     $this -> TplInclude -> IncludeCss("/basenomina/framework/css/DatosBasicos.css");
+     $this -> TplInclude -> IncludeCss("/basenomina/framework/css/jquery.alerts.css");
+     $this -> TplInclude -> IncludeCss("/basenomina/framework/css/jqgrid/redmond/jquery-ui-1.8.2.custom.css");
+     $this -> TplInclude -> IncludeCss("/basenomina/nomina/reportes/css/reportes.css");
+	 
+     $this -> TplInclude -> IncludeJs("/basenomina/framework/js/jquery.js");	 
+     $this -> TplInclude -> IncludeJs("/basenomina/framework/js/jqgrid/jquery-ui-1.8.2.custom.min.js");	 
+     $this -> TplInclude -> IncludeJs("/basenomina/framework/js/jqueryform.js");
+     $this -> TplInclude -> IncludeJs("/basenomina/framework/js/funciones.js");
+     $this -> TplInclude -> IncludeJs("/basenomina/framework/js/ajax-list.js");
+     $this -> TplInclude -> IncludeJs("/basenomina/framework/js/ajax-dynamic-list.js");
+     $this -> TplInclude -> IncludeJs("/basenomina/nomina/reportes/js/reportesContratos.js"); 
+     $this -> TplInclude -> IncludeJs("/basenomina/framework/js/funcionesDetalle.js");	 
+     $this -> TplInclude -> IncludeJs("/basenomina/framework/js/jquery.alerts.js");	
+     $this -> TplInclude -> IncludeJs("/basenomina/framework/js/jqeffects/jquery.magnifier.js");
+	 $this -> TplInclude -> IncludeJs("/basenomina/framework/js/jquery.filestyle.js");
+	 $this -> TplInclude -> IncludeJs("/basenomina/framework/js/ajaxupload.3.6.js");
+     $this -> TplInclude -> IncludeJs("/basenomina/framework/js/general.js");
+	 
+     $this -> assign("CSSSYSTEM",	     $this -> TplInclude -> GetCssInclude());
+     $this -> assign("JAVASCRIPT",	     $this -> TplInclude -> GetJsInclude());
+     $this -> assign("FORM1",		     $Form1 -> FormBegin());
+     $this -> assign("FORM1END",	     $Form1 -> FormEnd());
+	 $this -> assign("DESDE",			 $this -> objectsHtml -> GetobjectHtml($this -> fields[desde]));		 	 
+	 $this -> assign("HASTA",			 $this -> objectsHtml -> GetobjectHtml($this -> fields[hasta]));		
+	 $this -> assign("EMPLEADO",       	 $this -> objectsHtml -> GetobjectHtml($this -> fields[empleado]));	            // 25/06/2013
+     $this -> assign("EMPLEADOID",     	 $this -> objectsHtml -> GetobjectHtml($this -> fields[empleado_id]));	        // 25/06/2013	 
+	 $this -> assign("CARGO",		     $this -> objectsHtml -> GetobjectHtml($this -> fields[cargo]));	
+	 $this -> assign("CARGOID",		 $this -> objectsHtml -> GetobjectHtml($this -> fields[cargo_id]));
+	 
+	 $this -> assign("GENERAR",			$this -> objectsHtml -> GetobjectHtml($this -> fields[generar]));	
+
+	 if($this -> Imprimir)
+	   $this -> assign("IMPRIMIR",	    $this -> objectsHtml -> GetobjectHtml($this -> fields[imprimir]));
+   }
+
+//LISTA MENU
+
+/*   public function setOficinas($oficinas){
+	 $this -> fields[oficina_id]['options'] = $oficinas;
+     $this -> assign("OFICINAID",$this -> objectsHtml -> GetobjectHtml($this -> fields[oficina_id]));      
+   }*/
+   
+    public function SetSi_Pro($Si_pro){
+	  $this -> fields[si_cargo]['options'] = $Si_pro;
+      $this -> assign("SI_CARGO",$this -> objectsHtml -> GetobjectHtml($this -> fields[si_cargo]));
+    }
+	public function SetSi_Pro2($Si_pro2){
+	  $this -> fields[si_empleado]['options'] = $Si_pro2;
+      $this -> assign("SI_EMPLEADO",$this -> objectsHtml -> GetobjectHtml($this -> fields[si_empleado]));
+    }
+   public function RenderMain(){   
+     $this -> RenderLayout('reportesContratos.tpl');	 
+   }
+}
+
+?>

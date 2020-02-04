@@ -1,0 +1,454 @@
+// JavaScript Document
+var formSubmitted = false;
+function setDataFormWithResponse(){
+	
+    var liquidacion_int_cesantias_id = $('#liquidacion_int_cesantias_id').val();
+    RequiredRemove();
+
+    var liquidacion  = new Array({campos:"liquidacion_int_cesantias_id",valores:$('#liquidacion_int_cesantias_id').val()});
+	var forma       = document.forms[0];
+	var controlador = 'IntCesantiasClass.php';
+
+	FindRow(liquidacion,forma,controlador,null,function(resp){
+														
+		 var data   = $.parseJSON(resp);													   
+		 var empleado_id = data[0]['empleado_id'];
+		 setDataEmpleado(empleado_id);
+		 
+		  var estado = data[0]['estado'];
+		 		 
+		 if(estado == 'I'){
+			 
+		   $(forma).find("input,select,textarea").each(function(){
+               this.disabled = true;																
+           });
+		   
+		 }else{
+			 
+		     $(forma).find("input,select,textarea").each(function(){
+               this.disabled = false;																
+             });			 
+			 
+		  }
+     	 var url    = "DetalleIntCesantiasClass.php?liquidacion_int_cesantias_id="+liquidacion_int_cesantias_id+"&rand="+Math.random();
+	 
+	 $("#detalleIntCesantias").attr("src",url);
+	 $("#detalleIntCesantias").load(function(){
+  	    getTotalDebitoCredito(liquidacion_int_cesantias_id);
+     });
+    if($('#guardar'))    $('#guardar').attr("disabled","true");
+	  if($('#estado').val()=='A'){
+		  if($('#actualizar')) 		$('#actualizar').attr("disabled","");
+		  if($('#contabilizar')) 	$('#contabilizar').attr("disabled","");		  
+		  if($('#anular')) 			$('#anular').attr("disabled","");  
+	   	  if($('#saveDetallepuc'))  $('#saveDetallepuc').attr("style","display:inherit");
+	  }else if($('#estado').val()=='C' ){
+		  if($('#actualizar')) 		$('#actualizar').attr("disabled","true");
+		  if($('#contabilizar')) 	$('#contabilizar').attr("disabled","true");			  
+		  if($('#anular')) 			$('#anular').attr("disabled","");  
+		  if($('#saveDetallepuc'))  $('#saveDetallepuc').attr("style","display:none");		  
+		  
+	  }	  
+    });
+
+
+}
+
+
+function Empleado_si(){
+	if($('#si_empleado').val()==1){
+		
+		  $('#empleado').attr("disabled","");	
+		  $("#empleado").addClass("obligatorio");
+		  $('#num_identificacion').attr("disabled","");	
+		  $("#num_identificacion").addClass("obligatorio");
+		  $('#cargo').attr("disabled","");	
+		  $("#cargo").addClass("obligatorio");
+		  $('#salario').attr("disabled","");	
+		  $("#salario").addClass("obligatorio");
+		  $('#fecha_inicio_contrato').attr("disabled","");	
+		  $("#fecha_inicio_contrato").addClass("obligatorio");
+		   $('#valor').attr("disabled","");	
+		  $("#valor").addClass("obligatorio");
+		  
+	}else if($('#si_empleado').val()=='ALL'){
+		
+		  $('#empleado').attr("disabled","true");
+		  $('#empleado').val('');
+		  $('#empleado_id').val('');
+ 		  $("#empleado").removeClass("obligatorio");
+		  
+		  $('#num_identificacion').val('');
+ 		  $("#num_identificacion").removeClass("obligatorio");
+		  $('#num_identificacion').attr("disabled","true");
+		  
+		  $('#cargo').val('');
+ 		  $("#cargo").removeClass("obligatorio");
+		  $('#cargo').attr("disabled","true");
+		  
+		  $('#salario').val('');
+ 		  $("#salario").removeClass("obligatorio");
+		  $('#salario').attr("disabled","true");
+		  
+		  $('#fecha_inicio_contrato').val('');
+ 		  $("#fecha_inicio_contrato").removeClass("obligatorio");
+		  $('#fecha_inicio_contrato').attr("disabled","true");
+		  
+		   $('#valor').val('');
+ 		  $("#valor").removeClass("obligatorio");
+		  $('#valor').attr("disabled","true");
+		  
+		  
+		  
+	}
+
+}
+
+function getTotalDebitoCredito(liquidacion_int_cesantias_id){
+		
+	var QueryString = "ACTIONCONTROLER=getTotalDebitoCredito&liquidacion_int_cesantias_id="+liquidacion_int_cesantias_id;
+	
+	$.ajax({
+      url     : "IntCesantiasClass.php",
+	  data    : QueryString,
+	  success : function(response){
+		  		  
+		  try{
+			 var totalDebitoCredito = $.parseJSON(response); 
+             var totalDebito        = parseFloat(totalDebitoCredito[0]['debito']) > 0 ? totalDebitoCredito[0]['debito'] : 0;
+			 var totalCredito       = parseFloat(totalDebitoCredito[0]['credito']) > 0 ? totalDebitoCredito[0]['credito'] : 0;
+             var totalDiferencia    = Math.abs(totalDebito - totalCredito);
+			 
+			 $("#totalDebito").html(totalDebito);
+			 $("#totalCredito").html(totalCredito);
+			 $("#totalDiferencia").html(totalDiferencia);
+		  }catch(e){
+			  
+			}
+      }
+	  
+    });    
+
+
+}
+
+function setDataEmpleado(empleado_id){
+    
+  var QueryString = "ACTIONCONTROLER=setDataEmpleado&empleado_id="+empleado_id;
+  
+  $.ajax({
+    url        : "IntCesantiasClass.php?rand="+Math.random(),
+    data       : QueryString,
+    beforeSend : function(){
+      
+    },
+    success    : function(response){
+      
+      try{
+ 			
+		  var responseArray        	  = $.parseJSON(response); 
+		  var contrato_id             =responseArray[0]['contrato_id'];
+		  var sueldo_base      	      =responseArray[0]['sueldo_base']; 
+		  var cargo      	      	  =responseArray[0]['cargo']; 
+		  var empleado     	      	  =responseArray[0]['empleado']; 
+		  var numero_identificacion   =responseArray[0]['numero_identificacion']; 
+		  var fecha_inicio   		  =responseArray[0]['fecha_inicio']; 
+
+		  var valor_consolidado   		  =responseArray[0]['valor_consolidado']; 
+		  var fecha_ultimo_corte   		  =responseArray[0]['fecha_ultimo_corte']; 
+		  
+		 if(fecha_ultimo_corte>fecha_inicio){
+			 fecha_inicio = fecha_ultimo_corte;
+		 }else{
+			 fecha_inicio = fecha_inicio;
+		 }
+
+		  $("#valor_consolidado").val(setFormatCurrency(valor_consolidado));
+		  
+		  $("#fecha_ultimo_corte").val(fecha_ultimo_corte);
+		  
+		  $("#num_identificacion").val(numero_identificacion);
+		  $("#cargo").val(cargo);
+ 		  $("#salario").val(setFormatCurrency(sueldo_base));
+		  $("#empleado").val(empleado);
+		  $("#fecha_inicio_contrato").val(fecha_inicio);
+		  
+		  
+ 
+      }catch(e){
+        alertJquery(e,'Inconsistencia');
+		$("#empleado").val();
+		$("#empleado_id").val();
+       }
+      
+    }
+    
+  });
+  
+}
+function setDataContrato(contrato_id){
+    
+  var QueryString = "ACTIONCONTROLER=setDataContrato&contrato_id="+contrato_id;
+  
+  $.ajax({
+    url        : "IntCesantiasClass.php?rand="+Math.random(),
+    data       : QueryString,
+    beforeSend : function(){
+      
+    },
+    success    : function(response){
+      
+      try{
+ 
+  var responseArray         = $.parseJSON(response); 
+  var contrato               =responseArray[0]['contrato'];
+  var contrato_id            =responseArray[0]['contrato_id'];  
+  $("#contrato").val(contrato);
+  $("#contrato_id").val(contrato_id);
+ 
+      }catch(e){
+     //alertJquery(e);
+       }
+      
+    }
+    
+  });
+  
+}
+
+function IntCesantiasOnSaveOnUpdate(formulario,resp){
+  
+   $("#refresh_QUERYGRID_novedad_fija_id").click();
+   if($('#guardar'))    $('#guardar').attr("disabled","");
+   if($('#actualizar')) $('#actualizar').attr("disabled","true");
+   if($('#borrar'))     $('#borrar').attr("disabled","true");
+   if($('#limpiar'))    $('#limpiar').attr("disabled","");
+   if (parseInt(resp)>0){
+   alertJquery("Se guardo la liquidacion No "+resp,"IntCesantias");
+    $('#liquidacion_int_cesantias_id').val(resp);
+    var liquidacion_int_cesantias_id = $('#liquidacion_int_cesantias_id').val();
+    var url    = "DetalleIntCesantiasClass.php?liquidacion_int_cesantias_id="+liquidacion_int_cesantias_id+"&rand="+Math.random();
+	 
+	 $("#detalleIntCesantias").attr("src",url);
+	 $("#detalleIntCesantias").load(function(){
+  	    getTotalDebitoCredito(liquidacion_int_cesantias_id);
+     });
+   }else
+   {
+	  alertJquery(resp,"IntCesantias");
+   }
+    
+
+}
+
+function OnclickContabilizar(){
+	
+	var liquidacion_int_cesantias_id 			 = $("#liquidacion_int_cesantias_id").val();
+	var QueryString 		 = "ACTIONCONTROLER=getTotalDebitoCredito&liquidacion_int_cesantias_id="+liquidacion_int_cesantias_id;	
+
+	if(parseInt(liquidacion_int_cesantias_id)>0){
+		if(!formSubmitted){	
+			formSubmitted = true;			
+			$.ajax({
+			  url     : "IntCesantiasClass.php",
+			  data    : QueryString,
+			  success : function(response){
+						  
+				  try{
+					 var totalDebitoCredito = $.parseJSON(response); 
+					 var totalDebito        = parseFloat(totalDebitoCredito[0]['debito']) > 0 ? totalDebitoCredito[0]['debito'] : 0;
+					 var totalCredito       = parseFloat(totalDebitoCredito[0]['credito']) > 0 ? totalDebitoCredito[0]['credito'] : 0;
+					 
+					 $("#totalDebito").html(totalDebito);
+					 $("#totalCredito").html(totalCredito);	
+					 
+					 if(parseFloat(totalDebito)==parseFloat(totalCredito)  && parseFloat(valor)>0){
+						var QueryString = "ACTIONCONTROLER=getContabilizar&liquidacion_int_cesantias_id="+liquidacion_int_cesantias_id+"&fecha_liquidacion="+fecha;	
+	
+						$.ajax({
+							url     : "IntCesantiasClass.php",
+							data    : QueryString,
+							success : function(response){
+						  
+								try{
+									 if($.trim(response) == 'true'){
+										 alertJquery('Liquidacion Contabilizada','Contabilizacion Exitosa');
+										 $("#refresh_QUERYGRID_factura").click();
+										 setDataFormWithResponse();
+										 formSubmitted = false;	
+									 }else{
+										   alertJquery(response,'Inconsistencia Contabilizando');
+									 }
+									
+		
+								}catch(e){
+								  
+								}
+							}
+						});
+					 }else{
+						alertJquery('No existen sumas iguales :<b>NO SE CONTABILIZARA</b>','Contabilizacion'); 
+					 }
+				  }catch(e){
+					  
+				  }
+			  }
+			  
+			}); 
+			
+		}
+	}else{
+		alertJquery('Debe Seleccionar primero una Liquidacion','Contabilizacion'); 
+	}
+}
+
+
+function IntCesantiasOnReset(formulario){
+	
+    clearFind();	
+    if($('#guardar'))    $('#guardar').attr("disabled","");
+    if($('#actualizar')) $('#actualizar').attr("disabled","true");
+    if($('#borrar'))     $('#borrar').attr("disabled","true");
+    if($('#limpiar'))    $('#limpiar').attr("disabled","");	
+	$("#detalleIntCesantias").attr("src","../../../framework/tpl/blank.html");	
+
+}
+
+function cargardiv(){
+	var empleado_id  					= $('#empleado_id').val();
+	
+	if(parseInt(empleado_id)>0){
+		$("#iframeSolicitud").attr("src","SolicPeriodosClass.php?empleado_id="+empleado_id+"&rand="+Math.random());
+		$("#divSolicitudFacturas").dialog({
+			title: 'Remesas y Ordenes de Servicios Pendientes',
+			width: 950,
+			height: 395,
+			closeOnEscape:true,
+			show: 'scale',
+			hide: 'scale'
+		});
+	}else{
+		alertJquery("Por Favor Seleccione un Empleado","IntCesantias");		
+	}
+}
+
+function closeDialog(){
+	$("#divSolicitudFacturas").dialog('close');
+}
+
+function calculaValor(){
+    
+	var fecha_corte = $("#fecha_corte").val();
+	var empleado_id = $("#empleado_id").val();
+	
+  	
+  var QueryString = "ACTIONCONTROLER=calculaValor&empleado_id="+empleado_id+"&fecha_corte="+fecha_corte;
+  
+  $.ajax({
+    url        : "IntCesantiasClass.php?rand="+Math.random(),
+    data       : QueryString,
+    beforeSend : function(){
+      
+    },
+    success    : function(response){
+      
+      try{
+ 
+			  var responseArray         = $.parseJSON(response); 
+			  var valor_liquidacion     =responseArray[0]['valor_liquidacion'];
+			  var dias_periodo          =responseArray[0]['dias_periodo'];  
+			  var dias_no_remu          =responseArray[0]['dias_no_remu'];  
+			  var dias_liquidados       =responseArray[0]['dias_liquidacion'];  
+			  
+			  var valor_consolidado  = removeFormatCurrency($("#valor_consolidado").val());
+
+			  
+			  var diferencia = parseInt((parseInt(valor_consolidado)))-parseInt(valor_liquidacion);
+			  
+			 	if(diferencia>0){
+					$("#reintegro").css("display","");
+					$("#gasto").css("display","none");
+				}else if(diferencia<0){
+					$("#reintegro").css("display","none");
+					$("#gasto").css("display","");
+				}else if(diferencia==0){
+					$("#reintegro").css("display","none");
+					$("#gasto").css("display","none");
+				}
+			  $("#dias_periodo").val(dias_periodo);
+			  $("#dias_no_remu").val(dias_no_remu);
+			  $("#dias_liquidados").val(dias_liquidados);
+			  $("#valor_liquidacion").val(setFormatCurrency(valor_liquidacion));
+			  $("#valor_liquidacion1").val(setFormatCurrency(valor_liquidacion));
+			   $("#valor_diferencia").val(setFormatCurrency(diferencia)); 
+      }catch(e){
+     //alertJquery(e);
+       }
+      
+    }
+    
+  });
+  
+}
+
+$(document).ready(function(){
+						   
+  var formulario = document.getElementById('IntCesantiasForm');
+  
+  $("#divSolicitudFacturas").css("display","none");
+
+						   
+
+  $("#detalleIntCesantias").attr("src","../../../framework/tpl/blank.html");	
+
+
+	 $("#fecha_corte").change(function(){
+		calculaValor();								
+	});
+	 
+	$("#Buscar").click(function(){										
+		cargardiv();
+	
+	  });
+	
+	$("#tipo_liquidacion").change(function(){										
+		if($("#si_empleado").val()=='ALL' && $("#tipo_liquidacion").val()=='P'){
+				alertJquery("No es posible hacer una liquidacion parcial para todos los empleados!!","Validacion Liquidacion IntCesantias");
+				$("#tipo_liquidacion").val('T');
+		}
+		
+		if($("#si_empleado").val()=='1' && $("#tipo_liquidacion").val()=='T'){
+			salario = removeFormatCurrency($("#salario").val());
+			int_cesantias = salario/2;
+			$("#valor").val(setFormatCurrency(int_cesantias));
+		}
+		if($("#si_empleado").val()=='1' && $("#tipo_liquidacion").val()=='P'){
+			
+			$("#valor").val('');
+		}
+	
+	  });
+	
+	$("#si_empleado").change(function(){										
+		if($("#si_empleado").val()=='ALL' && $("#tipo_liquidacion").val()=='P'){
+				alertJquery("No es posible hacer una liquidacion parcial para todos los empleados!!","Validacion Liquidacion IntCesantias");
+				$("#tipo_liquidacion").val('T');
+		}
+	
+	  });
+	
+  $("#guardar,#actualizar").click(function(){
+	if(this.id == 'guardar'){
+			if(!formSubmitted){
+				 formSubmitted = true;
+				 Send(formulario,'onclickSave',null,IntCesantiasOnSaveOnUpdate);
+			}
+		}else{
+			Send(formulario,'onclickUpdate',null,IntCesantiasOnSaveOnUpdate);
+		}	
+	
+	formSubmitted = false;
+  
+  });
+
+});

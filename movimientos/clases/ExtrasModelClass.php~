@@ -1,0 +1,91 @@
+<?php
+
+	require_once("../../../framework/clases/DbClass.php");
+	require_once("../../../framework/clases/PermisosFormClass.php");
+
+	final class ExtrasModel extends Db{
+
+		private $UserId;
+		private $Permisos;
+
+		public function SetUsuarioId($UserId,$CodCId){
+			$this -> Permisos = new PermisosForm();
+			$this -> Permisos -> SetUsuarioId($UserId,$CodCId);
+		}
+
+		public function getPermiso($ActividadId,$Permiso,$Conex){
+			return $this -> Permisos -> getPermiso($ActividadId,$Permiso,$Conex);
+		}
+
+		public function selectExtrasId($hora_extra_id,$Conex){
+			$select ="SELECT
+				h.*,
+				(SELECT sueldo_base FROM contrato WHERE contrato_id=h.contrato_id)as sueldo_base,
+				(SELECT CONCAT_WS(' ',c.numero_contrato,'-',t.razon_social,t.primer_nombre,t.segundo_nombre,t.primer_apellido,t.segundo_apellido,'-',t.numero_identificacion) 
+				AS contrato FROM contrato c,  tercero t, empleado e WHERE c.empleado_id=e.empleado_id AND e.tercero_id=t.tercero_id AND c.contrato_id=h.contrato_id)AS contrato
+			FROM hora_extra h WHERE	h.hora_extra_id = $hora_extra_id"; 
+			
+			$result    = $this -> DbFetchAll($select,$Conex);
+			return $result;
+		}
+		
+		public function getExtras($fecha_inicial,$Conex){
+			
+			$anio = substr($fecha_inicial,0,4);
+			
+			$select_per = "SELECT * FROM datos_periodo 
+			WHERE periodo_contable_id = (SELECT periodo_contable_id FROM periodo_contable WHERE anio=$anio)";
+			$result_per = $this -> DbFetchAll($select_per,$Conex,true);
+			return $result_per;			
+			
+		}		
+
+		public function Save($Campos,$Conex){
+			$this -> Begin($Conex);
+				$hora_extra_id    = $this -> DbgetMaxConsecutive("hora_extra","hora_extra_id",$Conex,true,1);
+				$this -> assignValRequest('hora_extra_id',$id_uvt);
+				$this -> DbInsertTable("hora_extra",$Campos,$Conex,true,false);
+			$this -> Commit($Conex);
+		}
+
+		public function Update($Campos,$Conex){
+			$this -> Begin($Conex);
+				if($_REQUEST['hora_extra_id'] == 'NULL'){
+					$this -> DbInsertTable("hora_extra",$Campos,$Conex,true,false);
+				}else{
+					$this -> DbUpdateTable("hora_extra",$Campos,$Conex,true,false);
+				}
+			$this -> Commit($Conex);
+		}
+
+		public function Delete($Campos,$Conex){
+			$this -> DbDeleteTable("hora_extra",$Campos,$Conex,true,false);
+		}
+
+		public function ValidateRow($Conex,$Campos){
+			require_once("../../../framework/clases/ValidateRowClass.php");
+			$Data = new ValidateRow($Conex,"hora_extra",$Campos);
+			return $Data -> GetData();
+		}
+		
+	  public function getDataContrato($contrato_id,$Conex){
+		 $select = "SELECT * FROM contrato WHERE contrato_id = $contrato_id";
+		 $result = $this -> DbFetchAll($select,$Conex,true);
+		 return $result;
+	  } 
+		
+
+		public function GetQueryExtrasGrid(){
+
+			$Query = "SELECT
+				h.hora_extra_id,
+				(SELECT CONCAT_WS(' ',c.numero_contrato,'-',t.razon_social,t.primer_nombre,t.segundo_nombre,t.primer_apellido,t.segundo_apellido,'-',t.numero_identificacion) 
+				AS contrato FROM contrato c,  tercero t, empleado e WHERE c.empleado_id=e.empleado_id AND e.tercero_id=t.tercero_id AND c.contrato_id=h.contrato_id)AS contrato,
+				h.fecha_inicial, h.fecha_final, h.horas_diurnas,h.vr_horas_diurnas, h.horas_nocturnas,h.vr_horas_nocturnas, h.horas_diurnas_fes,h.vr_horas_diurnas_fes, h.horas_nocturnas_fes,
+				h.vr_horas_nocturnas_fes,h.horas_recargo_noc, h.vr_horas_recargo_noc, 
+				IF(h.estado = 'P','PROCESADO',IF(h.estado = 'E','EDICION','ANULADO')) estado
+				FROM hora_extra h ";
+			return $Query;
+		}
+	}
+?>

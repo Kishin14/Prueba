@@ -1,0 +1,56 @@
+body{
+	
+	background:#FFF;
+}
+*{
+ font-family:Arial, Helvetica, sans-serif;
+ font-size:12px;
+}
+
+#encabezado{
+  margin-bottom:15px;
+  margin-top:10px;
+} 
+
+#encabezado tr td{
+  font-weight:bold;
+  padding:0 5px 0 5px;
+}
+
+#registros{
+  margin-top:15px;
+}
+
+#registros tr td{
+  padding:4px;
+}
+
+.titulo{
+ font-size:16px;
+}
+
+.subtitulo{
+  font-weight:bold;
+}
+
+.borderLeft{
+ border-left:1px solid;
+}
+
+.borderRight{
+ border-right:1px solid;
+}
+
+
+.borderBottom{
+  border-bottom:1px solid;
+}
+
+.borderTop{
+  border-top:1px solid;
+}
+
+#usuarioProceso{
+  margin-top:15px;
+}
+

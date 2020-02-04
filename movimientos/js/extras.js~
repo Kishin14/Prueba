@@ -1,0 +1,259 @@
+// JavaScript Document
+function setDataFormWithResponse(){
+	var parametrosId = $('#hora_extra_id').val();
+	var parametros  = new Array({campos:"hora_extra_id",valores:parametrosId});
+	var forma       = document.forms[0];
+	var controlador = 'ExtrasClass.php';
+
+	
+	FindRow(parametros,forma,controlador,null,function(resp){
+
+		if($('#guardar'))    $('#guardar').attr("disabled","true");
+		if($('#actualizar')) $('#actualizar').attr("disabled","");
+		if($('#borrar'))     $('#borrar').attr("disabled","");
+		if($('#imprimir'))   $('#imprimir').attr("disabled","");
+		if($('#limpiar'))    $('#limpiar').attr("disabled","");
+	});
+}
+
+function ExtrasOnSaveOnUpdateonDelete(formulario,resp){
+	Reset(formulario);
+	clearFind();
+	$("#refresh_QUERYGRID_Extras").click();
+	if($('#guardar'))    $('#guardar').attr("disabled","");
+	if($('#actualizar')) $('#actualizar').attr("disabled","true");
+	if($('#borrar'))     $('#borrar').attr("disabled","true");
+	if($('#imprimir'))   $('#imprimir').attr("disabled","true");
+	if($('#limpiar'))    $('#limpiar').attr("disabled","");
+	alertJquery(resp,"Depreciacion");
+}
+
+function ExtrasOnReset(formulario){
+	 Reset(formulario);
+    clearFind();  
+    setFocusFirstFieldForm(formulario); 
+	$('#hora_extra_id').attr("disabled","");
+	if($('#guardar'))    $('#guardar').attr("disabled","");
+	if($('#actualizar')) $('#actualizar').attr("disabled","true");
+	if($('#borrar'))     $('#borrar').attr("disabled","true");
+	if($('#imprimir'))   $('#imprimir').attr("disabled","true");
+	if($('#limpiar'))    $('#limpiar').attr("disabled","");
+}
+
+function setDataContrato(contrato_id){
+    
+  var QueryString = "ACTIONCONTROLER=setDataContrato&contrato_id="+contrato_id;
+  
+  $.ajax({
+    url        : "ExtrasClass.php?rand="+Math.random(),
+    data       : QueryString,
+    beforeSend : function(){
+      
+    },
+    success    : function(response){
+      
+      try{
+ 
+  var responseArray         = $.parseJSON(response); 
+  var contrato               =responseArray[0]['contrato'];
+  var contrato_id            =responseArray[0]['contrato_id']; 
+  var sueldo_base   			= responseArray[0]['sueldo_base'];
+
+  $("#contrato").val(contrato);
+  $("#contrato_id").val(contrato_id);
+  $("#sueldo_base").val(sueldo_base);  
+	
+ 
+      }catch(e){
+     //alertJquery(e);
+       }
+      
+    }
+    
+  });
+  
+}
+
+$(document).ready(function(){
+
+	$("#guardar,#actualizar").click(function(){
+		var formulario = document.getElementById('ExtrasForm');
+		if(ValidaRequeridos(formulario)){
+			if(this.id == 'guardar'){
+				Send(formulario,'onclickSave',null,ExtrasOnSaveOnUpdateonDelete)
+			}else{
+				Send(formulario,'onclickUpdate',null,ExtrasOnSaveOnUpdateonDelete)
+			}
+		}
+	});
+	
+	$("#horas_diurnas").blur(function(){
+
+		var sueldo_base 	= removeFormatCurrency($("#sueldo_base").val());
+		var fecha_inicial 	= $('#fecha_inicial').val();
+		var horas_diurnas 	= $('#horas_diurnas').val();					  
+		var QueryString 	= "ACTIONCONTROLER=setExtras&sueldo_base="+sueldo_base+"&fecha_inicial="+fecha_inicial+"&horas_diurnas="+horas_diurnas;
+		
+		$.ajax({
+			url        : "ExtrasClass.php?rand="+Math.random(),
+			data       : QueryString,
+			beforeSend : function(){
+			
+			},
+			success    : function(response){
+			
+			try{
+			
+				var vr_horas_diurnas    =response;
+				$("#vr_horas_diurnas").val(setFormatCurrency(vr_horas_diurnas));  
+				
+				
+				}catch(e){
+				//alertJquery(e);
+				}
+			
+			}
+		
+		});
+	});
+	
+	$("#horas_nocturnas").blur(function(){
+
+		
+		var sueldo_base 	= removeFormatCurrency($("#sueldo_base").val());
+		var fecha_inicial 	= $('#fecha_inicial').val();
+		var horas_nocturnas = $('#horas_nocturnas').val();					  
+		var QueryString 	= "ACTIONCONTROLER=setExtras&sueldo_base="+sueldo_base+"&fecha_inicial="+fecha_inicial+"&horas_nocturnas="+horas_nocturnas;
+		
+		$.ajax({
+			url        : "ExtrasClass.php?rand="+Math.random(),
+			data       : QueryString,
+			beforeSend : function(){
+			
+			},
+			success    : function(response){
+			
+			try{
+			
+				var vr_horas_nocturnas    =response;
+				$("#vr_horas_nocturnas").val(setFormatCurrency(vr_horas_nocturnas));  
+				
+				
+				}catch(e){
+				//alertJquery(e);
+				}
+			
+			}
+		
+		});
+	});	
+	
+	$("#horas_diurnas_fes").blur(function(){
+
+		
+		var sueldo_base 	= removeFormatCurrency($("#sueldo_base").val());
+		var fecha_inicial 	= $('#fecha_inicial').val();
+		var horas_diurnas_fes = $('#horas_diurnas_fes').val();					  
+		var QueryString 	= "ACTIONCONTROLER=setExtras&sueldo_base="+sueldo_base+"&fecha_inicial="+fecha_inicial+"&horas_diurnas_fes="+horas_diurnas_fes;
+		
+		$.ajax({
+			url        : "ExtrasClass.php?rand="+Math.random(),
+			data       : QueryString,
+			beforeSend : function(){
+			
+			},
+			success    : function(response){
+			
+			try{
+			
+				var vr_horas_diurnas_fes    =response;
+				$("#vr_horas_diurnas_fes").val(setFormatCurrency(vr_horas_diurnas_fes));  
+				
+				
+				}catch(e){
+				//alertJquery(e);
+				}
+			
+			}
+		
+		});
+	});	
+	
+	$("#horas_nocturnas_fes").blur(function(){
+
+		
+		var sueldo_base 	= removeFormatCurrency($("#sueldo_base").val());
+		var fecha_inicial 	= $('#fecha_inicial').val();
+		var horas_nocturnas_fes = $('#horas_nocturnas_fes').val();					  
+		var QueryString 	= "ACTIONCONTROLER=setExtras&sueldo_base="+sueldo_base+"&fecha_inicial="+fecha_inicial+"&horas_nocturnas_fes="+horas_nocturnas_fes;
+		
+		$.ajax({
+			url        : "ExtrasClass.php?rand="+Math.random(),
+			data       : QueryString,
+			beforeSend : function(){
+			
+			},
+			success    : function(response){
+			
+			try{
+			
+				var vr_horas_nocturnas_fes    =response;
+				$("#vr_horas_nocturnas_fes").val(setFormatCurrency(vr_horas_nocturnas_fes));  
+				
+				
+				}catch(e){
+				//alertJquery(e);
+				}
+			
+			}
+		
+		});
+	});		
+
+	$("#horas_recargo_noc").blur(function(){
+
+		
+		var sueldo_base 	= removeFormatCurrency($("#sueldo_base").val());
+		var fecha_inicial 	= $('#fecha_inicial').val();
+		var horas_recargo_noc = $('#horas_recargo_noc').val();					  
+		var QueryString 	= "ACTIONCONTROLER=setExtras&sueldo_base="+sueldo_base+"&fecha_inicial="+fecha_inicial+"&horas_recargo_noc="+horas_recargo_noc;
+		
+		$.ajax({
+			url        : "ExtrasClass.php?rand="+Math.random(),
+			data       : QueryString,
+			beforeSend : function(){
+			
+			},
+			success    : function(response){
+			
+			try{
+			
+				var vr_horas_recargo_noc    =response;
+				$("#vr_horas_recargo_noc").val(setFormatCurrency(vr_horas_recargo_noc));  
+				
+				
+				}catch(e){
+				//alertJquery(e);
+				}
+			
+			}
+		
+		});
+	});		
+
+	
+}
+	
+);
+
+function beforePrint(){
+	
+   var hora_extra_id = parseInt(document.getElementById("hora_extra_id").value);
+      
+   if(isNaN(hora_extra_id)){
+     alertJquery("Debe Seleccionar una hora extra !!","Impresion Hora Extra"); 
+     return false;
+   }else{
+      return true;
+    }
+ }
