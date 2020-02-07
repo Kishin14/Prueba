@@ -183,7 +183,7 @@ final class reporteHojaVidaModel extends Db{
   public function getliquida_vacacion($contrato_id,$Conex){ 
 	   	
 
-	 $select = "SELECT lc.*,(CASE WHEN lc.estado='I' THEN '<span style=\'color:#FF0000;\'>
+	 $select = "SELECT lc.*,(SELECT sueldo_base FROM contrato WHERE contrato_id = lc.contrato_id)AS salario,(SELECT nombre_cargo FROM cargo WHERE cargo_id = (SELECT cargo_id FROM contrato WHERE contrato_id = lc.contrato_id))AS cargo,(CASE WHEN lc.estado='I' THEN '<span style=\'color:#FF0000;\'>
 		 INACTIVO</span>' WHEN lc.estado='A' THEN 'ACTIVO' ELSE '<span style=\'color:#008000;\'>
 		 CONTABILIZADO</span>' END)AS estado,CONCAT('','<a href=\"\../../movimientos/clases/VacacionClass.php?liquidacion_vacaciones_id=',lc.liquidacion_vacaciones_id,'\" target=\"_blank\">','<input type=\"button\" class=\"btn btn-info\" value=\"IR A LIQUIDACION\" style=\"padding: 0.055rem 0.55rem\">','</a>' )AS ir,
 		 (CONCAT_WS('','<a href=\"javascript:void(0)\" onClick=\"viewDoc(',lc.encabezado_registro_id,')\">','','<input type=\"button\" class=\"btn btn-info\" value=\"VER LIQUIDACION\" style=\"padding: 0.055rem 0.55rem\"> </a>' )) AS ver
