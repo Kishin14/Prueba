@@ -68,6 +68,9 @@ final class LicenciaLayout extends View{
      $this -> assign("FECHAFIN",   			$this -> objectsHtml -> GetobjectHtml($this -> fields[fecha_final]));
      $this -> assign("CONTRATOID",		   	$this -> objectsHtml -> GetobjectHtml($this -> fields[contrato_id]));
      $this -> assign("CONTRATO",   			$this -> objectsHtml -> GetobjectHtml($this -> fields[contrato]));
+     $this -> assign("ENFERMEDADID",		   	$this -> objectsHtml -> GetobjectHtml($this -> fields[cie_enfermedad_id]));
+     $this -> assign("ENFERMEDAD",   			$this -> objectsHtml -> GetobjectHtml($this -> fields[descripcion]));
+
      $this -> assign("DIAS",   				$this -> objectsHtml -> GetobjectHtml($this -> fields[dias]));
      $this -> assign("REMUNERADO", 			$this -> objectsHtml -> GetobjectHtml($this -> fields[remunerado]));	 
      $this -> assign("ESTADO",   			$this -> objectsHtml -> GetobjectHtml($this -> fields[estado]));

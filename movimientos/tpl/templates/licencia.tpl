@@ -31,9 +31,13 @@
             </tr>
             <tr>
                 <td><label>Empleado : </label></td>
-                <td>{$CONTRATO}{$CONTRATOID}</td>
+                <td>{$CONTRATO}{$CONTRATOID}</td>               
+            </tr>
+             <tr>
                 <td><label>Tipo Licencia o Incapacidad : </label></td>
-                <td>{$CONCEPTOAREA}</td>                
+                <td>{$CONCEPTOAREA}</td> 
+                <td><label>Enfermedad (CIE10): </label></td>
+                <td>{$ENFERMEDAD}{$ENFERMEDADID}</td>  
             </tr>
             <tr>
                 <td><label>Concepto : </label></td>

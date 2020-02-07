@@ -270,6 +270,27 @@ final class Licencia extends Controler{
 			setId =>'contrato_hidden')
   );
 
+  $this -> Campos[cie_enfermedad_id] = array(
+	   name =>'cie_enfermedad_id',
+	   id =>'cie_enfermedad_id',
+	   type =>'hidden',
+	   //required=>'yes',
+	   datatype=>array(type=>'integer'),
+	   transaction=>array(
+			table =>array('licencia'),
+			type =>array('column'))
+  );
+
+   $this -> Campos[descripcion] = array(
+	   name =>'descripcion',
+	   id =>'descripcion',
+	   type =>'text',
+	   size    =>'40',
+	   suggest => array(
+			name =>'enfermedades',
+			setId =>'cie_enfermedad_id')
+  );
+
 
 	$this -> Campos[tipo_incapacidad_id] = array(
 	  name =>'tipo_incapacidad_id',
