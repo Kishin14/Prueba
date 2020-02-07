@@ -119,7 +119,7 @@ final class reporteHojaVidaModel extends Db{
 
 	   	$select = "SELECT l.concepto, l.fecha_licencia,l.fecha_inicial,l.fecha_final,l.dias,IF(l.estado='A','<span style=\'color:#008000;\'>
 		 ACTIVO</span>','<span style=\'color:#FF0000;\'>
-		 INACTIVO</span>')AS estado,(SELECT t.nombre FROM tipo_incapacidad t WHERE t.tipo_incapacidad_id=l.tipo_incapacidad_id)AS tipo_incapacidad,IF(l.remunerado=0,'SI','NO')AS remunerado,CONCAT('','<a href=\"\../../../..../clases/LicenciaClass.php?licencia_id=',l.licencia_id,'\" target=\"_blank\">','<input type=\"button\" class=\"btn btn-info\" value=\"VER LICENCIA\" style=\"padding: 0.055rem 0.55rem\">','</a>' )AS ver,l.diagnostico FROM licencia l WHERE l.contrato_id = $contrato_id ORDER BY l.fecha_inicial ASC";
+		 INACTIVO</span>')AS estado,(SELECT t.nombre FROM tipo_incapacidad t WHERE t.tipo_incapacidad_id=l.tipo_incapacidad_id)AS tipo_incapacidad,IF(l.remunerado=0,'SI','NO')AS remunerado,CONCAT('','<a href=\"\../../movimientos/clases/LicenciaClass.php?licencia_id=',l.licencia_id,'\" target=\"_blank\">','<input type=\"button\" class=\"btn btn-info\" value=\"VER LICENCIA\" style=\"padding: 0.055rem 0.55rem\">','</a>' )AS ver,l.diagnostico FROM licencia l WHERE l.contrato_id = $contrato_id ORDER BY l.fecha_inicial ASC";
 
 	  $result = $this -> DbFetchAll($select,$Conex,true);		  
 	  $i=0;
@@ -131,7 +131,7 @@ final class reporteHojaVidaModel extends Db{
 
 		   $select = "SELECT n.concepto,n.fecha_novedad,n.fecha_inicial,n.fecha_final,n.cuotas,n.valor,n.valor_cuota,(CASE WHEN n.periodicidad='H' THEN 'HORAS' WHEN n.periodicidad='D' THEN 'DIAS' WHEN n.periodicidad='S' THEN 'SEMANAL' WHEN n.periodicidad='Q' THEN 'QUINCENAL' WHEN n.periodicidad='M' THEN 'MENSUAL'END)AS periodicidad,IF(n.tipo_novedad='D','DEDUCIDO','DEVENGADO')AS tipo_novedad,IF(n.estado='A','<span style=\'color:#008000;\'>
 		 ACTIVO</span>','<span style=\'color:#FF0000;\'>
-		 INACTIVO</span>')AS estado,CONCAT('','<a href=\"\../../../..../clases/NovedadClass.php?novedad_fija_id=',n.novedad_fija_id,'\" target=\"_blank\">','<input type=\"button\" class=\"btn btn-info\" value=\"VER NOVEDAD\" style=\"padding: 0.055rem 0.55rem\">','</a>' )AS ver,(SELECT c.descripcion FROM concepto_area c WHERE c.concepto_area_id=n.concepto_area_id)AS concepto_area,IF(n.documento_anexo!='',CONCAT('','<a href=\"javascript:popPup(\'',n.documento_anexo,'\',\'1000\',\'1150\');\">','<img src=\"../../../framework/media/images/forms/visualizar.png\">','</a>' ),'N/A')AS soporte FROM novedad_fija n WHERE n.contrato_id = $contrato_id ORDER BY n.fecha_inicial ASC";
+		 INACTIVO</span>')AS estado,CONCAT('','<a href=\"\../../movimientos/clases/NovedadClass.php?novedad_fija_id=',n.novedad_fija_id,'\" target=\"_blank\">','<input type=\"button\" class=\"btn btn-info\" value=\"VER NOVEDAD\" style=\"padding: 0.055rem 0.55rem\">','</a>' )AS ver,(SELECT c.descripcion FROM concepto_area c WHERE c.concepto_area_id=n.concepto_area_id)AS concepto_area,IF(n.documento_anexo!='',CONCAT('','<a href=\"javascript:popPup(\'',n.documento_anexo,'\',\'1000\',\'1150\');\">','<img src=\"../../../framework/media/images/forms/visualizar.png\">','</a>' ),'N/A')AS soporte FROM novedad_fija n WHERE n.contrato_id = $contrato_id ORDER BY n.fecha_inicial ASC";
 		   
 	  $result = $this -> DbFetchAll($select,$Conex,true);		  
 	  $i=0;
@@ -143,7 +143,7 @@ final class reporteHojaVidaModel extends Db{
 
 	   	$select = "SELECT  s.*, (CASE WHEN s.estado='E' THEN 'EDICION' WHEN s.estado='A' THEN '<span style=\'color:#FF0000;\'>
 		 ANULADO</span>' WHEN s.estado='P' THEN 'PROCESADO' ELSE '<span style=\'color:#008000;\'>
-		 LIQUIDADO</span>' END)AS estado,(SUM(s.vr_horas_diurnas)+SUM(s.vr_horas_nocturnas)+SUM(s.vr_horas_diurnas_fes)+SUM(s.vr_horas_nocturnas_fes)+SUM(s.vr_horas_recargo_noc)+SUM(s.vr_horas_recargo_doc))AS total_valor,(SUM(s.horas_diurnas)+SUM(s.horas_nocturnas)+SUM(s.horas_diurnas_fes)+SUM(s.horas_nocturnas_fes)+SUM(s.horas_recargo_noc)+SUM(s.horas_recargo_doc))AS total_cant,CONCAT('','<a href=\"\../../../..../clases/ExtrasClass.php?hora_extra_id=',s.hora_extra_id,'\" target=\"_blank\">','<input type=\"button\" class=\"btn btn-info\" value=\"VER HORA EXTRA\" style=\"padding: 0.055rem 0.55rem\">','</a>' )AS ver
+		 LIQUIDADO</span>' END)AS estado,(SUM(s.vr_horas_diurnas)+SUM(s.vr_horas_nocturnas)+SUM(s.vr_horas_diurnas_fes)+SUM(s.vr_horas_nocturnas_fes)+SUM(s.vr_horas_recargo_noc)+SUM(s.vr_horas_recargo_doc))AS total_valor,(SUM(s.horas_diurnas)+SUM(s.horas_nocturnas)+SUM(s.horas_diurnas_fes)+SUM(s.horas_nocturnas_fes)+SUM(s.horas_recargo_noc)+SUM(s.horas_recargo_doc))AS total_cant,CONCAT('','<a href=\"\../../movimientos/clases/ExtrasClass.php?hora_extra_id=',s.hora_extra_id,'\" target=\"_blank\">','<input type=\"button\" class=\"btn btn-info\" value=\"VER HORA EXTRA\" style=\"padding: 0.055rem 0.55rem\">','</a>' )AS ver
 				FROM hora_extra s WHERE s.contrato_id = $contrato_id ORDER BY s.fecha_inicial ASC";
 
 	  $result = $this -> DbFetchAll($select,$Conex,true);		  
@@ -156,7 +156,7 @@ final class reporteHojaVidaModel extends Db{
 
 	   	$select = "SELECT lc.*,IF(lc.periodo=1,'PRIMER SEMESTRE','SEGUNDO SEMESTRE')AS periodo,IF(lc.tipo_liquidacion='T','TOTAL','PARCIAL')AS tipo_liquidacion,(CASE WHEN lc.estado='I' THEN '<span style=\'color:#FF0000;\'>
 		 INACTIVO</span>' WHEN lc.estado='A' THEN 'ACTIVO' ELSE '<span style=\'color:#008000;\'>
-		 CONTABILIZADO</span>' END)AS estado,CONCAT('','<a href=\"\../../../..../clases/CesantiasClass.php?liquidacion_cesantias_id=',lc.liquidacion_cesantias_id,'\" target=\"_blank\">','<input type=\"button\" class=\"btn btn-info\" value=\"IR A LIQUIDACION\" style=\"padding: 0.055rem 0.55rem\">','</a>' )AS ir,
+		 CONTABILIZADO</span>' END)AS estado,CONCAT('','<a href=\"\../../movimientos/clases/CesantiasClass.php?liquidacion_cesantias_id=',lc.liquidacion_cesantias_id,'\" target=\"_blank\">','<input type=\"button\" class=\"btn btn-info\" value=\"IR A LIQUIDACION\" style=\"padding: 0.055rem 0.55rem\">','</a>' )AS ir,
 		 (CONCAT_WS('','<a href=\"javascript:void(0)\" onClick=\"viewDoc(',lc.encabezado_registro_id,')\">','','<input type=\"button\" class=\"btn btn-info\" value=\"VER LIQUIDACION\" style=\"padding: 0.055rem 0.55rem\"> </a>' )) AS ver
 	   	FROM liquidacion_cesantias lc 
 	   	WHERE lc.contrato_id = $contrato_id ORDER BY lc.fecha_corte ASC";
@@ -171,7 +171,7 @@ final class reporteHojaVidaModel extends Db{
 
 	 $select = "SELECT lc.*,IF(lc.periodo=1,'PRIMER SEMESTRE','SEGUNDO SEMESTRE')AS periodo,IF(lc.tipo_liquidacion='T','TOTAL','PARCIAL')AS tipo_liquidacion,(CASE WHEN lc.estado='I' THEN '<span style=\'color:#FF0000;\'>
 		 INACTIVO</span>' WHEN lc.estado='A' THEN 'ACTIVO' ELSE '<span style=\'color:#008000;\'>
-		 CONTABILIZADO</span>' END)AS estado,CONCAT('','<a href=\"\../../../..../clases/PrimaClass.php?liquidacion_prima_id=',lc.liquidacion_prima_id,'\" target=\"_blank\">','<input type=\"button\" class=\"btn btn-info\" value=\"IR A LIQUIDACION\" style=\"padding: 0.055rem 0.55rem\">','</a>' )AS ir,
+		 CONTABILIZADO</span>' END)AS estado,CONCAT('','<a href=\"\../../movimientos/clases/PrimaClass.php?liquidacion_prima_id=',lc.liquidacion_prima_id,'\" target=\"_blank\">','<input type=\"button\" class=\"btn btn-info\" value=\"IR A LIQUIDACION\" style=\"padding: 0.055rem 0.55rem\">','</a>' )AS ir,
 		 (CONCAT_WS('','<a href=\"javascript:void(0)\" onClick=\"viewDoc(',lc.encabezado_registro_id,')\">','','<input type=\"button\" class=\"btn btn-info\" value=\"VER LIQUIDACION\" style=\"padding: 0.055rem 0.55rem\"> </a>' )) AS ver
 	   	FROM liquidacion_prima lc 
 	   	WHERE lc.contrato_id = $contrato_id ORDER BY lc.fecha_liquidacion ASC";
@@ -185,7 +185,7 @@ final class reporteHojaVidaModel extends Db{
 
 	 $select = "SELECT lc.*,(CASE WHEN lc.estado='I' THEN '<span style=\'color:#FF0000;\'>
 		 INACTIVO</span>' WHEN lc.estado='A' THEN 'ACTIVO' ELSE '<span style=\'color:#008000;\'>
-		 CONTABILIZADO</span>' END)AS estado,CONCAT('','<a href=\"\../../../..../clases/VacacionClass.php?liquidacion_vacaciones_id=',lc.liquidacion_vacaciones_id,'\" target=\"_blank\">','<input type=\"button\" class=\"btn btn-info\" value=\"IR A LIQUIDACION\" style=\"padding: 0.055rem 0.55rem\">','</a>' )AS ir,
+		 CONTABILIZADO</span>' END)AS estado,CONCAT('','<a href=\"\../../movimientos/clases/VacacionClass.php?liquidacion_vacaciones_id=',lc.liquidacion_vacaciones_id,'\" target=\"_blank\">','<input type=\"button\" class=\"btn btn-info\" value=\"IR A LIQUIDACION\" style=\"padding: 0.055rem 0.55rem\">','</a>' )AS ir,
 		 (CONCAT_WS('','<a href=\"javascript:void(0)\" onClick=\"viewDoc(',lc.encabezado_registro_id,')\">','','<input type=\"button\" class=\"btn btn-info\" value=\"VER LIQUIDACION\" style=\"padding: 0.055rem 0.55rem\"> </a>' )) AS ver
 	   	FROM liquidacion_vacaciones lc 
 	   	WHERE lc.contrato_id = $contrato_id ORDER BY lc.fecha_dis_inicio ASC";
