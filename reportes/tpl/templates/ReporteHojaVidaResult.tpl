@@ -201,7 +201,7 @@
     <div class="row animated zoomIn">
       <div class="col-sm"></div>
       <div class="col-sm-10">
-        <div style="margin: 25% auto;width: 80%; border: #ebccd1 solid;border-radius: 0.5em;">
+        <div style="margin: 10% auto;width: 80%; border: #ebccd1 solid;border-radius: 0.5em;">
           <div class="panel-heading" style="color:#b94a48;background-color:#f2dede;border-radius: 0.5em;">
             <h3 class="panel-title">¡ATENCI&Oacute;N!</h3>
           </div>
