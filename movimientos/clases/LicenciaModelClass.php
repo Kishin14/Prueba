@@ -55,9 +55,9 @@ final class LicenciaModel extends Db{
 	}   
 
 	public function getDiagnostico($tipo_incapacidad_id,$Conex){
-		$select = "SELECT diagnostico FROM tipo_incapacidad WHERE tipo_incapacidad_id=$tipo_incapacidad_id";
+		$select = "SELECT tipo,diagnostico FROM tipo_incapacidad WHERE tipo_incapacidad_id=$tipo_incapacidad_id";
 		$result = $this -> DbFetchAll($select,$Conex);
-		return $result[0]['diagnostico'];
+		return $result;
 	}
 	
 	public function selectLicenciaId($licencia_id,$Conex){
@@ -71,10 +71,13 @@ final class LicenciaModel extends Db{
 	
 	public function GetQueryLicenciaGrid(){
 	
-		$Query = "SELECT n.licencia_id,n.fecha_licencia,
+		$Query = "SELECT n.licencia_id,
+		                 n.fecha_licencia,
 		(SELECT CONCAT_WS(' ',c.numero_contrato,'-',t.razon_social,t.primer_nombre,t.segundo_nombre,t.primer_apellido,t.segundo_apellido,'-',t.numero_identificacion) 
 		AS contrato FROM contrato c,  tercero t, empleado e WHERE c.empleado_id=e.empleado_id AND e.tercero_id=t.tercero_id AND c.contrato_id=n.contrato_id)AS contrato,
-		 n.concepto,n.diagnostico,n.fecha_inicial,n.fecha_final, 
+		 n.concepto,
+		 (SELECT descripcion FROM cie_enfermedades WHERE cie_enfermedades_id=n.cie_enfermedades_id)AS enfermedad,
+		 n.diagnostico,n.fecha_inicial,n.fecha_final, 
 		 IF(n.estado='A','ACTIVO','INACTIVO') AS estado
 		 FROM licencia n";
 		

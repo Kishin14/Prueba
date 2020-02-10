@@ -52,6 +52,7 @@ final class Licencia extends Controler{
 		array(name=>'fecha_licencia',		index=>'fecha_licencia',	sorttype=>'text',	width=>'110',	align=>'center'),
 	  	array(name=>'contrato',				index=>'contrato',			sorttype=>'text',	width=>'120',	align=>'center'),		
 		array(name=>'concepto',				index=>'concepto',			sorttype=>'text',	width=>'180',	align=>'center'),
+		array(name=>'enfermedad',			index=>'enfermedad',		sorttype=>'text',	width=>'180',	align=>'center'),
 	  	array(name=>'diagnostico',			index=>'diagnostico',		sorttype=>'text',	width=>'180',	align=>'center'),
 	  	array(name=>'fecha_inicial',		index=>'fecha_inicial',		sorttype=>'text',	width=>'100',	align=>'center'),
 	  	array(name=>'fecha_final',			index=>'fecha_final',		sorttype=>'text',	width=>'100',	align=>'center'),
@@ -61,7 +62,8 @@ final class Licencia extends Controler{
     $Titles = array('CODIGO',
 					'FECHA NOVEDAD',
 					'CONTRATO',					
-    				'CONCEPTO',
+					'CONCEPTO',
+					'ENFERMEDAD',
 					'DIAGNOSTICO',
     				'FECHA INICIAL',
     				'FECHA FINAL',
@@ -79,9 +81,9 @@ final class Licencia extends Controler{
 		$Data                  = array();
 		$tipo_incapacidad_id   = $_REQUEST['tipo_incapacidad_id'];
 		if(is_numeric($tipo_incapacidad_id)){
-			$diagnostico  = $Model -> getDiagnostico($tipo_incapacidad_id,$this -> getConex());
+			$result  = $Model -> getDiagnostico($tipo_incapacidad_id,$this -> getConex());
 		}
-		echo json_encode($diagnostico);
+		echo json_encode($result);
 	}
 	  
   //BUSQUEDA
@@ -270,9 +272,9 @@ final class Licencia extends Controler{
 			setId =>'contrato_hidden')
   );
 
-  $this -> Campos[cie_enfermedad_id] = array(
-	   name =>'cie_enfermedad_id',
-	   id =>'cie_enfermedad_id',
+  $this -> Campos[cie_enfermedades_id] = array(
+	   name =>'cie_enfermedades_id',
+	   id =>'cie_enfermedades_id',
 	   type =>'hidden',
 	   //required=>'yes',
 	   datatype=>array(type=>'integer'),
@@ -285,10 +287,11 @@ final class Licencia extends Controler{
 	   name =>'descripcion',
 	   id =>'descripcion',
 	   type =>'text',
+	   disabled => 'yes',
 	   size    =>'40',
 	   suggest => array(
 			name =>'enfermedades',
-			setId =>'cie_enfermedad_id')
+			setId =>'cie_enfermedades_id')
   );
 
 
