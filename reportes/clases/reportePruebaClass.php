@@ -89,6 +89,7 @@ final class reportePrueba extends Controler{
 		name	=>'desde',
 		id		=>'desde',
 		type	=>'text',
+		Boostrap => 'si',
 		required=>'yes',
 	 	datatype=>array(
 			type	=>'date',
@@ -98,6 +99,7 @@ final class reportePrueba extends Controler{
 	$this -> Campos[hasta] = array(
 		name	=>'hasta',
 		id		=>'hasta',
+		Boostrap => 'si',
 		type	=>'text',
 		required=>'yes',
 	 	datatype=>array(
@@ -109,6 +111,7 @@ final class reportePrueba extends Controler{
 		name	=>'si_convocado',
 		id		=>'si_convocado',
 		type	=>'select',
+		Boostrap => 'si',
 		options	=>null,
 		selected=>0,
 		required=>'yes',
@@ -119,6 +122,7 @@ final class reportePrueba extends Controler{
 		name	=>'si_cargo',
 		id		=>'si_cargo',
 		type	=>'select',
+		Boostrap => 'si',
 		options	=>null,
 		selected=>0,
 		required=>'yes',
@@ -141,6 +145,7 @@ final class reportePrueba extends Controler{
 		name	=>'cargo',
 		id		=>'cargo',
 		type	=>'text',
+		Boostrap => 'si',
 		disabled=>'disabled',
 		suggest=>array(
 			name	=>'cargo',
@@ -161,6 +166,7 @@ final class reportePrueba extends Controler{
 		name	=>'convocado',
 		id		=>'convocado',
 		type	=>'text',
+		Boostrap => 'si',
 		disabled=>'disabled',
 		suggest=>array(
 			name	=>'convocado',

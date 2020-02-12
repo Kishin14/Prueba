@@ -261,6 +261,7 @@ final class Prima extends Controler{
 		name	=>'consecutivo',
 		id		=>'consecutivo',
 		type	=>'text',
+		Boostrap =>'si',
 		datatype=>array(
 			type	=>'integer'),
 		transaction=>array(
@@ -284,6 +285,7 @@ final class Prima extends Controler{
 		name =>'empleado',
 		id =>'empleado',
 		type =>'text',
+		Boostrap =>'si',
 		required=>'yes',
 		size    =>'45',
 		suggest => array(
@@ -296,6 +298,7 @@ final class Prima extends Controler{
 		name	=>'cargo',
 		id		=>'cargo',
 		type	=>'text',
+		Boostrap =>'si',
 		readonly=>'yes',
 		required=>'yes',
 	 	datatype=>array(
@@ -307,6 +310,7 @@ final class Prima extends Controler{
 		name	=>'num_identificacion',
 		id		=>'num_identificacion',
 		type	=>'text',
+		Boostrap =>'si',
 		required=>'yes',
 		readonly=>'yes',
 	 	datatype=>array(
@@ -318,6 +322,7 @@ final class Prima extends Controler{
 		name	=>'salario',
 		id		=>'salario',
 		type	=>'text',
+		Boostrap =>'si',
 		required=>'yes',
 		readonly=>'yes',
 	 	datatype=>array(
@@ -330,6 +335,7 @@ final class Prima extends Controler{
 		name	=>'valor',
 		id		=>'valor',
 		type	=>'text',
+		Boostrap =>'si',
 		required=>'yes',
 		readonly=>'yes',
 	 	datatype=>array(
@@ -361,6 +367,7 @@ final class Prima extends Controler{
 		name	=>'observaciones',
 		id		=>'observaciones',
 		type	=>'text',
+		Boostrap =>'si',
 		size	=>81,
 		
 		required=>'yes',
@@ -378,6 +385,7 @@ final class Prima extends Controler{
 		name =>'estado',
 		id  =>'estado',
 		type =>'select',
+		Boostrap =>'si',
 		disabled => 'disabled',
 		options => array(array(value=>'A',text=>'ACTIVO',selected=>'A'),array(value=>'I',text=>'INACTIVO',selected=>'A'),array(value => 'C', text => 'CONTABILIZADA')),
 		required=>'yes',
@@ -393,6 +401,7 @@ final class Prima extends Controler{
 		name =>'tipo_liquidacion',
 		id  =>'tipo_liquidacion',
 		type =>'select',
+		Boostrap =>'si',
 		options => array(array(value=>'T',text=>'TOTAL',selected=>'T'),array(value=>'P',text=>'PARCIAL',selected=>'T')),
 		required=>'yes',
 		datatype=>array(
@@ -407,6 +416,7 @@ final class Prima extends Controler{
 		name	=>'si_empleado',
 		id		=>'si_empleado',
 		type	=>'select',
+		Boostrap =>'si',
 		options	=>array(array(value=>'1',text=>'UNO',selected=>'1'),array(value=>'ALL',text=>'TODOS',selected=>'1')),
 		
 		required=>'yes',
@@ -417,6 +427,7 @@ final class Prima extends Controler{
 		name	=>'periodo',
 		id		=>'periodo',
 		type	=>'select',
+		Boostrap =>'si',
 		options	=>array(array(value=>'1',text=>'PRIMER SEMESTRE',selected=>'1'),array(value=>'2',text=>'SEGUNDO SEMESTRE',selected=>'1')),
 		required=>'yes'
 		
@@ -436,6 +447,7 @@ final class Prima extends Controler{
 		name	=>'tipo_impresion',
 		id	    =>'tipo_impresion',
 		type	=>'select',
+		Boostrap =>'si',
 		options => array(array(value => 'C', text => 'PLANILLA LIQUIDACION'),array(value => 'CL', text => 'DESPRENDIBLES LIQUIDACION'), array(value => 'DP', text => 'DESPRENDIBLE DE PAGO'), array(value => 'DC', text => 'DOCUMENTO CONTABLE')),
 		selected=>'C',
 		required=>'yes',
@@ -446,6 +458,7 @@ final class Prima extends Controler{
 		name	=>'desprendibles',
 		id	    =>'desprendibles',
 		type	=>'select',
+		Boostrap =>'si',
 		options => array(array(value => '1', text => '1'), array(value => '2', text => '2'), array(value => '3', text => '3'), array(value => '4', text => '4'), array(value => '5', text => '5')),
 		selected=>'1',
 		required=>'yes',
@@ -528,7 +541,9 @@ final class Prima extends Controler{
 		name	=>'busqueda',
 		id		=>'busqueda',
 		type	=>'text',
-		size	=>'85',
+		Boostrap =>'si',
+		placeholder =>'Por favor digite el numero de identificación o el nombre',
+		size	=>'55',
 		suggest=>array(
 			name	=>'liquidacion_prima',
 			setId	=>'liquidacion_prima_id',
@@ -539,7 +554,9 @@ final class Prima extends Controler{
 		name	=>'busqueda_fecha',
 		id		=>'busqueda_fecha',
 		type	=>'text',
-		size	=>'85',
+		Boostrap =>'si',
+		placeholder =>'Por favor digite el numero de identificación o fecha	',
+		size	=>'55',
 		suggest=>array(
 			name	=>'liquidacion_prima_todos',
 			setId	=>'liquidacion_prima_id',

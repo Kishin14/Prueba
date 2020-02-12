@@ -135,6 +135,7 @@ final class CausalEval extends Controler{
 		name	=>'causal_desempeno_id',
 		id		=>'causal_desempeno_id',
 		type	=>'text',
+		Boostrap =>'si',
 		readonly =>'yes',
 		datatype=>array(
 			type	=>'autoincrement'),
@@ -148,6 +149,7 @@ final class CausalEval extends Controler{
 		id		=>'nombre',
 		type	=>'text',
 		required=>'yes',
+		Boostrap =>'si',
 	 	datatype=>array(
 			type	=>'text',
 			length	=>'150'),
@@ -161,6 +163,7 @@ final class CausalEval extends Controler{
 		id		=>'nota',
 		type	=>'text',
 		required=>'yes',
+		Boostrap =>'si',
 	 	datatype=>array(
 			type	=>'integer',
 			length	=>'11'),
@@ -173,6 +176,7 @@ final class CausalEval extends Controler{
 		name	=>'estado',
 		id		=>'estado',
 		type	=>'select',
+		Boostrap =>'si',
 		options	=> array(array(value=>'A',text=>'ACTIVO',selected=>'0'),array(value=>'I',text=>'INACTIVO')),
 		required=>'yes',
 	 	datatype=>array(
@@ -228,7 +232,9 @@ final class CausalEval extends Controler{
 		name	=>'busqueda',
 		id		=>'busqueda',
 		type	=>'text',
+		Boostrap =>'si',
 		size	=>'85',
+		placeholder =>'Por favor digite el nombre',
 		suggest=>array(
 			name	=>'causal_desempeno',
 			setId	=>'causal_desempeno_id',

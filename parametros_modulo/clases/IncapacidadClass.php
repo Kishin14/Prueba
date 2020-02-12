@@ -166,6 +166,7 @@ final class Incapacidad extends Controler{
 		id		=>'nombre',
 		type	=>'text',
 		required=>'yes',
+		Boostrap =>'si',
 	 	datatype=>array(
 			type	=>'text',
 			length	=>'150'),
@@ -178,6 +179,7 @@ final class Incapacidad extends Controler{
 		name	=>'tipo',
 		id		=>'tipo',
 		type	=>'select',
+		Boostrap =>'si',
 		options	=> array(array(value=>'L',text=>'LICENCIA',selected=>'L'),array(value=>'I',text=>'INCAPACIDAD')),
 		required=>'yes',
 	 	datatype=>array(
@@ -192,6 +194,7 @@ final class Incapacidad extends Controler{
 		name	=>'diagnostico',
 		id		=>'diagnostico',
 		type	=>'select',
+		Boostrap =>'si',
 		options	=> array(array(value=>'S',text=>'SI',selected=>'N'),array(value=>'N',text=>'NO')),
 		required=>'yes',
 	 	datatype=>array(
@@ -206,6 +209,7 @@ final class Incapacidad extends Controler{
 		name	=>'descuento',
 		id		=>'descuento',
 		type	=>'select',
+		Boostrap =>'si',
 		options	=> array(array(value=>'S',text=>'SI',selected=>'N'),array(value=>'N',text=>'NO',selected=>'N')),
 		required=>'yes',
 		selected=>'N',
@@ -222,6 +226,7 @@ final class Incapacidad extends Controler{
 		name	=>'dia',
 		id		=>'dia',
 		type	=>'text',
+		Boostrap =>'si',
 		//required=>'yes',
 		disabled=>'yes',		
 	 	datatype=>array(
@@ -236,6 +241,7 @@ final class Incapacidad extends Controler{
 		name	=>'porcentaje',
 		id		=>'porcentaje',
 		type	=>'text',
+		Boostrap =>'si',
 		//required=>'yes',
 		disabled=>'yes',
 		datatype=>array(
@@ -251,6 +257,7 @@ final class Incapacidad extends Controler{
 		name	=>'estado',
 		id		=>'estado',
 		type	=>'select',
+		Boostrap =>'si',
 		options	=> array(array(value=>'A',text=>'ACTIVO',selected=>'A'),array(value=>'I',text=>'INACTIVO')),
 		required=>'yes',
 	 	datatype=>array(
@@ -307,6 +314,8 @@ final class Incapacidad extends Controler{
 		id		=>'busqueda',
 		type	=>'text',
 		size	=>'85',
+		Boostrap =>'si',
+		placeholder =>'Por favor digite el nombre',
 		suggest=>array(
 			name	=>'tipo_incapacidad',
 			setId	=>'tipo_incapacidad_id',

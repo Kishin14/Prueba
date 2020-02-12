@@ -16,10 +16,10 @@
          <fieldset class="section">
         <table align="center" width="95%"> 
             <tr>
-                <td width="25%" align="center"><label>PERIODO</label></td>
-                <td width="30%" align="center"><label>EMPLEADO</label></td>
+                <td width="15%" align="center"><label>PERIODO</label></td>
+                <td width="20%" align="center"><label>EMPLEADO</label></td>
                 <td width="30%" align="center"><label>ENFERMEDAD</label></td>
-                <td width="25%" align="center"><label>TIPO</label></td>
+                <td width="20%" align="center"><label>TIPO</label></td>
                 <td width="25%" align="center"><label>INDICADORES</label></td>
                 
             </tr>

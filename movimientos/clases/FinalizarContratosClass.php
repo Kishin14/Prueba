@@ -146,7 +146,8 @@ final class FinalizarContratos extends Controler{
    	$this -> Campos[contrato] = array(
 	   	name =>'contrato',
 	   	id =>'contrato',
-	   	type =>'text',
+		   type =>'text',
+		   Boostrap => 'si',
 			size    =>'30',
 	   	suggest => array(
 			name =>'finalizar contrato',
@@ -157,7 +158,8 @@ final class FinalizarContratos extends Controler{
    $this -> Campos[fecha_inicio] = array(
     	name =>'fecha_inicio',
     	id  =>'fecha_inicio',
-    	type =>'text',
+		type =>'text',
+		Boostrap => 'si',
     	required=>'yes',
 		size=>10,
 		disabled=>'yes',
@@ -199,6 +201,7 @@ final class FinalizarContratos extends Controler{
 	  name =>'motivo_terminacion_id',
 	  id  =>'motivo_terminacion_id',
 	  type =>'select',
+	  Boostrap => 'si',
 	  options =>array(),
 	  required=>'yes',
 	  //tabindex=>'1',
@@ -213,6 +216,7 @@ final class FinalizarContratos extends Controler{
 	  name =>'causal_despido_id',
 	  id  =>'causal_despido_id',
 	  type =>'select',
+	  Boostrap => 'si',
 	  options =>array(),
 	  required=>'yes',
 	   datatype=>array(
@@ -226,6 +230,7 @@ final class FinalizarContratos extends Controler{
 		name =>'estado',
 		id  =>'estado',
 		type =>'select',
+		Boostrap => 'si',
 		disabled=>'yes',
 		options => array(array(value=>'A',text=>'ACTIVO',selected=>'A'),array(value=>'R',text=>'RETIRADO'),array(value=>'F',text=>'FINALIZADO'),array(value=>'AN',text=>'ANULADO'),array(value=>'L',text=>'LICENCIA')),
 		required=>'yes',
@@ -294,6 +299,7 @@ final class FinalizarContratos extends Controler{
 		name =>'causal_anulacion_id',
 		id  =>'causal_anulacion_id',
 		type =>'select',
+		Boostrap => 'si',
 		required=>'yes',
 		datatype=>array(
 			type =>'text',
@@ -304,6 +310,7 @@ final class FinalizarContratos extends Controler{
 		name	=>'tipo_impresion',
 		id	    =>'tipo_impresion',
 		type	=>'select',
+		Boostrap => 'si',
 		options => array(array(value => 'CL', text => 'DESPRENDIBLE LIQUIDACION'),  array(value => 'DC', text => 'DOCUMENTO CONTABLE')),
 		selected=>'C',
 		required=>'yes',
@@ -337,6 +344,8 @@ final class FinalizarContratos extends Controler{
 		id		=>'busqueda',
 		type	=>'text',
 		size	=>'85',
+		Boostrap => 'si',
+		placeholder =>'Por favor digite el numero de identificación del empleado o el nombre',
 		suggest=>array(
 			name	=>'finalizar contrato1',
 			setId	=>'contrato_id',

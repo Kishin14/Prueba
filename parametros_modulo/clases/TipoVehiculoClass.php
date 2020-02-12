@@ -147,6 +147,7 @@ final class TipoVehiculo extends Controler{
 		name	=>'nombre',
 		id		=>'nombre',
 		type	=>'text',
+		Boostrap =>'si',
 		required=>'yes',
 	 	datatype=>array(
 			type	=>'text',
@@ -161,6 +162,7 @@ final class TipoVehiculo extends Controler{
 		id		=>'codigo',
 		type	=>'text',
 		required=>'yes',
+		Boostrap =>'si',
 	 	datatype=>array(
 			type	=>'text',
 			length	=>'15'),
@@ -173,6 +175,7 @@ final class TipoVehiculo extends Controler{
 		name	=>'servicio',
 		id		=>'servicio',
 		type	=>'select',
+		Boostrap =>'si',
 		options	 =>array(array(value => '1',text => 'PARTICULAR'),array(value => '0', text => 'PUBLICO')),
 		required=>'yes',
 	 	datatype=>array(
@@ -187,6 +190,7 @@ final class TipoVehiculo extends Controler{
 			name	=>'tipo',
 			id		=>'tipo',
 			type	=>'select',
+			Boostrap =>'si',
 			options	=>array(array(value => 'C',text => 'CARGA'),array(value => 'P', text => 'PASAJERO'),array(value => 'R', text => 'PROPIO')),
 			required=>'yes',
 			datatype=>array(
@@ -242,6 +246,8 @@ final class TipoVehiculo extends Controler{
 		id		=>'busqueda',
 		type	=>'text',
 		size	=>'85',
+		Boostrap =>'si',
+		placeholder =>'Por favor digite el nombre',
 		suggest=>array(
 			name	=>'tipo_vehiculo_nomina',
 			setId	=>'vehiculo_nomina_id',

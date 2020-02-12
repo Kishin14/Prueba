@@ -259,6 +259,7 @@ final class Pago extends Controler{
 	$this -> Campos[numero_soporte] = array(
 		name	=>'numero_soporte',
 		id		=>'numero_soporte',
+		Boostrap =>'si',
 		type	=>'text',
 		readonly=>'yes'
 	);
@@ -267,6 +268,7 @@ final class Pago extends Controler{
 		name =>'empleados',
 		id  =>'empleados',
 		type =>'select',
+		Boostrap =>'si',
 		options => array(array(value=>'U',text=>'UNO',selected=>'U'),array(value=>'T',text=>'TODOS')),
 		required=>'yes',
 		datatype=>array(
@@ -296,6 +298,7 @@ final class Pago extends Controler{
 	$this -> Campos[empleado] = array(
 		name	=>'empleado',
 		id		=>'empleado',
+		Boostrap =>'si',
 		type	=>'text',
 		size	=>45,
 		suggest=>array(
@@ -308,6 +311,7 @@ final class Pago extends Controler{
 		name	=>'empleado_nit',
 		id		=>'empleado_nit',
 		type	=>'text',
+		Boostrap =>'si',
 		readonly=>'yes',
 	 	datatype=>array(
 			type	=>'alphanum',
@@ -331,6 +335,7 @@ final class Pago extends Controler{
 		name	=>'num_cheque',
 		id		=>'num_cheque',
 		type	=>'text',
+		Boostrap =>'si',
 	 	datatype=>array(
 			type	=>'text',
 			length	=>'50')
@@ -340,6 +345,7 @@ final class Pago extends Controler{
 		name	=>'valor_abono_nomina',
 		id		=>'valor_abono_nomina',
 		type	=>'text',
+		Boostrap =>'si',
 		readonly=>'yes',
 	 	datatype=>array(
 			type	=>'numeric',
@@ -356,6 +362,7 @@ final class Pago extends Controler{
 		name	=>'cuenta_tipo_pago_id',
 		id		=>'cuenta_tipo_pago_id',
 		type	=>'select',
+		Boostrap =>'si',
 		options	=>null,
 		required=>'yes',
 	 	datatype=>array(
@@ -370,6 +377,7 @@ final class Pago extends Controler{
 		name	=>'tipo_documento_id',
 		id		=>'tipo_documento_id',
 		type	=>'select',
+		Boostrap =>'si',
 		options	=>null,
 		required=>'yes',
 	 	datatype=>array(
@@ -385,6 +393,7 @@ final class Pago extends Controler{
 		name	=>'concepto_abono_nomina',
 		id		=>'concepto_abono_nomina',
 		type	=>'text',
+		Boostrap =>'si',
 		readonly=>'yes',
 		required=>'yes',
 		size    => '48',
@@ -462,6 +471,7 @@ final class Pago extends Controler{
 		name	=>'estado_abono_nomina',
 		id		=>'estado_abono_nomina',
 		type	=>'select',
+		Boostrap =>'si',
 		disabled=>'yes',
 		options => array(array(value => 'A', text => 'EDICION'),array(value => 'I', text => 'ANULADA'),array(value => 'C', text => 'CONTABILIZADA')),
 		selected=>'A',		
@@ -598,7 +608,9 @@ final class Pago extends Controler{
 		name	=>'busqueda',
 		id		=>'busqueda',
 		type	=>'text',
+		Boostrap =>'si',
 		size	=>'85',
+		placeholder =>'Por favor digite el consecutivo o la fecha',
 		//tabindex=>'1',
 		suggest=>array(
 			name	=>'pago_nomina',

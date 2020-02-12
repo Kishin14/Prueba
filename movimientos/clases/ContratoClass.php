@@ -228,6 +228,7 @@ final class Contrato extends Controler{
 			name	=>'numero_contrato',
 			id		=>'numero_contrato',
 			type	=>'text',
+			Boostrap =>'si',
 			//required=>'yes',
 			size    =>'10',
 			datatype=>array(
@@ -293,6 +294,7 @@ final class Contrato extends Controler{
 			name =>'empleado',
 			id =>'empleado',
 			type =>'text',
+			Boostrap =>'si',
 			required=>'yes',
 			size    =>'20',
 			suggest => array(
@@ -305,6 +307,7 @@ final class Contrato extends Controler{
 			name	=>'tipo_contrato_id',
 			id		=>'tipo_contrato_id',
 			type	=>'select',
+			Boostrap =>'si',
 			required=>'yes',
 			datatype=>array(
 				type	=>'integer',
@@ -319,6 +322,7 @@ final class Contrato extends Controler{
 			name	=>'prefijo',
 			id		=>'prefijo',
 			type	=>'text',
+			Boostrap =>'si',
 			required=>'no',
 			size    =>'5',
 			datatype=>array(
@@ -345,6 +349,7 @@ final class Contrato extends Controler{
 			name =>'cargo',
 			id =>'cargo',
 			type =>'text',
+			Boostrap =>'si',
 			required=>'yes',
 			size    =>'20',
 			suggest => array(
@@ -358,6 +363,7 @@ final class Contrato extends Controler{
 			name	=>'motivo_terminacion_id',
 			id		=>'motivo_terminacion_id',
 			type	=>'select',
+			Boostrap =>'si',
 			disabled=>'yes',
 			datatype=>array(
 				type	=>'integer',
@@ -371,6 +377,7 @@ final class Contrato extends Controler{
 			name 		=>'sueldo_base',
 			id      	=>'sueldo_base',
 			type	=>'text',
+			Boostrap =>'si',
 			required	=>'yes',
 			datatype	=>array(
 			type		=>'numeric'),
@@ -383,6 +390,7 @@ final class Contrato extends Controler{
 			name =>'subsidio_transporte',
 			id =>'subsidio_transporte',
 			type	=>'text',
+			Boostrap =>'si',
 			required=>'yes',
 			datatype=>array(type=>'numeric'),
 			transaction=>array(
@@ -394,6 +402,7 @@ final class Contrato extends Controler{
 			name =>'ingreso_nosalarial',
 			id =>'ingreso_nosalarial',
 			type	=>'text',
+			Boostrap =>'si',
 			required=>'yes',
 			datatype=>array(type=>'numeric'),
 			transaction=>array(
@@ -458,6 +467,7 @@ final class Contrato extends Controler{
 			name 		=>'valor_cesantias',
 			id      	=>'valor_cesantias',
 			type	=>'text',
+			Boostrap =>'si',
 			//required	=>'yes',
 			size		=>10,			
 			datatype	=>array(
@@ -471,6 +481,7 @@ final class Contrato extends Controler{
 			name 		=>'valor_intcesantias',
 			id      	=>'valor_intcesantias',
 			type	=>'text',
+			Boostrap =>'si',
 			//required	=>'yes',
 			size		=>10,			
 			datatype	=>array(
@@ -484,6 +495,7 @@ final class Contrato extends Controler{
 			name 		=>'valor_prima',
 			id      	=>'valor_prima',
 			type	=>'text',
+			Boostrap =>'si',
 			//required	=>'yes',
 			size		=>10,
 			datatype	=>array(
@@ -497,6 +509,7 @@ final class Contrato extends Controler{
 			name 		=>'valor_vacaciones',
 			id      	=>'valor_vacaciones',
 			type	=>'text',
+			Boostrap =>'si',
 			//required	=>'yes',
 			size		=>10,			
 			datatype	=>array(
@@ -511,6 +524,7 @@ final class Contrato extends Controler{
 			name =>'centro_de_costo_id',
 			id =>'centro_de_costo_id',
 			type	=>'select',
+			Boostrap =>'si',
 			required=>'yes',
 			datatype=>array(type=>'integer'),
 			transaction=>array(
@@ -523,6 +537,7 @@ final class Contrato extends Controler{
 			name =>'periodicidad',
 			id  =>'periodicidad',
 			type =>'select',
+			Boostrap =>'si',
 			options => array(array(value=>'H',text=>'HORAS',selected=>'H'),array(value=>'D',text=>'DIAS'),array(value=>'S',text=>'SEMANAL'),array(value=>'Q',text=>'QUINCENAL'),array(value=>'M',text=>'MENSUAL')),
 			required=>'yes',
 			datatype=>array(
@@ -537,6 +552,7 @@ final class Contrato extends Controler{
 			name	=>'causal_despido_id',
 			id		=>'causal_despido_id',
 			type	=>'select',
+			Boostrap =>'si',
 			disabled=>'yes',
 			datatype=>array(
 				type	=>'text',
@@ -565,6 +581,7 @@ final class Contrato extends Controler{
 			name	=>'categoria_arl_id',
 			id		=>'categoria_arl_id',
 			type	=>'select',
+			Boostrap =>'si',
 			options	=>null,
 			required=>'yes',
 			datatype=>array(
@@ -579,6 +596,7 @@ final class Contrato extends Controler{
 		name	=>'tipo_cta_id',
 		id		=>'tipo_cta_id',
 		type	=>'select',
+		Boostrap =>'si',
 		options	=>null,
 		//required=>'yes',
 		//tabindex=>'2',
@@ -594,6 +612,7 @@ final class Contrato extends Controler{
 		name	=>'banco',
 		id		=>'banco',
 		type	=>'text',
+		Boostrap =>'si',
 		//tabindex=>'7',
 		suggest=>array(
 			name	=>'banco',
@@ -619,6 +638,7 @@ final class Contrato extends Controler{
 			name	=>'estado',
 			id		=>'estado',
 			type	=>'select',
+			Boostrap =>'si',
 			options	=> array(array(value=>'A',text=>'ACTIVO',selected=>'A'),array(value=>'R',text=>'RETIRADO'),array(value=>'F',text=>'FINALIZADO'),array(value=>'AN',text=>'ANULADO'),array(value=>'L',text=>'LICENCIA')),
 			required=>'yes',
 			disabled=>'yes',
@@ -634,6 +654,7 @@ final class Contrato extends Controler{
 			name	=>'area_laboral',
 			id		=>'area_laboral',
 			type	=>'select',
+			Boostrap =>'si',
 			options	=> array(array(value=>'A',text=>'ADMINISTRATIVO',selected=>'A'),array(value=>'O',text=>'OPERATIVO'),array(value=>'C',text=>'COMERCIAL')),
 			required=>'yes',
 			datatype=>array(
@@ -661,6 +682,7 @@ final class Contrato extends Controler{
 			name =>'empresa_eps',
 			id =>'empresa_eps',
 			type =>'text',
+			Boostrap =>'si',
 			required=>'yes',
 			size    =>'20',
 			suggest => array(
@@ -684,6 +706,7 @@ final class Contrato extends Controler{
 			name =>'empresa_pension',
 			id =>'empresa_pension',
 			type =>'text',
+			Boostrap =>'si',
 			required=>'yes',
 			size    =>'20',
 			suggest => array(
@@ -708,6 +731,7 @@ final class Contrato extends Controler{
 			name =>'empresa_arl',
 			id =>'empresa_arl',
 			type =>'text',
+			Boostrap =>'si',
 			required=>'yes',
 			size    =>'20',
 			suggest => array(
@@ -732,6 +756,7 @@ final class Contrato extends Controler{
 			name =>'empresa_caja',
 			id =>'empresa_caja',
 			type =>'text',
+			Boostrap =>'si',
 			required=>'yes',
 			size    =>'20',
 			suggest => array(
@@ -756,6 +781,7 @@ final class Contrato extends Controler{
 			name =>'empresa_cesan',
 			id =>'empresa_cesan',
 			type =>'text',
+			Boostrap =>'si',
 			required=>'yes',
 			size    =>'20',
 			suggest => array(
@@ -863,6 +889,7 @@ final class Contrato extends Controler{
 		name	=>'numcuenta_proveedor',
 		id		=>'numcuenta_proveedor',
 		type	=>'text',
+		Boostrap =>'si',
 		required=>'yes',
 		//tabindex=>'8',
 		datatype=>array(
@@ -1214,6 +1241,7 @@ final class Contrato extends Controler{
 			name =>'horario_fin',
 			id =>'horario_fin',
 			type =>'text',
+			
 			size    =>'5',
 			datatype=>array(
 				type	=>'time',
@@ -1243,6 +1271,7 @@ final class Contrato extends Controler{
 			name	=>'dotacion',
 			id		=>'dotacion',
 			type	=>'text',
+
 			required=>'yes',
 			datatype=>array(
 				type	=>'date',
@@ -1268,6 +1297,7 @@ final class Contrato extends Controler{
 			name =>'lugar_trabajo',
 			id =>'lugar_trabajo',
 			type	=>'text',
+			Boostrap =>'si',
 			required=>'yes',
 			size=>'10',
 			
@@ -1280,6 +1310,7 @@ final class Contrato extends Controler{
 			name =>'lugar_expedicion_doc',
 			id =>'lugar_expedicion_doc',
 			type	=>'text',
+			Boostrap =>'si',
 			required=>'yes',
 			size=>'10',
 			
@@ -1295,7 +1326,7 @@ final class Contrato extends Controler{
 			required=>'yes',
 			datatype=>array(
 				type	=>'date',
-				length	=>'45'),
+				length	=>'15'),
 			transaction=>array(
 				table	=>array('contrato'),
 				type	=>array('column'))
@@ -1307,7 +1338,7 @@ final class Contrato extends Controler{
 			required=>'yes',
 			datatype=>array(
 				type	=>'date',
-				length	=>'45'),
+				length	=>'15'),
 			transaction=>array(
 				table	=>array('contrato'),
 				type	=>array('column'))
@@ -1319,7 +1350,7 @@ final class Contrato extends Controler{
 			required=>'yes',
 			datatype=>array(
 				type	=>'date',
-				length	=>'45'),
+				length	=>'15'),
 			transaction=>array(
 				table	=>array('contrato'),
 				type	=>array('column'))
@@ -1328,10 +1359,11 @@ final class Contrato extends Controler{
 			name	=>'fecha_inicio_compensacion',
 			id		=>'fecha_inicio_compensacion',
 			type	=>'text',
+			
 			required=>'yes',
 			datatype=>array(
 				type	=>'date',
-				length	=>'45'),
+				length	=>'15'),
 			transaction=>array(
 				table	=>array('contrato'),
 				type	=>array('column'))
@@ -1340,10 +1372,11 @@ final class Contrato extends Controler{
 			name	=>'fecha_inicio_cesantias',
 			id		=>'fecha_inicio_cesantias',
 			type	=>'text',
+			
 			required=>'yes',
 			datatype=>array(
 				type	=>'date',
-				length	=>'45'),
+				length	=>'15'),
 			transaction=>array(
 				table	=>array('contrato'),
 				type	=>array('column'))
@@ -1407,6 +1440,8 @@ final class Contrato extends Controler{
 			id		=>'busqueda',
 			type	=>'text',
 			size	=>'85',
+			Boostrap =>'si',
+			placeholder =>'Por favor digite el numero de identificacion, nombre del empleado o numero de contrato',
 			// tabindex=>'1',
 			suggest=>array(
 				name	=>'contrato',

@@ -1,6 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="../../../framework/css/bootstrap1.css">
     {$JAVASCRIPT}
     {$TABLEGRIDJS}
     {$CSSSYSTEM}
@@ -33,7 +34,7 @@
             </tr>
             <tr>
                 <td><label>Numero Identificaci&oacute;n :</label></td>
-                <td colspan="3">{$NUMID}{$DIGITO}</td>
+                <td colspan="1">{$NUMID}{$DIGITO}</td>
             </tr>
             <tr>
                 <td><label>Raz&oacute;n Social :</label></td>
@@ -80,7 +81,7 @@
             </tr>
             <tr>
                 <td><label>Parafiscales : </label></td>
-                <td colspan="3">{$PARAFISCALES}</td>
+                <td colspan="1">{$PARAFISCALES}</td>
             </tr>
             <tr>
                 <td><label>Agente ICA :</label></td>

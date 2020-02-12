@@ -98,14 +98,14 @@ final class EmpPrestacionModel extends Db{
 	public function GetQueryEmpPrestacionGrid(){
 		$Query = "SELECT 
 		(SELECT nombre FROM tipo_persona WHERE tipo_persona_id=t.tipo_persona_id) AS tipo_persona_id, 
-		numero_identificacion, 
-		digito_verificacion, 
-		razon_social, 
-		sigla, 
-		email, 
-		telefax, 
-		telefono, 
-		movil, 
+		t.numero_identificacion, 
+		t.digito_verificacion, 
+		t.razon_social, 
+		t.sigla, 
+		t.email, 
+		t.telefax, 
+		t.telefono, 
+		t.movil, 
 		e.codigo, 
 		IF(e.salud=1,'SI','NO') AS salud, 
 		IF(e.pension=1,'SI','NO') AS pension, 
@@ -119,8 +119,8 @@ final class EmpPrestacionModel extends Db{
 		(SELECT nombre FROM ubicacion WHERE ubicacion_id=t.ubicacion_id) AS ubicacion_id, 
 		(SELECT nombre FROM tipo_identificacion WHERE tipo_identificacion_id=t.tipo_identificacion_id) AS tipo_identificacion_id, 
 		(SELECT nombre FROM regimen WHERE regimen_id=t.regimen_id) AS regimen_id 
-		FROM
-			empresa_prestaciones e INNER JOIN tercero t ON e.tercero_id=t.tercero_id";
+		
+		FROM empresa_prestaciones e, tercero t WHERE e.tercero_id=t.tercero_id";
 		return $Query;
 	}
 }
