@@ -144,6 +144,7 @@
 				name	=>'nombre',
 				id		=>'nombre',
 				type	=>'text',
+				Boostrap =>'si',
 				required=>'yes',
 				datatype=>array(
 					type	=>'text',
@@ -157,6 +158,7 @@
 				name	=>'observacion',
 				id		=>'observacion',
 				type	=>'text',
+				Boostrap =>'si',
 				required=>'yes',
 				datatype=>array(
 					type	=>'text',
@@ -170,6 +172,7 @@
 				name	=>'resultado',
 				id		=>'resultado',
 				type	=>'text',
+				Boostrap =>'si',
 				required=>'yes',
 				datatype=>array(
 					type	=>'text',
@@ -183,6 +186,7 @@
 				name	=>'base',
 				id		=>'base',
 				type	=>'text',
+				Boostrap =>'si',
 				required=>'yes',
 				datatype=>array(
 					type	=>'integer',
@@ -209,6 +213,7 @@
 			   name =>'convocado',
 			   id =>'convocado',
 				   type =>'text',
+				   Boostrap =>'si',
 					 size    =>'30',
 				   suggest => array(
 					name =>'convocado',
@@ -252,6 +257,7 @@
 				name	=>'aprobado',
 				id		=>'aprobado',
 				type	=>'select',
+				Boostrap =>'si',
 				options	=> array(array(value=>1,text=>'SI'),array(value=>0,text=>'NO')),
 				required=>'yes',
 				datatype=>array(
@@ -310,6 +316,7 @@
 				id		=>'busqueda',
 				type	=>'text',
 				size	=>'85',
+				Boostrap =>'si',
 				// tabindex=>'1',
 				suggest=>array(
 					name	=>'prueba',
