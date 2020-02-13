@@ -1,6 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="../../../framework/css/bootstrap1.css">
     {$JAVASCRIPT}
     {$TABLEGRIDJS}
     {$CSSSYSTEM}
@@ -139,20 +140,20 @@
             <td colspan="4">
         	<fieldset class="section">
         	<legend>Prestaciones sociales y Documentos Contratacion</legend>
-                <table width="99%">
+                <table width="50%">
                     <tr>                     
                         <td ><label>EPS :</label></td>
                         <td >{$EMPEPS}{$EMPEPSID}</td>
-                        <td ><label>Fecha inicio : </label></td>
-                        <td width="50%">{$FECINIEPS}</td>
+                        <td width="10%"><label>Fecha inicio : </label></td>
+                        <td >{$FECINIEPS}</td>
                         <td ><label>Certificado : </label></td>
-                        <td width="50%">{$ESCEPS}</td>
+                        <td >{$ESCEPS}</td>
                     </tr>
                     <tr>  
                         <td ><label>Pensi&oacute;n : </label></td>
                         <td>{$EMPPEN}{$EMPPENID}</td>
                         <td ><label>Fecha inicio : </label></td>
-                        <td width="50%">{$FECINIPEN}</td>
+                        <td >{$FECINIPEN}</td>
                         <td ><label>Certificado : </label></td>
                         <td>{$ESCPEN}</td>
                     </tr>
@@ -160,7 +161,7 @@
                         <td><label>ARL : </label></td>
                         <td>{$EMPARL}{$EMPARLID}</td>
                         <td ><label>Fecha inicio : </label></td>
-                        <td width="50%">{$FECINIARL}</td>
+                        <td >{$FECINIARL}</td>
                         <td ><label>Certificado : </label></td>
                         <td>{$ESCARL}</td>
                     </tr>                        
@@ -168,7 +169,7 @@
                         <td><label>Caja Compensaci&oacute;n : </label></td>
                         <td>{$EMPCAJ}{$EMPCAJID}</td>
                         <td ><label>Fecha inicio : </label></td>
-                        <td width="50%">{$FECINICOM}</td>
+                        <td >{$FECINICOM}</td>
                         <td ><label>Certificado : </label></td>
                         <td>{$ESCCAJA}</td>
                     </tr>
@@ -176,7 +177,7 @@
                         <td><label>Cesantias : </label></td>
                         <td>{$EMPCES}{$EMPCESID}</td>
                         <td ><label>Fecha inicio : </label></td>
-                        <td width="50%">{$FECINICES}</td>
+                        <td >{$FECINICES}</td>
                         <td ><label>Certificado : </label></td>
                         <td>{$ESCCESAN}</td>
                     </tr>

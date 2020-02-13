@@ -82,6 +82,7 @@ final class reportesPrestaServicios extends Controler{
 		name	=>'desde',
 		id		=>'desde',
 		type	=>'text',
+		Boostrap => 'si',
 		required=>'yes',
 	 	datatype=>array(
 			type	=>'date',
@@ -92,6 +93,7 @@ final class reportesPrestaServicios extends Controler{
 		name	=>'hasta',
 		id		=>'hasta',
 		type	=>'text',
+		Boostrap => 'si',
 		required=>'yes',
 	 	datatype=>array(
 			type	=>'date',
@@ -102,6 +104,7 @@ final class reportesPrestaServicios extends Controler{
 		name	=>'si_empleado',
 		id		=>'si_empleado',
 		type	=>'select',
+		Boostrap => 'si',
 		options	=>null,
 		selected=>0,
 		required=>'yes',
@@ -112,6 +115,7 @@ final class reportesPrestaServicios extends Controler{
 		name	=>'si_cargo',
 		id		=>'si_cargo',
 		type	=>'select',
+		Boostrap => 'si',
 		options	=>null,
 		selected=>0,
 		required=>'yes',
@@ -134,6 +138,7 @@ final class reportesPrestaServicios extends Controler{
 		name	=>'cargo',
 		id		=>'cargo',
 		type	=>'text',
+		Boostrap => 'si',
 		disabled=>'disabled',
 		suggest=>array(
 			name	=>'cargo',
@@ -154,6 +159,7 @@ final class reportesPrestaServicios extends Controler{
 		name	=>'empleado',
 		id		=>'empleado',
 		type	=>'text',
+		Boostrap => 'si',
 		disabled=>'disabled',
 		suggest=>array(
 			name	=>'empleado',

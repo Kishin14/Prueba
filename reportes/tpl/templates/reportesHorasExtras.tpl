@@ -16,8 +16,8 @@
          <fieldset class="section">
         <table align="center" width="90%">
             <tr>
-                <td width="35%" align="center"><label>PERIODO</label></td>
-                <td width="45%" align="center"><label>EMPLEADO</label></td>
+                <td width="20%" align="center"><label>PERIODO</label></td>
+                <td width="20%" align="center"><label>EMPLEADO</label></td>
             </tr>
             <tr>
                 <td valign="top">
@@ -36,7 +36,7 @@
                     <table width="100%">
                         <tr>
                             <td id="loading" width="20%"></td>
-                            <td width="50%" align="center">{$GENERAR}{$IMPRIMIR}{$LIMPIAR} <input type="button" name="generar_excel" id="generar_excel" value="Generar Archivo Excel>>" /></td>
+                            <td width="50%" align="center">{$GENERAR}{$IMPRIMIR}{$LIMPIAR} <input type="button" class="btn btn-primary" name="generar_excel" id="generar_excel" value="Generar Archivo Excel>>" /></td>
                             <td width="20%"></td>
                         </tr>
                     </table>

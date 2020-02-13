@@ -96,6 +96,7 @@
                  {/foreach}
                  
                   <td align="right">{$d.total_credito}</td> 
+                 
                  {foreach name=saldo from=$CONCSALDO1 item=j}
                     <td align="right">{$d[$j.concepto]}</td> 
                     {math assign="total_apagar" equation="x + y" x=$total_apagar y=$d[$j.concepto]} 

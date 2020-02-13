@@ -163,6 +163,7 @@ final class Convocatoria extends Controler{
 			name	=>'estado',
 			id		=>'estado',
 			type	=>'select',
+			Boostrap =>'si',
 			options	=> array(array(value=>'1',text=>'ACTIVO',selected=>'1'),array(value=>'0',text=>'INACTIVO')),
 			required=>'yes',
 			datatype=>array(
@@ -176,7 +177,7 @@ final class Convocatoria extends Controler{
 			name	=>'cargo_id',
 			id		=>'cargo_id',
 			type	=>'select',
-			
+			Boostrap =>'si',
 			required=>'yes',
 			datatype=>array(
 				type	=>'integer',
@@ -233,6 +234,7 @@ final class Convocatoria extends Controler{
 			id		=>'busqueda',
 			type	=>'text',
 			size	=>'85',
+			Boostrap =>'si',
 			// tabindex=>'1',
 			suggest=>array(
 				name	=>'convocatoria',

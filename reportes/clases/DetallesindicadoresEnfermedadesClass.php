@@ -29,26 +29,18 @@ final class DetallesindicadoresEnfermedades extends Controler{
 	if($si_empleado=='ALL' && $tipo == 'I' && $cie_enfermedades_id == ''){
        $data  = $Model -> getReporte($desde,$hasta,$tipo,$this -> getConex());
 
-    }else if($si_empleado=='ALL' && $tipo == 'L' && $cie_enfermedades_id == 'NULL'){
+    }else if($si_empleado=='ALL' && $tipo == 'L' && $cie_enfermedades_id == ''){
 		$data  = $Model -> getReporte1($desde,$hasta,$tipo,$this -> getConex());	
 		
-    }else if($si_empleado==1 && $tipo == 'I' && $cie_enfermedades_id == 'NULL'){
-		$data  = $Model -> getReporte2($desde,$hasta,$tipo,$this -> getConex());		
+    }else if($si_empleado==1 && $tipo == 'I' && $cie_enfermedades_id == ''){
+		$data  = $Model -> getReporte2($desde,$hasta,$tipo,$empleado_id,$this -> getConex());		
 
-    }else if($si_empleado==1 && $tipo == 'L' && $cie_enfermedades_id == 'NULL'){
-        $data  = $Model -> getReporte3($desde,$hasta,$tipo,$this -> getConex());
+    }else if($si_empleado==1 && $tipo == 'L' && $cie_enfermedades_id == ''){
+        $data  = $Model -> getReporte3($desde,$hasta,$tipo,$empleado_id,$this -> getConex());
     
     }else if($si_empleado=='ALL' && $tipo == 'I' && $cie_enfermedades_id>0){
 		$data  = $Model -> getReporte4($desde,$hasta,$tipo,$cie_enfermedades_id,$this -> getConex());		
     }
-    
-
-
-
-	for ($i=0; $i < count($data) ; $i++) { 
- 		$data_licencia  = $Model -> get_licencia($data[$i]['contrato_id'],$this -> getConex());
- 		$data[$i]['licencia'] = $data_licencia;
- 	}
 
 /* 	for ($i=0; $i < count($data) ; $i++) { 
  		$data_novedad  = $Model -> get_novedad($data[$i]['contrato_id'],$this -> getConex());

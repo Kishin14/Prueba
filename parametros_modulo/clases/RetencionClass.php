@@ -149,6 +149,7 @@
 				name	=>'porcentaje',
 				id		=>'porcentaje',
 				type	=>'text',
+				Boostrap =>'si',
 				required=>'yes',
 				size=>'5',
 				datatype=>array(
@@ -164,6 +165,7 @@
 				name	=>'rango_ini',
 				id		=>'rango_ini',
 				type	=>'text',
+				Boostrap =>'si',
 				required=>'yes',
 				datatype=>array(
 					type	=>'numeric',
@@ -178,6 +180,7 @@
 				name	=>'rango_fin',
 				id		=>'rango_fin',
 				type	=>'text',
+				Boostrap =>'si',
 				required=>'yes',
 				datatype=>array(
 					type	=>'numeric',
@@ -192,6 +195,7 @@
 				name	=>'rango_ini_pesos',
 				id		=>'rango_ini_pesos',
 				type	=>'text',
+				Boostrap =>'si',
 				disabled=>'yes',
 				datatype=>array(
 					type	=>'numeric',
@@ -206,6 +210,7 @@
 				name	=>'rango_fin_pesos',
 				id		=>'rango_fin_pesos',
 				type	=>'text',
+				Boostrap =>'si',
 				disabled=>'yes',
 				datatype=>array(
 					type	=>'numeric',
@@ -220,6 +225,7 @@
 				name	=>'periodo_contable_id',
 				id		=>'periodo_contable_id',
 				type	=>'select',
+				Boostrap =>'si',
 				options	=>null,
 				required=>'yes',
 				datatype=>array(
@@ -291,6 +297,8 @@
 				id		=>'busqueda',
 				type	=>'text',
 				size	=>'85',
+				Boostrap =>'si',
+				placeholder =>'Por favor digite el porcentaje o periodo contable',
 				// tabindex=>'1',
 				suggest=>array(
 					name	=>'retencion_salarial',
