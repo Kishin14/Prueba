@@ -119,7 +119,7 @@ final class reporteHojaVidaModel extends Db{
 
 	   	$select = "SELECT l.concepto, l.fecha_licencia,l.fecha_inicial,l.fecha_final,l.dias,IF(l.estado='A','<span style=\'color:#008000;\'>
 		 ACTIVO</span>','<span style=\'color:#FF0000;\'>
-		 INACTIVO</span>')AS estado,(SELECT t.nombre FROM tipo_incapacidad t WHERE t.tipo_incapacidad_id=l.tipo_incapacidad_id)AS tipo_incapacidad,IF(l.remunerado=0,'SI','NO')AS remunerado,CONCAT('','<a href=\"\../../movimientos/clases/LicenciaClass.php?licencia_id=',l.licencia_id,'\" target=\"_blank\">','<input type=\"button\" class=\"btn btn-info\" value=\"VER LICENCIA\" style=\"padding: 0.055rem 0.55rem\">','</a>' )AS ver,l.diagnostico FROM licencia l WHERE l.contrato_id = $contrato_id ORDER BY l.fecha_inicial ASC";
+		 INACTIVO</span>')AS estado,(SELECT t.nombre FROM tipo_incapacidad t WHERE t.tipo_incapacidad_id=l.tipo_incapacidad_id)AS tipo_incapacidad,IF(l.remunerado=1,'SI','NO')AS remunerado,CONCAT('','<a href=\"\../../movimientos/clases/LicenciaClass.php?licencia_id=',l.licencia_id,'\" target=\"_blank\">','<input type=\"button\" class=\"btn btn-info\" value=\"VER LICENCIA\" style=\"padding: 0.055rem 0.55rem\">','</a>' )AS ver,l.diagnostico FROM licencia l WHERE l.contrato_id = $contrato_id ORDER BY l.fecha_inicial ASC";
 
 	  $result = $this -> DbFetchAll($select,$Conex,true);		  
 	  $i=0;
