@@ -65,18 +65,23 @@ final class reporteIncapacidades extends Controler{
 	}*/
 	
 	$nombre = 'Rep_Conv'.date('Y-m-d'); 	
-	if($si_empleado=='ALL' && $si_cargo=='ALL')
-		$data = $Model -> getReporteMC1($desde,$hasta,$this -> getConex());
-		
-		elseif($si_empleado==1 && $si_cargo=='ALL')
-		$data = $Model -> getReporteMC2($empleado_id,$desde,$hasta,$this -> getConex());
-		
-		elseif($si_empleado==1 && $si_cargo==1)
-		$data = $Model -> getReporteMC3($empleado_id,$cargo_id,$desde,$hasta,$this -> getConex());
+	if($si_empleado=='ALL' && $tipo == 'I' && $cie_enfermedades_id == ''){
+       $data  = $Model -> getReporteMC1($desde,$hasta,$tipo,$this -> getConex());
 
-		elseif($si_empleado=='ALL' && $si_cargo==1)
-		$data = $Model -> getReporteMC4($cargo_id,$desde,$hasta,$this -> getConex());
+    }else if($si_empleado=='ALL' && $tipo == 'L' && $cie_enfermedades_id == ''){
+		$data  = $Model -> getReporteMC2($desde,$hasta,$tipo,$this -> getConex());	
 		
+    }else if($si_empleado==1 && $tipo == 'I' && $cie_enfermedades_id == ''){
+		$data  = $Model -> getReporteMC3($desde,$hasta,$tipo,$empleado_id,$this -> getConex());		
+
+    }else if($si_empleado==1 && $tipo == 'L' && $cie_enfermedades_id == ''){
+        $data  = $Model -> getReporteMC4($desde,$hasta,$tipo,$empleado_id,$this -> getConex());
+    
+    }else if($si_empleado=='ALL' && $tipo == 'I' && $cie_enfermedades_id>0){
+		$data  = $Model -> getReporteMC5($desde,$hasta,$tipo,$cie_enfermedades_id,$this -> getConex());		
+    }
+
+
 		
    	$ruta  = $this -> arrayToExcel("Reporte",$nombre,$data,null,"string");	
 	
@@ -91,6 +96,7 @@ final class reporteIncapacidades extends Controler{
 		name	=>'desde',
 		id		=>'desde',
 		type	=>'text',
+		Boostrap => 'si',
 		required=>'yes',
 	 	datatype=>array(
 			type	=>'date',
@@ -101,6 +107,7 @@ final class reporteIncapacidades extends Controler{
 		name	=>'hasta',
 		id		=>'hasta',
 		type	=>'text',
+		Boostrap => 'si',
 		required=>'yes',
 	 	datatype=>array(
 			type	=>'date',
@@ -111,6 +118,7 @@ final class reporteIncapacidades extends Controler{
 		name	=>'si_empleado',
 		id		=>'si_empleado',
 		type	=>'select',
+		Boostrap => 'si',
 		options	=>null,
 		selected=>0,
 		//required=>'yes',
@@ -154,6 +162,7 @@ final class reporteIncapacidades extends Controler{
 	   name =>'descripcion',
 	   id =>'descripcion',
 	   type =>'text',
+	   Boostrap => 'si',
 	   //disabled => 'yes',
 	   size    =>'40',
 	   suggest => array(
@@ -175,6 +184,7 @@ final class reporteIncapacidades extends Controler{
 		name	=>'empleado',
 		id		=>'empleado',
 		type	=>'text',
+		Boostrap => 'si',
 		disabled=>'disabled',
 		suggest=>array(
 			name	=>'empleado',
@@ -193,6 +203,7 @@ final class reporteIncapacidades extends Controler{
 		name	=>'tipo',
 		id		=>'tipo',
 		type	=>'select',
+		Boostrap => 'si',
 		required=>'yes',
 		options	=>array(array(value => 'L', text => 'LICENCIA'),array(value => 'I', text => 'INCAPACIDAD'))
 	); 	
@@ -201,6 +212,7 @@ final class reporteIncapacidades extends Controler{
 		name	=>'indicadores',
 		id		=>'indicadores',
 		type	=>'select',
+		Boostrap => 'si',
 		//Boostrap=>'si',
 		options	=>null,
 		selected=>'A',

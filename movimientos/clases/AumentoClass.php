@@ -219,6 +219,7 @@
 				name	=>'consecutivo',
 				id		=>'consecutivo',
 				type	=>'text',
+				Boostrap =>'si',
 				readonly=>'yes',
 				datatype=>array(
 					type	=>'integer',
@@ -233,6 +234,7 @@
 				name	=>'contrato',
 				id		=>'contrato',
 				type	=>'text',
+				Boostrap =>'si',
 				//tabindex=>'7',
 				suggest=>array(
 					name	=>'contrato_activo',
@@ -257,6 +259,7 @@
 				name	=>'cliente',
 				id		=>'cliente',
 				type	=>'text',
+				Boostrap =>'si',
 				readonly=>'yes',
 				datatype=>array(
 					type	=>'text',
@@ -272,6 +275,7 @@
 				name	=>'canon',
 				id		=>'canon',
 				type	=>'text',
+				Boostrap =>'si',
 				readonly=>'yes',
 				datatype=>array(
 					type	=>'numeric',
@@ -287,6 +291,7 @@
 				name   	 =>'estado',
 				id     	 =>'estado',
 				type   	 =>'select',
+				Boostrap =>'si',
 				disabled => 'yes',
 				options  =>	array(array(value => 'A', text => 'APROBADO', selected => 'E'),array(value => 'D', text => 'DESISTIDO', selected => 'E'), 
 							array(value => 'N', text => 'NO APROBADA' , selected => 'E'),array(value => 'F', text => 'FINALIZADO' , selected => 'E'),array(value=>'E',text=>'EN ESTUDIO',selected=>'E')),
@@ -323,6 +328,7 @@
 				name	=>'consecutivo2',
 				id		=>'consecutivo2',
 				type	=>'text',
+				Boostrap =>'si',
 				disabled=>'yes',
 				size	=>'6',
 				datatype=>array(
@@ -348,6 +354,7 @@
 				name	=>'cliente_finaliza',
 				id		=>'cliente_finaliza',
 				type	=>'text',
+				Boostrap =>'si',
 				disabled=>'yes',
 				size	=>'52',
 				datatype=>array(
@@ -363,6 +370,7 @@
 				name	=>'propietario_id',
 				id		=>'propietario_id',
 				type	=>'text',
+				Boostrap =>'si',
 				size	=>'52',
 				disabled=>'yes',
 			 	datatype=>array(
@@ -377,6 +385,7 @@
 				name	=>'arrendatario_id',
 				id		=>'arrendatario_id',
 				type	=>'text',
+				Boostrap =>'si',
 				size	=>'52',
 				disabled=>'yes',
 			 	datatype=>array(
@@ -427,6 +436,7 @@
 				name	=>'consecutivo_renueva',
 				id		=>'consecutivo_renueva',
 				type	=>'text',
+				Boostrap =>'si',
 				disabled=>'yes',
 				size	=>'6',
 				datatype=>array(
@@ -442,6 +452,7 @@
 				name	=>'fecha_solicitud_renueva',
 				id		=>'fecha_solicitud_renueva',
 				type	=>'text',
+				Boostrap =>'si',
 				disabled=>'yes',
 				datatype=>array(
 					type	=>'text',
@@ -452,6 +463,7 @@
 				name	=>'fecha_inicio2',
 				id		=>'fecha_inicio2',
 				type	=>'text',
+				Boostrap =>'si',
 				disabled=>'yes',
 				datatype=>array(
 					type	=>'text',
@@ -462,6 +474,7 @@
 				name	=>'fecha_final2',
 				id		=>'fecha_final2',
 				type	=>'text',
+				Boostrap =>'si',
 				disabled=>'yes',
 				datatype=>array(
 					type	=>'text',
@@ -487,6 +500,7 @@
 				name	=>'propietario_renueva',
 				id		=>'propietario_renueva',
 				type	=>'text',
+				Boostrap =>'si',
 				size	=>'52',
 				disabled=>'yes',
 			 	datatype=>array(
@@ -501,6 +515,7 @@
 				name	=>'arrendatario_renueva',
 				id		=>'arrendatario_renueva',
 				type	=>'text',
+				Boostrap =>'si',
 				size	=>'52',
 				disabled=>'yes',
 			 	datatype=>array(
@@ -515,6 +530,7 @@
 				name	=>'canon_renovacion',
 				id		=>'canon_renovacion',
 				type	=>'text',
+				Boostrap =>'si',
 				required=>'yes',
 				datatype=>array(
 					type	=>'numeric',
@@ -543,6 +559,7 @@
 				name	=>'administracion',
 				id		=>'administracion',
 				type	=>'text',
+				Boostrap =>'si',
 				required=>'yes',
 				datatype=>array(
 					type	=>'numeric',
@@ -557,6 +574,7 @@
 				name	=>'fecha_inicio_renovacion',
 				id		=>'fecha_inicio_renovacion',
 				type	=>'text',
+				Boostrap =>'si',
 				disabled=>'yes',
 				datatype=>array(
 					type	=>'text',
@@ -577,6 +595,7 @@
 				name	=>'fecha_final_renovacion',
 				id		=>'fecha_final_renovacion',
 				type	=>'text',
+				Boostrap =>'si',
 				disabled=>'yes',
 				//required=>'yes',
 				datatype=>array(
@@ -600,6 +619,7 @@
 				name	=>'numero_meses',
 				id		=>'numero_meses',
 				type	=>'text',
+				Boostrap =>'si',
 				disabled=>'yes',
 				size	=>'30'
 			); 
@@ -612,6 +632,7 @@
 				name	=>'consecutivo_actualiza',
 				id		=>'consecutivo_actualiza',
 				type	=>'text',
+				Boostrap =>'si',
 				disabled=>'yes',
 				size	=>'6',
 				datatype=>array(
@@ -627,6 +648,7 @@
 				name	=>'fecha_solicitud_actualiza',
 				id		=>'fecha_solicitud_actualiza',
 				type	=>'text',
+				Boostrap =>'si',
 				disabled=>'yes',
 				datatype=>array(
 					type	=>'text',
@@ -637,6 +659,7 @@
 				name	=>'fecha_inicio_2_actualiza',
 				id		=>'fecha_inicio_2_actualiza',
 				type	=>'text',
+				Boostrap =>'si',
 				disabled=>'yes',
 				datatype=>array(
 					type	=>'text',
@@ -647,6 +670,7 @@
 				name	=>'fecha_final_2_actualiza',
 				id		=>'fecha_final_2_actualiza',
 				type	=>'text',
+				Boostrap =>'si',
 				disabled=>'yes',
 				datatype=>array(
 					type	=>'text',
@@ -657,6 +681,7 @@
 				name	=>'cliente_actualiza',
 				id		=>'cliente_actualiza',
 				type	=>'text',
+				Boostrap =>'si',
 				disabled=>'yes',
 				size	=>'52',
 				datatype=>array(
@@ -672,6 +697,7 @@
 				name	=>'propietario_actualiza',
 				id		=>'propietario_actualiza',
 				type	=>'text',
+				Boostrap =>'si',
 				size	=>'52',
 				disabled=>'yes',
 			 	datatype=>array(
@@ -686,6 +712,7 @@
 				name	=>'arrendatario_actualiza',
 				id		=>'arrendatario_actualiza',
 				type	=>'text',
+				Boostrap =>'si',
 				size	=>'52',
 				disabled=>'yes',
 			 	datatype=>array(
@@ -700,6 +727,7 @@
 				name	=>'canon_actualiza',
 				id		=>'canon_actualiza',
 				type	=>'text',
+				Boostrap =>'si',
 				required=>'yes',
 				datatype=>array(
 					type	=>'numeric',
@@ -714,6 +742,7 @@
 				name	=>'administracion_actualiza',
 				id		=>'administracion_actualiza',
 				type	=>'text',
+				Boostrap =>'si',
 				required=>'yes',
 				datatype=>array(
 					type	=>'numeric',
@@ -728,6 +757,7 @@
 				name	=>'fecha_inicio_actualiza',
 				id		=>'fecha_inicio_actualiza',
 				type	=>'text',
+				Boostrap =>'si',
 				disabled=>'yes',
 				datatype=>array(
 					type	=>'text',
@@ -738,6 +768,7 @@
 				name	=>'fecha_final_actualiza',
 				id		=>'fecha_final_actualiza',
 				type	=>'text',
+				Boostrap =>'si',
 				disabled=>'yes',
 				//required=>'yes',
 				datatype=>array(
@@ -761,6 +792,7 @@
 				name	=>'numero_meses_actualiza',
 				id		=>'numero_meses_actualiza',
 				type	=>'text',
+				Boostrap =>'si',
 				disabled=>'yes',
 				size	=>'10'
 			); 
@@ -858,6 +890,7 @@
 				id		=>'busqueda',
 				type	=>'text',
 				size	=>'85',
+				Boostrap =>'si',
 				suggest=>array(
 					name	=>'activo',
 					setId	=>'activo_id',

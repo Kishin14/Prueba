@@ -152,6 +152,7 @@ final class Contable extends Controler{
 				name	=>'puc_admon',
 				id		=>'puc_admon',
 				type	=>'text',
+				Boostrap =>'si',
 				required=>'yes',
 				datatype=>array(type=>'text'),
 				suggest=>array(
@@ -174,6 +175,7 @@ final class Contable extends Controler{
 				name	=>'puc_ventas',
 				id		=>'puc_ventas',
 				type	=>'text',
+				Boostrap =>'si',
 				required=>'yes',
 				datatype=>array(type=>'text'),
 				suggest=>array(
@@ -196,6 +198,7 @@ final class Contable extends Controler{
 				name	=>'puc_prod',
 				id		=>'puc_prod',
 				type	=>'text',
+				Boostrap =>'si',
 				required=>'yes',
 				datatype=>array(type=>'text'),
 				suggest=>array(
@@ -218,6 +221,7 @@ final class Contable extends Controler{
 				name	=>'base_salarial',
 				id		=>'base_salarial',
 				type	=>'select',
+				Boostrap =>'si',
 				options	=> array(array(value=>'NO',text=>'NO',selected=>'0'),array(value=>'SI',text=>'SI')),
 				required=>'yes',
 				datatype=>array(
@@ -232,6 +236,7 @@ final class Contable extends Controler{
 		name =>'tipo_novedad',
 		id  =>'tipo_novedad',
 		type =>'select',
+		Boostrap =>'si',
 		options => array(array(value=>'V',text=>'DEVENGADO',selected=>'V'),array(value=>'D',text=>'DEDUCIDO')),
 		required=>'yes',
 		datatype=>array(
@@ -249,6 +254,7 @@ final class Contable extends Controler{
 			type	=>'text',
 			required=>'yes',
 			size	=>'65',
+			Boostrap =>'si',
 			datatype=>array(
 				type	=>'text',
 				length	=>'45'),
@@ -261,6 +267,7 @@ final class Contable extends Controler{
 			name	=>'naturaleza_admon',
 			id		=>'naturaleza_admon',
 			type	=>'select',
+			Boostrap =>'si',
 			options	=> array(array(value=>'D',text=>'DEBITO',selected=>'0'),array(value=>'C',text=>'CREDITO')),
 			required=>'yes',
 			datatype=>array(
@@ -275,6 +282,7 @@ final class Contable extends Controler{
 			name	=>'naturaleza_ventas',
 			id		=>'naturaleza_ventas',
 			type	=>'select',
+			Boostrap =>'si',
 			options	=> array(array(value=>'D',text=>'DEBITO',selected=>'0'),array(value=>'C',text=>'CREDITO')),
 			required=>'yes',
 			datatype=>array(
@@ -289,6 +297,7 @@ final class Contable extends Controler{
 			name	=>'naturaleza_prod',
 			id		=>'naturaleza_prod',
 			type	=>'select',
+			Boostrap =>'si',
 			options	=> array(array(value=>'D',text=>'DEBITO',selected=>'0'),array(value=>'C',text=>'CREDITO')),
 			required=>'yes',
 			datatype=>array(
@@ -304,6 +313,7 @@ final class Contable extends Controler{
 			name	=>'naturaleza_contrapartida',
 			id		=>'naturaleza_contrapartida',
 			type	=>'select',
+			Boostrap =>'si',
 			options	=> array(array(value=>'D',text=>'DEBITO',selected=>'0'),array(value=>'C',text=>'CREDITO')),
 			required=>'yes',
 			datatype=>array(
@@ -318,6 +328,7 @@ final class Contable extends Controler{
 			name	=>'puc_partida',
 			id		=>'puc_partida',
 			type	=>'text',
+			Boostrap =>'si',
 			//required=>'yes',
 			disabled=>'yes',
 			datatype=>array(type=>'text'),
@@ -341,6 +352,7 @@ final class Contable extends Controler{
 			name	=>'puc_contra',
 			id		=>'puc_contra',
 			type	=>'text',
+			Boostrap =>'si',
 			//required=>'yes',
 			disabled=>'yes',
 			datatype=>array(type=>'text'),
@@ -364,6 +376,7 @@ final class Contable extends Controler{
 			name	=>'naturaleza_partida',
 			id		=>'naturaleza_partida',
 			type	=>'select',
+			Boostrap =>'si',
 			options	=> array(array(value=>'D',text=>'DEBITO',selected=>'0'),array(value=>'C',text=>'CREDITO')),
 			//required=>'yes',
 			disabled=>'yes',
@@ -379,6 +392,7 @@ final class Contable extends Controler{
 			name	=>'naturaleza_contra',
 			id		=>'naturaleza_contra',
 			type	=>'select',
+			Boostrap =>'si',
 			options	=> array(array(value=>'D',text=>'DEBITO',selected=>'0'),array(value=>'C',text=>'CREDITO')),
 			//required=>'yes',
 			disabled=>'yes',
@@ -395,6 +409,7 @@ final class Contable extends Controler{
 			name	=>'contabiliza',
 			id		=>'contabiliza',
 			type	=>'select',
+			Boostrap =>'si',
 			options	=> array(array(value=>'SI',text=>'SI',selected=>'NO'),array(value=>'NO',text=>'NO')),
 			required=>'yes',
 			datatype=>array(
@@ -409,6 +424,7 @@ final class Contable extends Controler{
 			name	=>'estado',
 			id		=>'estado',
 			type	=>'select',
+			Boostrap =>'si',
 			options	=> array(array(value=>'A',text=>'ACTIVO',selected=>'0'),array(value=>'I',text=>'INACTIVO')),
 			required=>'yes',
 			datatype=>array(
@@ -425,6 +441,7 @@ final class Contable extends Controler{
 				name	=>'contrapartida',
 				id		=>'contrapartida',
 				type	=>'text',
+				Boostrap =>'si',
 				datatype=>array(type=>'text'),
 				suggest=>array(
 					name	=>'cuentas_movimiento',
@@ -446,6 +463,7 @@ final class Contable extends Controler{
 			name	=>'tipo_calculo',
 			id		=>'tipo_calculo',
 			type	=>'select',
+			Boostrap =>'si',
 			options	=> array(array(value=>'P',text=>'PORCENTAJE',selected=>'0'),array(value=>'A',text=>'ABSOLUTO')),
 			required=>'yes',
 			datatype=>array(
@@ -505,6 +523,8 @@ final class Contable extends Controler{
 			id		=>'busqueda',
 			type	=>'text',
 			size	=>'85',
+			Boostrap =>'si',
+			placeholder =>'Por favor digite el nombre',
 			// tabindex=>'1',
 			suggest=>array(
 				name	=>'concepto_area',

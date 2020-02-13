@@ -90,6 +90,7 @@ final class reporteEmpleado extends Controler{
 		name	=>'desde',
 		id		=>'desde',
 		type	=>'text',
+		Boostrap => 'si',
 		required=>'yes',
 	 	datatype=>array(
 			type	=>'date',
@@ -100,6 +101,7 @@ final class reporteEmpleado extends Controler{
 		name	=>'hasta',
 		id		=>'hasta',
 		type	=>'text',
+		Boostrap => 'si',
 		required=>'yes',
 	 	datatype=>array(
 			type	=>'date',
@@ -110,6 +112,7 @@ final class reporteEmpleado extends Controler{
 		name	=>'si_empleado',
 		id		=>'si_empleado',
 		type	=>'select',
+		Boostrap => 'si',
 		options	=>null,
 		selected=>0,
 		required=>'yes',
@@ -120,6 +123,7 @@ final class reporteEmpleado extends Controler{
 		name	=>'si_cargo',
 		id		=>'si_cargo',
 		type	=>'select',
+		Boostrap => 'si',
 		options	=>null,
 		selected=>0,
 		required=>'yes',
@@ -142,6 +146,7 @@ final class reporteEmpleado extends Controler{
 		name	=>'cargo',
 		id		=>'cargo',
 		type	=>'text',
+		Boostrap => 'si',
 		disabled=>'disabled',
 		suggest=>array(
 			name	=>'perfil',
@@ -162,6 +167,7 @@ final class reporteEmpleado extends Controler{
 		name	=>'empleado',
 		id		=>'empleado',
 		type	=>'text',
+		Boostrap => 'si',
 		disabled=>'disabled',
 		suggest=>array(
 			name	=>'empleado',
@@ -180,6 +186,7 @@ final class reporteEmpleado extends Controler{
 		name	=>'estado',
 		id		=>'estado',
 		type	=>'select',
+		Boostrap => 'si',
 		required=>'yes',
 		options	=>array(array(value => 'A', text => 'ACTIVO'),array(value => 'I', text => 'INACTIVO')),
 		multiple=>'yes',

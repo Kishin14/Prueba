@@ -27,6 +27,7 @@ final class Patronales extends Controler{
 	$this -> Campos[consecutivo] = array(
 		name	=>'consecutivo',
 		id		=>'consecutivo',
+		Boostrap =>'si',
 		type	=>'text',
 		required=>'no',
 		readonly=>'readonly',
@@ -82,6 +83,7 @@ final class Patronales extends Controler{
 		name =>'estado',
 		id  =>'estado',
 		type =>'select',
+		Boostrap =>'si',
 		disabled=>'yes',
 		options => array(array(value=>'A',text=>'ANULADO',selected=>'E'),array(value=>'E',text=>'EDICION',selected=>'E'),array(value=>'C',text=>'CONTABILIZADO',selected=>'E')),
 		required=>'yes',
@@ -226,8 +228,10 @@ final class Patronales extends Controler{
 		name	=>'busqueda',
 		id		=>'busqueda',
 		type	=>'text',
+		Boostrap =>'si',
 		size	=>'85',
 		value	=>'',
+		placeholder =>'Por favor digite el consecutivo o la fecha',
 		//tabindex=> '1',
 		suggest=>array(
 			name	=>'busca_patronal',

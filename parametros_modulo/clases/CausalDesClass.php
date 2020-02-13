@@ -146,6 +146,7 @@ final class CausalDes extends Controler{
 		name	=>'nombre',
 		id		=>'nombre',
 		type	=>'text',
+		Boostrap =>'si',
 		required=>'yes',
 	 	datatype=>array(
 			type	=>'text',
@@ -159,6 +160,7 @@ final class CausalDes extends Controler{
 		name	=>'tipo_causal',
 		id		=>'tipo_causal',
 		type	=>'select',
+		Boostrap =>'si',
 		options	=> array(array(value=>'J',text=>'JUSTIFICADA',selected=>'0'),array(value=>'I',text=>'INJUSTIFICADA')),
 		required=>'yes',
 	 	datatype=>array(
@@ -173,6 +175,7 @@ final class CausalDes extends Controler{
 		name	=>'estado',
 		id		=>'estado',
 		type	=>'select',
+		Boostrap =>'si',
 		options	=> array(array(value=>'A',text=>'ACTIVO',selected=>'0'),array(value=>'I',text=>'INACTIVO')),
 		required=>'yes',
 	 	datatype=>array(
@@ -228,6 +231,8 @@ final class CausalDes extends Controler{
 		name	=>'busqueda',
 		id		=>'busqueda',
 		type	=>'text',
+		Boostrap =>'si',
+		placeholder =>'Por favor digite el nombre',
 		size	=>'85',
 		suggest=>array(
 			name	=>'causal_despido',

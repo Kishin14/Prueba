@@ -38,7 +38,7 @@
                     <table width="100%">
                         <tr>
                             <td id="loading" width="20%"></td>
-                            <td width="50%" align="center">{$GENERAR}{$IMPRIMIR}{$LIMPIAR} <input type="button" name="generar_excel" id="generar_excel" value="Generar Archivo Excel>>" /></td>
+                            <td width="50%" align="center">{$GENERAR}{$IMPRIMIR}{$LIMPIAR} <input type="button" class="btn btn-primary" name="generar_excel" id="generar_excel" value="Generar Archivo Excel>>" /></td>
                             <td width="20%"></td>
                         </tr>
                     </table>

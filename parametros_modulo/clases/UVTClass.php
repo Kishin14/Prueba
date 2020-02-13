@@ -139,6 +139,7 @@
 				name	=>'periodo_contable_id',
 				id		=>'periodo_contable_id',
 				type	=>'select',
+				Boostrap =>'si',
 				options	=>null,
 				required=>'yes',
 				datatype=>array(
@@ -153,6 +154,7 @@
 				name	=>'uvt_nominal',
 				id		=>'uvt_nominal',
 				type	=>'text',
+				Boostrap =>'si',
 				required=>'yes',
 				datatype=>array(
 					type	=>'text',
@@ -166,6 +168,7 @@
 				name	=>'utv_minimo',
 				id		=>'utv_minimo',
 				type	=>'text',
+				Boostrap =>'si',
 				required=>'yes',
 				datatype=>array(
 					type	=>'text',
@@ -180,6 +183,7 @@
 				name	=>'impuesto_id',
 				id		=>'impuesto_id',
 				type	=>'select',
+				Boostrap =>'si',
 				options	=>null,
 				required=>'yes',
 				datatype=>array(
@@ -238,6 +242,8 @@
 				id		=>'busqueda',
 				type	=>'text',
 				size	=>'85',
+				Boostrap =>'si',
+				placeholder =>'Por favor digite el periodo contable',
 				// tabindex=>'1',
 				suggest=>array(
 					name	=>'uvt',

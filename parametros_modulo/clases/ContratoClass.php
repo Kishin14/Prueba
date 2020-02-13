@@ -159,6 +159,7 @@ final class Contrato extends Controler{
 		name	=>'nombre',
 		id		=>'nombre',
 		type	=>'text',
+		Boostrap =>'si',
 		required=>'yes',
 	 	datatype=>array(
 			type	=>'text',
@@ -172,6 +173,7 @@ final class Contrato extends Controler{
 		name	=>'prefijo',
 		id		=>'prefijo',
 		type	=>'text',
+		Boostrap =>'si',
 		required=>'no', 
 	 	datatype=>array(
 			type	=>'text',
@@ -185,6 +187,7 @@ final class Contrato extends Controler{
 		name	=>'tiempo_contrato',
 		id		=>'tiempo_contrato',
 		type	=>'text',
+		Boostrap =>'si',
 		required=>'no',
 	 	datatype=>array(
 			type	=>'text',
@@ -198,6 +201,7 @@ final class Contrato extends Controler{
 		name	=>'prefijo',
 		id		=>'prefijo',
 		type	=>'text',
+		Boostrap =>'si',
 		required=>'no', 
 	 	datatype=>array(
 			type	=>'text',
@@ -211,6 +215,7 @@ final class Contrato extends Controler{
 		name	=>'descripcion',
 		id		=>'descripcion',
 		type	=>'textarea',
+		
 		required=>'yes',
 	 	datatype=>array(
 			type	=>'text',
@@ -224,6 +229,7 @@ final class Contrato extends Controler{
 		name	=>'periodo_prueba',
 		id		=>'periodo_prueba',
 		type	=>'text',
+		Boostrap =>'si',
 		required=>'yes',
 	 	datatype=>array(
 			type	=>'integer',
@@ -237,6 +243,7 @@ final class Contrato extends Controler{
 		name	=>'indemnizacion',
 		id		=>'indemnizacion',
 		type	=>'select',
+		Boostrap =>'si',
 		options	=> array(array(value=>'0',text=>'NO',selected=>'0'),array(value=>'1',text=>'SI')),
 		required=>'yes',
 	 	datatype=>array(
@@ -251,6 +258,7 @@ final class Contrato extends Controler{
 		name	=>'liquidacion',
 		id		=>'liquidacion',
 		type	=>'select',
+		Boostrap =>'si',
 		options	=> array(array(value=>'0',text=>'NO',selected=>'0'),array(value=>'1',text=>'SI')),
 		required=>'yes',
 	 	datatype=>array(
@@ -265,6 +273,7 @@ final class Contrato extends Controler{
 		name	=>'prestaciones_sociales',
 		id		=>'prestaciones_sociales',
 		type	=>'select',
+		Boostrap =>'si',
 		options	=> array(array(value=>'0',text=>'NO',selected=>'0'),array(value=>'1',text=>'SI')),
 		required=>'yes',
 	 	datatype=>array(
@@ -280,6 +289,7 @@ final class Contrato extends Controler{
 		name	=>'salud',
 		id		=>'salud',
 		type	=>'select',
+		Boostrap =>'si',
 		options	=> array(array(value=>'0',text=>'NO',selected=>'0'),array(value=>'1',text=>'SI')),
 		required=>'yes',
 	 	datatype=>array(
@@ -294,6 +304,7 @@ final class Contrato extends Controler{
 		name	=>'arl',
 		id		=>'arl',
 		type	=>'select',
+		Boostrap =>'si',
 		options	=> array(array(value=>'0',text=>'NO',selected=>'0'),array(value=>'1',text=>'SI')),
 		required=>'yes',
 	 	datatype=>array(
@@ -308,6 +319,7 @@ final class Contrato extends Controler{
 		name	=>'tipo',
 		id		=>'tipo',
 		type	=>'select',
+		Boostrap =>'si',
 		options	=> array(array(value=>'F',text=>'FIJO',selected=>'F'),array(value=>'I',text=>'INDEFINIDO')),
 		required=>'yes',
 	 	datatype=>array(
@@ -363,6 +375,8 @@ final class Contrato extends Controler{
 		id		=>'busqueda',
 		type	=>'text',
 		size	=>'85',
+		placeholder =>'Por favor digite el nombre',
+		Boostrap =>'si',
 		suggest=>array(
 			name	=>'tipo_contrato',
 			setId	=>'tipo_contrato_id',

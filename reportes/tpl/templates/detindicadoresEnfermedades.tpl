@@ -13,70 +13,121 @@
         </style>
         <script type="text/javascript">
 $(function () {
-    $('#container').highcharts({
-        chart: {
-            plotBackgroundColor: null,
-            plotBorderWidth: null,
-            plotShadow: false
-        },
-        title: {
-        {/literal}
-         {foreach name=detalles from=$DETALLES item=i}
+
+
+
+   $('#container').highcharts({
+    chart: {
+        type: 'bar'
+    },
+    title: {
+       {/literal}
+        
             text: ['Licencias e Incapacidades'],
-          {/foreach}
+        
         {literal}
+        
+    },
+    subtitle: {
+        text: 'Source: <a href="https://en.wikipedia.org/wiki/World_population">Wikipedia.org</a>'
+    },
+    xAxis: {
+        {/literal}
+
+
+          {foreach name=detalles from=$DETALLES item=i}
+
+          {assign var="array" value=$i.contrato}
+
+          {assign var="variable" value="$variable,'$array'"|replace:"'',":""}
+            
+          {/foreach}
+
+         categories: [{$variable|substr:1}],
+           
+        {literal}
+      
+        title: {
+            text: null
+        }
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Population (millions)',
+            align: 'high'
         },
-        tooltip: {
-            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-        },
-        plotOptions: {
-            pie: {
-                allowPointSelect: true,
-                cursor: 'pointer',
-                dataLabels: {
-                    enabled: true,
-                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                    style: {
-                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-                    }
-                }
+        labels: {
+            overflow: 'justify'
+        }
+    },
+    tooltip: {
+        valueSuffix: ' millions'
+    },
+    plotOptions: {
+        bar: {
+            dataLabels: {
+                enabled: true
             }
-        },
-        series: [{
-            type: 'pie',
-            name: 'Total Incapacidades',
-            data: [
-                {/literal}
-                {foreach name=detall from=$i.licencia item=l}
-                      ['Numero Incapacidades',{$l.licencia_id}],
-                      
-                {/foreach}
-                {literal}
-            ]
-        }]
-    });
+        }
+    },
+    legend: {
+        layout: 'vertical',
+        align: 'right',
+        verticalAlign: 'top',
+        x: -40,
+        y: 90,
+        floating: true,
+        borderWidth: 1,
+        backgroundColor:'#FFFFFF',
+        shadow: true
+    },
+    credits: {
+        enabled: false
+    },
+    series: [{
+       
+        name: 'Numero Licencias o Incapacidades',
+       
+         {/literal}
+            {foreach name=detalles from=$DETALLES item=i}
+              
+              {assign var="array1" value=$i.numero}
+
+              {assign var="variable1" value="$variable1,$array1"|replace:"'',":""}
+           
+            {/foreach}
+
+            data: [{$variable1|substr:1}]
+           
+        {literal}
+    }]
+});
 
 
 });
 
 
-        </script>
+</script>
 {/literal}
 
-  <body>
+ <body>
     <link rel="stylesheet" href="../../../framework/css/bootstrap.css">
     <link rel="stylesheet" href="../../../framework/css/animate.css">
   <script src="../Highcharts-4.1.5/js/highcharts.js"></script>
   <script src="../Highcharts-4.1.5/js/modules/exporting.js"></script> 
- {foreach name=detalles from=$DETALLES item=i}
-    <div class="container-fluid">
+  
+
+    <div class="container-fluid" style="background-color: #e2e2e2;">
     <div class="row animated zoomIn">
             <div class="col-sm-12">
-              <div id="container" style="width: 500px; height: 500px;  margin: 0 auto"></div>
+             
+                <div id="container" style="width: 700px; height: 380px;  margin: 0 auto; margin-top: 6px; margin-bottom: 8px;"></div>
+          
             </div>
-        </div>
+    </div>
     <div>
-    {/foreach}
+  
 
   </body>
 

@@ -171,6 +171,7 @@ final class Perfil extends Controler{
 			name	=>'base',
 			id		=>'base',
 			type	=>'text',
+			Boostrap =>'si',
 			required=>'yes',
 			datatype=>array(
 				type	=>'numeric',
@@ -184,6 +185,7 @@ final class Perfil extends Controler{
 			name	=>'nombre_cargo',
 			id		=>'nombre_cargo',
 			type	=>'text',
+			Boostrap =>'si',
 			required=>'yes',
 			datatype=>array(
 				type	=>'text',
@@ -197,6 +199,7 @@ final class Perfil extends Controler{
 			name	=>'categoria_arl_id',
 			id		=>'categoria_arl_id',
 			type	=>'select',
+			Boostrap =>'si',
 			options	=>null,
 			required=>'yes',
 			datatype=>array(
@@ -211,6 +214,7 @@ final class Perfil extends Controler{
 			name	=>'experiencia',
 			id		=>'experiencia',
 			type	=>'text',
+			Boostrap =>'si',
 			required=>'yes',
 			datatype=>array(
 				type	=>'integer',
@@ -224,6 +228,7 @@ final class Perfil extends Controler{
 			name	=>'sexo',
 			id		=>'sexo',
 			type	=>'select',
+			Boostrap =>'si',
 			options	=> array(array(value=>'M',text=>'MASCULINO',selected=>'0'),array(value=>'F',text=>'FEMENINO'),array(value=>'C',text=>'CUALQUIERA')),
 			required=>'yes',
 			datatype=>array(
@@ -238,6 +243,7 @@ final class Perfil extends Controler{
 			name	=>'minimo_edad',
 			id		=>'minimo_edad',
 			type	=>'text',
+			Boostrap =>'si',
 			required=>'yes',
 			datatype=>array(
 				type	=>'integer',
@@ -251,6 +257,7 @@ final class Perfil extends Controler{
 			name	=>'maximo_edad',
 			id		=>'maximo_edad',
 			type	=>'text',
+			Boostrap =>'si',
 			required=>'yes',
 			datatype=>array(
 				type	=>'integer',
@@ -264,6 +271,7 @@ final class Perfil extends Controler{
 			name	=>'rango_sal_minimo',
 			id		=>'rango_sal_minimo',
 			type	=>'text',
+			Boostrap =>'si',
 			required=>'yes',
 			datatype=>array(
 				type	=>'numeric',
@@ -277,6 +285,7 @@ final class Perfil extends Controler{
 			name	=>'rango_sal_maximo',
 			id		=>'rango_sal_maximo',
 			type	=>'text',
+			Boostrap =>'si',
 			required=>'yes',
 			datatype=>array(
 				type	=>'numeric',
@@ -291,6 +300,7 @@ final class Perfil extends Controler{
 			name	=>'nivel_escolaridad_id',
 			id		=>'nivel_escolaridad_id',
 			type	=>'select',
+			Boostrap =>'si',
 			options	=>null,
 			required=>'yes',
 			datatype=>array(
@@ -305,6 +315,7 @@ final class Perfil extends Controler{
 			name	=>'escala_salarial_id',
 			id		=>'escala_salarial_id',
 			type	=>'select',
+			Boostrap =>'si',
 			options	=>null,
 			//required=>'yes',
 			datatype=>array(
@@ -319,6 +330,7 @@ final class Perfil extends Controler{
 			name	=>'estado_civil_id',
 			id		=>'estado_civil_id',
 			type	=>'select',
+			Boostrap =>'si',
 			options	=>null,
 			//required=>'yes',
 			datatype=>array(
@@ -333,6 +345,7 @@ final class Perfil extends Controler{
 				name	=>'area_laboral',
 				id		=>'area_laboral',
 				type	=>'select',
+				Boostrap =>'si',
 				options	=> array(array(value=>'A',text=>'ADMINISTRATIVO',selected=>'A'),array(value=>'O',text=>'OPERATIVO'),array(value=>'C',text=>'COMERCIAL')),
 				required=>'yes',
 				datatype=>array(
@@ -347,6 +360,7 @@ final class Perfil extends Controler{
 				name	=>'ocupacion',
 				id		=>'ocupacion',
 				type	=>'text',
+				Boostrap =>'si',
 				size	=>'40',
 				// tabindex=>'1',
 				suggest=>array(
@@ -412,6 +426,8 @@ final class Perfil extends Controler{
 			id		=>'busqueda',
 			type	=>'text',
 			size	=>'85',
+			placeholder =>'Por favor digite el nombre del cargo',
+			Boostrap =>'si',
 			// tabindex=>'1',
 			suggest=>array(
 				name	=>'perfil',

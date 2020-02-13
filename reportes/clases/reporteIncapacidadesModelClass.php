@@ -33,72 +33,120 @@ final class reporteIncapacidadesModel extends Db{
 	return $opciones;
    }
    
-  public function getReporteMC1($desde,$hasta,$Conex){ 	   	
+  public function getReporteMC1($desde,$hasta,$tipo,$Conex){ 	   	
  
-	    $select = "SELECT (SELECT CONCAT_WS(' ', c.primer_nombre,c.segundo_nombre,c.primer_apellido,c.segundo_apellido)) AS nombre_convocado,
-					c.numero_identificacion,		
-					c.direccion,
-					c.telefono,
-					c.movil,
-		 			(SELECT u.nombre FROM ubicacion u WHERE u.ubicacion_id=c.ubicacion_id) AS ciudad,
-					p.fecha,
-					(SELECT ca.nombre_cargo FROM cargo ca WHERE ca.cargo_id=co.cargo_id) AS nombre_cargo
-					FROM convocado c, convocatoria co, postulacion p 		
-					WHERE c.convocado_id=p.convocado_id AND p.convocatoria_id=co.convocatoria_id AND p.fecha BETWEEN '$desde' AND '$hasta' ORDER BY c.convocado_id";		  
+	    $select = "SELECT l.licencia_id,
+                          l.concepto,
+                          l.fecha_licencia,
+                          l.fecha_inicial,
+                          l.fecha_final,
+                          l.dias,
+                          (CASE l.estado WHEN 'A' THEN 'ACTIVO' ELSE 'INACTIVO' END)AS estado,
+                          (SELECT CONCAT_WS(' ',t.primer_nombre,t.segundo_nombre,t.primer_apellido,t.segundo_apellido,t.razon_social) 
+                           FROM tercero t, empleado e, contrato c 
+                           WHERE t.tercero_id=e.tercero_id AND e.empleado_id=c.empleado_id AND c.contrato_id=l.contrato_id)AS contrato,
+                          (SELECT CONCAT_WS('-',c.codigo,c.descripcion) FROM cie_enfermedades c WHERE c.cie_enfermedades_id=l.cie_enfermedades_id)AS enfermedad,
+                          (CASE l.remunerado WHEN 1 THEN 'SI' ELSE 'NO' END)AS remunerado
+
+		
+				   FROM licencia l
+				   WHERE l.fecha_inicial BETWEEN '$desde' AND '$hasta' AND (SELECT t.tipo FROM tipo_incapacidad t WHERE t.tipo_incapacidad_id=l.tipo_incapacidad_id) = '$tipo' ORDER BY l.fecha_licencia";		  
 		  
 		  //echo $select;		  
 		  $results = $this -> DbFetchAll($select,$Conex);
 		  return $results;
   } 
   
-    public function getReporteMC2($convocado_id,$desde,$hasta,$Conex){ 	   	
+    public function getReporteMC2($desde,$hasta,$tipo,$Conex){ 	   	
  
-	    $select = "SELECT (SELECT CONCAT_WS(' ', c.primer_nombre,c.segundo_nombre,c.primer_apellido,c.segundo_apellido)) AS nombre_convocado,
-		 			(SELECT u.nombre FROM ubicacion u WHERE u.ubicacion_id=c.ubicacion_id) AS ciudad,
-					c.numero_identificacion,		
-					c.direccion,
-					c.telefono,
-					c.movil,
-					p.fecha,
-					(SELECT ca.nombre_cargo FROM cargo ca WHERE ca.cargo_id=co.cargo_id) AS nombre_cargo
-					FROM convocado c, convocatoria co, postulacion p 		
-					WHERE c.convocado_id=p.convocado_id AND c.convocado_id IN ($convocado_id)  AND p.convocatoria_id=co.convocatoria_id AND p.fecha BETWEEN '$desde' AND '$hasta'";		  
+	    $select = "SELECT l.licencia_id,
+                          l.concepto,
+                          l.fecha_licencia,
+                          l.fecha_inicial,
+                          l.fecha_final,
+                          l.dias,
+                          (CASE l.estado WHEN 'A' THEN 'ACTIVO' ELSE 'INACTIVO' END)AS estado,
+                          (SELECT CONCAT_WS(' ',t.primer_nombre,t.segundo_nombre,t.primer_apellido,t.segundo_apellido,t.razon_social) 
+                           FROM tercero t, empleado e, contrato c 
+                           WHERE t.tercero_id=e.tercero_id AND e.empleado_id=c.empleado_id AND c.contrato_id=l.contrato_id)AS contrato,
+                          IF((SELECT c.descripcion FROM cie_enfermedades c WHERE c.cie_enfermedades_id=l.cie_enfermedades_id) != '', (SELECT CONCAT_WS('-',c.codigo,c.descripcion) FROM cie_enfermedades c WHERE c.cie_enfermedades_id=l.cie_enfermedades_id),'N/A')AS enfermedad,
+                          (CASE l.remunerado WHEN 1 THEN 'SI' ELSE 'NO' END)AS remunerado
+
+		
+				   FROM licencia l
+				   WHERE l.fecha_inicial BETWEEN '$desde' AND '$hasta' AND (SELECT t.tipo FROM tipo_incapacidad t WHERE t.tipo_incapacidad_id=l.tipo_incapacidad_id) = '$tipo' ORDER BY l.fecha_licencia";		  
 		  
 		  //echo $select;		  
 		  $results = $this -> DbFetchAll($select,$Conex);
 		  return $results;
   }
   
-    public function getReporteMC3($convocado_id,$convocatoria_id,$desde,$hasta,$Conex){ 	   	
+    public function getReporteMC3($empleado_id,$desde,$hasta,$tipo,$Conex){ 	   	
  
-	    $select = "SELECT (SELECT CONCAT_WS(' ', c.primer_nombre,c.segundo_nombre,c.primer_apellido,c.segundo_apellido)) AS nombre_convocado,
-		 			(SELECT u.nombre FROM ubicacion u WHERE u.ubicacion_id=c.ubicacion_id) AS ciudad,
-					c.numero_identificacion,		
-					c.direccion,
-					c.telefono,
-					c.movil,
-					p.fecha,
-					(SELECT ca.nombre_cargo FROM cargo ca WHERE ca.cargo_id=co.cargo_id) AS nombre_cargo
-					FROM convocado c, convocatoria co, postulacion p  		
-					WHERE c.convocado_id=p.convocado_id AND c.convocado_id IN ($convocado_id) AND p.convocatoria_id=co.convocatoria_id AND co.convocatoria_id IN ($convocatoria_id) AND p.fecha BETWEEN '$desde' AND '$hasta'";		  
+	    $select = "SELECT l.licencia_id,
+                          l.concepto,
+                          l.fecha_licencia,
+                          l.fecha_inicial,
+                          l.fecha_final,
+                          l.dias,
+                          (CASE l.estado WHEN 'A' THEN 'ACTIVO' ELSE 'INACTIVO' END)AS estado,
+                          (SELECT CONCAT_WS(' ',t.primer_nombre,t.segundo_nombre,t.primer_apellido,t.segundo_apellido,t.razon_social) 
+                           FROM tercero t, empleado e, contrato c 
+                           WHERE t.tercero_id=e.tercero_id AND e.empleado_id=c.empleado_id AND c.contrato_id=l.contrato_id)AS contrato,
+                          IF((SELECT c.descripcion FROM cie_enfermedades c WHERE c.cie_enfermedades_id=l.cie_enfermedades_id) != '', (SELECT CONCAT_WS('-',c.codigo,c.descripcion) FROM cie_enfermedades c WHERE c.cie_enfermedades_id=l.cie_enfermedades_id),'N/A')AS enfermedad,
+                          (CASE l.remunerado WHEN 1 THEN 'SI' ELSE 'NO' END)AS remunerado
+
+		
+				   FROM licencia l
+				   WHERE l.fecha_inicial BETWEEN '$desde' AND '$hasta' AND (SELECT e.empleado_id FROM contrato c, empleado e WHERE e.empleado_id=c.empleado_id AND c.contrato_id = l.contrato_id) = $empleado_id AND (SELECT t.tipo FROM tipo_incapacidad t WHERE t.tipo_incapacidad_id=l.tipo_incapacidad_id) = '$tipo' ORDER BY l.fecha_licencia";		  
 		  
 		  //echo $select;		  
 		  $results = $this -> DbFetchAll($select,$Conex);
 		  return $results;
   }
   
-    public function getReporteMC4($convocatoria_id,$desde,$hasta,$Conex){ 	   	
+    public function getReporteMC4($empleado_id,$desde,$hasta,$tipo,$Conex){ 	   	
  
-	    $select = "SELECT (SELECT CONCAT_WS(' ', c.primer_nombre,c.segundo_nombre,c.primer_apellido,c.segundo_apellido)) AS  nombre_convocado,
-		 			(SELECT u.nombre FROM ubicacion u WHERE u.ubicacion_id=c.ubicacion_id) AS ciudad,
-					c.numero_identificacion,		
-					c.direccion,
-					c.telefono,
-					c.movil,
-					p.fecha,
-					(SELECT ca.nombre_cargo FROM cargo ca WHERE ca.cargo_id=co.cargo_id) AS nombre_cargo
-					FROM convocado c, convocatoria co, postulacion p  		
-					WHERE c.convocado_id=p.convocado_id AND p.convocatoria_id=co.convocatoria_id AND co.convocatoria_id IN ($convocatoria_id) AND p.fecha BETWEEN '$desde' AND '$hasta'";		  
+	    $select = "SELECT l.licencia_id,
+                          l.concepto,
+                          l.fecha_licencia,
+                          l.fecha_inicial,
+                          l.fecha_final,
+                          l.dias,
+                          (CASE l.estado WHEN 'A' THEN 'ACTIVO' ELSE 'INACTIVO' END)AS estado,
+                          (SELECT CONCAT_WS(' ',t.primer_nombre,t.segundo_nombre,t.primer_apellido,t.segundo_apellido,t.razon_social) 
+                           FROM tercero t, empleado e, contrato c 
+                           WHERE t.tercero_id=e.tercero_id AND e.empleado_id=c.empleado_id AND c.contrato_id=l.contrato_id)AS contrato,
+                          IF((SELECT c.descripcion FROM cie_enfermedades c WHERE c.cie_enfermedades_id=l.cie_enfermedades_id) != '', (SELECT CONCAT_WS('-',c.codigo,c.descripcion) FROM cie_enfermedades c WHERE c.cie_enfermedades_id=l.cie_enfermedades_id),'N/A')AS enfermedad,
+                          (CASE l.remunerado WHEN 1 THEN 'SI' ELSE 'NO' END)AS remunerado
+
+		
+				   FROM licencia l
+				   WHERE l.fecha_inicial BETWEEN '$desde' AND '$hasta' AND (SELECT e.empleado_id FROM contrato c, empleado e WHERE e.empleado_id=c.empleado_id AND c.contrato_id = l.contrato_id) = $empleado_id AND (SELECT t.tipo FROM tipo_incapacidad t WHERE t.tipo_incapacidad_id=l.tipo_incapacidad_id) = '$tipo' ORDER BY l.fecha_licencia";		  
+		  
+		  //echo $select;		  
+		  $results = $this -> DbFetchAll($select,$Conex);
+		  return $results;
+  }
+
+  public function getReporteMC5($desde,$hasta,$tipo,$cie_enfermedades_id,$Conex){ 	   	
+ 
+	    $select = "SELECT l.licencia_id,
+                          l.concepto,
+                          l.fecha_licencia,
+                          l.fecha_inicial,
+                          l.fecha_final,
+                          l.dias,
+                          (CASE l.estado WHEN 'A' THEN 'ACTIVO' ELSE 'INACTIVO' END)AS estado,
+                          (SELECT CONCAT_WS(' ',t.primer_nombre,t.segundo_nombre,t.primer_apellido,t.segundo_apellido,t.razon_social) 
+                           FROM tercero t, empleado e, contrato c 
+                           WHERE t.tercero_id=e.tercero_id AND e.empleado_id=c.empleado_id AND c.contrato_id=l.contrato_id)AS contrato,
+                          IF((SELECT c.descripcion FROM cie_enfermedades c WHERE c.cie_enfermedades_id=l.cie_enfermedades_id) != '', (SELECT CONCAT_WS('-',c.codigo,c.descripcion) FROM cie_enfermedades c WHERE c.cie_enfermedades_id=l.cie_enfermedades_id),'N/A')AS enfermedad,
+                          (CASE l.remunerado WHEN 1 THEN 'SI' ELSE 'NO' END)AS remunerado
+
+		
+				   FROM licencia l
+				   WHERE l.fecha_inicial BETWEEN '$desde' AND '$hasta'AND l.cie_enfermedades_id = $cie_enfermedades_id AND (SELECT t.tipo FROM tipo_incapacidad t WHERE t.tipo_incapacidad_id=l.tipo_incapacidad_id) = '$tipo' ORDER BY l.fecha_licencia";		  
 		  
 		  //echo $select;		  
 		  $results = $this -> DbFetchAll($select,$Conex);

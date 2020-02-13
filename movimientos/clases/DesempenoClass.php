@@ -154,6 +154,7 @@
 			   name =>'empleado',
 			   id =>'empleado',
 				 type =>'text',
+				 Boostrap =>'si',
 				  size    =>'30',
 				    suggest => array(
 				  name =>'empleado',
@@ -166,6 +167,7 @@
 				name	=>'causal_desempeno_id',
 				id		=>'causal_desempeno_id',
 				type	=>'select',
+				Boostrap =>'si',
 				options =>array(),
 				required=>'yes',
 				datatype=>array(
@@ -182,6 +184,7 @@
 				name =>'resultado',
 				id  =>'resultado',
 				type =>'select',
+				Boostrap =>'si',
 				options => array(array(value=>'A',text=>'APROBADO',selected=>'A'),array(value=>'N',text=>'NO APROBADO')),
 				required=>'yes',
 				datatype=>array(
@@ -274,6 +277,8 @@
 				id		=>'busqueda',
 				type	=>'text',
 				size	=>'85',
+				Boostrap =>'si',
+				placeholder =>'Por favor digite el nombre o el numero de identificacion del empleado',
 				// tabindex=>'1',
 				suggest=>array(
 					name	=>'desempeno',

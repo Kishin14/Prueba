@@ -106,6 +106,7 @@ final class reportesContratos extends Controler{
 		name	=>'si_empleado',
 		id		=>'si_empleado',
 		type	=>'select',
+		Boostrap => 'si',
 		options	=>null,
 		selected=>0,
 		required=>'yes',
@@ -116,6 +117,7 @@ final class reportesContratos extends Controler{
 		name	=>'si_cargo',
 		id		=>'si_cargo',
 		type	=>'select',
+		Boostrap => 'si',
 		options	=>null,
 		selected=>0,
 		required=>'yes',
@@ -138,6 +140,7 @@ final class reportesContratos extends Controler{
 		name	=>'cargo',
 		id		=>'cargo',
 		type	=>'text',
+		Boostrap => 'si',
 		disabled=>'disabled',
 		suggest=>array(
 			name	=>'cargo',
@@ -158,6 +161,7 @@ final class reportesContratos extends Controler{
 		name	=>'empleado',
 		id		=>'empleado',
 		type	=>'text',
+		Boostrap => 'si',
 		disabled=>'disabled',
 		suggest=>array(
 			name	=>'empleado',

@@ -154,6 +154,7 @@
 				name	=>'tipo_identificacion_id',
 				id		=>'tipo_identificacion_id',
 				type	=>'select',
+				Boostrap =>'si',
 				options	=>null,
 				required=>'yes',
 				datatype=>array(
@@ -168,6 +169,7 @@
 				name	=>'numero_identificacion',
 				id		=>'numero_identificacion',
 				type	=>'text',
+				Boostrap =>'si',
 				required=>'yes',
 				datatype=>array(
 					type	=>'integer',
@@ -181,6 +183,7 @@
 				name	=>'primer_nombre',
 				id		=>'primer_nombre',
 				type	=>'text',
+				Boostrap =>'si',
 				required=>'yes',
 				datatype=>array(
 					type	=>'text',
@@ -194,6 +197,7 @@
 				name	=>'segundo_nombre',
 				id		=>'segundo_nombre',
 				type	=>'text',
+				Boostrap =>'si',
 				datatype=>array(
 					type	=>'text',
 					length	=>'45'),
@@ -206,6 +210,7 @@
 				name	=>'primer_apellido',
 				id		=>'primer_apellido',
 				type	=>'text',
+				Boostrap =>'si',
 				required=>'yes',
 				datatype=>array(
 					type	=>'text',
@@ -219,6 +224,7 @@
 				name	=>'segundo_apellido',
 				id		=>'segundo_apellido',
 				type	=>'text',
+				Boostrap =>'si',
 				datatype=>array(
 					type	=>'text',
 					length	=>'45'),
@@ -231,6 +237,7 @@
 				name	=>'direccion',
 				id		=>'direccion',
 				type	=>'text',
+				Boostrap =>'si',
 				required=>'yes',
 				datatype=>array(
 					type	=>'text',
@@ -244,6 +251,7 @@
 				name	=>'telefono',
 				id		=>'telefono',
 				type	=>'text',
+				Boostrap =>'si',
 				required=>'yes',
 				datatype=>array(
 					type	=>'integer',
@@ -257,6 +265,7 @@
 				name	=>'movil',
 				id		=>'movil',
 				type	=>'text',
+				Boostrap =>'si',
 				required=>'yes',
 				datatype=>array(
 					type	=>'integer',
@@ -280,7 +289,8 @@
 			$this -> Campos[ubicacion] = array(
 			   	name =>'ubicacion',
 			   	id =>'ubicacion',
-			   	type =>'text',
+				   type =>'text',
+				   Boostrap =>'si',
 				size    =>'15',
 			   	suggest => array(
 				name =>'ciudad',
@@ -307,6 +317,7 @@
 				name	=>'estado',
 				id		=>'estado',
 				type	=>'select',
+				Boostrap =>'si',
 				options	=> array(array(value=>'A',text=>'ACTIVO',selected=>'A'),array(value=>'I',text=>'INACTIVO')),
 				required=>'yes',
 				datatype=>array(
@@ -363,6 +374,7 @@
 				name	=>'busqueda',
 				id		=>'busqueda',
 				type	=>'text',
+				Boostrap =>'si',
 				size	=>'85',
 				// tabindex=>'1',
 				suggest=>array(

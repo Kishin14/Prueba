@@ -246,6 +246,7 @@ final class Vacacion extends Controler{
 		name 	=>'fecha_liquidacion',
 		id  	=>'fecha_liquidacion',
 		type 	=>'text',
+		
 		required=>'yes',
 		datatype=>array(
 			type =>'date',
@@ -260,6 +261,7 @@ final class Vacacion extends Controler{
 		name	=>'liquidacion_vacaciones_id',
 		id		=>'liquidacion_vacaciones_id',
 		type	=>'text',
+		Boostrap =>'si',
 		datatype=>array(
 			type	=>'integer'),
 		transaction=>array(
@@ -283,6 +285,7 @@ final class Vacacion extends Controler{
 		name =>'empleado',
 		id =>'empleado',
 		type =>'text',
+		Boostrap =>'si',
 		required=>'yes',
 		size    =>'45',
 		suggest => array(
@@ -295,6 +298,7 @@ final class Vacacion extends Controler{
 		name	=>'cargo',
 		id		=>'cargo',
 		type	=>'text',
+		Boostrap =>'si',
 		readonly=>'yes',
 		required=>'yes',
 	 	datatype=>array(
@@ -306,6 +310,7 @@ final class Vacacion extends Controler{
 		name	=>'num_identificacion',
 		id		=>'num_identificacion',
 		type	=>'text',
+		Boostrap =>'si',
 		required=>'yes',
 		readonly=>'yes',
 	 	datatype=>array(
@@ -317,6 +322,7 @@ final class Vacacion extends Controler{
 		name	=>'salario',
 		id		=>'salario',
 		type	=>'text',
+		Boostrap =>'si',
 		required=>'yes',
 		readonly=>'yes',
 	 	datatype=>array(
@@ -329,6 +335,7 @@ final class Vacacion extends Controler{
 		name	=>'valor',
 		id		=>'valor',
 		type	=>'text',
+		Boostrap =>'si',
 		required=>'yes',
 		readonly=>'yes',
 	 	datatype=>array(
@@ -354,6 +361,7 @@ final class Vacacion extends Controler{
 		name	=>'concepto',
 		id		=>'concepto',
 		type	=>'text',
+		Boostrap =>'si',
 		size	=>78,
 		readonly=>'yes',
 		required=>'yes',
@@ -370,6 +378,7 @@ final class Vacacion extends Controler{
 		name	=>'dias',
 		id		=>'dias',
 		type	=>'text',
+		Boostrap =>'si',
 		required=>'yes',
 	 	datatype=>array(
 			type	=>'text',
@@ -433,6 +442,7 @@ final class Vacacion extends Controler{
 		name	=>'observaciones',
 		id		=>'observaciones',
 		type	=>'text',
+		Boostrap =>'si',
 		size	=>81,
 		
 		required=>'yes',
@@ -450,6 +460,7 @@ final class Vacacion extends Controler{
 		name =>'estado',
 		id  =>'estado',
 		type =>'select',
+		Boostrap =>'si',
 		options => array(array(value=>'A',text=>'ACTIVO',selected=>'A'),array(value=>'I',text=>'INACTIVO',selected=>'A'),array(value => 'C', text => 'CONTABILIZADA')),
 		required=>'yes',
 		datatype=>array(
@@ -464,6 +475,7 @@ final class Vacacion extends Controler{
 		name	=>'si_empleado',
 		id		=>'si_empleado',
 		type	=>'select',
+		Boostrap =>'si',
 		options	=>array(array(value=>'1',text=>'UNO',selected=>'ALL'),array(value=>'ALL',text=>'TODOS',selected=>'ALL')),
 		selected=>0,
 		required=>'yes',
@@ -482,6 +494,7 @@ final class Vacacion extends Controler{
 		name	=>'tipo_impresion',
 		id	    =>'tipo_impresion',
 		type	=>'select',
+		Boostrap =>'si',
 		options => array(array(value => 'CL', text => 'DESPRENDIBLE LIQUIDACION'),  array(value => 'DC', text => 'DOCUMENTO CONTABLE')),
 		selected=>'C',
 		//required=>'yes',
@@ -552,7 +565,9 @@ final class Vacacion extends Controler{
 		name	=>'busqueda',
 		id		=>'busqueda',
 		type	=>'text',
+		Boostrap =>'si',
 		size	=>'85',
+		placeholder =>'Por favor digite el numero de identificación o el nombre',
 		suggest=>array(
 			name	=>'liquidacion_vacaciones',
 			setId	=>'liquidacion_vacaciones_id',

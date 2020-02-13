@@ -171,6 +171,7 @@ final class Licencia extends Controler{
 		name	=>'licencia_id',
 		id		=>'licencia_id',
 		type	=>'text',
+		Boostrap =>'si',
 		disabled=>'yes',
 		size	=>'8',
 		datatype=>array(
@@ -184,6 +185,7 @@ final class Licencia extends Controler{
 		name	=>'concepto',
 		id		=>'concepto',
 		type	=>'text',
+		Boostrap =>'si',
 		required=>'yes',
 		size	=>'90',
 	 	datatype=>array(
@@ -198,6 +200,7 @@ final class Licencia extends Controler{
 		name	=>'diagnostico',
 		id		=>'diagnostico',
 		type	=>'text',
+		Boostrap =>'si',
 		required=>'yes',
 		size	=>'90',
 	 	datatype=>array(
@@ -266,6 +269,7 @@ final class Licencia extends Controler{
 	   name =>'contrato',
 	   id =>'contrato',
 	   type =>'text',
+	   Boostrap =>'si',
 	   size    =>'30',
 	   suggest => array(
 			name =>'contrato_laboral',
@@ -287,6 +291,7 @@ final class Licencia extends Controler{
 	   name =>'descripcion',
 	   id =>'descripcion',
 	   type =>'text',
+	   Boostrap =>'si',
 	   disabled => 'yes',
 	   size    =>'40',
 	   suggest => array(
@@ -299,6 +304,7 @@ final class Licencia extends Controler{
 	  name =>'tipo_incapacidad_id',
 	  id  =>'tipo_incapacidad_id',
 	  type =>'select',
+	  Boostrap =>'si',
 	  options =>array(),
 	  required=>'yes',
 	  //tabindex=>'1',
@@ -314,6 +320,7 @@ final class Licencia extends Controler{
 		id  =>'dias',
 		type =>'text',
 		size=>'5',
+		Boostrap =>'si',
 //		required=>'yes',
 		datatype=>array(
 			type =>'text',
@@ -327,6 +334,7 @@ final class Licencia extends Controler{
 		name =>'remunerado',
 		id  =>'remunerado',
 		type =>'select',
+		Boostrap =>'si',
 		options => array(array(value=>'1',text=>'SI',selected=>'1'),array(value=>'0',text=>'NO')),
 		required=>'yes',
 		datatype=>array(
@@ -341,6 +349,7 @@ final class Licencia extends Controler{
 		name =>'estado',
 		id  =>'estado',
 		type =>'select',
+		Boostrap =>'si',
 		options => array(array(value=>'A',text=>'ACTIVO',selected=>'A'),array(value=>'I',text=>'INACTIVO')),
 		required=>'yes',
 		datatype=>array(
@@ -403,6 +412,8 @@ final class Licencia extends Controler{
 		id		=>'busqueda',
 		type	=>'text',
 		size	=>'85',
+		Boostrap =>'si',
+		placeholder =>'Por favor digite el nombre del empleado o el concepto',
 		// tabindex=>'1',
 		suggest=>array(
 			name	=>'licencia',

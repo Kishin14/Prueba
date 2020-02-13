@@ -140,6 +140,7 @@ final class Estudios extends Controler{
 		name	=>'descripcion',
 		id		=>'descripcion',
 		type	=>'text',
+		Boostrap =>'si',
 		required=>'yes',
 	 	datatype=>array(
 			type	=>'text',
@@ -153,6 +154,7 @@ final class Estudios extends Controler{
 		name	=>'nombre',
 		id		=>'nombre',
 		type	=>'text',
+		Boostrap =>'si',
 		required=>'yes',
 	 	datatype=>array(
 			type	=>'text',
@@ -166,6 +168,7 @@ final class Estudios extends Controler{
 		name	=>'estado',
 		id		=>'estado',
 		type	=>'select',
+		Boostrap =>'si',
 		options	 =>array(array(value => '1',text => 'ACTIVO'),array(value => '0', text => 'INACTIVO')),
 		required=>'yes',
 	 	datatype=>array(
@@ -220,6 +223,8 @@ final class Estudios extends Controler{
 		id		=>'busqueda',
 		type	=>'text',
 		size	=>'85',
+		Boostrap =>'si',
+		placeholder =>'Por favor digite el nombre',
 		suggest=>array(
 			name	=>'nivel_escolaridad',
 			setId	=>'nivel_escolaridad_id',

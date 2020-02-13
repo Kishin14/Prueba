@@ -185,6 +185,7 @@ final class EmpPrestacion extends Controler{
 			name	=>'codigo',
 			id		=>'codigo',
 			type	=>'text',
+			Boostrap =>'si',
 			required=>'yes',
 			datatype=>array(
 				type	=>'text',
@@ -198,6 +199,7 @@ final class EmpPrestacion extends Controler{
 			name	=>'salud',
 			id		=>'salud',
 			type	=>'select',
+			Boostrap =>'si',
 			required=>'yes',
 			options	=> array(array(value=>'0',text=>'NO',selected=>'0'),array(value=>'1',text=>'SI')),				
 			datatype=>array(
@@ -212,6 +214,7 @@ final class EmpPrestacion extends Controler{
 			name	=>'pension',
 			id		=>'pension',
 			type	=>'select',
+			Boostrap =>'si',
 			required=>'yes',
 			options	=> array(array(value=>'0',text=>'NO',selected=>'0'),array(value=>'1',text=>'SI')),				
 			datatype=>array(
@@ -226,6 +229,7 @@ final class EmpPrestacion extends Controler{
 			name	=>'arl',
 			id		=>'arl',
 			type	=>'select',
+			Boostrap =>'si',
 			required=>'yes',
 			options	=> array(array(value=>'0',text=>'NO',selected=>'0'),array(value=>'1',text=>'SI')),
 			datatype=>array(
@@ -240,6 +244,7 @@ final class EmpPrestacion extends Controler{
 			name	=>'caja_compensacion',
 			id		=>'caja_compensacion',
 			type	=>'select',
+			Boostrap =>'si',
 			required=>'yes',
 			options	=> array(array(value=>'0',text=>'NO',selected=>'0'),array(value=>'1',text=>'SI')),
 			datatype=>array(
@@ -254,6 +259,7 @@ final class EmpPrestacion extends Controler{
 			name	=>'cesantias',
 			id		=>'cesantias',
 			type	=>'select',
+			Boostrap =>'si',
 			required=>'yes',
 			options	=> array(array(value=>'0',text=>'NO',selected=>'0'),array(value=>'1',text=>'SI')),
 			datatype=>array(
@@ -268,6 +274,7 @@ final class EmpPrestacion extends Controler{
 			name	=>'parafiscales',
 			id		=>'parafiscales',
 			type	=>'select',
+			Boostrap =>'si',
 			required=>'yes',
 			options	=> array(array(value=>'0',text=>'NO',selected=>'0'),array(value=>'1',text=>'SI')),
 			datatype=>array(
@@ -296,6 +303,7 @@ final class EmpPrestacion extends Controler{
 			name	=>'ubicacion',
 			id		=>'ubicacion',
 			type	=>'text',
+			Boostrap =>'si',
 			required=>'yes',
 			suggest=>array(
 				name	=>'ciudad',
@@ -309,6 +317,7 @@ final class EmpPrestacion extends Controler{
 			name	=>'tipo_persona_id',
 			id		=>'tipo_persona_id',
 			type	=>'select',
+			Boostrap =>'si',
 			options	=> null,
 			required=>'yes',
 			datatype=>array(
@@ -323,6 +332,7 @@ final class EmpPrestacion extends Controler{
 			name	=>'tipo_identificacion_id',
 			id		=>'tipo_identificacion_id',
 			type	=>'select',
+			Boostrap =>'si',
 			options	=> null,
 			required=>'yes',
 			datatype=>array(
@@ -337,6 +347,7 @@ final class EmpPrestacion extends Controler{
 			name	=>'numero_identificacion',
 			id		=>'numero_identificacion',
 			type	=>'text',
+			Boostrap =>'si',
 			required=>'yes',
 			//tabindex=>'2',
 			onblur =>'calculaDigitoTercero()',
@@ -353,6 +364,7 @@ final class EmpPrestacion extends Controler{
 			name	=>'digito_verificacion',
 			id		=>'digito_verificacion',
 			type	=>'text',
+			Boostrap =>'si',
 			readonly=>'readonly',
 			size	=>'1',
 			//tabindex=>'3',
@@ -369,6 +381,7 @@ final class EmpPrestacion extends Controler{
 			name	=>'razon_social',
 			id		=>'razon_social',
 			type	=>'text',
+			Boostrap =>'si',
 			required=>'yes',
 			datatype=>array(
 				type	=>'text',
@@ -382,6 +395,7 @@ final class EmpPrestacion extends Controler{
 			name	=>'sigla',
 			id		=>'sigla',
 			type	=>'text',
+			Boostrap =>'si',
 			required=>'yes',
 			datatype=>array(
 				type	=>'text',
@@ -396,6 +410,7 @@ final class EmpPrestacion extends Controler{
 			id		=>'direccion',
 			type	=>'text',
 			required=>'yes',
+			Boostrap =>'si',
 			datatype=>array(
 				type	=>'text',
 				length	=>'250'),
@@ -408,6 +423,7 @@ final class EmpPrestacion extends Controler{
 			name	=>'email',
 			id		=>'email',
 			type	=>'text',
+			Boostrap =>'si',
 			required=>'yes',
 			datatype=>array(
 				type	=>'text',
@@ -421,6 +437,7 @@ final class EmpPrestacion extends Controler{
 			name	=>'telefax',
 			id		=>'telefax',
 			type	=>'text',
+			Boostrap =>'si',
 			//required=>'yes',
 			datatype=>array(
 				type	=>'text',
@@ -435,6 +452,7 @@ final class EmpPrestacion extends Controler{
 			id		=>'telefono',
 			type	=>'text',
 			required=>'yes',
+			Boostrap =>'si',
 			datatype=>array(
 				type	=>'integer',
 				length	=>'20'),
@@ -447,6 +465,7 @@ final class EmpPrestacion extends Controler{
 			name	=>'movil',
 			id		=>'movil',
 			type	=>'text',
+			Boostrap =>'si',
 			//required=>'yes',
 			datatype=>array(
 				type	=>'integer',
@@ -460,6 +479,7 @@ final class EmpPrestacion extends Controler{
 			name	=>'estado',
 			id		=>'estado',
 			type	=>'select',
+			Boostrap =>'si',
 			options	=> array(array(value=>'D',text=>'DISPONIBLE',selected=>'D'),array(value=>'B',text=>'BLOQUEADO')),
 			required=>'yes',
 			datatype=>array(
@@ -474,6 +494,7 @@ final class EmpPrestacion extends Controler{
 			name	=>'regimen_id',
 			id		=>'regimen_id',
 			type	=>'select',
+			Boostrap =>'si',
 			options	=> null,
 			required=>'yes',
 			datatype=>array(
@@ -488,6 +509,7 @@ final class EmpPrestacion extends Controler{
 			name	=>'retei_proveedor',
 			id		=>'retei_proveedor',
 			type	=>'select',
+			Boostrap =>'si',
 			options	=> array(array(value=>'N',text=>'NO',selected=>'N'),array(value=>'S',text=>'SI')),
 			required=>'yes',
 			datatype=>array(
@@ -502,6 +524,7 @@ final class EmpPrestacion extends Controler{
 			name	=>'autoret_proveedor',
 			id		=>'autoret_proveedor',
 			type	=>'select',
+			Boostrap =>'si',
 			options	=> array(array(value=>'N',text=>'NO',selected=>'N'),array(value=>'S',text=>'SI')),
 			required=>'yes',
 			datatype=>array(
@@ -563,6 +586,8 @@ final class EmpPrestacion extends Controler{
 			id		=>'busqueda',
 			type	=>'text',
 			size	=>'85',
+			Boostrap =>'si',
+			placeholder =>'Por favor Digite el Nit o Nombre de la Empresa',
 			// tabindex=>'1',
 			suggest=>array(
 				name	=>'empresa_prestaciones',
