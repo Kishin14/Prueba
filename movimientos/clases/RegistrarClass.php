@@ -290,6 +290,7 @@ final class Registrar extends Controler{
    	$this -> Campos[previsual] = array(
 		name	    =>'previsual',
 		id	    	=>'previsual',
+		Clase		=>'btn btn-success',
 		type	    =>'button',
 		value	    =>'Previsual',
 		onclick     =>'Previsual(this.form)'
