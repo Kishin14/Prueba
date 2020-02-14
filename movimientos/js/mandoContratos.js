@@ -24,7 +24,7 @@ $(document).ready(function () {
 
             var data = $.parseJSON(response);
             
-            if($data != null){
+            if(data != null){
             
                 var numero_contrato = data[0]['numero_contrato'];
                 var fecha_inicio = data[0]['fecha_inicio'];
