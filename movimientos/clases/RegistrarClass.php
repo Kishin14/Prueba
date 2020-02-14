@@ -290,6 +290,7 @@ final class Registrar extends Controler{
    	$this -> Campos[previsual] = array(
 		name	    =>'previsual',
 		id	    	=>'previsual',
+		Clase		=>'btn btn-success', 
 		type	    =>'button',
 		value	    =>'Previsual',
 		onclick     =>'Previsual(this.form)'
@@ -618,7 +619,7 @@ final class Registrar extends Controler{
 
 	      $Layout -> setLiquidacion($con_deb1,$con_cre1,$con_debExt1,$con_creExt1,$con_sal1,$Model -> getLiquidacion($select_deb_total,$select_cre_total,$select_deb,$select_cre,$select_debExt,$select_creExt,$select_sal,$this -> getOficinaId(),$this -> getEmpresaId(),$this -> getConex()),$Model -> getTotales($select_tot_deb,$select_tot_cre,$select_tot_debExt,$select_tot_creExt,$select_tot_sal,$this -> getEmpresaId(),$this -> getConex()));
 
-		  $Layout -> exportToExcel('Imp_LiquidacionExcel.tpl'); 
+		  //$Layout -> exportToExcel('Imp_LiquidacionExcel.tpl'); 
 
 		   echo 'true'; #Este echo valida que la previsual se cumpla
 
@@ -776,8 +777,10 @@ final class Registrar extends Controler{
 			   
 		  }
 		   
+		  //exit('test : '.$select_tot_sal);
 
-	      $Layout -> setLiquidacion($con_deb1,$con_cre1,$con_debExt1,$con_creExt1,$con_sal1,$Model -> getLiquidacion($select_deb_total,$select_cre_total,$select_deb,$select_cre,$select_debExt,$select_creExt,$select_sal,$this -> getOficinaId(),$this -> getEmpresaId(),$this -> getConex()),$Model -> getTotales($select_tot_deb,$select_tot_cre,$select_tot_debExt,$select_tot_creExt,$select_tot_sal,$this -> getEmpresaId(),$this -> getConex()));
+		  $Layout -> setLiquidacion($con_deb1,$con_cre1,$con_debExt1,$con_creExt1,$con_sal1,$Model -> getLiquidacion($select_deb_total,$select_cre_total,$select_deb,$select_cre,$select_debExt,$select_creExt,$select_sal,$this -> getOficinaId(),$this -> getEmpresaId(),$this -> getConex()),$Model -> getTotales($select_tot_deb,$select_tot_cre,$select_tot_debExt,$select_tot_creExt,$select_tot_sal,$this -> getEmpresaId(),$this -> getConex()));
+		  
 
 
 		  $Layout -> exportToExcel('Imp_LiquidacionExcel.tpl'); 
