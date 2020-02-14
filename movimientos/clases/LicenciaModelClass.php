@@ -62,8 +62,11 @@ final class LicenciaModel extends Db{
 	
 	public function selectLicenciaId($licencia_id,$Conex){
 		$select = "SELECT n.*,
+		           (SELECT c.descripcion FROM cie_enfermedades c WHERE c.cie_enfermedades_id = n.cie_enfermedades_id)AS descripcion,
 		(SELECT CONCAT_WS(' ',c.numero_contrato,'-',t.razon_social,t.primer_nombre,t.segundo_nombre,t.primer_apellido,t.segundo_apellido,'-',t.numero_identificacion) 
-		AS contrato FROM contrato c,  tercero t, empleado e WHERE c.empleado_id=e.empleado_id AND e.tercero_id=t.tercero_id AND c.contrato_id=n.contrato_id)AS contrato
+		AS contrato 
+		
+		FROM contrato c,  tercero t, empleado e WHERE c.empleado_id=e.empleado_id AND e.tercero_id=t.tercero_id AND c.contrato_id=n.contrato_id)AS contrato
 		FROM licencia n WHERE n.licencia_id = $licencia_id";
 		$result = $this -> DbFetchAll($select,$Conex);
 		return $result;
