@@ -67,6 +67,8 @@
             <tr>
                 <td><label>Ocupaci&oacute;n DANE :</label></td>
                 <td>{$OCUPACION}{$OCUPACIONID}</td>
+                <td><label>Escala Salarial  : </label></td>
+                <td>{$ESCALAID}</td>
             </tr>
             <tr>
                 <td colspan="4">&nbsp;</td>
