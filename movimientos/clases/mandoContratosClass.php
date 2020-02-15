@@ -69,6 +69,20 @@ final class mandoContratos extends Controler{
 	 }	
   }
 
+  protected function vencidos(){
+
+    require_once("mandoContratosModelClass.php");
+    $Model = new mandoContratosModel();
+	
+    $result = $Model -> SelectVencidos($this -> getConex());
+	
+    if($Model -> GetNumError() > 0){
+      exit("false");
+    }else{
+       $this -> getArrayJSON($result);
+	 }	
+  }
+
   
 }
 

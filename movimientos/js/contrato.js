@@ -239,9 +239,8 @@ $(document).ready(function(){
 					$('#horario_ini,#horario_fin,#empresa_caja,#empresa_cesan').val("");  
 				  }
 				  
-				  if(!isNaN(tiempo_contrato)){
-					  $('#tiempo_contrato').val(tiempo_contrato);  					
-					  calculaFechaFin();
+				  if(!isNaN(tiempo_contrato)){  			
+					  calculaFechaFin(tiempo_contrato);
 				  }
 
 			  }catch(e){
@@ -319,14 +318,17 @@ $(document).ready(function(){
 			}
 		}
    });
+
+
 });
 
 
-function calculaFechaFin(){
+function calculaFechaFin(tiempo_contrato){
 	var fechai = $('#fecha_inicio').val();
-	var tiempo_contrato = $('#tiempo_contrato').val();
+
+	if(fechai != ''){
 	
-	 var QueryString = "ACTIONCONTROLER=calculaFechaFin&fechai="+fechai+"&tiempo_contrato="+tiempo_contrato;
+		var QueryString = "ACTIONCONTROLER=calculaFechaFin&fechai="+fechai+"&tiempo_contrato="+tiempo_contrato;
 		  
 		  $.ajax({
 			url        : "ContratoClass.php?rand="+Math.random(),
@@ -338,16 +340,19 @@ function calculaFechaFin(){
 			  
 			  try{
 				  var responseArray       = $.parseJSON(response); 
-				  var fecha_fin        	  = responseArray['fecha'];
+				  var fecha_fin        	  = responseArray['fechafin'];
+				 
 				  $('#fecha_terminacion').val(fecha_fin);
 			  }catch(e){
-				 //alertJquery(e);
+				 alertJquery(e);
 			  }
 			  
 			}
 			
 		  });
-	
+		}else{
+			alertJquery("¡Por favor ingrese la fecha inicio y seleccione nuevamente el TIPO DE CONTRATO!");
+		}
 }
 
 function beforePrint(){
