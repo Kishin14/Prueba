@@ -296,7 +296,7 @@ final class PrestacionFinal extends Controler{
 	  }
   }
 
-  protected function restaFechasCont($f1,$f2){
+  /*protected function restaFechasCont($f1,$f2){
 
 	$aFecha1 = explode('-',$f1); 
 	$aFecha2 = explode('-',$f2);  
@@ -377,7 +377,7 @@ final class PrestacionFinal extends Controler{
 	return $dias;
 
 	  
-  }
+  }*/
 
 
   //CAMPOS

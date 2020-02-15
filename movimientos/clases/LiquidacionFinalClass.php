@@ -857,7 +857,7 @@ final class LiquidacionFinal extends Controler{
 	
   }
 
-  protected function restaFechasCont($f1,$f2){
+  /*protected function restaFechasCont($f1,$f2){
 
 	$aFecha1 = explode('-',$f1); 
 	$aFecha2 = explode('-',$f2);  
@@ -937,7 +937,7 @@ final class LiquidacionFinal extends Controler{
 	return $dias;
 
 	  
-  }
+  }*/
 
 
   protected function setDataContrato(){
@@ -1126,10 +1126,8 @@ final class LiquidacionFinal extends Controler{
     	id  =>'fecha_inicio',
     	type =>'text',
     	required=>'yes',
-		size=>10,
-		disabled=>'yes',
     	datatype=>array(
-     		type =>'text',
+     		type =>'date',
      		length =>'11'),
     	transaction=>array(
      		table =>array('liquidacion_definitiva'),
