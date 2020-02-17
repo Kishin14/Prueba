@@ -322,8 +322,11 @@ final class Patronales extends Controler{
 	$comprobar = $Model -> ComprobarLiquidacionT($fecha_inicial,$fecha_final,$this -> getConex());
 	if($comprobar[0]['consecutivo']>0) exit("Existe una liquidaci&oacute;n Previa  para las fechas seleccionadas. <br>Por favor verifique Liquidaci&oacute;n No ".$comprobar[0]['consecutivo']);
 
-	$comprobar1 = $Model -> ComprobarLiquidacionNovedad($fecha_inicial,$fecha_final,$this -> getConex());
-	if(count($comprobar1)==0) exit("No existen Liquidaciones de Nomina en este rango de fechas seleccionadas. <br>Por favor verifique.");
+	$comprobar1 = $Model -> ComprobarLiquidacionNovedadIni($fecha_inicial,$this -> getConex());
+	if(count($comprobar1)==0) exit("No existen Liquidaciones de Nomina con la  fecha Inicial seleccionadas. <br>Por favor verifique.");
+
+	$comprobar1 = $Model -> ComprobarLiquidacionNovedadFin($fecha_final,$this -> getConex());
+	if(count($comprobar1)==0) exit("No existen Liquidaciones de Nomina con la  fecha Final seleccionadas. <br>Por favor verifique.");
 
 	$result = $Model -> SaveTodos($this -> getOficinaId(),$this -> getUsuarioId(),$this -> Campos,$dias,$this -> getConex());
 	

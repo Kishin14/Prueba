@@ -110,7 +110,7 @@ final class PatronalesModel extends Db{
 			(SELECT car.porcentaje  FROM cargo ca, categoria_arl car WHERE ca.cargo_id=c.cargo_id AND car.categoria_arl_id=ca.categoria_arl_id ) AS desc_empre_arl
 			
    			FROM liquidacion_novedad l, contrato c, tipo_contrato t 
-			WHERE l.estado='C' AND l.fecha_inicial='$fecha_inicial' AND l.fecha_final='$fecha_final' AND c.contrato_id=l.contrato_id AND t.tipo_contrato_id=c.tipo_contrato_id AND (t.prestaciones_sociales=1 OR (t.salud=1 AND t.prestaciones_sociales=0))";
+			WHERE l.estado='C' AND l.fecha_inicial='$fecha_inicial' AND l.fecha_final='$fecha_final' AND c.contrato_id=l.contrato_id AND t.tipo_contrato_id=c.tipo_contrato_id AND (t.prestaciones_sociales=1 OR (t.salud=1 AND t.prestaciones_sociales=0)) GROUP BY l.contrato_id";
 	$result = $this -> DbFetchAll($select,$Conex,true);
 	
 
@@ -328,8 +328,6 @@ final class PatronalesModel extends Db{
 			$debito=$valor_pension;
 			$credito=0;
 
-
-
 			$detalle_liquidacion_patronal_id = $this -> DbgetMaxConsecutive("detalle_liquidacion_patronal","detalle_liquidacion_patronal_id",$Conex,false,1);
 			$insert = "INSERT INTO 	detalle_liquidacion_patronal (detalle_liquidacion_patronal_id,puc_id,liquidacion_patronal_id,liquidacion_novedad_id,debito,credito,fecha_inicial,fecha_final,dias,concepto,centro_de_costo_id,codigo_centro_costo,tercero_id,numero_identificacion,digito_verificacion) 
 			VALUES ($detalle_liquidacion_patronal_id,$puc_pens,$liquidacion_patronal_id,$liquidacion_novedad_id, $debito,$credito,'$fecha_inicial','$fecha_final',$dias,'PENSION $empleado',$centro_de_costo_idg,'$codigo_centrog',$tercero_pension_id,$numero_identificacion_pension,$digito_verificacion_pension)";
@@ -449,11 +447,22 @@ final class PatronalesModel extends Db{
   }
 
 
-  public function ComprobarLiquidacionNovedad($fecha_inicial,$fecha_final,$Conex){
+  public function ComprobarLiquidacionNovedadIni($fecha_inicial,$Conex){
     				
    $select = "SELECT  l.liquidacion_novedad_id
    			FROM liquidacion_novedad l
-			WHERE l.estado='C' AND l.fecha_inicial='$fecha_inicial' AND l.fecha_final='$fecha_final' ";
+			WHERE l.estado='C' AND l.fecha_inicial='$fecha_inicial'  ";
+				
+	$result = $this -> DbFetchAll($select,$Conex,$ErrDb = false);
+	
+	return $result;
+  }
+
+  public function ComprobarLiquidacionNovedadFin($fecha_final,$Conex){
+    				
+   $select = "SELECT  l.liquidacion_novedad_id
+   			FROM liquidacion_novedad l
+			WHERE l.estado='C' AND  l.fecha_final='$fecha_final' ";
 				
 	$result = $this -> DbFetchAll($select,$Conex,$ErrDb = false);
 	

@@ -151,11 +151,13 @@ final class Cesantias extends Controler{
 			if($comprobar_cesantias[0]['validacion_posterior']=='NO' || $comprobar_cesantias[0]['validacion_posterior']==''){
 				if($fecha_inicio<$fecha_ultimo_corte){
 					$fecha_ultimo_corte1 = $comprobar_cesantias[0]['fecha_corte']!='' ? $comprobar_cesantias[0]['fecha_corte'] : $fecha_ultimo_corte;
+					$dias_corte = $this -> restaFechasCont($fecha_ultimo_corte1,$_REQUEST['fecha_corte'],1);
+						
 				}else{
 					$fecha_ultimo_corte1 = $fecha_inicio;
-					
+					$dias_corte = $this -> restaFechasCont($fecha_ultimo_corte1,$_REQUEST['fecha_corte'],0);
+			
 				}
-				$dias_corte = $this -> restaFechasCont($fecha_ultimo_corte1,$_REQUEST['fecha_corte'],1);
 				$Data = $Model -> getValor($empleado_id,$fecha_ultimo_corte1,$fecha_corte,$dias_corte,$this -> getOficinaId(),$this -> getConex());
 				$valor_diferencia = intval($Data[0]['valor_liquidacion']-$Data[0]['valor_consolidado']);
 				

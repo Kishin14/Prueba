@@ -71,7 +71,7 @@ final class ProvisionesModel extends Db{
 			(SELECT CONCAT_WS(' ',t.primer_nombre,t.primer_apellido) FROM empleado e, tercero t WHERE e.empleado_id=c.empleado_id AND t.tercero_id=e.tercero_id) AS empleado,
 			c.centro_de_costo_id,(SELECT cc.codigo FROM  centro_de_costo cc WHERE  cc.centro_de_costo_id=c.centro_de_costo_id ) AS codigo_centro					
    			FROM liquidacion_novedad l, contrato c, tipo_contrato t
-			WHERE l.estado='C' AND l.fecha_inicial='$fecha_inicial' AND l.fecha_final='$fecha_final' AND c.contrato_id=l.contrato_id AND t.tipo_contrato_id=c.tipo_contrato_id AND t.prestaciones_sociales=1";
+			WHERE l.estado='C' AND l.fecha_inicial='$fecha_inicial' AND l.fecha_final='$fecha_final' AND c.contrato_id=l.contrato_id AND t.tipo_contrato_id=c.tipo_contrato_id AND t.prestaciones_sociales=1 GROUP BY l.contrato_id";
 	$result = $this -> DbFetchAll($select,$Conex,true);
 	 
 
@@ -337,16 +337,28 @@ final class ProvisionesModel extends Db{
   }
 
 
-  public function ComprobarLiquidacionNovedad($fecha_inicial,$fecha_final,$Conex){
+  public function ComprobarLiquidacionNovedadIni($fecha_inicial,$Conex){
     				
    $select = "SELECT  l.liquidacion_novedad_id
    			FROM liquidacion_novedad l
-			WHERE l.estado='C' AND l.fecha_inicial='$fecha_inicial' AND l.fecha_final='$fecha_final' ";
+			WHERE l.estado='C' AND l.fecha_inicial='$fecha_inicial'  ";
 				
 	$result = $this -> DbFetchAll($select,$Conex,$ErrDb = false);
 	
 	return $result;
   }
+
+  public function ComprobarLiquidacionNovedadFin($fecha_final,$Conex){
+    				
+   $select = "SELECT  l.liquidacion_novedad_id
+   			FROM liquidacion_novedad l
+			WHERE l.estado='C' AND  l.fecha_final='$fecha_final' ";
+				
+	$result = $this -> DbFetchAll($select,$Conex,$ErrDb = false);
+	
+	return $result;
+  }
+
 
   public function ComprobarLiquidacionT($fecha_inicial,$fecha_final,$Conex){
     				
