@@ -97,7 +97,9 @@ final class PatronalesModel extends Db{
 			(SELECT t.numero_identificacion  FROM empresa_prestaciones e, tercero t WHERE e.empresa_id=c.empresa_arl_id AND t.tercero_id=e.tercero_id) AS numero_identificacion_arl,
 			(SELECT t.digito_verificacion  FROM empresa_prestaciones e, tercero t WHERE e.empresa_id=c.empresa_arl_id AND t.tercero_id=e.tercero_id) AS digito_verificacion_arl,			
 
-			(SELECT dias FROM detalle_liquidacion_novedad WHERE liquidacion_novedad_id=l.liquidacion_novedad_id AND sueldo_pagar=1) AS dias,
+			(SELECT SUM(d.dias) FROM detalle_liquidacion_novedad d, liquidacion_novedad ln 
+			WHERE d.liquidacion_novedad_id=ln.liquidacion_novedad_id AND d.sueldo_pagar=1 AND ln.estado='C' AND ln.fecha_inicial>='$fecha_inicial' 
+			AND ln.fecha_final<='$fecha_final' AND ln.contrato_id=l.contrato_id) AS dias,
 			
 			((SELECT DATEDIFF(IF(l.fecha_final>'$fecha_final','$fecha_final',l.fecha_final),IF(l.fecha_inicial<c.fecha_inicio,c.fecha_inicio,l.fecha_inicial)))+1)as dias_real,
 			(SELECT SUM((DATEDIFF(IF(l.fecha_final>'$fecha_final','$fecha_final',l.fecha_final),IF(l.fecha_inicial>'$fecha_inicial',l.fecha_inicial,'$fecha_inicial')))) 
