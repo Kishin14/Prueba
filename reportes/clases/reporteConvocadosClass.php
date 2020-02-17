@@ -84,6 +84,7 @@ final class reporteConvocados extends Controler{
 		name	=>'desde',
 		id		=>'desde',
 		type	=>'text',
+		Boostrap => 'si',
 		required=>'yes',
 	 	datatype=>array(
 			type	=>'date',
@@ -94,6 +95,7 @@ final class reporteConvocados extends Controler{
 		name	=>'hasta',
 		id		=>'hasta',
 		type	=>'text',
+		Boostrap => 'si',
 		required=>'yes',
 	 	datatype=>array(
 			type	=>'date',
@@ -104,6 +106,7 @@ final class reporteConvocados extends Controler{
 		name	=>'si_convocado',
 		id		=>'si_convocado',
 		type	=>'select',
+		Boostrap => 'si',
 		options	=>null,
 		selected=>0,
 		required=>'yes',
@@ -114,6 +117,7 @@ final class reporteConvocados extends Controler{
 		name	=>'si_convocatoria',
 		id		=>'si_convocatoria',
 		type	=>'select',
+		Boostrap => 'si',
 		options	=>null,
 		selected=>0,
 		required=>'yes',
@@ -136,6 +140,7 @@ final class reporteConvocados extends Controler{
 		name	=>'convocatoria',
 		id		=>'convocatoria',
 		type	=>'text',
+		Boostrap => 'si',
 		disabled=>'disabled',
 		suggest=>array(
 			name	=>'convocatoria',
@@ -156,6 +161,7 @@ final class reporteConvocados extends Controler{
 		name	=>'convocado',
 		id		=>'convocado',
 		type	=>'text',
+		Boostrap => 'si',
 		disabled=>'disabled',
 		suggest=>array(
 			name	=>'convocado',

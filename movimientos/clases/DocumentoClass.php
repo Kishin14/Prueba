@@ -139,6 +139,7 @@
 			  name =>'documento_laboral_id',
 			  id  =>'documento_laboral_id',
 			  type =>'text',
+			  Boostrap =>'si',
 			  required=>'no',
 			  readonly=>'readonly',
 			  size =>'10',
@@ -168,6 +169,7 @@
 			   	name =>'tipo_documento_laboral_id',
 			   	id =>'tipo_documento_laboral_id',
 				type	=>'select',
+				Boostrap =>'si',
 				required=>'yes',
 			   	datatype=>array(type=>'integer'),
 			   	transaction=>array(
@@ -191,6 +193,7 @@
 				name =>'contrato',
 				id =>'contrato',
 				type =>'text',
+				Boostrap =>'si',
 				size    =>'30',
 				suggest => array(
 				name =>'contrato',
@@ -261,7 +264,9 @@
 				name	=>'busqueda',
 				id		=>'busqueda',
 				type	=>'text',
+				Boostrap =>'si',
 				size	=>'85',
+				placeholder =>'Por favor digite el nombre del documento o el numero de contrato',
 				// tabindex=>'1',
 				suggest=>array(
 					name	=>'contratoDP',

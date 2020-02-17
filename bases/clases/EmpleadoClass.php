@@ -202,6 +202,7 @@
 				type	=>'select',
 				options	=> array(array(value=>'F',text=>'FEMENINO',selected=>'0'),array(value=>'M',text=>'MASCULINO')),
 				required=>'yes',
+				Boostrap =>'si',
 			 	datatype=>array(
 					type	=>'text',
 					length	=>'1'),
@@ -214,6 +215,7 @@
 				name	=>'fecha_nacimiento',
 				id		=>'fecha_nacimiento',
 				type	=>'text',
+				
 				required=>'yes',
 				datatype=>array(
 					type	=>'date',
@@ -227,6 +229,7 @@
 				name	=>'tipo_vivienda',
 				id		=>'tipo_vivienda',
 				type	=>'select',
+				Boostrap =>'si',
 				options	=> array(array(value=>'P',text=>'PROPIA',selected=>'0'),array(value=>'A',text=>'ARRIENDO')),
 				required=>'yes',
 				datatype=>array(
@@ -241,6 +244,7 @@
 				name	=>'num_hijos',
 				id		=>'num_hijos',
 				type	=>'text',
+				Boostrap =>'si',
 				size  	=>'5',
 				required=>'yes',
 				datatype=>array(
@@ -255,6 +259,7 @@
 				name	=>'estado',
 				id		=>'estado',
 				type	=>'select',
+				Boostrap =>'si',
 				options	=> array(array(value=>'A',text=>'ACTIVO',selected=>'0'),array(value=>'I',text=>'INACTIVO')),
 				required=>'yes',
 				datatype=>array(
@@ -269,6 +274,7 @@
 				name	=>'convocado_id',
 				id		=>'convocado_id',
 				type	=>'text',
+				Boostrap =>'si',
 				required=>'no',
 				datatype=>array(
 					type	=>'text',
@@ -305,6 +311,7 @@
 			name	=>'profesion',
 			id	=>'profesion',
 			type	=>'text',
+			Boostrap =>'si',
 					size    =>'30',
 			suggest => array(
 				name	=>'profesion',
@@ -316,6 +323,7 @@
 				name	=>'numero_identificacion',
 				id		=>'numero_identificacion',
 				type	=>'text',
+				Boostrap =>'si',
 				required=>'yes',
 				size	=>'12',
 				//tabindex=>'3',
@@ -332,6 +340,7 @@
 				name	=>'primer_apellido',
 				id		=>'primer_apellido',
 				type	=>'text',
+				Boostrap =>'si',
 				required=>'yes',
 				//tabindex=>'5',
 				datatype=>array(
@@ -346,6 +355,7 @@
 				name	=>'segundo_apellido',
 				id		=>'segundo_apellido',
 				type	=>'text',
+				Boostrap =>'si',
 				//tabindex=>'6',
 				datatype=>array(
 					type	=>'alpha_upper',
@@ -359,6 +369,7 @@
 				name	=>'primer_nombre',
 				id		=>'primer_nombre',
 				type	=>'text',
+				Boostrap =>'si',
 				required=>'yes',
 				//tabindex=>'7',
 				datatype=>array(
@@ -373,6 +384,7 @@
 				name	=>'segundo_nombre',
 				id		=>'segundo_nombre',
 				type	=>'text',
+				Boostrap =>'si',
 				//tabindex=>'8',
 				datatype=>array(
 					type	=>'alpha_upper',
@@ -388,6 +400,7 @@
 				name	=>'estado_civil_id',
 				id		=>'estado_civil_id',
 				type	=>'select',
+				Boostrap =>'si',
 				//options	=>null,
 				required=>'yes',
 				datatype=>array(
@@ -403,6 +416,7 @@
 		name	=>'tipo_identificacion_id',
 		id		=>'tipo_identificacion_id',
 		type	=>'select',
+		Boostrap =>'si',
 		options	=>array(),
 		required=>'yes',
 		//tabindex=>'1',
@@ -417,6 +431,7 @@
 		name	=>'tipo_persona_id',
 		id		=>'tipo_persona_id',
 		type	=>'select',
+		Boostrap =>'si',
 		options	=> array(array(value=>'N',text=>'NATURAL',selected=>'N'),array(value=>'J',text=>'JURIDICA')),
 		required=>'yes',
 		//tabindex=>'2',
@@ -432,6 +447,7 @@
 					name	=>'direccion',
 					id		=>'direccion',
 					type	=>'text',
+					Boostrap =>'si',
 					required=>'yes',
 					datatype=>array(
 						type	=>'text',
@@ -445,6 +461,7 @@
 					name	=>'telefono',
 					id		=>'telefono',
 					type	=>'text',
+					Boostrap =>'si',
 					required=>'no',
 					datatype=>array(
 						type	=>'integer',
@@ -458,6 +475,7 @@
 					name	=>'movil',
 					id		=>'movil',
 					type	=>'text',
+					Boostrap =>'si',
 					required=>'yes',
 					datatype=>array(
 						type	=>'integer',
@@ -581,6 +599,8 @@
 				id		=>'busqueda',
 				type	=>'text',
 				size	=>'85',
+				Boostrap =>'si',
+				placeholder =>'Por favor digite el numero de identificacion o el nombre',
 				// tabindex=>'1',
 				suggest=>array(
 					name	=>'empleado',

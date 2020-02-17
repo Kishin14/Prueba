@@ -166,12 +166,12 @@ final class Imp_LiquidacionPrimaModel extends Db{
 				(SELECT ca.nombre_cargo	FROM cargo ca, contrato c  WHERE c.contrato_id=ln.contrato_id AND c.cargo_id=ca.cargo_id) AS cargo, 
 				(SELECT c.sueldo_base	FROM  contrato c  WHERE c.contrato_id=ln.contrato_id ) AS sueldo_base ,				
 				
-				IF((SELECT DATEDIFF(ln.fecha_liquidacion,(SELECT c.fecha_inicio	FROM  contrato c  WHERE c.contrato_id=ln.contrato_id )))>180,180,(SELECT DATEDIFF(ln.fecha_liquidacion,(SELECT c.fecha_inicio	FROM  contrato c  WHERE c.contrato_id=ln.contrato_id ))))as dias				
+				IF((SELECT DATEDIFF(ln.fecha_liquidacion,(SELECT c.fecha_inicio	FROM  contrato c  WHERE c.contrato_id=ln.contrato_id )))>180,180,(SELECT DATEDIFF(ln.fecha_liquidacion,(SELECT c.fecha_inicio	FROM  contrato c  WHERE c.contrato_id=ln.contrato_id )))-1)as dias				
 
 
 				FROM liquidacion_prima ln
 				WHERE ln.liquidacion_prima_id IN(SELECT liquidacion_prima_id FROM liquidacion_prima WHERE consecutivo = (SELECT consecutivo FROM liquidacion_prima WHERE liquidacion_prima_id = $liquidacion_prima_id))";
-
+				
 	  	$result = $this -> DbFetchAll($select,$Conex,true);
 	  
 	}else{

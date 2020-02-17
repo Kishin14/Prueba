@@ -527,28 +527,34 @@ final class RegistrarModel extends Db{
 	if($previsual == 'true'){
 		
 	
-		 # Muestro la ultima liquidacion creada	
-		 $selectLiquidacion      = "SELECT l.liquidacion_novedad_id, l.consecutivo, l.empleados, l.fecha_inicial, l.fecha_final, 		                              l.periodicidad, l.area_laboral, l.estado, l.contrato_id, l.encabezado_registro_id, l.usuario_id,                                  l.fecha_registro, l.con_usuario_id, l.con_fecha, 
-									(SELECT c.nombre FROM centro_de_costo c WHERE c.centro_de_costo_id=l.centro_de_costo_id) AS centro_de_costo
-									FROM liquidacion_novedad l
-									ORDER BY l.liquidacion_novedad_id DESC LIMIT 1"; 
-		 
-		 $resultLiquidacion      = $this -> DbFetchAll($selectLiquidacion,$Conex,true);
-	
-		 $liquidacion_novedad_id = $resultLiquidacion[0]['liquidacion_novedad_id'];
-	
-		 $selectDetalle = " SELECT (p.nombre) AS nombre_puc, d.liquidacion_novedad_id, CONCAT_WS(' ',t.primer_nombre, t.segundo_nombre, t.primer_apellido, t.segundo_apellido) AS tercero, d.numero_identificacion, d.digito_verificacion, 
-						   (SELECT c.descripcion FROM concepto_area c WHERE c.concepto_area_id=d.concepto_area_id) AS descripcion_concepto, 
-						   d.formula, d.base, d.porcentaje, d.debito, d.credito, d.fecha_inicial, d.fecha_final, d.dias, d.concepto, d.observacion, d.sueldo_pagar 
-						   FROM detalle_liquidacion_novedad d, puc p, tercero t
-						   WHERE d.puc_id=p.puc_id AND d.tercero_id=t.tercero_id AND d.liquidacion_novedad_id = $liquidacion_novedad_id"; 
-						   
-		 
-		 $resultDetalle  = $this -> DbFetchAll($selectDetalle,$Conex,true);
-	
-		 return  $resultDetalle;
-		 
-		 $this -> Rollback($Conex);
+	 # Muestro la ultima liquidacion creada	
+	 $selectLiquidacion      = "SELECT l.liquidacion_novedad_id, l.consecutivo, l.empleados, l.fecha_inicial, l.fecha_final, 		                              l.periodicidad, l.area_laboral, l.estado, l.contrato_id, l.encabezado_registro_id, l.usuario_id,                                  l.fecha_registro, l.con_usuario_id, l.con_fecha, 
+	                            (SELECT c.nombre FROM centro_de_costo c WHERE c.centro_de_costo_id=l.centro_de_costo_id) AS centro_de_costo
+	                            FROM liquidacion_novedad l
+                                ORDER BY l.liquidacion_novedad_id DESC LIMIT 1"; 
+	 
+	 $resultLiquidacion      = $this -> DbFetchAll($selectLiquidacion,$Conex,true);
+
+	 $liquidacion_novedad_id = $resultLiquidacion[0]['liquidacion_novedad_id'];
+
+
+	 $selectDetalle = " SELECT (p.nombre) AS nombre_puc, d.liquidacion_novedad_id, CONCAT_WS(' ',t.primer_nombre, t.segundo_nombre, t.primer_apellido, t.segundo_apellido) AS tercero, d.numero_identificacion, d.digito_verificacion, 
+
+					   (SELECT c.descripcion FROM concepto_area c WHERE c.concepto_area_id=d.concepto_area_id) AS descripcion_concepto, 
+
+                       d.formula, d.base, d.porcentaje, d.debito, d.credito, d.fecha_inicial, d.fecha_final, d.dias, d.concepto, d.observacion, d.sueldo_pagar 
+
+                       FROM detalle_liquidacion_novedad d, puc p, tercero t
+
+					   WHERE d.puc_id=p.puc_id AND d.tercero_id=t.tercero_id AND d.liquidacion_novedad_id = $liquidacion_novedad_id"; 
+					   
+	 
+	 $resultDetalle  = $this -> DbFetchAll($selectDetalle,$Conex,true);
+
+
+	 return  $resultDetalle;
+	 
+	 $this -> Rollback($Conex);
 
 	}else{
 
@@ -706,6 +712,8 @@ final class RegistrarModel extends Db{
 		$this -> assignValRequest('liquidacion_novedad_id',$liquidacion_novedad_id);
 		
 		$this -> assignValRequest('contrato_id',$result[$i]['contrato_id']);
+
+	
 	
 		$this -> DbInsertTable("liquidacion_novedad",$Campos,$Conex,true,false);
 		$contrato_id =  $result[$i]['contrato_id'];
@@ -764,6 +772,8 @@ final class RegistrarModel extends Db{
 		
 		$select_inca = "SELECT (DATEDIFF(IF(l.fecha_final>'$fecha_final','$fecha_final',l.fecha_final),IF(l.fecha_inicial>'$fecha_inicial',l.fecha_inicial,'$fecha_inicial'))+1) AS dias_inca, ti.dia, ti.porcentaje,ti.descuento  
 					FROM licencia l, tipo_incapacidad ti WHERE  l.contrato_id=$contrato_id AND l.estado!='I' AND ti.tipo_incapacidad_id=l.tipo_incapacidad_id AND ti.tipo='I'  AND ('$fecha_inicial' BETWEEN  l.fecha_inicial AND l.fecha_final OR '$fecha_final'  BETWEEN  l.fecha_inicial AND l.fecha_final OR l.fecha_inicial BETWEEN '$fecha_inicial' AND '$fecha_final') ";
+
+		
 		$result_inca = $this -> DbFetchAll($select_inca,$Conex,true);
 		
 		
@@ -784,21 +794,24 @@ final class RegistrarModel extends Db{
 					$des_val_inc = ($des_val_inc + intval(($sal_dia_cont-$salrio_diario)*$dia_difinc));
 				}
 			}
-			$dias_inca_sub=$dias_inca_sub+$result_inca[$l]['dias_inca'];			
+			$dias_inca_sub=$dias_inca_sub+$result_inca[$l]['dias_inca'];	
 		}
-		
-	
 
 		
+
 		
 		$dias_sub=$dias_sub-$dias_inca_sub;//resta los dias incapacidad
+
+		
 		//salario
-		$debito=intval((($sueldo_base/30)*$dias)-$des_val_inc);		
+		$debito=intval((($sueldo_base/30)*$dias_sub)-$des_val_inc);		
 		//$debito=intval((($sueldo_base/30)*$dias_sub));		
 		$credito=0;
 		$deb_total=$deb_total+$debito;
 		$cre_total=$cre_total+$credito;
 		$dias_sal = $dias - $dias_inca_sub;
+
+		
 		$detalle_liquidacion_novedad_id = $this -> DbgetMaxConsecutive("detalle_liquidacion_novedad","detalle_liquidacion_novedad_id",$Conex,false,1);
 		//exit("***".$puc_sal."***"."JDFC26");
 		$insert = "INSERT INTO 	detalle_liquidacion_novedad (detalle_liquidacion_novedad_id,puc_id,liquidacion_novedad_id,debito,credito,fecha_inicial,fecha_final,dias,observacion,concepto,tercero_id,numero_identificacion,digito_verificacion) 
@@ -807,9 +820,13 @@ final class RegistrarModel extends Db{
 		
 		
 		//incapacidades
-		$debito=intval(($dias_inca_sub*$sal_dia_cont)-$des_val_inc);	
+		$debito=intval(($dias_inca_sub*$sal_dia_cont)-$des_val_inc);
+		$deb_total=$deb_total+$debito;	
 		$credito=0;
-		$dias_sub=$dias_sub-$dias_inca_sub;//resta los dias incapacidad
+		// $dias_sub=$dias_sub-$dias_inca_sub;//resta los dias incapacidad
+
+		
+		
 		if($dias_inca_sub>0){
 		
 			$detalle_liquidacion_novedad_id = $this -> DbgetMaxConsecutive("detalle_liquidacion_novedad","detalle_liquidacion_novedad_id",$Conex,false,1);
@@ -826,6 +843,8 @@ final class RegistrarModel extends Db{
 			$credito=0;
 			$deb_total=$deb_total+$debito;
 			$cre_total=$cre_total+$credito;
+
+			
 			
 			$detalle_liquidacion_novedad_id = $this -> DbgetMaxConsecutive("detalle_liquidacion_novedad","detalle_liquidacion_novedad_id",$Conex,false,1);
 			$insert = "INSERT INTO 	detalle_liquidacion_novedad (detalle_liquidacion_novedad_id,puc_id,liquidacion_novedad_id,debito,credito,fecha_inicial,fecha_final,dias,observacion,concepto,tercero_id,numero_identificacion,digito_verificacion) 
@@ -1038,6 +1057,7 @@ final class RegistrarModel extends Db{
 				FROM novedad_fija n, concepto_area c
 				WHERE n.contrato_id=$contrato_id AND n.estado='A' AND '$fecha_final' BETWEEN  n.fecha_inicial AND n.fecha_final AND c.concepto_area_id=n.concepto_area_id";
 
+			
 		$result2 = $this -> DbFetchAll($select2,$Conex,true);
 
 		for($j=0;$j<count($result2);$j++){
@@ -1092,13 +1112,31 @@ final class RegistrarModel extends Db{
 	if($previsual == 'true'){
 		
 	
-		 # Muestro la ultima liquidacion creada	
-		 $selectLiquidacion      = "SELECT l.liquidacion_novedad_id, l.consecutivo, l.empleados, l.fecha_inicial, l.fecha_final, 		                              l.periodicidad, l.area_laboral, l.estado, l.contrato_id, l.encabezado_registro_id, l.usuario_id,                                  l.fecha_registro, l.con_usuario_id, l.con_fecha, 
-									(SELECT c.nombre FROM centro_de_costo c WHERE c.centro_de_costo_id=l.centro_de_costo_id) AS centro_de_costo
-									FROM liquidacion_novedad l
-									ORDER BY l.liquidacion_novedad_id DESC LIMIT 1"; 
-		 
-		 $resultLiquidacion      = $this -> DbFetchAll($selectLiquidacion,$Conex,true);
+	 # Muestro la ultima liquidacion creada	
+	 $selectLiquidacion      = "SELECT l.liquidacion_novedad_id, l.consecutivo, l.empleados, l.fecha_inicial, l.fecha_final, 		                              l.periodicidad, l.area_laboral, l.estado, l.contrato_id, l.encabezado_registro_id, l.usuario_id,                                  l.fecha_registro, l.con_usuario_id, l.con_fecha, 
+	                            (SELECT c.nombre FROM centro_de_costo c WHERE c.centro_de_costo_id=l.centro_de_costo_id) AS centro_de_costo
+	                            FROM liquidacion_novedad l
+                                ORDER BY l.liquidacion_novedad_id DESC LIMIT 1"; 
+	 
+	 $resultLiquidacion      = $this -> DbFetchAll($selectLiquidacion,$Conex,true);
+
+	 $liquidacion_novedad_id = $resultLiquidacion[0]['liquidacion_novedad_id'];
+
+
+	 $selectDetalle = "SELECT (p.nombre) AS nombre_puc, d.liquidacion_novedad_id, CONCAT_WS(' ',t.primer_nombre, t.segundo_nombre, t.primer_apellido, t.segundo_apellido) AS tercero, d.numero_identificacion, d.digito_verificacion, 
+
+					   (SELECT c.descripcion FROM concepto_area c WHERE c.concepto_area_id=d.concepto_area_id) AS descripcion_concepto, 
+
+                       d.formula, d.base, d.porcentaje, d.debito, d.credito, d.fecha_inicial, d.fecha_final, d.dias, d.concepto, d.observacion, d.sueldo_pagar 
+
+                       FROM detalle_liquidacion_novedad d, puc p, tercero t
+
+					   WHERE d.puc_id=p.puc_id AND d.tercero_id=t.tercero_id AND d.liquidacion_novedad_id = $liquidacion_novedad_id";
+					   
+					   $resultDetalle  = $this -> DbFetchAll($selectDetalle,$Conex,true);
+
+
+	//
 	
 		 $liquidacion_novedad_id = $resultLiquidacion[0]['liquidacion_novedad_id'];
 	

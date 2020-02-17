@@ -151,6 +151,7 @@ final class Parametros_documento extends Controler{
 	name =>'tipo_documento_laboral_id',
 	id  =>'tipo_documento_laboral_id',
 	type =>'text',
+	Boostrap =>'si',
 	required=>'no',
 	readonly=>'readonly',
 	size =>'10',
@@ -166,6 +167,7 @@ final class Parametros_documento extends Controler{
 	name =>'nombre_documento',
 	id =>'nombre_documento',
 	type	=>'text',
+	Boostrap =>'si',
 	required=>'yes',
 	datatype=>array(type=>'text'),
 	transaction=>array(
@@ -177,6 +179,7 @@ final class Parametros_documento extends Controler{
 	name =>'cuerpo_mensaje',
 	id =>'cuerpo_mensaje',
 	type	=>'textarea',
+	
 	rows =>'35',
 	cols=>'100',
 	required=>'yes',
@@ -190,6 +193,7 @@ final class Parametros_documento extends Controler{
 			name	=>'tipo_contrato_id',
 			id		=>'tipo_contrato_id',
 			type	=>'select',
+			Boostrap =>'si',
 			datatype=>array(
 				type	=>'integer',
 				length	=>'9'),
@@ -202,6 +206,7 @@ final class Parametros_documento extends Controler{
 				name	=>'variables',
 				id		=>'variables',
 				type	=>'select',
+				Boostrap =>'si',
 				options	=> array(
 					array(value=>'{NOMBRE}',text=>'NOMBRE',selected=>'0'),
 					array(value=>'{IDENTIFICACION}',text=>'IDENTIFICACION'),
@@ -279,6 +284,8 @@ final class Parametros_documento extends Controler{
 		id		=>'busqueda',
 		type	=>'text',
 		size	=>'85',
+		Boostrap =>'si',
+		placeholder =>'Por favor digite el nombre del documento',
 		suggest=>array(
 			name	=>'tipo_documento_laboral',
 			setId	=>'tipo_documento_laboral_id',

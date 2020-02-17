@@ -143,6 +143,7 @@ final class Profesiones extends Controler{
 		name	=>'nombre',
 		id		=>'nombre',
 		type	=>'text',
+		Boostrap =>'si',
 		required=>'yes',
 	 	datatype=>array(
 			type	=>'text',
@@ -156,6 +157,7 @@ final class Profesiones extends Controler{
 		name	=>'nombre_dane',
 		id		=>'nombre_dane',
 		type	=>'text',
+		Boostrap =>'si',
 		required=>'yes',
 	 	datatype=>array(
 			type	=>'text',
@@ -169,6 +171,7 @@ final class Profesiones extends Controler{
 		name	=>'id_dane_profesion',
 		id		=>'id_dane_profesion',
 		type	=>'text',
+		Boostrap =>'si',
 		required=>'yes',
 	 	datatype=>array(
 			type	=>'text',
@@ -224,6 +227,8 @@ final class Profesiones extends Controler{
 		id		=>'busqueda',
 		type	=>'text',
 		size	=>'85',
+		Boostrap =>'si',
+		placeholder =>'Por favor digite el nombre',
 		suggest=>array(
 			name	=>'profesion',
 			setId	=>'profesion_id',

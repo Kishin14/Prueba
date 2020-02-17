@@ -201,7 +201,7 @@
     <div class="row animated zoomIn">
       <div class="col-sm"></div>
       <div class="col-sm-10">
-        <div style="margin: 25% auto;width: 80%; border: #ebccd1 solid;border-radius: 0.5em;">
+        <div style="margin: 10% auto;width: 80%; border: #ebccd1 solid;border-radius: 0.5em;">
           <div class="panel-heading" style="color:#b94a48;background-color:#f2dede;border-radius: 0.5em;">
             <h3 class="panel-title">¡ATENCI&Oacute;N!</h3>
           </div>
@@ -665,16 +665,16 @@
               <td width="25%"><b>D&iacute;as a Liquidar </b>&nbsp;{$lc.dias_liquidados}</td>
             </tr>
             <tr>
-              <td width="25%"><b>Base Liquidaci&oacute;n </b>&nbsp; $ {$lc.salario|number_format:0:',':'.'}</td>
-              <td width="25%"><b>Vlr. Consolidado </b>&nbsp; ${$lc.valor_consolidado|number_format:0:',':'.'}</td>
-              <td width="25%"><b>Vlr. Provisionado </b>&nbsp; $ {$lc.valor_provision|number_format:0:',':'.'}</td>
-              <td width="25%"><b>Vlr. Diferencia </b>&nbsp; $ {$lc.valor_diferencia|number_format:0:',':'.'}</td>
+              <td width="25%"><b>Base Liquidaci&oacute;n </b>&nbsp; $ {$lc.salario}</td>
+              <td width="25%"><b>Vlr. Consolidado </b>&nbsp; ${$lc.valor_consolidado}</td>
+              <td width="25%"><b>Vlr. Provisionado </b>&nbsp; $ {$lc.valor_provision}</td>
+              <td width="25%"><b>Vlr. Diferencia </b>&nbsp; $ {$lc.valor_diferencia}</td>
             </tr>
             <tr style="background-color: #e6eee3;">
                 <td width="25%"><b>Estado </b>&nbsp;{$lc.estado}</td>
                 <td width="25%"><b>Periodo </b>&nbsp;{$lc.periodo}</td>
               <td width="25%"><b>Observaciones </b>&nbsp;{$lc.observaciones}</td>
-              <td width="25%"><b>Vlr. Liquidaci&oacute;n </b>&nbsp; $ {$lc.valor_liquidacion|number_format:0:',':'.'}</td>
+              <td width="25%"><b>Vlr. Liquidaci&oacute;n </b>&nbsp; $ {$lc.valor_liquidacion}</td>
             </tr>
             {if $lc.encabezado_registro_id neq ''}
             <tr>
@@ -719,7 +719,7 @@
             <tr style="background-color: #e6eee3;">
               <td width="25%"><b>Estado </b>&nbsp;{$lp.estado}</td>
               <td width="50%" colspan="2"><b>Observaciones </b>&nbsp;{$lp.observaciones}</td>
-              <td width="25%"><b>Vlr. Liquidaci&oacute;n </b>&nbsp; $ {$lp.valor|number_format:0:',':'.'}</td>
+              <td width="25%"><b>Vlr. Liquidaci&oacute;n </b>&nbsp; $ {$lp.total|number_format:0:',':'.'}</td>
             </tr>
             {if $lp.encabezado_registro_id neq ''}
             <tr>
@@ -764,7 +764,7 @@
             <tr>
               <td width="25%"><b>Fecha Reintegro </b>&nbsp;{$lv.fecha_reintegro}</td>
               <td width="25%"><b>D&iacute;as a Disfrutar </b>&nbsp;{$lv.dias}</td>
-              <td width="25%"><b>Base Liquidaci&oacute;n </b>&nbsp; $ {$lv.salario|number_format:0:',':'.'}</td>
+              <td width="25%"><b>Cargo </b>&nbsp;{$lv.cargo}</td>
               <td width="25%"><b>Concepto </b>&nbsp;{$lv.concepto}</td>
             </tr>
             <tr style="background-color: #e6eee3;">

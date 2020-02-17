@@ -1,6 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
   <head>
    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+   <link rel="stylesheet" href="../../../framework/css/bootstrap1.css">
   {$JAVASCRIPT}
   {$TABLEGRIDJS}
   {$CSSSYSTEM}
@@ -12,10 +13,30 @@
 	<fieldset>
         <legend>{$TITLEFORM}</legend>
 
-        <div id="table_find"><table>
-        <tr><td><label>Busqueda liquidacion : </label></td><td>{$BUSQUEDA}</td></tr>
-        <tr><td><label>Busqueda por fechas  : </label></td><td>{$BUSQUEDA1}</td></tr>
-        </table></div>
+        <div id="table_find">
+      
+        <div class="container">
+          <div class="row">
+              <div class="col-sm-6">
+                  <tr>
+                    <td><label>Busqueda liquidacion : </label></td>
+                  </tr>
+                  <tr>
+                    <td>{$BUSQUEDA}</td>
+                  </tr>
+              </div>
+              <div class="col-sm-6">
+                  <tr>
+                    <td><label>Busqueda liquidacion: </label></td>
+                  </tr>
+                  <tr>
+                    <td>{$BUSQUEDA1}</td>
+                  </tr>
+              </div>
+          </div>
+        </div>
+    
+        </div>
         
         {$FORM1}
         {$NOVEDADID}

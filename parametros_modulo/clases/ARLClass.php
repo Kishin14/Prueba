@@ -148,6 +148,7 @@ final class ARL extends Controler{
 		id		=>'clase_riesgo',
 		type	=>'text',
 		required=>'yes',
+		Boostrap =>'si',
 	 	datatype=>array(
 			type	=>'text',
 			length	=>'5'),
@@ -161,6 +162,7 @@ final class ARL extends Controler{
 		id		=>'porcentaje',
 		type	=>'text',
 		required=>'yes',
+		Boostrap =>'si',
 	 	datatype=>array(
 			type	=>'numeric',
 			length	=>'15',
@@ -187,6 +189,7 @@ final class ARL extends Controler{
 		name	=>'estado',
 		id		=>'estado',
 		type	=>'select',
+		Boostrap =>'si',
 		options	=> array(array(value=>'A',text=>'ACTIVO',selected=>'0'),array(value=>'I',text=>'INACTIVO')),
 		required=>'yes',
 		selected => 'A',
@@ -244,6 +247,8 @@ final class ARL extends Controler{
 		id		=>'busqueda',
 		type	=>'text',
 		size	=>'85',
+		placeholder =>'Por favor digite la clase de riesgo',
+		Boostrap =>'si',
 		suggest=>array(
 			name	=>'categoria_arl',
 			setId	=>'categoria_arl_id',

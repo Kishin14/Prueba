@@ -48,7 +48,11 @@ $(document).ready(function(){
 		  success : function(response){
 					  
 			  try{
-				 var aplica_diagnostico = $.parseJSON(response); 
+				 var data = $.parseJSON(response); 
+
+				 var aplica_diagnostico = data[0]['diagnostico'];
+				 var tipo = data[0]['tipo'];
+
 				if(aplica_diagnostico=='S'){
 						$('#diagnostico').attr("disabled","");	
 		  				$("#diagnostico").addClass("obligatorio");
@@ -56,6 +60,14 @@ $(document).ready(function(){
 						$('#diagnostico').attr("disabled","true");	
 		  				$("#diagnostico").removeClass("obligatorio");
 				}
+
+				if(tipo == 'I'){
+					$('#descripcion').attr("disabled", "");
+				}else if(tipo == 'L'){
+					$('#descripcion').attr("disabled", "true");
+				}
+
+
 			  }catch(e){
 				  console.log(e);
 				}
@@ -64,6 +76,7 @@ $(document).ready(function(){
 		});    
 		
 	});
+
  
   
 });

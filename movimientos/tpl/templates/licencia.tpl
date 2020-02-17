@@ -1,6 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="../../../framework/css/bootstrap1.css">
     {$JAVASCRIPT}
     {$TABLEGRIDJS}
     {$CSSSYSTEM} 
@@ -31,9 +32,13 @@
             </tr>
             <tr>
                 <td><label>Empleado : </label></td>
-                <td>{$CONTRATO}{$CONTRATOID}</td>
+                <td>{$CONTRATO}{$CONTRATOID}</td>               
+            </tr>
+             <tr>
                 <td><label>Tipo Licencia o Incapacidad : </label></td>
-                <td>{$CONCEPTOAREA}</td>                
+                <td>{$CONCEPTOAREA}</td> 
+                <td><label>Enfermedad (CIE10): </label></td>
+                <td>{$ENFERMEDAD}{$ENFERMEDADID}</td>  
             </tr>
             <tr>
                 <td><label>Concepto : </label></td>

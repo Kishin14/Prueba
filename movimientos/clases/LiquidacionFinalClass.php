@@ -857,7 +857,7 @@ final class LiquidacionFinal extends Controler{
 	
   }
 
- /* protected function restaFechasCont($f1,$f2){
+  /*protected function restaFechasCont($f1,$f2){
 
 	$aFecha1 = explode('-',$f1); 
 	$aFecha2 = explode('-',$f2);  
@@ -1085,6 +1085,7 @@ final class LiquidacionFinal extends Controler{
 		name	=>'liquidacion_definitiva_id',
 		id		=>'liquidacion_definitiva_id',
 		type	=>'text',
+		Boostrap => 'si',
 		required=>'no',
 		readonly=>'readonly',
 		size	=>'10',
@@ -1111,7 +1112,8 @@ final class LiquidacionFinal extends Controler{
    	$this -> Campos[contrato] = array(
 	   	name =>'contrato',
 	   	id =>'contrato',
-	   	type =>'text',
+		   type =>'text',
+		  Boostrap => 'si',
 			size    =>'30',
 	   	suggest => array(
 			name =>'contrato',
@@ -1124,10 +1126,8 @@ final class LiquidacionFinal extends Controler{
     	id  =>'fecha_inicio',
     	type =>'text',
     	required=>'yes',
-		size=>10,
-		disabled=>'yes',
     	datatype=>array(
-     		type =>'text',
+     		type =>'date',
      		length =>'11'),
     	transaction=>array(
      		table =>array('liquidacion_definitiva'),
@@ -1150,6 +1150,7 @@ final class LiquidacionFinal extends Controler{
 	  name =>'motivo_terminacion_id',
 	  id  =>'motivo_terminacion_id',
 	  type =>'select',
+	  Boostrap => 'si',
 	  options =>array(),
 	  required=>'yes',
 	  //tabindex=>'1',
@@ -1164,6 +1165,7 @@ final class LiquidacionFinal extends Controler{
 	  name =>'causal_despido_id',
 	  id  =>'causal_despido_id',
 	  type =>'select',
+	  Boostrap => 'si',
 	  options =>array(),
 	  //tabindex=>'1',
 	   datatype=>array(
@@ -1177,6 +1179,7 @@ final class LiquidacionFinal extends Controler{
 		name	=>'base_liquidacion',
 		id		=>'base_liquidacion',
 		type	=>'text',
+		Boostrap => 'si',
 	 	datatype=>array(
 			type	=>'numeric',
 			length	=>'20'),
@@ -1190,6 +1193,7 @@ final class LiquidacionFinal extends Controler{
 		name =>'justificado',
 		id  =>'justificado',
 		type =>'select',
+		Boostrap => 'si',
 		options => array(array(value=>'S',text=>'SI'),array(value=>'N',text=>'NO')),
 		required=>'yes',
 		datatype=>array(
@@ -1213,6 +1217,7 @@ final class LiquidacionFinal extends Controler{
 		name	=>'dias',
 		id		=>'dias',
 		type	=>'text',
+		Boostrap => 'si',
 	 	datatype=>array(
 			type	=>'numeric',
 			length	=>'20'),
@@ -1225,6 +1230,7 @@ final class LiquidacionFinal extends Controler{
 		name =>'estado',
 		id  =>'estado',
 		type =>'select',
+		Boostrap => 'si',
 		disabled=>'yes',
 		options => array(array(value=>'E',text=>'EDICION',selected=>'E'),array(value=>'A',text=>'ANULADO'),array(value=>'C',text=>'CONTABILIZADO')),
 		required=>'yes',
@@ -1293,6 +1299,7 @@ final class LiquidacionFinal extends Controler{
 		name =>'causal_anulacion_id',
 		id  =>'causal_anulacion_id',
 		type =>'select',
+		Boostrap => 'si',
 		required=>'yes',
 		datatype=>array(
 			type =>'text',
@@ -1311,6 +1318,7 @@ final class LiquidacionFinal extends Controler{
 		name	=>'tipo_impresion',
 		id	    =>'tipo_impresion',
 		type	=>'select',
+		Boostrap => 'si',
 		options => array(array(value => 'CL', text => 'DESPRENDIBLE LIQUIDACION'),  array(value => 'DC', text => 'DOCUMENTO CONTABLE')),
 		selected=>'C',
 		required=>'yes',
@@ -1389,6 +1397,8 @@ final class LiquidacionFinal extends Controler{
 		name	=>'busqueda',
 		id		=>'busqueda',
 		type	=>'text',
+		Boostrap => 'si',
+		placeholder =>'Por favor digite el numero de identificación del empleado o el consecutivo',
 		size	=>'85',
 		suggest=>array(
 			name	=>'liquidacion_definitiva',

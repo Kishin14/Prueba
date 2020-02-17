@@ -28,6 +28,7 @@ final class Registrar extends Controler{
 		name	=>'consecutivo',
 		id		=>'consecutivo',
 		type	=>'text',
+		Boostrap =>'si',
 		required=>'no',
 		readonly=>'readonly',
 		size	=>'10',
@@ -71,6 +72,7 @@ final class Registrar extends Controler{
 		name =>'empleados',
 		id  =>'empleados',
 		type =>'select',
+		Boostrap =>'si',
 		options => array(array(value=>'U',text=>'UNO',selected=>'U'),array(value=>'T',text=>'TODOS')),
 		required=>'yes',
 		datatype=>array(
@@ -86,6 +88,7 @@ final class Registrar extends Controler{
 		name =>'periodicidad',
 		id  =>'periodicidad',
 		type =>'select',
+		Boostrap =>'si',
 		options => array(array(value=>'Q',text=>'QUINCENAL'),array(value=>'M',text=>'MENSUAL'),array(value=>'T',text=>'TODOS',selected=>'T')),
 		//required=>'yes',
 		disabled => 'disabled',
@@ -102,6 +105,7 @@ final class Registrar extends Controler{
 			name	=>'area_laboral',
 			id		=>'area_laboral',
 			type	=>'select',
+			Boostrap =>'si',
 			options	=> array(array(value=>'T',text=>'TODOS',selected=>'T'),array(value=>'A',text=>'ADMINISTRATIVO'),array(value=>'O',text=>'OPERATIVO'),array(value=>'C',text=>'COMERCIAL')),
 			disabled => 'disabled',
 			datatype=>array(
@@ -116,6 +120,7 @@ final class Registrar extends Controler{
 			name	=>'centro_de_costo_id',
 			id		=>'centro_de_costo_id',
 			type	=>'select',
+			Boostrap =>'si',
 			options	=> array(),
 			disabled => 'disabled',
 			datatype=>array(
@@ -140,7 +145,8 @@ final class Registrar extends Controler{
 
    	$this -> Campos[contrato] = array(
 	   	name =>'contrato',
-	   	id =>'contrato',
+		   id =>'contrato',
+		   Boostrap =>'si',
 	   	type =>'text',
 			size    =>'30',
 	   	suggest => array(
@@ -153,6 +159,7 @@ final class Registrar extends Controler{
 		name =>'estado',
 		id  =>'estado',
 		type =>'select',
+		Boostrap =>'si',
 		disabled=>'yes',
 		options => array(array(value=>'A',text=>'ANULADO',selected=>'E'),array(value=>'E',text=>'EDICION',selected=>'E'),array(value=>'C',text=>'CONTABILIZADO',selected=>'E')),
 		required=>'yes',
@@ -283,6 +290,7 @@ final class Registrar extends Controler{
    	$this -> Campos[previsual] = array(
 		name	    =>'previsual',
 		id	    	=>'previsual',
+		Clase		=>'btn btn-success', 
 		type	    =>'button',
 		value	    =>'Previsual',
 		onclick     =>'Previsual(this.form)'
@@ -329,8 +337,10 @@ final class Registrar extends Controler{
 		name	=>'busqueda',
 		id		=>'busqueda',
 		type	=>'text',
+		Boostrap =>'si',
 		size	=>'85',
 		value	=>'',
+		placeholder =>'Por favor digite el numero de la liquidacion o el nombre del empleado',
 		//tabindex=> '1',
 		suggest=>array(
 			name	=>'busca_registrar_nov_nomina',
@@ -342,8 +352,10 @@ final class Registrar extends Controler{
 		name	=>'busqueda1',
 		id		=>'busqueda1',
 		type	=>'text',
+		Boostrap =>'si',
 		size	=>'85',
 		value	=>'',
+		placeholder =>'Por favor digite el numero de la liquidacion o la fecha',
 		//tabindex=> '1',
 		suggest=>array(
 			name	=>'busca_registrar_nov_fecha',
@@ -607,7 +619,7 @@ final class Registrar extends Controler{
 
 	      $Layout -> setLiquidacion($con_deb1,$con_cre1,$con_debExt1,$con_creExt1,$con_sal1,$Model -> getLiquidacion($select_deb_total,$select_cre_total,$select_deb,$select_cre,$select_debExt,$select_creExt,$select_sal,$this -> getOficinaId(),$this -> getEmpresaId(),$this -> getConex()),$Model -> getTotales($select_tot_deb,$select_tot_cre,$select_tot_debExt,$select_tot_creExt,$select_tot_sal,$this -> getEmpresaId(),$this -> getConex()));
 
-		  $Layout -> exportToExcel('Imp_LiquidacionExcel.tpl'); 
+		  //$Layout -> exportToExcel('Imp_LiquidacionExcel.tpl'); 
 
 		   echo 'true'; #Este echo valida que la previsual se cumpla
 
@@ -765,8 +777,10 @@ final class Registrar extends Controler{
 			   
 		  }
 		   
+		  //exit('test : '.$select_tot_sal);
 
-	      $Layout -> setLiquidacion($con_deb1,$con_cre1,$con_debExt1,$con_creExt1,$con_sal1,$Model -> getLiquidacion($select_deb_total,$select_cre_total,$select_deb,$select_cre,$select_debExt,$select_creExt,$select_sal,$this -> getOficinaId(),$this -> getEmpresaId(),$this -> getConex()),$Model -> getTotales($select_tot_deb,$select_tot_cre,$select_tot_debExt,$select_tot_creExt,$select_tot_sal,$this -> getEmpresaId(),$this -> getConex()));
+		  $Layout -> setLiquidacion($con_deb1,$con_cre1,$con_debExt1,$con_creExt1,$con_sal1,$Model -> getLiquidacion($select_deb_total,$select_cre_total,$select_deb,$select_cre,$select_debExt,$select_creExt,$select_sal,$this -> getOficinaId(),$this -> getEmpresaId(),$this -> getConex()),$Model -> getTotales($select_tot_deb,$select_tot_cre,$select_tot_debExt,$select_tot_creExt,$select_tot_sal,$this -> getEmpresaId(),$this -> getConex()));
+		  
 
 
 		  $Layout -> exportToExcel('Imp_LiquidacionExcel.tpl'); 

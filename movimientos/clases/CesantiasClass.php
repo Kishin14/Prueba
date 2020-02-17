@@ -304,6 +304,7 @@ final class Cesantias extends Controler{
 		name 	=>'fecha_liquidacion',
 		id  	=>'fecha_liquidacion',
 		type 	=>'text',
+		Boostrap =>'si',
 		required=>'yes',
 		datatype=>array(
 			type =>'date',
@@ -318,6 +319,7 @@ final class Cesantias extends Controler{
 		name	=>'liquidacion_cesantias_id',
 		id		=>'liquidacion_cesantias_id',
 		type	=>'text',
+		Boostrap =>'si',
 		datatype=>array(
 			type	=>'integer'),
 		transaction=>array(
@@ -352,6 +354,7 @@ final class Cesantias extends Controler{
 		name =>'empleado',
 		id =>'empleado',
 		type =>'text',
+		Boostrap =>'si',
 		required=>'yes',
 		size    =>'45',
 		suggest => array(
@@ -364,6 +367,7 @@ final class Cesantias extends Controler{
 		name	=>'cargo',
 		id		=>'cargo',
 		type	=>'text',
+		Boostrap =>'si',
 		readonly=>'yes',
 		required=>'yes',
 	 	datatype=>array(
@@ -375,6 +379,7 @@ final class Cesantias extends Controler{
 		name	=>'num_identificacion',
 		id		=>'num_identificacion',
 		type	=>'text',
+		Boostrap =>'si',
 		required=>'yes',
 		readonly=>'yes',
 	 	datatype=>array(
@@ -386,6 +391,7 @@ final class Cesantias extends Controler{
 		name	=>'salario',
 		id		=>'salario',
 		type	=>'text',
+		Boostrap =>'si',
 		required=>'yes',
 		readonly=>'yes',
 	 	datatype=>array(
@@ -401,6 +407,7 @@ final class Cesantias extends Controler{
 		name	=>'valor_liquidacion',
 		id		=>'valor_liquidacion',
 		type	=>'text',
+		Boostrap =>'si',
 		required=>'yes',
 		readonly=>'yes',
 	 	datatype=>array(
@@ -416,6 +423,7 @@ final class Cesantias extends Controler{
 		name	=>'valor_liquidacion1',
 		id		=>'valor_liquidacion1',
 		type	=>'text',
+		Boostrap =>'si',
 		required=>'yes',
 		readonly=>'yes',
 	 	datatype=>array(
@@ -431,6 +439,7 @@ final class Cesantias extends Controler{
 		name 	=>'fecha_inicio_contrato',
 		id  	=>'fecha_inicio_contrato',
 		type 	=>'text',
+		Boostrap =>'si',
 		required=>'yes',
 		readonly=>'yes',
 		transaction=>array(
@@ -487,6 +496,7 @@ final class Cesantias extends Controler{
 		name	=>'valor_consolidado',
 		id		=>'valor_consolidado',
 		type	=>'text',
+		Boostrap =>'si',
 		required=>'yes',
 		//readonly=>'yes',
 	 	datatype=>array(
@@ -502,6 +512,7 @@ final class Cesantias extends Controler{
 		name	=>'valor_diferencia',
 		id		=>'valor_diferencia',
 		type	=>'text',
+		Boostrap =>'si',
 		required=>'yes',
 		//readonly=>'yes',
 	 	datatype=>array(
@@ -519,6 +530,7 @@ final class Cesantias extends Controler{
 		name	=>'observaciones',
 		id		=>'observaciones',
 		type	=>'text',
+		Boostrap =>'si',
 		size	=>61,
 		
 		required=>'yes',
@@ -535,6 +547,7 @@ final class Cesantias extends Controler{
 		name	=>'dias_liquidados',
 		id		=>'dias_liquidados',
 		type	=>'text',
+		Boostrap =>'si',
 		required=>'yes',
 	 	datatype=>array(
 			type	=>'integer',
@@ -549,6 +562,7 @@ final class Cesantias extends Controler{
 		name	=>'dias_periodo',
 		id		=>'dias_periodo',
 		type	=>'text',
+		Boostrap =>'si',
 		required=>'yes',
 	 	datatype=>array(
 			type	=>'integer',
@@ -563,6 +577,7 @@ final class Cesantias extends Controler{
 		name	=>'dias_no_remu',
 		id		=>'dias_no_remu',
 		type	=>'text',
+		Boostrap =>'si',
 		required=>'yes',
 	 	datatype=>array(
 			type	=>'integer',
@@ -591,6 +606,7 @@ final class Cesantias extends Controler{
 		name =>'estado',
 		id  =>'estado',
 		type =>'select',
+		Boostrap =>'si',
 		options => array(array(value=>'A',text=>'ACTIVO',selected=>'A'),array(value=>'I',text=>'INACTIVO',selected=>'A'),array(value => 'C', text => 'CONTABILIZADA')),
 		required=>'yes',
 		disabled=>'yes',
@@ -606,6 +622,7 @@ final class Cesantias extends Controler{
 		name =>'tipo_liquidacion',
 		id  =>'tipo_liquidacion',
 		type =>'select',
+		Boostrap =>'si',
 		options => array(array(value=>'T',text=>'TOTAL',selected=>'T'),array(value=>'P',text=>'PARCIAL',selected=>'T')),
 		required=>'yes',
 		datatype=>array(
@@ -620,6 +637,7 @@ final class Cesantias extends Controler{
 		name	=>'si_empleado',
 		id		=>'si_empleado',
 		type	=>'select',
+		Boostrap =>'si',
 		options	=>array(array(value=>'1',text=>'UNO',selected=>'1'),array(value=>'ALL',text=>'TODOS',selected=>'1')),
 		required=>'yes',
 		onchange=>'Empleado_si()',
@@ -633,6 +651,7 @@ final class Cesantias extends Controler{
 		name	=>'beneficiario',
 		id		=>'beneficiario',
 		type	=>'select',
+		Boostrap =>'si',
 		options	=>array(array(value=>'1',text=>'FONDO',selected=>'1'),array(value=>'2',text=>'EMPLEADO',selected=>'1')),
 		required=>'yes',
 		transaction=>array(
@@ -700,7 +719,9 @@ final class Cesantias extends Controler{
 		name	=>'busqueda',
 		id		=>'busqueda',
 		type	=>'text',
+		Boostrap =>'si',
 		size	=>'85',
+		placeholder =>'Por favor digite el numero de identificación o el nombre',
 		suggest=>array(
 			name	=>'liquidacion_cesantias',
 			setId	=>'liquidacion_cesantias_id',

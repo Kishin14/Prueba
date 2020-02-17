@@ -228,6 +228,7 @@ final class Novedad extends Controler{
 		name	=>'novedad_fija_id',
 		id		=>'novedad_fija_id',
 		type	=>'text',
+		Boostrap =>'si',
 		disabled=>'yes',
 		size	=>'8',
 		datatype=>array(
@@ -241,6 +242,7 @@ final class Novedad extends Controler{
 		name	=>'concepto',
 		id		=>'concepto',
 		type	=>'text',
+		Boostrap =>'si',
 		required=>'yes',
 		size	=>'50',
 	 	datatype=>array(
@@ -297,6 +299,7 @@ final class Novedad extends Controler{
 		name	=>'cuotas',
 		id		=>'cuotas',
 		type	=>'text',
+		Boostrap =>'si',
 		required=>'yes',
 		size	=>'10',
 	 	datatype=>array(
@@ -312,6 +315,7 @@ final class Novedad extends Controler{
 		name	=>'valor',
 		id		=>'valor',
 		type	=>'text',
+		Boostrap =>'si',
 		required=>'yes',
 		size	=>'10',		
 	 	datatype=>array(
@@ -328,6 +332,7 @@ final class Novedad extends Controler{
 		id		=>'valor_cuota',
 		type	=>'text',
 		required=>'yes',
+		Boostrap =>'si',
 		disabled=>'yes',
 		readonly=>'yes',
 		size	=>'10',		
@@ -345,6 +350,7 @@ final class Novedad extends Controler{
 		name =>'periodicidad',
 		id  =>'periodicidad',
 		type =>'select',
+		Boostrap =>'si',
 		options => array(array(value=>'S',text=>'SEMANA'),array(value=>'Q',text=>'QUINCENAL'),array(value=>'M',text=>'2 QUINCENAS',selected=>'M'),array(value=>'Q1',text=>'1era QUINCENA'),array(value=>'Q2',text=>'2da QUINCENA')),
 		required=>'yes',
 		datatype=>array(
@@ -359,6 +365,7 @@ final class Novedad extends Controler{
 		name =>'tipo_novedad',
 		id  =>'tipo_novedad',
 		type =>'select',
+		Boostrap =>'si',
 		options => array(array(value=>'V',text=>'DEVENGADO',selected=>'V'),array(value=>'D',text=>'DEDUCIDO')),
 		required=>'yes',
 		datatype=>array(
@@ -372,6 +379,7 @@ final class Novedad extends Controler{
 	$this -> Campos[si_empleado] = array(
 		name	=>'si_empleado',
 		id		=>'si_empleado',
+		Boostrap =>'si',
 		type	=>'select',
 		options	=>null,
 		selected=>1,
@@ -394,6 +402,7 @@ final class Novedad extends Controler{
 	   name =>'contrato',
 	   id =>'contrato',
 	   type =>'text',
+	   Boostrap =>'si',
 		size    =>'30',
 	   suggest => array(
 			name =>'contrato_laboral',
@@ -415,6 +424,7 @@ final class Novedad extends Controler{
 	   name =>'tercero',
 	   id =>'tercero',
 	   type =>'text',
+	   Boostrap =>'si',
 		size    =>'30',
 	   suggest => array(
 			name =>'tercero',
@@ -426,6 +436,7 @@ final class Novedad extends Controler{
 	  name =>'concepto_area_id',
 	  id  =>'concepto_area_id',
 	  type =>'select',
+	  Boostrap =>'si',
 	  options =>array(),
 	  required=>'yes',
 	  //tabindex=>'1',
@@ -440,6 +451,7 @@ final class Novedad extends Controler{
 	  name =>'tipo_documento_id',
 	  id  =>'tipo_documento_id',
 	  type =>'select',
+	  Boostrap =>'si',
 	  options =>array(),
 	  //required=>'yes',
 	  //tabindex=>'1',
@@ -454,6 +466,7 @@ final class Novedad extends Controler{
 		name =>'estado',
 		id  =>'estado',
 		type =>'select',
+		Boostrap =>'si',
 		options => array(array(value=>'A',text=>'ACTIVO',selected=>'A'),array(value=>'I',text=>'INACTIVO')),
 		required=>'yes',
 		datatype=>array(
@@ -506,6 +519,7 @@ final class Novedad extends Controler{
 	  $this -> Campos[doc_contable] = array(
 		   name =>'doc_contable',
 		   id =>'doc_contable',
+		   Boostrap =>'si',
 		   type =>'text',
 		   disabled=>'yes',
 		   datatype=>array(type=>'text')
@@ -564,6 +578,7 @@ final class Novedad extends Controler{
 		id		=>'busqueda',
 		type	=>'text',
 		size	=>'85',
+		Boostrap =>'si',
 		suggest=>array(
 			name	=>'novedad_nomina',
 			setId	=>'novedad_fija_id',
@@ -574,6 +589,7 @@ final class Novedad extends Controler{
 		name	=>'busqueda_novedad',
 		id		=>'busqueda_novedad',
 		type	=>'text',
+		Boostrap =>'si',
 		size	=>'85',
 		suggest=>array(
 			name	=>'novedad_nomina_novedad',
