@@ -75,17 +75,17 @@
                     <tr>
                       	<td><label>Ultimo Corte:</label></td>
             			<td id="fec_ultcorte">{$FECHAULTIMOCORTE}{$FECHAULTIMOCORTE1}</td>
-                        <td><label>Fecha Corte : </label></td>
+                        <td><label>Fecha Corte: </label></td>
             			<td>{$FECHACORTE}</td>
-						<td><label>Dias totales : </label></td>
+						<td><label>Dias totales: </label></td>
                         <td>{$DIASPERIODO}</td>
                      </tr>
                      <tr>
-                        <td><label>Dias no remunerados : </label></td>
+                        <td><label>Dias no remunerados: </label></td>
                         <td>{$DIASNOREMU}</td>
-                        <td><label>Dias a liquidar : </label></td>
+                        <td><label>Dias a liquidar: </label></td>
                         <td>{$DIASLIQUIDADOS}</td>
-			            <td><label>Valor Liquidacion : </label></td>
+			            <td><label>Valor Liquidaci&oacute;n: </label></td>
             			<td>{$VALORLIQUIDACION}</td>
             		</tr>
            		</table>
@@ -101,7 +101,7 @@
             <legend>CONTABILIZACION</legend>
             	<table align="center">
                 	<tr>
-                        <td><label>Vlr Liquidación</label></td>
+                        <td><label>Vlr Liquidaci&oacute;n</label></td>
                     	<td><label>Vlr Acumulado</label></td>
                         <td><label>Diferencia</label></td>
                     </tr>
@@ -128,7 +128,7 @@
       </table>
       <table width="100%">
           <tr>
-             <td colspan="8" align="center">{$GUARDAR}&nbsp;{$LIMPIAR}&nbsp;{$CONTABILIZAR}&nbsp;{$PREVISUAL}</td></tr>
+             <td colspan="8" align="center">{$GUARDAR}&nbsp;{$LIMPIAR}&nbsp;{$CONTABILIZAR}&nbsp;{*{$PREVISUAL}*}</td></tr>
      
          <tr><td colspan="8"><iframe id="detalleCesantias" frameborder="0" marginheight="0" marginwidth="0"></iframe></td></tr>
          <tr>

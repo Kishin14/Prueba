@@ -92,9 +92,11 @@ final class CesantiasLayout extends View{
 	 $this -> assign("SIEMPLEADO",    		$this -> objectsHtml -> GetobjectHtml($this -> fields[si_empleado]));
 	 $this -> assign("ESTADO",    			$this -> objectsHtml -> GetobjectHtml($this -> fields[estado]));
      
-     if($this -> Guardar)
+     if($this -> Guardar){
 	   $this -> assign("GUARDAR",	$this -> objectsHtml -> GetobjectHtml($this -> fields[guardar]));
-	  
+  	   $this -> assign("PREVISUAL",$this -> objectsHtml -> GetobjectHtml($this -> fields[previsual]));
+
+	 }
 	 if($this -> Actualizar){
 	   $this -> assign("ACTUALIZAR",$this -> objectsHtml -> GetobjectHtml($this -> fields[actualizar]));
 	   $this -> assign("CONTABILIZAR",$this -> objectsHtml -> GetobjectHtml($this -> fields[contabilizar]));
