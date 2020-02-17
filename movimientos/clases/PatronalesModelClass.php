@@ -110,7 +110,7 @@ final class PatronalesModel extends Db{
 			(SELECT car.porcentaje  FROM cargo ca, categoria_arl car WHERE ca.cargo_id=c.cargo_id AND car.categoria_arl_id=ca.categoria_arl_id ) AS desc_empre_arl
 			
    			FROM liquidacion_novedad l, contrato c, tipo_contrato t 
-			WHERE l.estado='C' AND l.fecha_inicial='$fecha_inicial' AND l.fecha_final='$fecha_final' AND c.contrato_id=l.contrato_id AND t.tipo_contrato_id=c.tipo_contrato_id AND (t.prestaciones_sociales=1 OR (t.salud=1 AND t.prestaciones_sociales=0)) GROUP BY l.contrato_id";
+			WHERE l.estado='C' AND l.fecha_inicial>='$fecha_inicial' AND l.fecha_final<='$fecha_final' AND c.contrato_id=l.contrato_id AND t.tipo_contrato_id=c.tipo_contrato_id AND (t.prestaciones_sociales=1 OR (t.salud=1 AND t.prestaciones_sociales=0)) GROUP BY l.contrato_id";
 	$result = $this -> DbFetchAll($select,$Conex,true);
 	
 
