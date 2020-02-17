@@ -39,8 +39,26 @@ final class mandoContratosModel extends Db{
 
       if($result>0){
           return $result;
-      }
+      } 
      
+   }
+
+   public function SelectVencidos($Conex){
+
+    $select = "SELECT c.numero_contrato, 
+                      c.fecha_inicio,
+                      c.fecha_terminacion,
+                      (SELECT CONCAT_WS(' ',t.primer_nombre,t.segundo_nombre,t.primer_apellido,t.segundo_apellido,t.razon_social) 
+                      FROM tercero t, empleado e WHERE t.tercero_id=e.tercero_id AND e.empleado_id=c.empleado_id)AS empleado,
+                      (SELECT TIMESTAMPDIFF(DAY,NOW(),c.fecha_terminacion))AS dias_dif
+                                  
+             FROM contrato c WHERE c.estado = 'A' AND ((SELECT TIMESTAMPDIFF(DAY,NOW(),c.fecha_terminacion)) < 0) ORDER BY c.fecha_inicio DESC";
+  
+    $result = $this -> DbFetchAll($select,$Conex);
+
+      if($result>0){
+          return $result;
+      } 
      
    }
 

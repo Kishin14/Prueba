@@ -48,7 +48,20 @@ final class ContratoModel extends Db{
 	public function calculaFecha($tiempo_contrato,$fecha_inicio,$Conex){
 		$select ="SELECT DATE_ADD('$fecha_inicio', INTERVAL $tiempo_contrato MONTH) as fecha"; 
 		$result    = $this -> DbFetchAll($select,$Conex,true);
-		return $result[0];
+		$fecha = $result[0]['fecha'];
+
+		$select ="SELECT DATE_ADD('$fecha_inicio', INTERVAL $tiempo_contrato MONTH) as fecha"; 
+		$result    = $this -> DbFetchAll($select,$Conex,true);
+
+		$fecha = $result[0]['fecha'];
+
+		$select ="SELECT DATE_ADD('$fecha', INTERVAL -1 DAY) as fechafin"; 
+		$result1    = $this -> DbFetchAll($select,$Conex,true);
+		
+		//$nuevafecha = strtotime ( '-1 day' , strtotime ( $fecha ));
+		//$nuevafecha = date ( 'Y-m-j' , $nuevafecha );
+		
+		return $result1[0];
 	}
 
 	

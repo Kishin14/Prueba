@@ -22,7 +22,10 @@
         </div>
     </fieldset>
     {assign var="TITULO_H" value="Ingreso No salarial"} 
-    {assign var="PARRAFO_P" value="El artículo 128 del código sustantivo del trabajo señala los pagos que no constituyen salario en los siguientes términos: Pagos que no constituyen salarios. No constituyen salario las sumas que ocasionalmente y por mera liberalidad recibe el trabajador del empleador, como primas, bonificaciones o gratificaciones ocasionales, participación de utilidades, excedentes de las empresas de economía solidaria y lo que recibe en dinero o en especie no para su beneficio, ni para enriquecer su patrimonio, sino para desempeñar a cabalidad sus funciones, como gastos de representación, medios de transporte, elementos de trabajo y otros semejantes. Tampoco las prestaciones sociales de que tratan los títulos VIII y IX, ni los beneficios o auxilios habituales u ocasionales acordados convencional o contractualmente u otorgados en forma extralegal por el empleador, cuando las partes hayan dispuesto expresamente que no constituyen salario en dinero o en especie, tales como la alimentación, habitación o vestuario, las primas extralegales, de vacaciones, de servicios o de navidad. Pagos que no constituyen salario limitados al 40% del total de la remuneración."} 
+    {assign var="PARRAFO_P" value="El artículo 128 del código sustantivo del trabajo señala los pagos que no constituyen salario en los siguientes términos: Pagos que no constituyen salarios. No constituyen salario las sumas que ocasionalmente y por mera liberalidad recibe el trabajador del empleador, como primas, bonificaciones o gratificaciones ocasionales, participación de utilidades, excedentes de las empresas de economía solidaria y lo que recibe en dinero o en especie no para su beneficio, ni para enriquecer su patrimonio, sino para desempeñar a cabalidad sus funciones, como gastos de representación, medios de transporte, elementos de trabajo y otros semejantes. Tampoco las prestaciones sociales de que tratan los títulos VIII y IX, ni los beneficios o auxilios habituales u ocasionales acordados convencional o contractualmente u otorgados en forma extralegal por el empleador, cuando las partes hayan dispuesto expresamente que no constituyen salario en dinero o en especie, tales como la alimentación, habitación o vestuario, las primas extralegales, de vacaciones, de servicios o de navidad. Pagos que no constituyen salario limitados al 40% del total de la remuneración."}
+
+    {assign var="TITULO_F" value="Fecha terminacion"} 
+    {assign var="PARRAFO_F" value="La fecha de terminacion se calculrá automaticamente basandose en el tiempo de contrato que le especificaron al tipo de contrato. Esto lo podemos verificar en el formulario de TIPO CONTRATO."} 
      
     {$FORM1}
     <fieldset class="section">
@@ -41,7 +44,7 @@
                     <tr>
                         <td width="20%"><label>Fecha de Inicio : </label></td>
                         <td width="7">{$FECHA_INICIO}</td>
-                        <td width="20%"><label>Fecha Terminaci&oacute;n : </label></td>
+                        <td width="20%"><label>Fecha Terminaci&oacute;n : &nbsp;&nbsp;<a href="javascript:void(0);"   title="Presiona aqui para saber acerca de este concepto."  name="myBtn"><img src="../../../framework/media/images/modulos/manual.png" width="16" height="18" onclick="alert_unico(this,'{$TITULO_F}','{$PARRAFO_F}')"/></a> </label></td>
                         <td width="7">{$FECHA_TERMINACION}</td>
                     </tr>
                     <tr>
@@ -137,63 +140,63 @@
 		</tr>                                                          
 
         <tr>
-            <td colspan="4">
+            <td colspan="2">
         	<fieldset class="section">
         	<legend>Prestaciones sociales y Documentos Contratacion</legend>
-                <table width="50%">
+                <table width="100%">
                     <tr>                     
                         <td ><label>EPS :</label></td>
                         <td >{$EMPEPS}{$EMPEPSID}</td>
-                        <td width="10%"><label>Fecha inicio : </label></td>
-                        <td >{$FECINIEPS}</td>
                         <td ><label>Certificado : </label></td>
                         <td >{$ESCEPS}</td>
+                        <td ><label> Fecha inicio: </label></td>
+                        <td >{$FECINIEPS}</td>
                     </tr>
                     <tr>  
                         <td ><label>Pensi&oacute;n : </label></td>
                         <td>{$EMPPEN}{$EMPPENID}</td>
-                        <td ><label>Fecha inicio : </label></td>
-                        <td >{$FECINIPEN}</td>
                         <td ><label>Certificado : </label></td>
                         <td>{$ESCPEN}</td>
+                        <td ><label>Fecha inicio: </label></td>
+                        <td >{$FECINIPEN}</td>
                     </tr>
                     <tr>
                         <td><label>ARL : </label></td>
                         <td>{$EMPARL}{$EMPARLID}</td>
-                        <td ><label>Fecha inicio : </label></td>
-                        <td >{$FECINIARL}</td>
                         <td ><label>Certificado : </label></td>
                         <td>{$ESCARL}</td>
+                         <td ><label>Fecha inicio: </label></td>
+                        <td >{$FECINIARL}</td>
                     </tr>                        
                     <tr>  
                         <td><label>Caja Compensaci&oacute;n : </label></td>
                         <td>{$EMPCAJ}{$EMPCAJID}</td>
-                        <td ><label>Fecha inicio : </label></td>
-                        <td >{$FECINICOM}</td>
                         <td ><label>Certificado : </label></td>
                         <td>{$ESCCAJA}</td>
+                        <td ><label>Fecha inicio: </label></td>
+                        <td >{$FECINICOM}</td>
                     </tr>
                     <tr>  
                         <td><label>Cesantias : </label></td>
                         <td>{$EMPCES}{$EMPCESID}</td>
-                        <td ><label>Fecha inicio : </label></td>
-                        <td >{$FECINICES}</td>
                         <td ><label>Certificado : </label></td>
                         <td>{$ESCCESAN}</td>
+                        <td ><label>Fecha inicio: </label></td>
+                        <td >{$FECINICES}</td>
                     </tr>
                    <tr>  
                         <td><label>Entidad Bancaria :</label></td>
                         <td>{$BANCO}{$BANCOID}</td>
-                        <td><label>Tipo de Cuenta :</label></td>
-                		<td colspan="2">{$TIPOCUENTA}</td>
+                         <td><label>Numero de cuenta : </label></td>
+                        <td>{$NUMCUENTA}</td>
                     </tr>
                      <tr>  
-                        <td><label>Numero de cuenta : </label></td>
-                        <td>{$NUMCUENTA}</td>
+                        <td><label>Tipo de Cuenta :</label></td>
+                		<td >{$TIPOCUENTA}</td>
                         <td ><label>Certificado : </label></td>
                         <td colspan="2">{$CERTBANC}</td>
                     </tr>
-                    <tr>  
+                    <tr>   
                         <td><label>Examen Medico : </label></td>
                         <td>{$EXAMENMEDICO}</td>
                         <td ><label>Salud Ocupacional : </label></td>

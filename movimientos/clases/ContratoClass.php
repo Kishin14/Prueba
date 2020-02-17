@@ -191,7 +191,9 @@ final class Contrato extends Controler{
 		$Data                  = array();
 		$tiempo_contrato   		= $_REQUEST['tiempo_contrato']; 
 		$fecha_inicio   		= $_REQUEST['fechai']; 
+		//echo "fecha inicio ".$fecha_inicio." tiempo contrato ".$tiempo_contrato;
 		$Data  = $Model -> calculaFecha($tiempo_contrato,$fecha_inicio,$this -> getConex());
+		
 		echo json_encode($Data);
 	}
 	
@@ -200,7 +202,7 @@ final class Contrato extends Controler{
 	protected function onclickFind(){
 		require_once("ContratoModelClass.php");
 		$Model = new ContratoModel();
-		$Data                  = array();
+		$Data               = array();
 		$contrato_id   		= $_REQUEST['contrato_id']; 
 		$Data  = $Model -> selectDatosContratoId($contrato_id,$this -> getConex());
 		echo json_encode($Data);
@@ -243,6 +245,7 @@ final class Contrato extends Controler{
 			name	=>'fecha_inicio',
 			id		=>'fecha_inicio',
 			type	=>'text',
+			value   =>date('Y-m-d'),
 			required=>'yes',
 			datatype=>array(
 				type	=>'date',
