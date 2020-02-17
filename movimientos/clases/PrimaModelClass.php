@@ -172,7 +172,7 @@ final class PrimaModel extends Db{
 				$empleado_id	 = $result_contrato[0]['empleado_id'];
 				$tercero_id	 = $result_contrato[0]['tercero_id'];
 				$area_laboral	 = $result_contrato[0]['area_laboral'];
-				$dias_laborados	 = $result_contrato[0]['dias_laborados']>180 ? 180 : $result_contrato[0]['dias_laborados'] ;
+				$dias_laborados	 = $result_contrato[0]['dias_laborados']>180 ? 180 : $result_contrato[0]['dias_laborados'] -1;
 				$sueldo_base	 = $result_contrato[0]['sueldo_base'];
 			 	$valor = intval(($dias_laborados*($sueldo_base/2))/180);
 				
@@ -192,7 +192,7 @@ final class PrimaModel extends Db{
 				$result_datos_ter = $this -> DbFetchAll($select_datos_ter,$Conex) ;
 				
 				$numero_identificacion = $result_datos_ter[0]['numero_identificacion'];
-				$digito_verificacion   = $result_datos_ter[0]['digito_verificacion']>0 ? $result_datos_ter[0]['digito_verificacion']>0 :'NULL';
+				$digito_verificacion   = $result_datos_ter[0]['digito_verificacion']>0 ? $result_datos_ter[0]['digito_verificacion']>0 :'NULL';//NULL
 				$nombre_tercero = $result_datos_ter[0]['nombre'];
 				
 				$select_parametros="SELECT 
@@ -249,23 +249,34 @@ final class PrimaModel extends Db{
 					
 				}
 				
+				if($area_laboral=='A'){
+					$puc_diferencia = $puc_admin;
+				}elseif($area_laboral=='O'){
+					$puc_diferencia = $puc_operativo;
+				}elseif($area_laboral=='C'){
+					$puc_diferencia = $puc_venta;
+				}
+
+
 				if($valor>$valor_guardado){
-					if($area_laboral=='A'){
-						$puc_diferencia = $puc_admin;
-					}elseif($area_laboral=='O'){
-						$puc_diferencia = $puc_operativo;
-					}elseif($area_laboral=='C'){
-						$puc_diferencia = $puc_venta;
-					}
 					
 					$diferencia= intval($valor-$valor_guardado);
-					
+
 					$insert_det_puc_gas ="INSERT INTO detalle_prima_puc (liquidacion_prima_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_prima,porcentaje_prima,formula_prima,desc_prima,deb_item_prima,cre_item_prima,valor_liquida,contrapartida)
-				VALUES
-				($liquidacion_prima_id,$puc_diferencia,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_provision,IF(COALESCE($centro_costo_provision,0)>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_provision),'NULL'),0,'NULL','NULL',$observaciones,$diferencia,0,0,0)";
-				$this -> query($insert_det_puc_gas,$Conex,true); 
+					VALUES
+					($liquidacion_prima_id,$puc_diferencia,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_provision,IF(COALESCE($centro_costo_provision,0)>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_provision),'NULL'),0,'NULL','NULL',$observaciones,$diferencia,0,0,0)";
 				
+				}else{
+
+					$diferencia= intval($valor_guardado-$valor);
+
+					$insert_det_puc_gas ="INSERT INTO detalle_prima_puc (liquidacion_prima_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_prima,porcentaje_prima,formula_prima,desc_prima,deb_item_prima,cre_item_prima,valor_liquida,contrapartida)
+					VALUES
+					($liquidacion_prima_id,$puc_diferencia,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_provision,IF(COALESCE($centro_costo_provision,0)>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_provision),'NULL'),0,'NULL','NULL',$observaciones,0,$diferencia,0,0)";
+					
 				}
+
+				$this -> query($insert_det_puc_gas,$Conex,true); 
 				
 				$insert_det_puc_contra ="INSERT INTO detalle_prima_puc (liquidacion_prima_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_prima,porcentaje_prima,formula_prima,desc_prima,deb_item_prima,cre_item_prima,valor_liquida,contrapartida)
 				VALUES
