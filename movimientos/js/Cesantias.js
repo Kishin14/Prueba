@@ -16,7 +16,7 @@ function setDataFormWithResponse(){
 		 
 		  var estado = data[0]['estado'];
 		 		 
-		 if(estado == 'I'){
+		 if(estado == 'I' || estado == 'C'){
 			 
 		   $(forma).find("input,select,textarea").each(function(){
                this.disabled = true;																
@@ -26,7 +26,8 @@ function setDataFormWithResponse(){
 			 
 		     $(forma).find("input,select,textarea").each(function(){
                this.disabled = false;																
-             });			 
+             });	
+			 $('#estado').attr("disabled","true");
 			 
 		  }
      	 var url    = "DetalleCesantiasClass.php?liquidacion_cesantias_id="+liquidacion_cesantias_id+"&rand="+Math.random();
@@ -35,12 +36,14 @@ function setDataFormWithResponse(){
 	 $("#detalleCesantias").load(function(){
   	    getTotalDebitoCredito(liquidacion_cesantias_id);
      });
-    if($('#guardar'))    $('#guardar').attr("disabled","true");
+      if($('#guardar'))    $('#guardar').attr("disabled","true");
+	  if($('#previsual'))  $('#previsual').attr("disabled","true");
+	  if($('#limpiar'))    $('#limpiar').attr("disabled","");	  
 	  if($('#estado').val()=='A'){
 		  if($('#contabilizar')) 	$('#contabilizar').attr("disabled","");		  
 		  if($('#anular')) 			$('#anular').attr("disabled","");  
 	   	  if($('#saveDetallepuc'))  $('#saveDetallepuc').attr("style","display:inherit");
-	  }else if($('#estado').val()=='C' ){
+	  }else if($('#estado').val()=='C' || $('#estado').val()=='I' ){
 		  if($('#contabilizar')) 	$('#contabilizar').attr("disabled","true");			  
 		  if($('#anular')) 			$('#anular').attr("disabled","");  
 		  if($('#saveDetallepuc'))  $('#saveDetallepuc').attr("style","display:none");		  
@@ -126,7 +129,7 @@ function setDataEmpleado(empleado_id){
 		  var empleado     	      	  =responseArray[0]['empleado']; 
 		  var numero_identificacion   =responseArray[0]['numero_identificacion']; 
 		  var fecha_inicio   		  =responseArray[0]['fecha_inicio']; 
-		  var fecha_ultimo_corte   	  =responseArray[0]['fecha_ultimo_corte']; 
+		  var fecha_ultimo_corte   	  =responseArray[0]['fecha_ultimo_corte']!=null ?  responseArray[0]['fecha_ultimo_corte'] : responseArray[0]['fecha_inicio']; 
 		  
 		  
 		  $("#fecha_ultimo_corte").val(fecha_ultimo_corte);
@@ -158,16 +161,16 @@ function setDataEmpleado(empleado_id){
 function CesantiasOnSaveOnUpdate(formulario,resp){
   
 	$("#refresh_QUERYGRID_cesantias").click();
-	if($('#guardar'))    $('#guardar').attr("disabled","");
-	if($('#actualizar')) $('#actualizar').attr("disabled","true");
-	if($('#borrar'))     $('#borrar').attr("disabled","true");
+	if($('#guardar'))    	$('#guardar').attr("disabled","true");
+	if($('#previsual'))    	$('#previsual').attr("disabled","true");
+	
+	if($('#contabilizar'))  $('#contabilizar').attr("disabled","");
 	if($('#limpiar'))    $('#limpiar').attr("disabled","");
 	if (parseInt(resp)>0){
 		alertJquery("Se guardo la liquidacion No "+resp,"Cesantiass");
 		$('#liquidacion_cesantias_id').val(resp);
 		var liquidacion_cesantias_id = $('#liquidacion_cesantias_id').val();
-
-     	 var url    = "DetalleCesantiasClass.php?liquidacion_cesantias_id="+liquidacion_cesantias_id+"&rand="+Math.random();
+     	var url    = "DetalleCesantiasClass.php?liquidacion_cesantias_id="+liquidacion_cesantias_id+"&rand="+Math.random();
 
 		
 		$("#detalleCesantias").attr("src",url);
@@ -248,11 +251,20 @@ function OnclickContabilizar(){
 function CesantiasOnReset(formulario){
 	
     clearFind();	
+	Reset(formulario);
     if($('#guardar'))    $('#guardar').attr("disabled","");
-    if($('#actualizar')) $('#actualizar').attr("disabled","true");
-    if($('#borrar'))     $('#borrar').attr("disabled","true");
+	if($('#previsual'))    	$('#previsual').attr("disabled","");
+    if($('#contabilizar')) $('#contabilizar').attr("disabled","true");
     if($('#limpiar'))    $('#limpiar').attr("disabled","");	
-	 $("#detalleCesantias").attr("src","../../../framework/tpl/blank.html");	
+	$("#estado").val('A');
+	$(formulario).find("input,select,textarea").each(function(){
+															  
+	   this.disabled = false;																
+	});
+	 $('#estado').attr("disabled","true");
+	
+	$("#detalleCesantias").attr("src","../../../framework/tpl/blank.html");	
+
 
 }
 
@@ -332,6 +344,48 @@ function calculaValor(){
   
 }
 
+function Previsual(formulario){
+
+	if(ValidaRequeridos(formulario)){
+	
+		var beneficiario       = $("#beneficiario").val();
+		var si_empleado        = $("#si_empleado").val();
+		var empleado_id        = $("#empleado_id").val();		
+		var contrato_id        = $("#contrato_id").val();		
+		var fecha_liquidacion  = $("#fecha_liquidacion").val();
+		var fecha_corte        = $("#fecha_corte").val();
+		var fecha_ultimo_corte = $("#fecha_ultimo_corte").val();	
+		var tipo_liquidacion   = $("#tipo_liquidacion").val();
+		var observaciones 	   = $("#observaciones").val();	
+	
+		var QueryString = "ACTIONCONTROLER=onclickSave&previsual=true&empleados="+empleados+"&fecha_inicial="+fecha_inicial+"&fecha_final="+fecha_final+"&periodicidad="+periodicidad+"&area_laboral="+area_laboral+"&centro_de_costo_id="+centro_de_costo_id+"&contrato_id="+contrato_id;
+	
+		$.ajax({
+		type: "POST",
+		url: "CesantiasClass.php?rand=" + Math.random(),
+		data: QueryString,
+		success: function(resp) {
+		  try {
+			  if (isInteger(resp)){
+	
+				  alertJquery("Existe una liquidaci&oacute;n Previa  para las fechas seleccionadas. <br>Por favor verifique Liquidaci&oacute;n No "+resp);
+				  
+				}else{
+					
+					document.location.href = "CesantiasClass.php?" + QueryString;
+	
+			  } 
+		  } catch (e) {
+			alertJquery("Se presento un error :" + e, "Alerta !!");
+		  }
+		}
+	  });
+	
+	}
+
+}
+
+
 $(document).ready(function(){
 
 
@@ -388,7 +442,7 @@ $(document).ready(function(){
 	});
 	
   	$("#guardar,#actualizar").click(function(){
-	if(this.id == 'guardar'){
+		if(this.id == 'guardar'){
 			if(!formSubmitted){
 				 formSubmitted = true;
 				 Send(formulario,'onclickSave',null,CesantiasOnSaveOnUpdate);
@@ -397,9 +451,9 @@ $(document).ready(function(){
 			Send(formulario,'onclickUpdate',null,CesantiasOnSaveOnUpdate);
 		}	
 	
-	formSubmitted = false;
+		formSubmitted = false;
   
-  });
+  	});
 
 });
 

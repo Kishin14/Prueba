@@ -67,11 +67,15 @@ final class ProvisionesModel extends Db{
 			((SELECT DATEDIFF(IF(l.fecha_final>'$fecha_final','$fecha_final',l.fecha_final),
 			IF(l.fecha_inicial < c.fecha_inicio,c.fecha_inicio,l.fecha_inicial))))as dias_real,
 			
-			(SELECT dias FROM detalle_liquidacion_novedad WHERE liquidacion_novedad_id=l.liquidacion_novedad_id AND sueldo_pagar=1) AS dias,
+			(SELECT SUM(d.dias) FROM detalle_liquidacion_novedad d, liquidacion_novedad ln 
+			WHERE d.liquidacion_novedad_id=ln.liquidacion_novedad_id AND d.sueldo_pagar=1 AND ln.estado='C' AND ln.fecha_inicial>='$fecha_inicial' 
+			AND ln.fecha_final<='$fecha_final' AND ln.contrato_id=l.contrato_id 	) AS dias,
+			
 			(SELECT CONCAT_WS(' ',t.primer_nombre,t.primer_apellido) FROM empleado e, tercero t WHERE e.empleado_id=c.empleado_id AND t.tercero_id=e.tercero_id) AS empleado,
 			c.centro_de_costo_id,(SELECT cc.codigo FROM  centro_de_costo cc WHERE  cc.centro_de_costo_id=c.centro_de_costo_id ) AS codigo_centro					
    			FROM liquidacion_novedad l, contrato c, tipo_contrato t
-			WHERE l.estado='C' AND l.fecha_inicial='$fecha_inicial' AND l.fecha_final='$fecha_final' AND c.contrato_id=l.contrato_id AND t.tipo_contrato_id=c.tipo_contrato_id AND t.prestaciones_sociales=1";
+			WHERE l.estado='C' AND l.fecha_inicial>='$fecha_inicial' AND l.fecha_final<='$fecha_final' AND c.contrato_id=l.contrato_id AND t.tipo_contrato_id=c.tipo_contrato_id AND t.prestaciones_sociales=1 GROUP BY l.contrato_id";
+
 	$result = $this -> DbFetchAll($select,$Conex,true);
 	 
 
@@ -126,18 +130,13 @@ final class ProvisionesModel extends Db{
 		$contrato_id =  $result[$i]['contrato_id'];
 		$sueldo_base =$result[$i]['sueldo_base'];
 		$subsidio_transporte = $result[$i]['subsidio_transporte'];
-		//$dias =  $result[$i]['dias'];
-
-		
 		
 		$dias_real = $result[$i]['dias'] > $result[$i]['dias_real'] ? $result[$i]['dias']: $result[$i]['dias_real'] ;
-
-		$dias = $dias_real-$result[$i]['dias_lice_nore'];
+		$dias = $dias_real;
 		//$dias = $result[$i]['dias_real']-$result[$i]['dias_lice_nore'];
 		//$dias = $dias_total-$result[$i]['dias_lice_nore'];
 		$liquidacion_novedad_id=$result[$i]['liquidacion_novedad_id'];
 		$empleado=$result[$i]['empleado'];
-		
 		$centro_de_costo_idg =  $result[$i]['centro_de_costo_id'];
 		$codigo_centrog =  $result[$i]['codigo_centro'];
 
@@ -337,22 +336,34 @@ final class ProvisionesModel extends Db{
   }
 
 
-  public function ComprobarLiquidacionNovedad($fecha_inicial,$fecha_final,$Conex){
+  public function ComprobarLiquidacionNovedadIni($fecha_inicial,$Conex){
     				
    $select = "SELECT  l.liquidacion_novedad_id
    			FROM liquidacion_novedad l
-			WHERE l.estado='C' AND l.fecha_inicial='$fecha_inicial' AND l.fecha_final='$fecha_final' ";
+			WHERE l.estado='C' AND l.fecha_inicial='$fecha_inicial'  ";
 				
 	$result = $this -> DbFetchAll($select,$Conex,$ErrDb = false);
 	
 	return $result;
   }
 
+  public function ComprobarLiquidacionNovedadFin($fecha_final,$Conex){
+    				
+   $select = "SELECT  l.liquidacion_novedad_id
+   			FROM liquidacion_novedad l
+			WHERE l.estado='C' AND  l.fecha_final='$fecha_final' ";
+				
+	$result = $this -> DbFetchAll($select,$Conex,$ErrDb = false);
+	
+	return $result;
+  }
+
+
   public function ComprobarLiquidacionT($fecha_inicial,$fecha_final,$Conex){
     				
    $select = "SELECT  liquidacion_provision_id, consecutivo
    			FROM liquidacion_provision 
-			WHERE  estado!='A' AND fecha_inicial='$fecha_inicial' AND fecha_final='$fecha_final' ";//(fecha_inicial BETWEEN '$fecha_inicial' AND '$fecha_final' OR fecha_final BETWEEN '$fecha_inicial' AND '$fecha_final') 
+			WHERE  estado!='A' AND fecha_inicial>='$fecha_inicial' AND fecha_final<='$fecha_final' ";//(fecha_inicial BETWEEN '$fecha_inicial' AND '$fecha_final' OR fecha_final BETWEEN '$fecha_inicial' AND '$fecha_final') 
 				
 	$result = $this -> DbFetchAll($select,$Conex,$ErrDb = false);
 	

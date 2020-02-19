@@ -97,10 +97,12 @@ final class PatronalesModel extends Db{
 			(SELECT t.numero_identificacion  FROM empresa_prestaciones e, tercero t WHERE e.empresa_id=c.empresa_arl_id AND t.tercero_id=e.tercero_id) AS numero_identificacion_arl,
 			(SELECT t.digito_verificacion  FROM empresa_prestaciones e, tercero t WHERE e.empresa_id=c.empresa_arl_id AND t.tercero_id=e.tercero_id) AS digito_verificacion_arl,			
 
-			(SELECT dias FROM detalle_liquidacion_novedad WHERE liquidacion_novedad_id=l.liquidacion_novedad_id AND sueldo_pagar=1) AS dias,
+			(SELECT SUM(d.dias) FROM detalle_liquidacion_novedad d, liquidacion_novedad ln 
+			WHERE d.liquidacion_novedad_id=ln.liquidacion_novedad_id AND d.sueldo_pagar=1 AND ln.estado='C' AND ln.fecha_inicial>='$fecha_inicial' 
+			AND ln.fecha_final<='$fecha_final' AND ln.contrato_id=l.contrato_id) AS dias,
 			
-			((SELECT DATEDIFF(IF(l.fecha_final>'$fecha_final','$fecha_final',l.fecha_final),IF(l.fecha_inicial<c.fecha_inicio,c.fecha_inicio,l.fecha_inicial)))+1)as dias_real,
-			(SELECT SUM((DATEDIFF(IF(l.fecha_final>'$fecha_final','$fecha_final',l.fecha_final),IF(l.fecha_inicial>'$fecha_inicial',l.fecha_inicial,'$fecha_inicial')))) 
+			((SELECT DATEDIFF(IF(l.fecha_final > '$fecha_final','$fecha_final',l.fecha_final),IF(l.fecha_inicial < c.fecha_inicio,c.fecha_inicio,l.fecha_inicial)))+1)as dias_real,
+			(SELECT SUM((DATEDIFF(IF(l.fecha_final > '$fecha_final','$fecha_final',l.fecha_final),IF(l.fecha_inicial>'$fecha_inicial',l.fecha_inicial,'$fecha_inicial')))) 
 			FROM licencia l WHERE l.remunerado=0 AND  l.contrato_id=c.contrato_id AND ('$fecha_inicial' BETWEEN  l.fecha_inicial AND l.fecha_final OR '$fecha_final'  BETWEEN  l.fecha_inicial AND l.fecha_final OR l.fecha_inicial BETWEEN '$fecha_inicial' AND '$fecha_final') )  AS dias_lice_nore,
 			
 			
@@ -110,7 +112,8 @@ final class PatronalesModel extends Db{
 			(SELECT car.porcentaje  FROM cargo ca, categoria_arl car WHERE ca.cargo_id=c.cargo_id AND car.categoria_arl_id=ca.categoria_arl_id ) AS desc_empre_arl
 			
    			FROM liquidacion_novedad l, contrato c, tipo_contrato t 
-			WHERE l.estado='C' AND l.fecha_inicial='$fecha_inicial' AND l.fecha_final='$fecha_final' AND c.contrato_id=l.contrato_id AND t.tipo_contrato_id=c.tipo_contrato_id AND (t.prestaciones_sociales=1 OR (t.salud=1 AND t.prestaciones_sociales=0))";
+			WHERE l.estado='C' AND l.fecha_inicial>='$fecha_inicial' AND l.fecha_final<='$fecha_final' AND c.contrato_id=l.contrato_id AND t.tipo_contrato_id=c.tipo_contrato_id AND (t.prestaciones_sociales=1 OR (t.salud=1 AND t.prestaciones_sociales=0)) GROUP BY l.contrato_id";
+	
 	$result = $this -> DbFetchAll($select,$Conex,true);
 	
 
@@ -190,8 +193,14 @@ final class PatronalesModel extends Db{
 		$contrato_id =  $result[$i]['contrato_id'];
 		$sueldo_base =$result[$i]['sueldo_base'];
 		$subsidio_transporte = $result[$i]['subsidio_transporte'];
-		$dias = $result[$i]['dias_real']-$result[$i]['dias_lice_nore'];
-		$dias_reales = $result[$i]['dias_real'];
+		//$dias = $result[$i]['dias_real']-$result[$i]['dias_lice_nore'];
+		//$dias_reales = $result[$i]['dias_real'];
+
+		$dias_real = $result[$i]['dias'] > $result[$i]['dias_real'] ? $result[$i]['dias']: $result[$i]['dias_real'] ;
+		$dias = $dias_real;
+		//$dias = $dias_real-$result[$i]['dias_lice_nore'];
+
+
 		$liquidacion_novedad_id=$result[$i]['liquidacion_novedad_id'];
 		$empleado=$result[$i]['empleado'];
 		
@@ -328,8 +337,6 @@ final class PatronalesModel extends Db{
 			$debito=$valor_pension;
 			$credito=0;
 
-
-
 			$detalle_liquidacion_patronal_id = $this -> DbgetMaxConsecutive("detalle_liquidacion_patronal","detalle_liquidacion_patronal_id",$Conex,false,1);
 			$insert = "INSERT INTO 	detalle_liquidacion_patronal (detalle_liquidacion_patronal_id,puc_id,liquidacion_patronal_id,liquidacion_novedad_id,debito,credito,fecha_inicial,fecha_final,dias,concepto,centro_de_costo_id,codigo_centro_costo,tercero_id,numero_identificacion,digito_verificacion) 
 			VALUES ($detalle_liquidacion_patronal_id,$puc_pens,$liquidacion_patronal_id,$liquidacion_novedad_id, $debito,$credito,'$fecha_inicial','$fecha_final',$dias,'PENSION $empleado',$centro_de_costo_idg,'$codigo_centrog',$tercero_pension_id,$numero_identificacion_pension,$digito_verificacion_pension)";
@@ -449,11 +456,22 @@ final class PatronalesModel extends Db{
   }
 
 
-  public function ComprobarLiquidacionNovedad($fecha_inicial,$fecha_final,$Conex){
+  public function ComprobarLiquidacionNovedadIni($fecha_inicial,$Conex){
     				
    $select = "SELECT  l.liquidacion_novedad_id
    			FROM liquidacion_novedad l
-			WHERE l.estado='C' AND l.fecha_inicial='$fecha_inicial' AND l.fecha_final='$fecha_final' ";
+			WHERE l.estado='C' AND l.fecha_inicial='$fecha_inicial'  ";
+				
+	$result = $this -> DbFetchAll($select,$Conex,$ErrDb = false);
+	
+	return $result;
+  }
+
+  public function ComprobarLiquidacionNovedadFin($fecha_final,$Conex){
+    				
+   $select = "SELECT  l.liquidacion_novedad_id
+   			FROM liquidacion_novedad l
+			WHERE l.estado='C' AND  l.fecha_final='$fecha_final' ";
 				
 	$result = $this -> DbFetchAll($select,$Conex,$ErrDb = false);
 	
@@ -464,7 +482,7 @@ final class PatronalesModel extends Db{
     				
    $select = "SELECT  liquidacion_patronal_id, consecutivo
    			FROM liquidacion_patronal 
-			WHERE  estado!='A' AND fecha_inicial='$fecha_inicial' AND fecha_final='$fecha_final' ";//AND (fecha_inicial BETWEEN '$fecha_inicial' AND '$fecha_final' OR fecha_final BETWEEN '$fecha_inicial' AND '$fecha_final')
+			WHERE  estado!='A' AND fecha_inicial>='$fecha_inicial' AND fecha_final<='$fecha_final' ";//AND (fecha_inicial BETWEEN '$fecha_inicial' AND '$fecha_final' OR fecha_final BETWEEN '$fecha_inicial' AND '$fecha_final')
 				
 	$result = $this -> DbFetchAll($select,$Conex,$ErrDb = false);
 	

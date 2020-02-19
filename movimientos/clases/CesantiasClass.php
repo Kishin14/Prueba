@@ -93,11 +93,13 @@ final class Cesantias extends Controler{
     $Model = new CesantiasModel();
 	$beneficiario = $_REQUEST['beneficiario'];
 	$si_empleado = $_REQUEST['si_empleado'];
+	$contrato_id = $_REQUEST['contrato_id'];	
 	$fecha_liquidacion = $_REQUEST['fecha_liquidacion'];	
 	$fecha_corte = $_REQUEST['fecha_corte'];
 	$fecha_ultimo_corte = $_REQUEST['fecha_ultimo_corte'];
 	$tipo_liquidacion = $_REQUEST['tipo_liquidacion'];	
 	$observaciones = $_REQUEST['observaciones'];	
+	$previsual          =	$_REQUEST['previsual'];
 	
 	$dias_corte = $this -> restaFechasCont($_REQUEST['fecha_ultimo_corte'],$_REQUEST['fecha_corte'],1);
 
@@ -130,9 +132,12 @@ final class Cesantias extends Controler{
 			$contrato_id = $contratos_activos[$i]['contrato_id'];
 			$empleado_id = $contratos_activos[$i]['empleado_id'];	
 			$tercero_id = $contratos_activos[$i]['tercero_id'];	
+			$numero_identificacion = $contratos_activos[$i]['numero_identificacion'];	
+			$tercero_id_cesan	 = $beneficiario=1 ?  $contratos_activos[$i]['tercero_id_cesan'] : $contratos_activos[$i]['tercero_id'];
+			$numero_identificacion_cesan = $beneficiario=1 ? $contratos_activos[$i]['numero_identificacion_cesan'] :  $contratos_activos[$i]['numero_identificacion'];
+
 			$area_laboral = $contratos_activos[$i]['area_laboral'];	
 			$centro_de_costo_id = $contratos_activos[$i]['centro_de_costo_id'];	
-			$numero_identificacion = $contratos_activos[$i]['numero_identificacion'];	
 			$salario = $contratos_activos[$i]['base_liquidacion'];	
 			$fecha_inicio = $contratos_activos[$i]['fecha_inicio'];				
 			$nombre = $contratos_activos[$i]['primer_nombre'].' '.$contratos_activos[$i]['primer_apellido'];									
@@ -144,15 +149,22 @@ final class Cesantias extends Controler{
 			//if($comprobar_provision['validacion']!='SI') exit('No se ha liquidado las Provisiones del Contrato de '. $contratos_activos[$i]['primer_nombre'].' '.$contratos_activos[$i]['primer_apellido'].' a la fecha de Corte de cesantias'); 
 			
 			if($comprobar_cesantias[0]['validacion_posterior']=='NO' || $comprobar_cesantias[0]['validacion_posterior']==''){
-				$fecha_ultimo_corte1 = $comprobar_cesantias[0]['fecha_corte']!='' ? $comprobar_cesantias[0]['fecha_corte'] : $fecha_ultimo_corte;
-				$dias_corte = $this -> restaFechasCont($fecha_ultimo_corte1,$_REQUEST['fecha_corte'],1);
+				if($fecha_inicio<$fecha_ultimo_corte){
+					$fecha_ultimo_corte1 = $comprobar_cesantias[0]['fecha_corte']!='' ? $comprobar_cesantias[0]['fecha_corte'] : $fecha_ultimo_corte;
+					$dias_corte = $this -> restaFechasCont($fecha_ultimo_corte1,$_REQUEST['fecha_corte'],1);
+						
+				}else{
+					$fecha_ultimo_corte1 = $fecha_inicio;
+					$dias_corte = $this -> restaFechasCont($fecha_ultimo_corte1,$_REQUEST['fecha_corte'],0);
+			
+				}
 				$Data = $Model -> getValor($empleado_id,$fecha_ultimo_corte1,$fecha_corte,$dias_corte,$this -> getOficinaId(),$this -> getConex());
 				$valor_diferencia = intval($Data[0]['valor_liquidacion']-$Data[0]['valor_consolidado']);
 				
 				if($Data[0]['validacion_posterior']=='SI'){
 					$no_liquidados.='El Empleado '.$numero_identificacion.' -  '.$nombre.' no se Liquido, ya tiene una liquidaci&oacute;n Reciente!!<br>';
 				}else{
-					$return = $Model -> saveTodos($si_empleado,$area_laboral,$centro_de_costo_id,$tercero_id,$numero_identificacion,$fecha_liquidacion,$fecha_corte,$fecha_ultimo_corte1,$beneficiario,$contrato_id,$empleado_id,$salario,$dias_corte,$Data[0]['valor_liquidacion'],$Data[0]['dias_no_remu'],$Data[0]['dias_liquidacion'],$Data[0]['valor_consolidado'],$valor_diferencia,$fecha_inicio,$tipo_liquidacion,$observaciones,$this -> getOficinaId(),$this -> getConex());
+					$return = $Model -> saveTodos($si_empleado,$area_laboral,$centro_de_costo_id,$tercero_id,$numero_identificacion,$tercero_id_cesan,$numero_identificacion_cesan,$fecha_liquidacion,$fecha_corte,$fecha_ultimo_corte1,$beneficiario,$contrato_id,$empleado_id,$salario,$dias_corte,$Data[0]['valor_liquidacion'],$Data[0]['dias_no_remu'],$Data[0]['dias_liquidacion'],$Data[0]['valor_consolidado'],$valor_diferencia,$fecha_inicio,$tipo_liquidacion,$observaciones,$this -> getOficinaId(),$this -> getConex());
 					if(!$Model -> GetNumError() > 0){
 						$total_contratos_liq++;
 					}
@@ -196,18 +208,30 @@ final class Cesantias extends Controler{
 	
   	require_once("CesantiasModelClass.php");
     $Model = new CesantiasModel();
-	$liquidacion_cesantias_id 	= $_REQUEST['liquidacion_cesantias_id'];
-	$fecha 			= $_REQUEST['fecha_liquidacion'];
+	$liquidacion_cesantias_id 	 = $_REQUEST['liquidacion_cesantias_id'];
+	$fecha_inicial = $_REQUEST['fecha_inicial'];
 	$empresa_id = $this -> getEmpresaId(); 
 	$oficina_id = $this -> getOficinaId();	
 	$usuario_id = $this -> getUsuarioId();		
 	
 	
-    $mesContable     = $Model -> mesContableEstaHabilitado($empresa_id,$oficina_id,$fecha,$this -> getConex());
+    $mesContable     = $Model -> mesContableEstaHabilitado($empresa_id,$oficina_id,$fecha_inicial,$this -> getConex());
     $periodoContable = $Model -> PeriodoContableEstaHabilitado($this -> getConex());
-	
+	$estado=$Model -> comprobar_estado($liquidacion_cesantias_id,$this -> getConex());
+
+	if($estado[0]['estado']=='C'){
+		 exit('No se puede Contabilizar. <br> La Liquidaci&oacute;n estaba previamente Contabilizada.');
+	}else if(is_numeric($estado[0]['encabezado_registro_id'])){
+		 exit('No se puede Contabilizar. <br> La Liquidaci&oacute;n estaba previamente Relacionada con un Registro contable.');
+		 
+	}
+	 
     if($mesContable && $periodoContable){
-		$return=$Model -> getContabilizarReg($liquidacion_cesantias_id,$empresa_id,$oficina_id,$usuario_id,$mesContable,$periodoContable,$this -> getConex());
+		if($estado[0]['si_empleado']=='1'){
+			$return=$Model -> getContabilizarReg($liquidacion_cesantias_id,$empresa_id,$oficina_id,$usuario_id,$mesContable,$periodoContable,$this -> getConex());//aca
+		}elseif($estado[0]['si_empleado']=='ALL'){
+			$return=$Model -> getContabilizarRegT($liquidacion_cesantias_id,$estado[0]['fecha_liquidacion'],$empresa_id,$oficina_id,$usuario_id,$mesContable,$periodoContable,$this -> getConex());	
+		}
 		if($return==true){
 			exit("true");
 		}else{
@@ -587,6 +611,7 @@ final class Cesantias extends Controler{
 		Boostrap =>'si',
 		options => array(array(value=>'A',text=>'ACTIVO',selected=>'A'),array(value=>'I',text=>'INACTIVO',selected=>'A'),array(value => 'C', text => 'CONTABILIZADA')),
 		required=>'yes',
+		disabled=>'yes',
 		datatype=>array(
 			type =>'text',
 			length =>'2'),
@@ -671,9 +696,9 @@ final class Cesantias extends Controler{
    	$this -> Campos[limpiar] = array(
 		name	=>'limpiar',
 		id		=>'limpiar',
-		type	=>'reset',
+		type	=>'button',
 		value	=>'Limpiar',
-		onclick	=>'CesantiasOnReset()'
+		onclick	=>'CesantiasOnReset(this.form)'
 	);
 		$this -> Campos[contabilizar] = array(
 		name	=>'contabilizar',
@@ -683,7 +708,15 @@ final class Cesantias extends Controler{
 		tabindex=>'16',
 		onclick =>'OnclickContabilizar()'
 	);	
-	 
+
+   	$this -> Campos[previsual] = array(
+		name	    =>'previsual',
+		id	    	=>'previsual',
+		type	    =>'button',
+		value	    =>'Previsual',
+		onclick     =>'Previsual(this.form)'
+	);
+
    	$this -> Campos[busqueda] = array(
 		name	=>'busqueda',
 		id		=>'busqueda',

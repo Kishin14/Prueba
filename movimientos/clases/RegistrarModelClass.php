@@ -1158,19 +1158,28 @@ final class RegistrarModel extends Db{
 
 	//
 	
+		 $liquidacion_novedad_id = $resultLiquidacion[0]['liquidacion_novedad_id'];
 	
-	 return  $resultLiquidacion;
-	 
-	 $this -> Rollback($Conex);
+	
+		 $selectDetalle = " SELECT (p.nombre) AS nombre_puc, d.liquidacion_novedad_id, CONCAT_WS(' ',t.primer_nombre, t.segundo_nombre, t.primer_apellido, t.segundo_apellido) AS tercero, d.numero_identificacion, d.digito_verificacion, 
+						   (SELECT c.descripcion FROM concepto_area c WHERE c.concepto_area_id=d.concepto_area_id) AS descripcion_concepto, 
+						   d.formula, d.base, d.porcentaje, d.debito, d.credito, d.fecha_inicial, d.fecha_final, d.dias, d.concepto, d.observacion, d.sueldo_pagar 
+						   FROM detalle_liquidacion_novedad d, puc p, tercero t
+						   WHERE d.puc_id=p.puc_id AND d.tercero_id=t.tercero_id AND d.liquidacion_novedad_id = $liquidacion_novedad_id"; 
+						   
+		 
+		 $resultDetalle  = $this -> DbFetchAll($selectDetalle,$Conex,true);
+	
+		 return  $resultLiquidacion;
+		 $this -> Rollback($Conex);
 
 	}else{
 
-	 $this -> Commit($Conex);
-
-	 return $liquidacion_novedad_id;
+	 	$this -> Commit($Conex);
+	 	return $liquidacion_novedad_id;
 
 	} 
-  }
+ }
 
   
 
