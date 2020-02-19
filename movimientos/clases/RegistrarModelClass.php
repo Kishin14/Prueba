@@ -16,6 +16,26 @@ final class RegistrarModel extends Db{
 	return $this -> Permisos -> getPermiso($ActividadId,$Permiso,$Conex);
   }
 
+  public function validarContratos($fecha_inicial,$fecha_final,$Conex){
+	
+	$contrato_id = $_REQUEST['contrato_id'];
+
+	if($contrato_id > 0){
+		$consulta = 'AND c.contrato_id ='.$contrato_id;
+	}else{
+		$consulta ='';
+	}
+
+	$select="SELECT c.numero_contrato,
+	         (SELECT CONCAT_WS(' ',t.primer_nombre,t.segundo_nombre,t.primer_apellido,t.segundo_apellido,t.razon_social) FROM tercero t,empleado e WHERE t.tercero_id=e.tercero_id AND e.empleado_id=c.empleado_id) AS empleado
+	         FROM contrato c WHERE c.estado = 'A' AND c.fecha_terminacion BETWEEN '$fecha_inicial' AND '$fecha_final' $consulta";
+	$result = $this -> DbFetchAll($select,$Conex,true);
+
+	return $result;
+
+  }
+  
+
 
   public function Save($usuario_id,$Campos,$dias,$dias_real,$previsual,$Conex){
 
