@@ -442,11 +442,9 @@ final class Registrar extends Controler{
   protected function onclickSave(){
 
 	require_once("RegistrarModelClass.php");
-
 	require_once("RegistrarLayoutClass.php");
 
 	$Model    = new RegistrarModel();
-
 	$Layout   = new RegistrarLayout($this -> getTitleTab(),$this -> getTitleForm());
 	
 	$empleados          =   $_REQUEST['empleados'];
@@ -475,6 +473,19 @@ final class Registrar extends Controler{
 	if(substr($fecha_inicial,0,4)!=substr($fecha_final,0,4)) exit("Las fechas Inicial y final no pueden ser en diferente A&ntilde;o");
 	
 	if($empleados=='U'){
+		
+		$contrato_id = $_REQUEST['contrato_id'];
+		$result = $Model -> validarContratos($fecha_inicial,$fecha_final,$this -> getConex());
+
+		if($result > 0){
+
+				$numero_contrato = $result[0]['numero_contrato'];
+				$empleado = $result[0]['empleado'];
+
+				$resultado = '<br><br> N° Contrato: '. $numero_contrato.' '.$empleado;
+			
+			exit("No puede liquidar la nomina hasta que actualice la fecha de terminación o realice la liquidación final del siguiente contrato: ".$resultado);
+		}
 
 		$comprobar = $Model -> ComprobarLiquidacion($_REQUEST['contrato_id'],$fecha_inicial,$fecha_final,$periodicidad,$area,$this -> getConex());
 		if($comprobar[0]['consecutivo']>0) exit($comprobar[0]['consecutivo']);
@@ -619,9 +630,9 @@ final class Registrar extends Controler{
 
 	      $Layout -> setLiquidacion($con_deb1,$con_cre1,$con_debExt1,$con_creExt1,$con_sal1,$Model -> getLiquidacion($select_deb_total,$select_cre_total,$select_deb,$select_cre,$select_debExt,$select_creExt,$select_sal,$this -> getOficinaId(),$this -> getEmpresaId(),$this -> getConex()),$Model -> getTotales($select_tot_deb,$select_tot_cre,$select_tot_debExt,$select_tot_creExt,$select_tot_sal,$this -> getEmpresaId(),$this -> getConex()));
 
-		  //$Layout -> exportToExcel('Imp_LiquidacionExcel.tpl'); 
+		  $Layout -> exportToExcel('Imp_LiquidacionExcel.tpl'); 
 
-		   echo 'true'; #Este echo valida que la previsual se cumpla
+		   //echo 'true'; #Este echo valida que la previsual se cumpla
 
 			}else {
 				
@@ -631,9 +642,28 @@ final class Registrar extends Controler{
 		   
 		}	
 	}elseif($empleados=='T'){	
-		
+
+		$result = $Model -> validarContratos($fecha_inicial,$fecha_final,$this -> getConex());
+
+		if($result > 0){
+
+			$array = array();
+
+			for($i=0; $i < count($result); $i++){
+
+				$numero_contrato = $result[$i]['numero_contrato'];
+				$empleado = $result[$i]['empleado'];
+
+				$resultado = $resultado. '<br><br>'.'N° Contrato: '. $numero_contrato.' '.$empleado;
+			}
+
+			 exit("No puede liquidar la nomina hasta que actualice la fecha de terminación o realice la liquidación final de los siguientes contratos: ".$resultado); 
+		}
+
+
 		$comprobar = $Model -> ComprobarLiquidacionT($fecha_inicial,$fecha_final,$periodicidad,$area,$centro_de_costo_id,$this -> getConex());
 		if($comprobar[0]['consecutivo']>0) exit($comprobar[0]['consecutivo']);
+
 
 		$result = $Model -> SaveTodos($this -> getUsuarioId(),$this -> Campos,$dias,$dias_real,$periodicidad,$area_laboral,$centro_de_costo_id,$previsual,$this -> getConex());
 		
@@ -781,10 +811,8 @@ final class Registrar extends Controler{
 
 		  $Layout -> setLiquidacion($con_deb1,$con_cre1,$con_debExt1,$con_creExt1,$con_sal1,$Model -> getLiquidacion($select_deb_total,$select_cre_total,$select_deb,$select_cre,$select_debExt,$select_creExt,$select_sal,$this -> getOficinaId(),$this -> getEmpresaId(),$this -> getConex()),$Model -> getTotales($select_tot_deb,$select_tot_cre,$select_tot_debExt,$select_tot_creExt,$select_tot_sal,$this -> getEmpresaId(),$this -> getConex()));
 		  
-
-
 		  $Layout -> exportToExcel('Imp_LiquidacionExcel.tpl'); 
-
+          
 			}else {
 				
 				echo $result;
