@@ -83,18 +83,24 @@ $(document).ready(function(){
     url: "RegistrarClass.php?rand=" + Math.random(),
     data: QueryString,
     success: function(resp) {
+		
+		
       try {
-		  if (isInteger(resp)){
+		 if (resp > 0){
 
 			  alertJquery("Existe una liquidaci&oacute;n Previa  para las fechas seleccionadas. <br>Por favor verifique Liquidaci&oacute;n No "+resp);
 			  
-			}else{
-				
+		 }else{
+			 
+			if (resp.indexOf('<html>') != -1){
 				document.location.href = "RegistrarClass.php?" + QueryString;
-
-		  } 
+			}else{
+				 alertJquery(resp, "atencion");
+			}
+			 	  
+		 } 
       } catch (e) {
-        alertJquery("Se presento un error :" + e, "Alerta !!");
+		 alertJquery("se presento un inconveniente: "+e,"Atencion");
       }
     }
   });
