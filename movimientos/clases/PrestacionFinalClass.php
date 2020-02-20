@@ -241,7 +241,7 @@ final class PrestacionFinal extends Controler{
 		$x++;
 		
 	    $Layout -> setDetallesRegistrar($datos);
-	}elseif($liquidacion_definitiva_id>0){
+	}/*elseif($liquidacion_definitiva_id>0){
 		$data1=$Model -> getDetallesLiquidacionPres($liquidacion_definitiva_id,$this -> getConex());
 		$y=(count($data1)+1);
 		$prestaciones=$data1[0]['total'];
@@ -273,7 +273,7 @@ final class PrestacionFinal extends Controler{
 		$datos = array_merge($data1,$data2,$data3,$data4);
 
 		$Layout -> setDetallesRegistrar($datos);
-	}
+	}*/
 	
     $Layout -> RenderMain();
     

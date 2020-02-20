@@ -115,6 +115,28 @@ final class Imp_LiquidacionFinalModel extends Db{
 	return $result;
   }
 
+  public function getDetallesLiquidaciondeven($liquidacion_definitiva_id, $Conex)
+    {
+		
+        if ($liquidacion_definitiva_id > 0) {
+
+            $select = "SELECT l.*,
+			IF(l.fecha_inicio IS NOT NULL, CONCAT_WS(' ','De:', l.fecha_inicio, 'Hasta:',l.fecha_fin ),'') AS periodo,
+			(SELECT SUM(valor) FROM liq_def_devengado WHERE liquidacion_definitiva_id = $liquidacion_definitiva_id) AS total
+			FROM 	liq_def_devengado l
+			WHERE l.liquidacion_definitiva_id = $liquidacion_definitiva_id";
+			
+			$result = $this->DbFetchAll($select, $Conex, true);
+			
+            if (!count($result) > 0) {
+                $result = array();
+            }
+
+        } else {
+            $result = array();
+        }
+        return $result;
+    }
 
   public function getLiquidacion2($liquidacion_definitiva_id,$empresa_id,$Conex){
  

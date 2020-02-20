@@ -34,7 +34,7 @@ final class DetalleNovedadModel extends Db{
 
 	   /* ====================Orden de quincenas (Primera y segunda quincena) ==================== */
 
-		    $newDate      = date("d-m-Y",strtotime($fecha_inicial."+ 2 week")); 
+		    $newDate      = date("Y-m-d",strtotime($fecha_inicial."+ 2 week")); 
 
 			$fechaInicio  = strtotime($fecha_inicial);
 			$fechaFin     = strtotime($newDate);
@@ -66,7 +66,7 @@ final class DetalleNovedadModel extends Db{
 			
 			for($j = 0; $j < intval($num_cuotas); $j++){
 
-			$fecha_inicial = date("d-m-Y",strtotime($fecha_inicial."+ 1 week"));
+			$fecha_inicial = date("Y-m-d",strtotime($fecha_inicial."+ 1 week"));
 			
 			$saldo         = $saldo-$valor_cuota;
 			
