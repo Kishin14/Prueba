@@ -241,12 +241,12 @@
 		
 		if($fecha_inicial!=''){
 
-			$valor_festivo = number_format((($salario*$val_recargo_dominical)/100), 0, ',', ' ');
-			$valor_recargo_noct = number_format((($salario*$val_recargo_nocturna)/100), 0, ',', ' ');
-			$valor_noct_fest = number_format((($salario*$val_hr_ext_festiva_nocturna)/100), 0, ',', ' ');
-			$valor_diur_fest = number_format((($salario*$val_hr_ext_festiva_diurna)/100), 0, ',', ' ');
-			$valor_nocturnas = number_format((($salario*$val_hr_ext_nocturna)/100), 0, ',', ' ');
-			$valor_diurnas = number_format((($salario*$val_hr_ext_diurna)/100), 0, ',', ' ');
+			$valor_festivo = number_format((($salario*$val_recargo_dominical)/100)+$salario, 0, ',', ' ');
+			$valor_recargo_noct = number_format((($salario*$val_recargo_nocturna)/100)+$salario, 0, ',', ' ');
+			$valor_noct_fest = number_format((($salario*$val_hr_ext_festiva_nocturna)/100)+$salario, 0, ',', ' ');
+			$valor_diur_fest = number_format((($salario*$val_hr_ext_festiva_diurna)/100)+$salario, 0, ',', ' ');
+			$valor_nocturnas = number_format((($salario*$val_hr_ext_nocturna)/100)+$salario, 0, ',', ' ');
+			$valor_diurnas = number_format((($salario*$val_hr_ext_diurna)/100)+$salario, 0, ',', ' ');
 
 			
 		}else{

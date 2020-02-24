@@ -50,7 +50,7 @@
                 <td><label>Dias : </label></td>
                 <td>{$DIAS}</td>
                 <td><label>Estado : </label></td>
-                <td>{$ESTADO}</td>
+                <td>{$ESTADO}{$BLUR}</td>
                 
             </tr>
             <tr>

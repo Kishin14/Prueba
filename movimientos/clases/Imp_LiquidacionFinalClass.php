@@ -49,13 +49,22 @@ final class Imp_LiquidacionFinal{
 			$data4[$y]['titulo']= 'TOTAL DEDUCCIONES';
 			$data4[$y]['valor']= $deducciones; 
 			$data4[$y]['campo']= 'deduccion'; 
-			$y++;
-			$valor_pagar = $liquidacion-$deducciones;
-			$data4[$y]['titulo']= 'VALOR A PAGAR';
-			$data4[$y]['valor']= $valor_pagar; 
-			$data4[$y]['campo']= 'valor_pagar'; 
 			
-			$datos = array_merge($data1,$data2,$data3,$data4);
+			$data5 = $Model->getDetallesLiquidaciondeven($liquidacion_definitiva_id, $this -> Conex);
+			
+			$y = (count($data5) + 1);
+			$devengados = $data5[0]['total'];
+			$data5[$y]['titulo'] = 'TOTAL DEVENGADOS';
+			$data5[$y]['valor'] = $devengados;
+			$data5[$y]['campo'] = 'devengado';
+			$y++;
+			
+			$valor_pagar = $liquidacion + $devengados - $deducciones;
+			$data5[$y]['titulo']= 'VALOR A PAGAR';
+			$data5[$y]['valor']= $valor_pagar; 
+			$data5[$y]['campo']= 'valor_pagar'; 
+			
+			$datos = array_merge($data1, $data2, $data3, $data4, $data5);
 
 
 		  $Layout -> setLiquidacion1($liquidacion1,$datos);

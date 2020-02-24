@@ -246,7 +246,7 @@
 				type	=>'text',
 				Boostrap =>'si',
 				size  	=>'5',
-				required=>'yes',
+				//required=>'yes',
 				datatype=>array(
 					type	=>'integer',
 					length	=>'2'),
@@ -300,7 +300,7 @@
 			name	=>'profesion_id',
 			id	=>'profesion_hidden',
 			type	=>'hidden',
-			required=>'yes',
+			//required=>'yes',
 			datatype=>array(type=>'integer'),
 			transaction=>array(
 				table	=>array('empleado'),

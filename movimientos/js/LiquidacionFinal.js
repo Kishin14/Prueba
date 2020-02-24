@@ -9,8 +9,9 @@ function setDataFormWithResponse(){
 	var controlador = 'LiquidacionFinalClass.php';
 
 	FindRow(novedad,forma,controlador,null,function(resp){
-	  var estado = $('#estado').val();												
-	  document.getElementById('prestacion').src = 'PrestacionFinalClass.php?liquidacion_definitiva_id='+liquidacion_definitiva_id;
+	  var estado = $('#estado').val();			
+	  var blur = true;									
+	  document.getElementById('prestacion').src = 'LiquidacionFinalClass.php?ACTIONCONTROLER=onclickSave&liquidacion_definitiva_id='+liquidacion_definitiva_id+'&blur='+blur;
 													
       if($('#guardar'))    $('#guardar').attr("disabled","true");
      
@@ -95,7 +96,7 @@ function LiquidacionFinalOnSave(formulario,resp){
 
    if(isInteger(resp)){
 	   $('#liquidacion_definitiva_id').val(liquidacion_definitiva_id);
-	   document.getElementById('prestacion').src = 'PrestacionFinalClass.php?liquidacion_definitiva_id='+resp+"&rand="+Math.random();
+	   document.getElementById('prestacion').src = 'LiquidacionFinalClass.php?ACTIONCONTROLER=onclickSave&liquidacion_definitiva_id='+resp+"&rand="+Math.random();
 	   
 	
 	   $("#refresh_QUERYGRID_liquidacion_definitiva").click();
@@ -438,6 +439,8 @@ $(document).ready(function(){
 	if(this.id == 'guardar'){
 			if(!formSubmitted){
 				 formSubmitted = true;
+				 console.log(formulario);
+				 $('#blur').val('false');
 				 Send(formulario,'onclickSave',null,LiquidacionFinalOnSave);
 			}
 		}else{
@@ -447,22 +450,23 @@ $(document).ready(function(){
 	formSubmitted = false;
   
   });
+
    $("#fecha_inicio,#fecha_final,#justificado").blur(function(){
+
 		var fecha_inicio =	$("#fecha_inicio").val();	
 		var fecha_final = $("#fecha_final").val();	
 		var contrato_id = $("#contrato_id").val();
 		var justificado = $("#justificado").val();
-		var liquidacion_definitiva_id = $("#liquidacion_definitiva_id").val();		
+		var liquidacion_definitiva_id = $("#liquidacion_definitiva_id").val();	
 		
-		if(parseInt(contrato_id)>0 && fecha_inicio!='' && fecha_final!='' && justificado!='NULL' && liquidacion_definitiva_id==''){
-			document.getElementById('prestacion').src = 'PrestacionFinalClass.php?contrato_id='+contrato_id+"&fecha_inicio="+fecha_inicio+"&fecha_final="+fecha_final+"&justificado="+justificado+"&rand="+Math.random();
-			
-		}else if(parseInt(contrato_id)>0 && fecha_inicio!='' && fecha_final!='' && justificado!='NULL' && parseInt(liquidacion_definitiva_id)>0){ 
-			document.getElementById('prestacion').src = 'PrestacionFinalClass.php?liquidacion_definitiva_id='+liquidacion_definitiva_id+"&rand="+Math.random();
-			
+		if(parseInt(contrato_id)>0 && fecha_inicio!='' && fecha_final!='' && justificado!='NULL'){
+			blur = true;
+			document.getElementById('prestacion').src = 'LiquidacionFinalClass.php?ACTIONCONTROLER=onclickSave&contrato_id='+contrato_id+"&fecha_inicio="+fecha_inicio+"&fecha_final="+fecha_final+"&justificado="+justificado+"&blur="+blur+"&liquidacion_definitiva_id="+liquidacion_definitiva_id+"&rand="+Math.random();
+			blur = false;
 		}
   
   });
+  
 
 	$('#fecha_final').change(function(){
 	
