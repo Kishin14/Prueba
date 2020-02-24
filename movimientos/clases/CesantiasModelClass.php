@@ -87,7 +87,7 @@ final class CesantiasModel extends Db{
 
 
 
-	public function Save($Campos,$oficina_id,$Conex){	
+	public function Save($Campos,$oficina_id,$usuario_id,$Conex){	
 		
 		$empleado_id				= $this -> requestDataForQuery('empleado_id','integer');
 		$observaciones   			= $this -> requestDataForQuery('observaciones','text');
@@ -99,9 +99,10 @@ final class CesantiasModel extends Db{
 		$tipo_liquidacion			= $this -> requestDataForQuery('tipo_liquidacion','text');
 		$beneficiario				= $this -> requestDataForQuery('beneficiario','integer');
 		$valor_liquidacion			= $this -> requestDataForQuery('valor_liquidacion','numeric');
+		$valor_diferencia			= $this -> requestDataForQuery('valor_diferencia','numeric');
 		
 		$this -> Begin($Conex);
-		$select_contrato = "SELECT c.contrato_id,
+		$select_contrato = "SELECT c.contrato_id, c.centro_de_costo_id,
 							( SELECT ep.tercero_id  FROM empresa_prestaciones ep WHERE ep.empresa_id=c.empresa_cesan_id) AS tercero_id_cesan,
 							( SELECT t.numero_identificacion  FROM empresa_prestaciones ep,tercero t WHERE ep.empresa_id=c.empresa_cesan_id AND t.tercero_id=ep.tercero_id) AS numero_identificacion_cesan,
 							( SELECT t.digito_verificacion  FROM empresa_prestaciones ep,tercero t WHERE ep.empresa_id=c.empresa_cesan_id AND t.tercero_id=ep.tercero_id) AS digito_verificacion_cesan,
@@ -115,14 +116,15 @@ final class CesantiasModel extends Db{
 		
 		$result_contrato = $this -> DbFetchAll($select_contrato,$Conex,true); 
 		$contrato_id	 = $result_contrato[0]['contrato_id'];
+		$centro_de_costo_id = $result_contrato[0]['centro_de_costo_id'];
 		$tercero_id	 = $result_contrato[0]['tercero_id'];
 		$numero_identificacion = $result_contrato[0]['numero_identificacion'];
 		$digito_verificacion   = $result_contrato[0]['digito_verificacion']>0 ? $result_contrato[0]['digito_verificacion']:'NULL';
 
-		$tercero_id_cesan	 = $beneficiario=1 ? $result_contrato[0]['tercero_id_cesan'] : $result_contrato[0]['tercero_id'];
-		$numero_identificacion_cesan = $beneficiario=1 ?  $result_contrato[0]['numero_identificacion_cesan'] :  $result_contrato[0]['numero_identificacion'];
+		$tercero_id_cesan	 = $beneficiario==1 ? $result_contrato[0]['tercero_id_cesan'] : $result_contrato[0]['tercero_id'];
+		$numero_identificacion_cesan = $beneficiario==1 ?  $result_contrato[0]['numero_identificacion_cesan'] :  $result_contrato[0]['numero_identificacion'];
 		$digito_verificacion_cesan   = $result_contrato[0]['digito_verificacion_cesan']>0 ? $result_contrato[0]['digito_verificacion_cesan'] :'NULL';		
-		$digito_verificacion_cesan   = $beneficiario=1 ?  $digito_verificacion_cesan : 'NULL';
+		$digito_verificacion_cesan   = $beneficiario==1 ?  $digito_verificacion_cesan : 'NULL';
 
 		$area_laboral	 = $result_contrato[0]['area_laboral'];
 		
@@ -131,6 +133,8 @@ final class CesantiasModel extends Db{
 		$this -> assignValRequest('liquidacion_cesantias_id',$liquidacion_cesantias_id);
 		$this -> assignValRequest('contrato_id',$contrato_id);
 		$this -> assignValRequest('estado',$estado);
+		$this -> assignValRequest('usuario_id',$usuario_id);
+		$this -> assignValRequest('fecha_registro',date('Y-m-d H:i:s'));
 		$this -> DbInsertTable("liquidacion_cesantias",$Campos,$Conex,true,false);  
 		
 		
@@ -167,17 +171,6 @@ final class CesantiasModel extends Db{
 		$valor_consolidado = intval($result_consolidado[0]['neto']);
 		$centro_costo_consolidado = $result_consolidado[0]['centro_de_costo_id'];
 		
-		$select_provision = "SELECT SUM(credito-debito)as neto,centro_de_costo_id  FROM imputacion_contable WHERE puc_id=$puc_provision_cesantias AND tercero_id=$tercero_id";
-		
-		$result_provision = $this -> DbFetchAll($select_provision,$Conex,true); 
-		
-		if(!count($result_provision)>0){exit("No se encontraron valores en la cuenta provisionados para este tercero!!");}
-		
-		
-		$valor_provision = intval($result_provision[0]['neto']);
-		$centro_costo_provision = $result_provision[0]['centro_de_costo_id'];
-		
-		
 		$valor_guardado = intval($valor_consolidado);
 		
 		//sacamos el consolidado				
@@ -193,7 +186,7 @@ final class CesantiasModel extends Db{
 		
 		$insert_det_puc_cons ="INSERT INTO detalle_cesantias_puc (liquidacion_cesantias_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_cesantias,porcentaje_cesantias,formula_cesantias,desc_cesantias,deb_item_cesantias,cre_item_cesantias,valor_liquida,contrapartida)
 		VALUES
-		($liquidacion_cesantias_id,$puc_consolidado_cesantias,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF($centro_costo_consolidado>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,$debito,$credito,$valor_consolidado,0)";
+		($liquidacion_cesantias_id,$puc_consolidado_cesantias,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_de_costo_id,IF($centro_de_costo_id>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_de_costo_id),'NULL'),0,'NULL','NULL',$observaciones,$debito,$credito,$valor_consolidado,0)";
 		$this -> query($insert_det_puc_cons,$Conex,true); 
 		
 		
@@ -201,75 +194,56 @@ final class CesantiasModel extends Db{
 
 
 		
-		if($valor_liquidacion != $valor_guardado){
+		if($valor_diferencia!=0){
 			if($area_laboral=='A'){
 				$puc_diferencia = $puc_admin;
-				$natu_diferencia = $natu_puc_admin;
 			}elseif($area_laboral=='O'){
 				$puc_diferencia = $puc_operativo;
-				$natu_diferencia = $natu_puc_operativo;
 			}elseif($area_laboral=='C'){
 				$puc_diferencia = $puc_venta;
-				$natu_diferencia = $natu_puc_venta;
 			}
-			
-			if($valor_guardado > $valor_liquidacion){
-				//cuando se provisiona mas hacemos reintegro a la naturaleza contraria de la cuenta
-				$diferencia	= $valor_guardado-$valor_liquidacion;
-				if($natu_diferencia=='D' ){
-					$debito  = $diferencia;
-					$credito =	0;
-				}else{
-					$debito   = 0;
-					$credito  = $diferencia;
-				}
+			$diferencia= $valor-$valor_guardado;
+			if($valor_diferencia>0){
+				$insert_det_puc_prov ="INSERT INTO detalle_cesantias_puc (liquidacion_cesantias_id,puc_id,tercero_id,numero_identificacion,centro_de_costo_id,codigo_centro_costo,base_cesantias,porcentaje_cesantias,formula_cesantias,desc_cesantias,deb_item_cesantias,cre_item_cesantias,valor_liquida,contrapartida)
+				VALUES
+				($liquidacion_cesantias_id,$puc_diferencia,$tercero_id,$numero_identificacion,$centro_de_costo_id,IF($centro_de_costo_id>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_de_costo_id),'NULL'),0,'NULL','NULL',$observaciones,$valor_diferencia,0,0,0)";
+				$this -> query($insert_det_puc_prov,$Conex,true); 
 				
-			
 			}else{
-				$diferencia	= $valor_liquidacion-$valor_guardado;
-				if($natu_diferencia=='D' ){
-					$credito  = $diferencia;
-					$debito	  =	0;
-				}else{
-					$credito = 0;
-					$debito  = $diferencia;
-				}
+				
+				$insert_det_puc_prov ="INSERT INTO detalle_cesantias_puc (liquidacion_cesantias_id,puc_id,tercero_id,numero_identificacion,centro_de_costo_id,codigo_centro_costo,base_cesantias,porcentaje_cesantias,formula_cesantias,desc_cesantias,deb_item_cesantias,cre_item_cesantias,valor_liquida,contrapartida)
+				VALUES
+				($liquidacion_cesantias_id,$puc_diferencia,$tercero_id,$numero_identificacion,$centro_de_costo_id,IF($centro_de_costo_id>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_de_costo_id),'NULL'),0,'NULL','NULL',$observaciones,0,ABS($valor_diferencia),0,0)";
+				$this -> query($insert_det_puc_prov,$Conex,true); 
 				
 			}
-			
-			
-			
-			$insert_det_puc_prov ="INSERT INTO detalle_cesantias_puc (liquidacion_cesantias_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_cesantias,porcentaje_cesantias,formula_cesantias,desc_cesantias,deb_item_cesantias,cre_item_cesantias,valor_liquida,contrapartida)
-			VALUES
-			($liquidacion_cesantias_id,$puc_diferencia,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_provision,IF($centro_costo_provision>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_provision),'NULL'),0,'NULL','NULL',$observaciones,$debito,$credito,$diferencia,0)";
-			$this -> query($insert_det_puc_prov,$Conex,true); 
-			
+		
 		}
 		
 		// contrapartida
 		$insert_det_puc_contra ="INSERT INTO detalle_cesantias_puc (liquidacion_cesantias_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_cesantias,porcentaje_cesantias,formula_cesantias,desc_cesantias,deb_item_cesantias,cre_item_cesantias,valor_liquida,contrapartida)
 		VALUES
-		($liquidacion_cesantias_id,$puc_contrapartida,$tercero_id_cesan,$numero_identificacion_cesan,$digito_verificacion_cesan,$centro_costo_provision,IF($centro_costo_provision>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_provision),'NULL'),0,'NULL','NULL',$observaciones,0,$valor_liquidacion,0,1)";
+		($liquidacion_cesantias_id,$puc_contrapartida,$tercero_id_cesan,$numero_identificacion_cesan,$digito_verificacion_cesan,$centro_de_costo_id,IF($centro_de_costo_id>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_de_costo_id),'NULL'),0,'NULL','NULL',$observaciones,0,$valor_liquidacion,0,1)";
 		$this -> query($insert_det_puc_contra,$Conex,true);
 		
 		$this -> Commit($Conex);  
 		
 		
-		print($liquidacion_cesantias_id);
+		return $liquidacion_cesantias_id;
 		
 	}
 	
 	
-	public function saveTodos($si_empleado,$area_laboral,$centro_de_costo_id,$tercero_id,$numero_identificacion,$tercero_id_cesan,$numero_identificacion_cesan,$fecha_liquidacion,$fecha_corte,$fecha_ultimo_corte,$beneficiario,$contrato_id,$empleado_id,$salario,$dias_corte,$valor_liquidacion,$dias_no_remu,$dias_liquidacion,$valor_consolidado,$valor_diferencia,$fecha_inicio,$tipo_liquidacion,$observaciones,$oficina_id,$Conex){
+	public function saveTodos($si_empleado,$area_laboral,$centro_de_costo_id,$tercero_id,$numero_identificacion,$tercero_id_cesan,$numero_identificacion_cesan,$fecha_liquidacion,$fecha_corte,$fecha_ultimo_corte,$beneficiario,$contrato_id,$empleado_id,$salario,$dias_corte,$valor_liquidacion,$dias_no_remu,$dias_liquidacion,$valor_consolidado,$valor_diferencia,$fecha_inicio,$tipo_liquidacion,$observaciones,$oficina_id,$usuario_id,$Conex){
 		// Para todos los empleados!!
-		
+
 		$this -> Begin($Conex);
 		
 		$liquidacion_cesantias_id 		= $this -> DbgetMaxConsecutive("liquidacion_cesantias","liquidacion_cesantias_id",$Conex,false,1);
-		
+		$fecha_registro= date('Y-m-d H:i:s');
 		$insert_cesantias = "INSERT INTO liquidacion_cesantias 
-		(liquidacion_cesantias_id,fecha_liquidacion,fecha_corte,fecha_ultimo_corte,beneficiario,contrato_id,empleado_id,salario,fecha_inicio_contrato,estado,dias_periodo,dias_no_remu,dias_liquidados,valor_consolidado,valor_liquidacion,valor_diferencia,tipo_liquidacion,observaciones,si_empleado)	VALUES
-		($liquidacion_cesantias_id,'$fecha_liquidacion','$fecha_corte','$fecha_ultimo_corte','$beneficiario',$contrato_id,$empleado_id,$salario,'$fecha_inicio','A',$dias_corte,$dias_no_remu,$dias_liquidacion,$valor_consolidado,$valor_liquidacion,$valor_diferencia,'$tipo_liquidacion','$observaciones','$si_empleado')";
+		(liquidacion_cesantias_id,fecha_liquidacion,fecha_corte,fecha_ultimo_corte,beneficiario,contrato_id,empleado_id,salario,fecha_inicio_contrato,estado,dias_periodo,dias_no_remu,dias_liquidados,valor_consolidado,valor_liquidacion,valor_diferencia,tipo_liquidacion,observaciones,si_empleado,usuario_id,fecha_registro)	VALUES
+		($liquidacion_cesantias_id,'$fecha_liquidacion','$fecha_corte','$fecha_ultimo_corte','$beneficiario',$contrato_id,$empleado_id,$salario,'$fecha_inicio','A',$dias_corte,$dias_no_remu,$dias_liquidacion,$valor_consolidado,$valor_liquidacion,$valor_diferencia,'$tipo_liquidacion','$observaciones','$si_empleado',$usuario_id,'$fecha_registro')";
 
 		$this -> query($insert_cesantias,$Conex,true);
 		
@@ -329,6 +303,7 @@ final class CesantiasModel extends Db{
 		$this -> query($insert_det_puc_contra,$Conex,true);
 		
 		$this -> Commit($Conex); 
+		return $liquidacion_cesantias_id;
 	
 	}
 	
@@ -343,7 +318,7 @@ final class CesantiasModel extends Db{
 	
 		$select = "SELECT mes_contable_id,estado FROM mes_contable WHERE empresa_id = $empresa_id AND 
 		oficina_id = $oficina_id AND '$fecha' BETWEEN fecha_inicio AND fecha_final";
-		$result = $this -> DbFetchAll($select,$Conex);
+		$result = $this -> DbFetchAll($select,$Conex); 
 		
 		$this -> mes_contable_id = $result[0]['mes_contable_id'];
 		
@@ -412,7 +387,7 @@ final class CesantiasModel extends Db{
 			
 			$concepto				= ''.$result[0]['observaciones'];
 			$puc_id					= 'NULL';
-			$fecha_registro			= date("Y-m-d H:m");
+			$fecha_registro			= date("Y-m-d H:i:s");
 			$modifica				= $result_usu[0]['usuario'];
 			//$fuente_facturacion_cod	= $result[0]['fuente_facturacion_cod'];
 			$numero_documento_fuente= $numero_soporte;
@@ -443,7 +418,7 @@ final class CesantiasModel extends Db{
 			}else{		
 			
 				$update = "UPDATE liquidacion_cesantias SET encabezado_registro_id=$encabezado_registro_id,	
-				estado= 'C'
+				estado= 'C', con_usuario_id='$usuario_id', con_fecha='$fecha_registro'
 				WHERE liquidacion_cesantias_id=$liquidacion_cesantias_id";	
 				$this -> query($update,$Conex,true);		  
 				
@@ -490,7 +465,7 @@ final class CesantiasModel extends Db{
 		}
 
 		$select 	= "SELECT f.*,
-					(SELECT tipo_documento_id FROM datos_periodo WHERE periodo_contable_id =(SELECT periodo_contable_id FROM periodo_contable WHERE anio=YEAR(DATE(f.fecha_inicial)) ) ) AS tipo_documento_id,
+					(SELECT tipo_documento_id FROM datos_periodo WHERE periodo_contable_id =(SELECT periodo_contable_id FROM periodo_contable WHERE anio=YEAR(DATE(f.fecha_liquidacion)) ) ) AS tipo_documento_id,
 					(SELECT SUM(debito) FROM detalle_liquidacion_novedad WHERE liquidacion_cesantias_id=f.liquidacion_cesantias_id) AS valor,
 					
 					(SELECT t.numero_identificacion FROM contrato c, empleado e, tercero t WHERE c.contrato_id=f.contrato_id AND e.empleado_id=c.empleado_id AND t.tercero_id=e.tercero_id) AS numero_identificacion,
@@ -512,13 +487,13 @@ final class CesantiasModel extends Db{
 		$numero_soporte			= $result[0]['consecutivo'];	
 		
 		
-	    $fechaMes               = substr($result[0]['fecha_final'],0,10);		
+	    $fechaMes               = substr($result[0]['fecha_liquidacion'],0,10);		
 	    $periodo_contable_id    = $utilidadesContables -> getPeriodoContableId($fechaMes,$Conex);
 	    $mes_contable_id        = $utilidadesContables -> getMesContableId($fechaMes,$periodo_contable_id,$Conex);
 	    $consecutivo1           = $utilidadesContables -> getConsecutivo($oficina_id,$tipo_documento_id,$periodo_contable_id,$Conex);		
 		
-		$fecha					= $result[0]['fecha_final'];
-		$concepto				= 'CESANTIAS '.$result[0]['observaciones'];
+		$fecha					= $result[0]['fecha_liquidacion'];
+		$concepto				= ''.$result[0]['observaciones'];
 		$puc_id					= 'NULL';
 		$fecha_registro			= date("Y-m-d H:i:s");
 		
@@ -546,28 +521,19 @@ final class CesantiasModel extends Db{
 			
 
 			$liquidacion_cesantias_id1 = $result[$i]['liquidacion_cesantias_id'];
-			$select_item      = "SELECT detalle_liquidacion_cesantias_id, sueldo_pagar  
+			$select_item      = "SELECT *  
 			FROM   detalle_cesantias_puc WHERE liquidacion_cesantias_id=$liquidacion_cesantias_id1";
 			$result_item      = $this -> DbFetchAll($select_item,$Conex,true);
 			foreach($result_item as $result_items){  
 			
 				$imputacion_contable_id 	= $this -> DbgetMaxConsecutive("imputacion_contable","imputacion_contable_id",$Conex,true,1);
 
-				if($result_items['sueldo_pagar']==0){
 
-					$insert_item ="INSERT INTO imputacion_contable (imputacion_contable_id,tercero_id,numero_identificacion,digito_verificacion,puc_id,descripcion,encabezado_registro_id,centro_de_costo_id,codigo_centro_costo,valor,base,	porcentaje,formula,debito,credito)
-									SELECT  $imputacion_contable_id,tercero_id,numero_identificacion,digito_verificacion,puc_id,concepto,$encabezado_registro_id,$centro_de_costo_id1,'$codigo_centro1',(debito+credito),base,porcentaje,
-									formula,debito,credito
-									FROM detalle_cesantias_puc WHERE liquidacion_cesantias_id=$liquidacion_cesantias_id1 AND detalle_liquidacion_cesantias_id=$result_items[detalle_liquidacion_cesantias_id]"; 
-									
-				}elseif($result_items['sueldo_pagar']==1){
+				$insert_item ="INSERT INTO imputacion_contable (imputacion_contable_id,tercero_id,numero_identificacion,digito_verificacion,puc_id,descripcion,encabezado_registro_id,centro_de_costo_id,codigo_centro_costo,valor,base,	porcentaje,formula,debito,credito)
+								SELECT  $imputacion_contable_id,tercero_id,numero_identificacion,digito_verificacion,puc_id,desc_cesantias,$encabezado_registro_id,centro_de_costo_id,codigo_centro_costo,(deb_item_cesantias+cre_item_cesantias),base_cesantias,porcentaje_cesantias,
+								formula_cesantias,deb_item_cesantias,cre_item_cesantias
+								FROM detalle_cesantias_puc WHERE liquidacion_cesantias_id=$liquidacion_cesantias_id1 AND detalle_cesantias_puc_id=$result_items[detalle_cesantias_puc_id]"; 
 
-					$insert_item ="INSERT INTO imputacion_contable (imputacion_contable_id,tercero_id,numero_identificacion,digito_verificacion,puc_id,descripcion,encabezado_registro_id,centro_de_costo_id,codigo_centro_costo,valor,base,	porcentaje,formula,debito,credito)
-									SELECT  $imputacion_contable_id,tercero_id,numero_identificacion,digito_verificacion,puc_id,concepto,$encabezado_registro_id,$centro_de_costo_id,'$codigo',(debito+credito),base,porcentaje,
-									formula,debito,credito
-									FROM detalle_cesantias_puc WHERE liquidacion_cesantias_id=$liquidacion_cesantias_id1 AND detalle_liquidacion_cesantias_id=$result_items[detalle_liquidacion_cesantias_id]"; 
-
-				}
 				$this -> query($insert_item,$Conex,true);
 			}
 			$update = "UPDATE liquidacion_cesantias SET encabezado_registro_id=$encabezado_registro_id,	
@@ -687,20 +653,88 @@ final class CesantiasModel extends Db{
 	
 	}
 
-	/*
-		$select_provision = "SELECT SUM(credito-debito)as neto,centro_de_costo_id  FROM imputacion_contable WHERE puc_id=$puc_provision_cesantias AND tercero_id=(SELECT t.tercero_id FROM tercero t,empleado e WHERE t.tercero_id=e.tercero_id AND e.empleado_id=$empleado_id)";
-		$result_provision = $this -> DbFetchAll($select_provision,$Conex,true); 
-		
-		//if(!count($result_provision)>0){exit("No se encontraron valores en la cuenta provisionados para este tercero!!");}
-		
-		
-		$valor_provision = $result_provision[0]['neto'] > 0 ? intval($result_provision[0]['neto']) :0;
-		$valor_guardado = intval($valor_consolidado)+intval($valor_provision);
-	*/
 	public function GetTipoConcepto($Conex){
 		return $this  -> DbFetchAll("SELECT tipo_concepto_laboral_id AS value,concepto AS text FROM tipo_concepto ORDER BY concepto ASC",$Conex,$ErrDb = false);
 	}   
+
+  public function cancellation($liquidacion_cesantias_id,$encabezado_registro_id,$causal_anulacion_id,$observacion_anulacion,$usuario_anulo_id,$Conex){
+  
+   $this -> Begin($Conex);
+  
+     $update = "UPDATE liquidacion_cesantias SET estado = 'I',causal_anulacion_id = $causal_anulacion_id,observacion_anulacion = $observacion_anulacion,
+	 fecha_anulacion = NOW(),usuario_anulo_id = $usuario_anulo_id WHERE liquidacion_cesantias_id = $liquidacion_cesantias_id";
+	 $this -> query($update,$Conex,true);
+	 
+	 
+	 if($encabezado_registro_id>0){
+
+		$insert = "INSERT INTO encabezado_de_registro_anulado SELECT $encabezado_registro_id AS 
+		encabezado_de_registro_anulado_id,encabezado_registro_id,empresa_id,oficina_id,tipo_documento_id,
+		forma_pago_id,valor,numero_soporte,tercero_id,periodo_contable_id,mes_contable_id,consecutivo,
+		fecha,concepto,puc_id,estado,fecha_registro,modifica,usuario_id,$causal_anulacion_id AS causal_anulacion_id,
+		$observacion_anulacion AS observaciones, $usuario_anulo_id, NOW(),usuario_actualiza,fecha_actualiza FROM encabezado_de_registro WHERE encabezado_registro_id = $encabezado_registro_id";
+		$this -> query($insert,$Conex,true);
 	
+		$insert = "INSERT INTO imputacion_contable_anulada SELECT  imputacion_contable_id AS  
+		imputacion_contable_anulada_id,tercero_id,numero_identificacion,digito_verificacion,puc_id,descripcion,encabezado_registro_id AS 
+		encabezado_registro_anulado_id,centro_de_costo_id,codigo_centro_costo,numero,valor,amortiza,deprecia,base,porcentaje,formula,debito,credito,area_id,departamento_id,unidad_negocio_id,sucursal_id  FROM 
+		imputacion_contable WHERE encabezado_registro_id = $encabezado_registro_id";
+		$this -> query($insert,$Conex,true);
+			
+		$update = "UPDATE encabezado_de_registro SET estado = 'A',anulado = 1, usuario_anula=$usuario_anulo_id, fecha_anulacion=NOW() WHERE encabezado_registro_id = $encabezado_registro_id";	  
+		$this -> query($update,$Conex,true);	
+			  
+		$update = "UPDATE imputacion_contable SET debito = 0,credito = 0 WHERE encabezado_registro_id=$encabezado_registro_id";
+		$this -> query($update,$Conex,true);			  
+				
+	 }
+	 
+     $this -> Commit($Conex);
+  
+  }    
+
+  public function cancellation1($liquidacion_cesantias_id,$encabezado_registro_id,$fecha_liquidacion,$causal_anulacion_id,$observacion_anulacion,$usuario_anulo_id,$Conex){
+  
+   $this -> Begin($Conex);
+  
+     $update = "UPDATE liquidacion_cesantias SET estado = 'I',causal_anulacion_id = $causal_anulacion_id,observacion_anulacion = $observacion_anulacion,
+	 fecha_anulacion = NOW(),usuario_anulo_id = $usuario_anulo_id WHERE fecha_liquidacion = '$fecha_liquidacion'  AND encabezado_registro_id=$encabezado_registro_id";
+	 $this -> query($update,$Conex,true);
+
+	 if($encabezado_registro_id>0){
+
+		$insert = "INSERT INTO encabezado_de_registro_anulado SELECT $encabezado_registro_id AS 
+		encabezado_de_registro_anulado_id,encabezado_registro_id,empresa_id,oficina_id,tipo_documento_id,
+		forma_pago_id,valor,numero_soporte,tercero_id,periodo_contable_id,mes_contable_id,consecutivo,
+		fecha,concepto,puc_id,estado,fecha_registro,modifica,usuario_id,$causal_anulacion_id AS causal_anulacion_id,
+		$observacion_anulacion AS observaciones,$usuario_anulo_id, NOW(),usuario_actualiza,fecha_actualiza FROM encabezado_de_registro WHERE encabezado_registro_id = $encabezado_registro_id";
+		$this -> query($insert,$Conex,true);
+	
+		$insert = "INSERT INTO imputacion_contable_anulada SELECT  imputacion_contable_id AS  
+		imputacion_contable_anulada_id,tercero_id,numero_identificacion,digito_verificacion,puc_id,descripcion,encabezado_registro_id AS 
+		encabezado_registro_anulado_id,centro_de_costo_id,codigo_centro_costo,numero,valor,amortiza,deprecia,base,porcentaje,formula,debito,credito,area_id,departamento_id,unidad_negocio_id,sucursal_id  FROM 
+		imputacion_contable WHERE encabezado_registro_id = $encabezado_registro_id";
+		$this -> query($insert,$Conex,true);
+			
+		$update = "UPDATE encabezado_de_registro SET estado = 'A',anulado = 1, usuario_anula=$usuario_anulo_id, fecha_anulacion=NOW() WHERE encabezado_registro_id = $encabezado_registro_id";	  
+		$this -> query($update,$Conex,true);	
+			  
+		$update = "UPDATE imputacion_contable SET debito = 0,credito = 0 WHERE encabezado_registro_id=$encabezado_registro_id";
+		$this -> query($update,$Conex,true);			  
+				
+	 }
+	 
+     $this -> Commit($Conex);
+  
+  }    
+
+	public function getCausalesAnulacion($Conex){
+		
+		$select = "SELECT causal_anulacion_id AS value,nombre AS text FROM causal_anulacion WHERE documento!='RM' ORDER BY nombre";
+		$result = $this -> DbFetchAll($select,$Conex);		
+		return $result;				
+	}  
+
 	public function GetQueryCesantiasGrid(){
 		$Query = "SELECT l.liquidacion_cesantias_id,
 		(SELECT CONCAT_WS(' ', t.primer_nombre,t.segundo_nombre,t.primer_apellido,t.segundo_apellido) FROM tercero t, empleado e,contrato c WHERE t.tercero_id=e.tercero_id AND e.empleado_id=c.empleado_id AND c.contrato_id=l.contrato_id) as empleado,
@@ -709,7 +743,7 @@ final class CesantiasModel extends Db{
 		l.fecha_liquidacion,
 		l.dias_periodo AS dias,
 		l.valor_liquidacion AS valor,
-		CASE l.estado WHEN 'A' THEN 'ACTIVO' WHEN 'I' THEN 'INACTIVO' WHEN 'C' THEN 'CONTABILIZADA' END AS estado FROM liquidacion_cesantias l";
+		CASE l.estado WHEN 'E' THEN 'EDICION' WHEN 'I' THEN 'ANULADO' WHEN 'C' THEN 'CONTABILIZADA' END AS estado FROM liquidacion_cesantias l";
 		return $Query;
 	}
 }

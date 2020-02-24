@@ -22,8 +22,12 @@ final class CesantiasLayout extends View{
    	 $this -> Actualizar = $Permiso;
    }   
 
-   public function SetBorrar($Permiso){
-      $this -> Borrar = $Permiso;
+   public function SetImprimir($Permiso){
+	 $this -> Imprimir = $Permiso;
+   } 
+
+   public function SetAnular($Permiso){
+      $this -> Anular = $Permiso;
     }
    
    public function SetLimpiar($Permiso){
@@ -91,6 +95,16 @@ final class CesantiasLayout extends View{
 	 $this -> assign("BENEFICIARIO",    	$this -> objectsHtml -> GetobjectHtml($this -> fields[beneficiario]));
 	 $this -> assign("SIEMPLEADO",    		$this -> objectsHtml -> GetobjectHtml($this -> fields[si_empleado]));
 	 $this -> assign("ESTADO",    			$this -> objectsHtml -> GetobjectHtml($this -> fields[estado]));
+	 $this -> assign("ENCABEZADOID",		$this -> objectsHtml -> GetobjectHtml($this -> fields[encabezado_registro_id]));
+
+	 $this -> assign("USUARIOID",			$this -> objectsHtml -> GetobjectHtml($this -> fields[usuario_id]));
+	 $this -> assign("FECHAREGISTRO",		$this -> objectsHtml -> GetobjectHtml($this -> fields[fecha_registro]));
+	//anulacion
+	 $this -> assign("USUARIOANUL_ID",	$this -> objectsHtml -> GetobjectHtml($this -> fields[usuario_anulo_id]));
+	 $this -> assign("FECHAANUL",		$this -> objectsHtml -> GetobjectHtml($this -> fields[fecha_anulacion]));	  
+	 $this -> assign("OBS_ANULACION",	$this -> objectsHtml -> GetobjectHtml($this -> fields[observacion_anulacion]));
+	 $this -> assign("CAUSALANUL",		$this -> objectsHtml -> GetobjectHtml($this -> fields[causal_anulacion_id]));
+
      
      if($this -> Guardar){
 	   $this -> assign("GUARDAR",	$this -> objectsHtml -> GetobjectHtml($this -> fields[guardar]));
@@ -101,8 +115,14 @@ final class CesantiasLayout extends View{
 	   $this -> assign("ACTUALIZAR",$this -> objectsHtml -> GetobjectHtml($this -> fields[actualizar]));
 	   $this -> assign("CONTABILIZAR",$this -> objectsHtml -> GetobjectHtml($this -> fields[contabilizar]));
 	 }
-	 if($this -> Borrar)
-        $this -> assign("BORRAR", $this -> objectsHtml -> GetobjectHtml($this -> fields[borrar]));
+
+	if($this -> Imprimir){
+		$this -> assign("IMPRIMIR",	    $this -> objectsHtml -> GetobjectHtml($this -> fields[imprimir]));
+	}
+
+    if($this -> Anular)
+	   $this -> assign("ANULAR",$this -> objectsHtml -> GetobjectHtml($this -> fields[anular]));	   
+	   
 	 if($this -> Limpiar)
 	   $this -> assign("LIMPIAR",	$this -> objectsHtml -> GetobjectHtml($this -> fields[limpiar]));
     }
@@ -111,7 +131,12 @@ final class CesantiasLayout extends View{
       $this -> fields[concepto_area_id]['options'] = $TiposConcepto;
       $this -> assign("CONCEPTOAREA",$this -> objectsHtml -> GetobjectHtml($this -> fields[concepto_area_id]));
     }
-	
+
+   public function setCausalesAnulacion($causales){
+	 $this -> fields[causal_anulacion_id]['options'] = $causales;
+     $this -> assign("CAUSALANUL",$this -> objectsHtml -> GetobjectHtml($this -> fields[causal_anulacion_id]));	  	   
+   }   
+
     public function SetGridCesantias($Attributes,$Titles,$Cols,$Query){
       require_once("../../../framework/clases/grid/JqGridClass.php");
 	  $TableGrid = new JqGrid();

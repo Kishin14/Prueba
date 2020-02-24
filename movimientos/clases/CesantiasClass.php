@@ -22,13 +22,16 @@ final class Cesantias extends Controler{
 
     $Model  -> SetUsuarioId($this -> getUsuarioId(),$this -> getOficinaId());
 	
-    $Layout -> SetGuardar   ($Model -> getPermiso($this -> getActividadId(),INSERT,$this -> getConex()));
-    $Layout -> SetActualizar($Model -> getPermiso($this -> getActividadId(),UPDATE,$this -> getConex()));
-	$Layout -> SetBorrar    ($Model -> getPermiso($this -> getActividadId(),DELETE,$this -> getConex()));
-    $Layout -> SetLimpiar   ($Model -> getPermiso($this -> getActividadId(),CLEAR,$this -> getConex()));
-	
+    $Layout -> SetGuardar   ($Model -> getPermiso($this -> getActividadId(),'INSERT',$this -> getConex()));
+    $Layout -> SetActualizar($Model -> getPermiso($this -> getActividadId(),'UPDATE',$this -> getConex()));
+	$Layout -> setImprimir		($Model -> getPermiso($this -> getActividadId(),'PRINT',$this -> getConex()));
+    $Layout -> setAnular     	($Model -> getPermiso($this -> getActividadId(),'ANULAR',$this -> getConex()));		
+    $Layout -> SetLimpiar   ($Model -> getPermiso($this -> getActividadId(),'CLEAR',$this -> getConex()));
+
     $Layout -> SetCampos($this -> Campos);
-	
+
+    $Layout ->  setCausalesAnulacion($Model -> getCausalesAnulacion($this -> getConex()));	
+
 	//// LISTAS MENU ////
 	$liquidacion_cesantias_id = $_REQUEST['liquidacion_cesantias_id'];
 
@@ -91,7 +94,7 @@ final class Cesantias extends Controler{
 
   	require_once("CesantiasModelClass.php");
     $Model = new CesantiasModel();
-	$beneficiario = $_REQUEST['beneficiario'];
+	$beneficiario = $_REQUEST['beneficiario']; 
 	$si_empleado = $_REQUEST['si_empleado'];
 	$contrato_id = $_REQUEST['contrato_id'];	
 	$fecha_liquidacion = $_REQUEST['fecha_liquidacion'];	
@@ -113,12 +116,13 @@ final class Cesantias extends Controler{
 		//if($comprobar_provision['validacion']!='SI') exit('No se ha liquidado las Provisiones del Contrato a la fecha de Corte de cesantias'); 
 		
 		
-		$return = $Model -> Save($this -> Campos,$this -> getOficinaId(),$this -> getConex());
+		$return = $Model -> Save($this -> Campos,$this -> getOficinaId(),$this -> getUsuarioId(),$this -> getConex());
 
 		if($Model -> GetNumError() > 0){
 			exit('Ocurrio una inconsistencia');
 		}else{
-			exit($return);
+			echo $return;
+			exit();
 		}
 
 	}else{
@@ -133,8 +137,8 @@ final class Cesantias extends Controler{
 			$empleado_id = $contratos_activos[$i]['empleado_id'];	
 			$tercero_id = $contratos_activos[$i]['tercero_id'];	
 			$numero_identificacion = $contratos_activos[$i]['numero_identificacion'];	
-			$tercero_id_cesan	 = $beneficiario=1 ?  $contratos_activos[$i]['tercero_id_cesan'] : $contratos_activos[$i]['tercero_id'];
-			$numero_identificacion_cesan = $beneficiario=1 ? $contratos_activos[$i]['numero_identificacion_cesan'] :  $contratos_activos[$i]['numero_identificacion'];
+			$tercero_id_cesan	 = $beneficiario==1 ?  $contratos_activos[$i]['tercero_id_cesan'] : $contratos_activos[$i]['tercero_id'];
+			$numero_identificacion_cesan = $beneficiario==1 ? $contratos_activos[$i]['numero_identificacion_cesan'] :  $contratos_activos[$i]['numero_identificacion'];
 
 			$area_laboral = $contratos_activos[$i]['area_laboral'];	
 			$centro_de_costo_id = $contratos_activos[$i]['centro_de_costo_id'];	
@@ -164,21 +168,30 @@ final class Cesantias extends Controler{
 				if($Data[0]['validacion_posterior']=='SI'){
 					$no_liquidados.='El Empleado '.$numero_identificacion.' -  '.$nombre.' no se Liquido, ya tiene una liquidaci&oacute;n Reciente!!<br>';
 				}else{
-					$return = $Model -> saveTodos($si_empleado,$area_laboral,$centro_de_costo_id,$tercero_id,$numero_identificacion,$tercero_id_cesan,$numero_identificacion_cesan,$fecha_liquidacion,$fecha_corte,$fecha_ultimo_corte1,$beneficiario,$contrato_id,$empleado_id,$salario,$dias_corte,$Data[0]['valor_liquidacion'],$Data[0]['dias_no_remu'],$Data[0]['dias_liquidacion'],$Data[0]['valor_consolidado'],$valor_diferencia,$fecha_inicio,$tipo_liquidacion,$observaciones,$this -> getOficinaId(),$this -> getConex());
+					$return = $Model -> saveTodos($si_empleado,$area_laboral,$centro_de_costo_id,$tercero_id,$numero_identificacion,$tercero_id_cesan,$numero_identificacion_cesan,$fecha_liquidacion,$fecha_corte,$fecha_ultimo_corte1,$beneficiario,$contrato_id,$empleado_id,$salario,$dias_corte,$Data[0]['valor_liquidacion'],$Data[0]['dias_no_remu'],$Data[0]['dias_liquidacion'],$Data[0]['valor_consolidado'],$valor_diferencia,$fecha_inicio,$tipo_liquidacion,$observaciones,$this -> getOficinaId(),$this -> getUsuarioId(),$this -> getConex());
 					if(!$Model -> GetNumError() > 0){
 						$total_contratos_liq++;
 					}
 				}
 			}
 		}
-		echo $no_liquidados.'<br>Total Contratos Activos: '.$total_contratos.'<br>Total Contratos Liquidados:'.$total_contratos_liq;
-		
+		$mensaje = $no_liquidados.'<br>Total Contratos Activos: '.$total_contratos.'<br>Total Contratos Liquidados:'.$total_contratos_liq;
+		exit($return.'==='.$mensaje);  
 	}
 	
 	
   }
+
+	  
+	protected function onclickPrint(){
 	
-	 protected function getTotalDebitoCredito(){
+		require_once("Imp_Documento1Class.php");
+		$print = new Imp_Documento($this -> getConex());
+		$print -> printOut();
+	  
+	}
+
+ protected function getTotalDebitoCredito(){
 	  
     require_once("CesantiasModelClass.php");
     $Model = new CesantiasModel();
@@ -209,7 +222,7 @@ final class Cesantias extends Controler{
   	require_once("CesantiasModelClass.php");
     $Model = new CesantiasModel();
 	$liquidacion_cesantias_id 	 = $_REQUEST['liquidacion_cesantias_id'];
-	$fecha_inicial = $_REQUEST['fecha_inicial'];
+	$fecha_inicial = $_REQUEST['fecha_liquidacion'];
 	$empresa_id = $this -> getEmpresaId(); 
 	$oficina_id = $this -> getOficinaId();	
 	$usuario_id = $this -> getUsuarioId();		
@@ -277,6 +290,43 @@ final class Cesantias extends Controler{
 	 
   }
   
+  protected function onclickCancellation(){
+  
+     require_once("CesantiasModelClass.php");
+	 
+     $Model                 = new CesantiasModel(); 
+	 $liquidacion_cesantias_id         = $this -> requestDataForQuery('liquidacion_cesantias_id','integer');
+	 $causal_anulacion_id   = $this -> requestDataForQuery('causal_anulacion_id','integer');	 
+	 $observacion_anulacion = $this -> requestDataForQuery('observacion_anulacion','text');
+	 $usuario_anulo_id      = $this -> getUsuarioId();
+	
+	 $estado=$Model -> comprobar_estado($liquidacion_cesantias_id,$this -> getConex());
+	 
+	 if($estado[0]['estado']=='A'){
+		 exit('No se puede Anular, La Liquidaci&oacute;n previamente estaba Anulada');
+
+	 }else if($estado[0]['estado']=='C' && $estado[0]['estado_mes']==0){
+		 
+		 exit('No se puede Anular, El mes contable de la Liquidaci&oacute;n esta Cerrado');
+		 
+	 }else if($estado[0]['estado']=='C' && $estado[0]['estado_periodo']==0){
+		 
+		 exit('No se puede Anular, El periodo contable de la Liquidaci&oacute;n esta Cerrado');
+
+	 }
+	 if($estado[0]['si_empleado']=='1'){
+		 $Model -> cancellation($liquidacion_cesantias_id,$estado[0]['encabezado_registro_id'],$causal_anulacion_id,$observacion_anulacion,$usuario_anulo_id,$this -> getConex());
+	 }elseif($estado[0]['si_empleado']=='ALL'){
+		 $Model -> cancellation1($liquidacion_cesantias_id,$estado[0]['encabezado_registro_id'],$estado[0]['fecha_liquidacion'],$causal_anulacion_id,$observacion_anulacion,$usuario_anulo_id,$this -> getConex());		 
+	 }
+	
+	 if(strlen($Model -> GetError()) > 0){
+	  exit('false');
+	 }else{
+	    exit('true');
+	  }
+	
+  }  
 
   //BUSQUEDA
   protected function onclickFind(){
@@ -500,7 +550,7 @@ final class Cesantias extends Controler{
 		type	=>'text',
 		Boostrap =>'si',
 		required=>'yes',
-		//readonly=>'yes',
+		readonly=>'yes',
 	 	datatype=>array(
 			type	=>'numeric',
 			length	=>'250'),
@@ -516,7 +566,7 @@ final class Cesantias extends Controler{
 		type	=>'text',
 		Boostrap =>'si',
 		required=>'yes',
-		//readonly=>'yes',
+		readonly=>'yes',
 	 	datatype=>array(
 			type	=>'numeric',
 			length	=>'250'),
@@ -609,7 +659,7 @@ final class Cesantias extends Controler{
 		id  =>'estado',
 		type =>'select',
 		Boostrap =>'si',
-		options => array(array(value=>'A',text=>'ACTIVO',selected=>'A'),array(value=>'I',text=>'INACTIVO',selected=>'A'),array(value => 'C', text => 'CONTABILIZADA')),
+		options => array(array(value=>'A',text=>'EDICION',selected=>'A'),array(value=>'I',text=>'ANULADO',selected=>'A'),array(value => 'C', text => 'CONTABILIZADA')),
 		required=>'yes',
 		disabled=>'yes',
 		datatype=>array(
@@ -662,6 +712,81 @@ final class Cesantias extends Controler{
 		
 	);
 
+	$this -> Campos[usuario_id] = array(
+		name 	=>'usuario_id',
+		id  	=>'usuario_id',
+		type 	=>'hidden',
+		//required=>'yes',
+		datatype=>array(
+			type =>'integer',
+			length =>'11'),
+		transaction=>array(
+			table =>array('liquidacion_cesantias'),
+			type =>array('column'))
+	);
+
+	$this -> Campos[fecha_registro] = array(
+		name 	=>'fecha_registro',
+		id  	=>'fecha_registro',
+		type 	=>'hidden',
+		//required=>'yes',
+		datatype=>array(
+			type =>'text',
+			length =>date('Y-m-d H:i:s')),
+		transaction=>array(
+			table =>array('liquidacion_cesantias'),
+			type =>array('column'))
+	);
+
+	$this -> Campos[encabezado_registro_id] = array(
+		name	=>'encabezado_registro_id',
+		id		=>'encabezado_registro_id',
+		type	=>'hidden',
+		required=>'no',
+		datatype=>array(
+			type	=>'integer',
+			length	=>'11')
+	);
+
+	//ANULACION
+  	$this -> Campos[usuario_anulo_id] = array(
+	   	name =>'usuario_anulo_id',
+	   	id =>'usuario_anulo_id',
+	   	type =>'hidden',
+	   	//required=>'yes',
+	   	datatype=>array(
+			type=>'integer')
+  	);
+
+  	$this -> Campos[fecha_anulacion] = array(
+	   	name =>'fecha_anulacion',
+	   	id =>'fecha_anulacion',
+	   	type =>'hidden',
+	   	//required=>'yes',
+	   	datatype=>array(
+			type=>'text')
+  	);
+
+  	$this -> Campos[observacion_anulacion] = array(
+	   	name =>'observacion_anulacion',
+	   	id =>'observacion_anulacion',
+	   	type =>'textarea',
+	   	required=>'yes',
+	   	datatype=>array(
+			type=>'tex')
+  	);
+
+	$this -> Campos[causal_anulacion_id] = array(
+		name =>'causal_anulacion_id',
+		id  =>'causal_anulacion_id',
+		type =>'select',
+		required=>'yes',
+		datatype=>array(
+			type =>'text',
+			length =>'2')
+   );
+
+
 	/**********************************
  	             Botones
 	**********************************/
@@ -681,18 +806,31 @@ final class Cesantias extends Controler{
 		disabled=>'disabled',
 	);
 
-	$this -> Campos[borrar] = array(
-		name	=>'borrar',
-		id		=>'borrar',
+
+	$this -> Campos[imprimir] = array(
+		name	   =>'imprimir',
+		id	   =>'imprimir',
+		type	   =>'print',
+		value	   =>'Imprimir',
+			displayoptions => array(
+				  form        => 0,
+				  beforeprint => 'beforePrint',
+		  title       => 'Impresion Liquidacion',
+		  width       => '700',
+		  height      => '600'
+		)
+
+	);	
+
+  	$this -> Campos[anular] = array(
+		name	=>'anular',
+		id		=>'anular',
 		type	=>'button',
-		value	=>'Borrar',
+		value	=>'Anular',
 		disabled=>'disabled',
-		// tabindex=>'21',
-		property=>array(
-			name	=>'delete_ajax',
-			onsuccess=>'CesantiasOnSaveOnUpdate')
+		onclick =>'onclickCancellation(this.form)'
 	);
-	 
+
    	$this -> Campos[limpiar] = array(
 		name	=>'limpiar',
 		id		=>'limpiar',

@@ -41,7 +41,7 @@
           
           <tr>
             <td><label>Empleado: </label></td>
-            <td>{$EMPLEADO}{$EMPLEADOID}{$CONTRATOID}</td>
+            <td>{$EMPLEADO}{$EMPLEADOID}{$CONTRATOID}{$ENCABEZADOID}{$USUARIOID}{$FECHAREGISTRO}</td>
             <td><label>Num Identificaci&oacute;n: </label></td>
             <td>{$IDENTIFICACION}</td>
             <td><label>Cargo: </label></td>
@@ -129,7 +129,7 @@
       </table>
       <table width="100%">
           <tr>
-             <td colspan="8" align="center">{$GUARDAR}&nbsp;{$LIMPIAR}&nbsp;{$CONTABILIZAR}&nbsp;{*{$PREVISUAL}*}</td></tr>
+             <td colspan="8" align="center">{$GUARDAR}&nbsp;{$ANULAR}&nbsp;{$LIMPIAR}&nbsp;{$IMPRIMIR}&nbsp;{$CONTABILIZAR}&nbsp;{*{$PREVISUAL}*}</td></tr>
      
          <tr><td colspan="8"><iframe id="detalleCesantias" frameborder="0" marginheight="0" marginwidth="0"></iframe></td></tr>
          <tr>
@@ -167,9 +167,26 @@
         <div id="divSolicitudFacturas">
             <iframe id="iframeSolicitud" height="300px"></iframe>
         </div>
-</fieldset>
+	</fieldset>
     
     <fieldset>{$GRIDPARAMETROS}</fieldset>
+    <div id="divAnulacion" style="display:none;">
+      <form onSubmit="return false">
+        <table>              
+          <tr>
+            <td><label>Causal :</label></td>
+            <td>{$CAUSALANUL}</td>
+          </tr>
+          <tr>
+            <td><label>Descripcion :</label></td>
+            <td>{$OBS_ANULACION}{$USUARIOANUL_ID}{$FECHAANUL}</td>
+          </tr> 
+          <tr>
+            <td colspan="2" align="center">{$ANULAR}</td>
+          </tr>                    
+        </table>
+      </form>
+    </div>	
     
   </body>
 </html>
