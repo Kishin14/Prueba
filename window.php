@@ -7,7 +7,7 @@ $Autenticar = new Seguridad(1);
 $ModuloId  = $_GET['ModuloId'];
 $OficinaId = $_GET['OficinaId'];
 $frame_destino = $_GET['frame_destino'];
-$url           = $_REQUEST['src']."&OFICINAID=$OficinaId";
+$url = $_REQUEST['src']."&OFICINAID=$OficinaId";
 
 ?>
 
