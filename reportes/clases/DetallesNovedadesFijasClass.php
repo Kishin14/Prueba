@@ -19,9 +19,6 @@ final class DetallesNovedadesFijas extends Controler{
 	$hasta					= $_REQUEST['hasta'];
 	$si_empleado			= $_REQUEST['si_empleado'];
 	$empleado_id			= $_REQUEST['empleado_id'];	
-		
-		
-		//	exit($si_empleado."---".$empleado_id);
 
 	
     $Layout -> setIncludes();
