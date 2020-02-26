@@ -162,7 +162,7 @@ function setDataEmpleado(empleado_id){
 
 function IntCesantiasOnSaveOnUpdate(formulario,resp){
   
-	$("#refresh_QUERYGRID_cesantias").click();
+	$("#refresh_QUERYGRID_intcesantias").click();
 	if($('#limpiar'))    $('#limpiar').attr("disabled","");
 	
 	

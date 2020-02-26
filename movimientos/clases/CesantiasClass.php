@@ -111,6 +111,11 @@ final class Cesantias extends Controler{
 		$contrato_id	  = $this -> requestDataForQuery('contrato_id','integer');
 		$comprobar_nomina = $Model -> comprobar_liquidaciones($contrato_id,$fecha_corte,$this -> getConex());
 		$comprobar_provision = $Model -> comprobar_liquidaciones_pro($contrato_id,$fecha_corte,$this -> getConex());
+		$comprobar_cesantias = $Model -> comprobar_liquidaciones_cesan($contrato_id,$fecha_corte,$this -> getConex());	
+		$comprobar_cesantias_edi = $Model -> comprobar_liquidaciones_cesan_edicion($contrato_id,$fecha_corte,$this -> getConex());			
+		
+		if($comprobar_cesantias[0]['validacion_posterior']=='SI' ) exit('Ya Existe una Liquidaci&oacute;n Posterior o igual a la fecha de Corte Contabilizada'); 
+		if($comprobar_cesantias_edi[0]['validacion_posterior']=='SI' ) exit('Ya Existe una Liquidaci&oacute;n Posterior o igual a la fecha de Corte En Edici&oacute;n'); 
 		
 		//if($comprobar_nomina['validacion']!='SI') exit('No se ha liquidado las Nominas del Contrato a la fecha de Corte de cesantias'); 
 		//if($comprobar_provision['validacion']!='SI') exit('No se ha liquidado las Provisiones del Contrato a la fecha de Corte de cesantias'); 

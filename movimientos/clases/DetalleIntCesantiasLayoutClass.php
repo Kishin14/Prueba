@@ -46,7 +46,7 @@ final class DetalleIntCesantiasLayout extends View{
 	  	  
      $this -> assign("CSSSYSTEM",	          $this -> TplInclude -> GetCssInclude());
      $this -> assign("JAVASCRIPT",	          $this -> TplInclude -> GetJsInclude());
-     $this -> assign("liquidacion_int_int_cesantias_id",  		  $_REQUEST['liquidacion_int_int_cesantias_id']);	 
+     $this -> assign("liquidacion_int_cesantias_id",  		  $_REQUEST['liquidacion_int_cesantias_id']);	 
 	
    }
 

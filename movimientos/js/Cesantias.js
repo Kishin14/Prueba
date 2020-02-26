@@ -139,6 +139,7 @@ function setDataEmpleado(empleado_id){
 		  var fecha_inicio   		  =responseArray[0]['fecha_inicio']; 
 		  var fecha_ultimo_corte   	  =responseArray[0]['fecha_ultimo_corte']!=null ?  responseArray[0]['fecha_ultimo_corte'] : responseArray[0]['fecha_inicio']; 
 		  
+		  $("#contrato_id").val(contrato_id);
 		  $("#fecha_ultimo_corte").val(fecha_ultimo_corte);
   		  $("#fecha_ultimo_corte1").val(fecha_ultimo_corte);
 		  $("#num_identificacion").val(numero_identificacion);

@@ -85,6 +85,18 @@ final class IntCesantiasModel extends Db{
 	
 	}
 
+	public function comprobar_liquidaciones_cesan_edicion($contrato_id,$fecha_corte,$Conex){
+	
+		$select = "SELECT l.fecha_corte, l.liquidacion_cesantias_id,
+					IF(l.fecha_corte>= '$fecha_corte','SI','NO') AS validacion_posterior
+					FROM liquidacion_int_cesantias l
+					WHERE l.contrato_id =$contrato_id AND l.estado='A' ORDER BY l.fecha_corte DESC   ";
+		$result = $this -> DbFetchAll($select,$Conex,true);
+		
+		return $result;
+	
+	}
+
 
 
 	public function Save($Campos,$oficina_id,$usuario_id,$Conex){	
@@ -743,7 +755,7 @@ final class IntCesantiasModel extends Db{
 		l.fecha_liquidacion,
 		l.dias_periodo AS dias,
 		l.valor_liquidacion AS valor,
-		CASE l.estado WHEN 'E' THEN 'EDICION' WHEN 'I' THEN 'ANULADO' WHEN 'C' THEN 'CONTABILIZADA' END AS estado FROM liquidacion_int_cesantias l";
+		CASE l.estado WHEN 'A' THEN 'EDICION' WHEN 'I' THEN 'ANULADO' WHEN 'C' THEN 'CONTABILIZADA' ELSE '' END AS estado FROM liquidacion_int_cesantias l";
 		return $Query;
 	}
 }
