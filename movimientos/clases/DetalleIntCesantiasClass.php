@@ -20,13 +20,13 @@ final class DetalleIntCesantias extends Controler{
 		
 	$Layout         = new DetalleIntCesantiasLayout();
     $Model          = new DetalleIntCesantiasModel();	
-    $liquidacion_int_int_cesantias_id 				= $_REQUEST['liquidacion_int_int_cesantias_id'];
+    $liquidacion_int_cesantias_id 				= $_REQUEST['liquidacion_int_cesantias_id'];
 	
 	$empresa_id		= $this -> getEmpresaId();
 	$oficina_id		= $this -> getOficinaId();	
 
     $Layout -> setIncludes();
-    $Layout -> setImputacionesContables($Model -> getImputacionesContables($liquidacion_int_int_cesantias_id,$empresa_id,$oficina_id,$this -> getConex()));	
+    $Layout -> setImputacionesContables($Model -> getImputacionesContables($liquidacion_int_cesantias_id,$empresa_id,$oficina_id,$this -> getConex()));	
 		
 	$Layout -> RenderMain();
     
