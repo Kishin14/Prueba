@@ -21,39 +21,39 @@
         <table align="center">
           <tr>
             
-             <td><label>Empleados ?  : </label></td>
+             <td><label>Empleados?: </label></td>
             <td>{$SIEMPLEADO}</td>
-            <td><label>Fecha Liquidacion : </label></td>
+            <td><label>Fecha Liquidaci&oacute;n: </label></td>
             <td>{$FECHALIQ}</td>
-          	 <td ><label>Liquidacion N°  : </label></td>
+          	 <td ><label>Liquidaci&oacute;n N°: </label></td>
             <td >{$CONSECUTIVO}</td>
           </tr>
           
           <tr>
-            <td><label>Beneficiario  : </label></td>
+            <td><label>Beneficiario: </label></td>
             <td>{$BENEFICIARIO}</td>
-            <td><label>Estado  : </label></td>
+            <td><label>Estado: </label></td>
             <td>{$ESTADO}</td>
-             <td ><label>Tipo Liquidacion :</label></td>
+             <td ><label>Tipo Liquidaci&oacute;n:</label></td>
             <td >{$TIPOLIQUIDACION}</td>
            
           </tr>
           
           <tr>
-            <td><label>Empleado  : </label></td>
-            <td>{$EMPLEADO}{$EMPLEADOID}{$CONTRATOID}</td>
-            <td><label>Num Identificacion  : </label></td>
+            <td><label>Empleado: </label></td>
+            <td>{$EMPLEADO}{$EMPLEADOID}{$CONTRATOID}{$ENCABEZADOID}{$USUARIOID}{$FECHAREGISTRO}</td>
+            <td><label>Num Identificaci&oacute;n: </label></td>
             <td>{$IDENTIFICACION}</td>
-            <td><label>Cargo  : </label></td>
+            <td><label>Cargo: </label></td>
             <td>{$CARGO}</td>
           </tr>
           
           
           <tr>
            
-            <td><label>Observacion  : </label></td>
+            <td><label>Observaci&oacute;n: </label></td>
             <td>{$OBSERVACION}</td>
-            <td><label>Fecha Inicio Contrato  : </label></td>
+            <td><label>Fecha Inicio Contrato: </label></td>
             <td>{$FECHAINICONT}</td>
            
             
@@ -70,24 +70,23 @@
             <legend>LIQUIDACION</legend>
             	<table align="center">
                 	<tr>
-                    	<td><label>Base Liquidacion  : </label></td>
+                    	<td><label>Base Liquidaci&oacute;n: </label></td>
             			<td>{$SALARIO}</td>
-                      	<td><label>Ultimo Corte</label></td>
-            			<td>{$FECHAULTIMOCORTE}</td>
-                        <td><label>Fecha Corte : </label></td>
-            			<td>{$FECHACORTE}</td>
                     </tr>
                     <tr>
-						<td><label>Dias totales : </label></td>
+                      	<td><label>Ultimo Corte:</label></td>
+            			<td id="fec_ultcorte">{$FECHAULTIMOCORTE}{$FECHAULTIMOCORTE1}</td>
+                        <td><label>Fecha Corte: </label></td>
+            			<td>{$FECHACORTE}</td>
+						<td><label>Dias totales: </label></td>
                         <td>{$DIASPERIODO}</td>
-                        <td><label>Dias no remunerados : </label></td>
-                        <td>{$DIASNOREMU}</td>
-                        <td><label>Dias a liquidar : </label></td>
-                        <td>{$DIASLIQUIDADOS}</td>
                      </tr>
                      <tr>
-                     	<td colspan="2">&nbsp;</td>
-			            <td><label>Valor Liquidacion : </label></td>
+                        <td><label>Dias no remunerados: </label></td>
+                        <td>{$DIASNOREMU}</td>
+                        <td><label>Dias a liquidar: </label></td>
+                        <td>{$DIASLIQUIDADOS}</td>
+			            <td><label>Valor Liquidaci&oacute;n: </label></td>
             			<td>{$VALORLIQUIDACION}</td>
             		</tr>
            		</table>
@@ -103,14 +102,14 @@
             <legend>CONTABILIZACION</legend>
             	<table align="center">
                 	<tr>
-                        <td><label>Vlr Liquidación</label></td>
-                    	<td><label>Vlr Consolidado</label></td>
+                        <td><label>Vlr Liquidaci&oacute;n</label></td>
+                    	<td><label>Vlr Acumulado</label></td>
                         <td><label>Diferencia</label></td>
                     </tr>
                     <tr>
                         <td>{$VALORLIQUIDACION1}</td>
                     	<td>{$VALORCONSOLIDADO}</td>
-                        <td>{$DIFERENCIA}<span id="reintegro" style="display: none; color:#090">REINTEGRO</span><span id="gasto" style="display: none; color:#F00">GASTO</span></td>
+                        <td>{$DIFERENCIA}</td>
                     </tr>
            		</table>
                 </fieldset>
@@ -130,7 +129,7 @@
       </table>
       <table width="100%">
           <tr>
-             <td colspan="8" align="center">{$GUARDAR}&nbsp;{$ACTUALIZAR}&nbsp;{$BORRAR}&nbsp;{$LIMPIAR}&nbsp;{$CONTABILIZAR}</td></tr>
+             <td colspan="8" align="center">{$GUARDAR}&nbsp;{$ANULAR}&nbsp;{$LIMPIAR}&nbsp;{$IMPRIMIR}&nbsp;{$CONTABILIZAR}&nbsp;{*{$PREVISUAL}*}</td></tr>
      
          <tr><td colspan="8"><iframe id="detalleIntCesantias" frameborder="0" marginheight="0" marginwidth="0"></iframe></td></tr>
          <tr>
@@ -168,9 +167,26 @@
         <div id="divSolicitudFacturas">
             <iframe id="iframeSolicitud" height="300px"></iframe>
         </div>
-</fieldset>
+	</fieldset>
     
     <fieldset>{$GRIDPARAMETROS}</fieldset>
+    <div id="divAnulacion" style="display:none;">
+      <form onSubmit="return false">
+        <table>              
+          <tr>
+            <td><label>Causal :</label></td>
+            <td>{$CAUSALANUL}</td>
+          </tr>
+          <tr>
+            <td><label>Descripcion :</label></td>
+            <td>{$OBS_ANULACION}{$USUARIOANUL_ID}{$FECHAANUL}</td>
+          </tr> 
+          <tr>
+            <td colspan="2" align="center">{$ANULAR}</td>
+          </tr>                    
+        </table>
+      </form>
+    </div>	
     
   </body>
 </html>
