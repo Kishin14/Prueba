@@ -332,7 +332,7 @@ final class PatronalesModel extends Db{
 		if($result[$i]['prestaciones_sociales']==1){
 			//pension
 			$por_pension = $result_per[0]['desc_empre_pens'];
-			$valor_pension=intval(intval((((($sueldo_base))/30)*$dias_reales)+$total_base)*($por_pension/100));
+			$valor_pension=intval(intval((((($sueldo_base))/30)*$dias)+$total_base)*($por_pension/100));
 			$valor_pension=round($valor_pension);
 			$debito=$valor_pension;
 			$credito=0;
