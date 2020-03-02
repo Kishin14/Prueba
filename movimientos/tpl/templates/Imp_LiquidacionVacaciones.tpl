@@ -29,12 +29,12 @@
                 <tr><td><strong>TIPO DE CONTRATO:</strong> </td><td>{$d.tipo_contrato}</td><td colspan="2">&nbsp;</td></tr>
 			  	<tr><td><strong>EMPLEADO:</strong> </td><td>{$d.empleado}</td><td><strong>DOCUMENTO No:</strong></td><td>{$d.identificacion}</td></tr>
                 <tr><td><strong>CARGO:</strong></td><td>{$d.cargo}</td><td>&nbsp;</td><td>&nbsp;</td></tr>  
-                <tr><td><strong>FECHA INGRESO:</strong></td><td>{$d.fecha_inicio}</td><td>&nbsp;</td><td>&nbsp;</td></tr>     
+                <tr><td><strong>FECHA INGRESO:</strong></td><td>{$d.fecha_registro}</td><td>&nbsp;</td><td>&nbsp;</td></tr>     
                 <tr>
                   <td><strong>DIAS VACACIONES:</strong></td><td>{$d.dias}</td><td>&nbsp;</td><td>&nbsp;</td></tr>      
-                <tr><td><strong>SUELDO BASICO:</strong></td><td align="left">${$d.sueldo_base|number_format:0:',':'.'}</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-                <tr><td><strong>AUXILIO TRANSPORTE:</strong></td><td align="left">${$d.subsidio_transporte|number_format:0:',':'.'}</td><td>&nbsp;</td><td>&nbsp;</td></tr>                                
-				<tr><td><strong>BASE LIQUIDACION:</strong></td><td align="left">${$d.salario_base|number_format:0:',':'.'}</td><td>&nbsp;</td><td>&nbsp;</td></tr>                                                
+                <tr><td><strong>BASE LIQUIDACION:</strong></td><td align="left">${$d.sueldo_base|number_format:0:',':'.'}</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+                                                
+				                                            
               	<tr>
                 	<td colspan="4"><br />
                           <table  width="100%" border="1" cellpadding="0" cellspacing="0">
