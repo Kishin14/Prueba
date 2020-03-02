@@ -18,12 +18,12 @@ final class DetalleVacaciones extends Controler{
 	require_once("DetalleVacacionesLayoutClass.php");
     require_once("DetalleVacacionesModelClass.php");
 		
-	$Layout         = new DetalleVacacionesLayout();
+	  $Layout         = new DetalleVacacionesLayout();
     $Model          = new DetalleVacacionesModel();	
     $liquidacion_vacaciones_id 				= $_REQUEST['liquidacion_vacaciones_id'];
 	
-	$empresa_id		= $this -> getEmpresaId();
-	$oficina_id		= $this -> getOficinaId();	
+	  $empresa_id		= $this -> getEmpresaId();
+	  $oficina_id		= $this -> getOficinaId();	
 
     $Layout -> setIncludes();
     $Layout -> setImputacionesContables($Model -> getImputacionesContables($liquidacion_vacaciones_id,$empresa_id,$oficina_id,$this -> getConex()));	
