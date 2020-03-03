@@ -15,7 +15,7 @@
 		<div id="table_find"><table><tr><td><label>Busqueda : </label></td><td>{$BUSQUEDA}</td></tr></table></div>    
         {$FORM1}
         <fieldset class="section">
-        <table align="center" width="90%">
+        <table align="center" width="100%">
             <tr>
         	    <td width="15%"><label>Forma de Pago :</label></td>
             	<td align="left">{$PAGO}</td>
@@ -37,23 +37,49 @@
             </tr>
             <tr>
             	<td><label>Buscar Pendientes: </label>&nbsp;<img src="../../../framework/media/images/grid/magb.png" id="Buscar" title="Buscar Facturas Pendientes Proveedor"/></td>
-                <td>{$CONCEPTONOMI}{$CAUSACIONNOMI}{$VALORESCAUSACION}{$VALORESPAGO}</td>
+                <td>{$CONCEPTONOMI}{$CAUSACIONNOMI}{$CAUSACIONPRIMA}{$CAUSACIONCESANTIAS}{$CAUSACIONINTCESANTIAS}{$CAUSACIONVACACIONES}{$VALORESCAUSACION}{$VALORESPAGO}{$VALORESPAGOPRIMAS}{$VALORESPAGOCESANTIAS}{$VALORESPAGOINTCESANTIAS}{$VALORESPAGOVACACIONES}</td>
                 <td><label>Fecha de pago : </label></td>
                 <td>{$FECHA}</td>
             </tr>
+            
+            <table width="55%">
         
             <tr>
-                <td><label>Valor Pago : </label></td>
+                <td><label>Valor Pago Nomina : </label></td>
                 <td>{$VALORPAGO}</td>
                 <td><label>No de Cheque (Si aplica):</label></td>
                 <td>{$NUMCHEQUE}</td>
             </tr>
+            
             <tr>
-			  <td><label>Doc Contable No :</label></td>
-			  <td >{$NUMSOPORTE}{$ABONOID}{$USUARIOID}{$FECHAINGRESO}{$OFICINAID}{$ENCABEZADOID}</td>
+                <td><label>Valor Pago Prima : </label></td>
+                <td>{$VALORPAGOPRIMA}</td>
+                <td colspan="2">&nbsp;</td>
+            </tr>
+            <tr>
+                <td><label>Valor Pago Cesantias : </label></td>
+                <td>{$VALORPAGOCESANTIAS}</td>
+                <td colspan="2">&nbsp;</td>
+            </tr>
+            <tr>
+                <td><label>Valor Pago Vacaciones : </label></td>
+                <td>{$VALORPAGOVACACIONES}</td>
+                <td colspan="2">&nbsp;</td>
+            </tr>
+            <tr>
+                 <td><label>Valor Pago Intereses Cesantias : </label></td>
+                <td>{$VALORPAGOINTCESANTIAS}{$VALORPAGOTOTAL}</td>
+                <td colspan="2">&nbsp;</td>
+            </tr>
+            
+            <tr>
+              <td><label>Doc Contable No :</label></td>
+              <td >{$NUMSOPORTE}{$ABONOID}{$USUARIOID}{$FECHAINGRESO}{$OFICINAID}{$ENCABEZADOID}</td>
                 <td><label>Estado : </label></td>
                 <td>{$ESTADO}</td>
             </tr>
+        </table>
+            
 
             <tr>
                 <td colspan="4" align="center">
@@ -84,9 +110,12 @@
 		</table>   
         </fieldset>     
 		{$FORM1END}
+        
         <div id="divSolicitudFacturas">
-            <iframe id="iframeSolicitud"></iframe>
+           <iframe id="iframeSolicitud"  style="height:100%"></iframe> 
+             <!-- <iframe id="iframePendientes" style="height:100%"></iframe>-->
         </div>
+    
         
 	</fieldset>
 	<fieldset>{$GRIDPAGO}</fieldset>   

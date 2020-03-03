@@ -31,19 +31,39 @@ final class SolicFacturasLayout extends View{
    public function SetCampos($campos){
 	   
      require_once("../../../framework/clases/FormClass.php");
-	   
-  	 $this -> fields = $campos;
-	 
-	 $this -> assign("ADICIONAR", $this -> GetobjectHtml($this -> fields[adicionar]));	 
  
    }
 
 
  	public function SetSolicFacturas($detalles){
    
-     $this -> assign("DETALLES",$detalles);	
+   $this -> assign("DETALLESFACTURAS",$detalles);	
 	 $this -> assign("empleado_id",$_REQUEST['empleado_id']);	
-	 $this -> assign("empleados",  $_REQUEST['empleados']);		 
+	 $this -> assign("empleados",  $_REQUEST['empleados']); 	 
+   
+   }
+   
+ 	public function SetSolicVacaciones($detalles){
+   
+   $this -> assign("DETALLESVACACIONES",$detalles);		 
+   
+   }
+   
+ 	public function SetSolicPrimas($detalles){
+   
+   $this -> assign("DETALLESPRIMAS",$detalles);		 
+   
+   }
+   
+ 	public function SetSolicCesantias($detalles){
+   
+   $this -> assign("DETALLESCESANTIAS",$detalles);		 
+   
+   }
+   
+ 	public function SetSolicIntCesantias($detalles){
+   
+   $this -> assign("DETALLESINTCESANTIAS",$detalles);		 
    
    }
 

@@ -356,6 +356,79 @@ final class Pago extends Controler{
 			type	=>array('column'))		
 		
 	);
+	$this -> Campos[valor_abono_primas] = array(
+		name	=>'valor_abono_primas',
+		id		=>'valor_abono_primas',
+		type	=>'text',
+		Boostrap =>'si',
+		readonly=>'yes',
+	 	datatype=>array(
+			type	=>'numeric',
+			length	=>'20',
+			presicion=>3),
+		transaction=>array(
+			table	=>array('abono_nomina'),
+			type	=>array('column'))		
+		
+	);
+	$this -> Campos[valor_abono_cesantias] = array(
+		name	=>'valor_abono_cesantias',
+		id		=>'valor_abono_cesantias',
+		type	=>'text',
+		Boostrap =>'si',
+		readonly=>'yes',
+	 	datatype=>array(
+			type	=>'numeric',
+			length	=>'20',
+			presicion=>3),
+		transaction=>array(
+			table	=>array('abono_nomina'),
+			type	=>array('column'))		
+		
+	);
+	$this -> Campos[valor_abono_vacaciones] = array(
+		name	=>'valor_abono_vacaciones',
+		id		=>'valor_abono_vacaciones',
+		type	=>'text',
+		Boostrap =>'si',
+		readonly=>'yes',
+	 	datatype=>array(
+			type	=>'numeric',
+			length	=>'20',
+			presicion=>3),
+		transaction=>array(
+			table	=>array('abono_nomina'),
+			type	=>array('column'))		
+		
+	);
+	
+	$this -> Campos[valor_abono_int_cesantias] = array(
+		name	=>'valor_abono_int_cesantias',
+		id		=>'valor_abono_int_cesantias',
+		type	=>'text',
+		Boostrap =>'si',
+		readonly=>'yes',
+	 	datatype=>array(
+			type	=>'numeric',
+			length	=>'20',
+			presicion=>3),
+		transaction=>array(
+			table	=>array('abono_nomina'),
+			type	=>array('column'))		
+		
+	);
+	
+	$this -> Campos[valor_abono_total] = array(
+		name	=>'valor_abono_total',
+		id		=>'valor_abono_total',
+		type	=>'hidden',
+		datatype=>array(
+			type	=>'numeric',
+			length	=>'20'),
+		transaction=>array(
+			table	=>array('abono_nomina'),
+			type	=>array('column'))
+	);
 
 
 	$this -> Campos[cuenta_tipo_pago_id] = array(
@@ -416,10 +489,102 @@ final class Pago extends Controler{
 			table	=>array('abono_nomina'),
 			type	=>array('column'))
 	);
+	$this -> Campos[valores_abono_primas] = array(
+		name	=>'valores_abono_primas',
+		id		=>'valores_abono_primas',
+		type	=>'hidden',
+		datatype=>array(
+			type	=>'alphanum',
+			length	=>'350'),
+		transaction=>array(
+			table	=>array('abono_nomina'),
+			type	=>array('column'))
+	);
+	$this -> Campos[valores_abono_cesantias] = array(
+		name	=>'valores_abono_cesantias',
+		id		=>'valores_abono_cesantias',
+		type	=>'hidden',
+		datatype=>array(
+			type	=>'alphanum',
+			length	=>'350'),
+		transaction=>array(
+			table	=>array('abono_nomina'),
+			type	=>array('column'))
+	);
+	$this -> Campos[valores_abono_vacaciones] = array(
+		name	=>'valores_abono_vacaciones',
+		id		=>'valores_abono_vacaciones',
+		type	=>'hidden',
+		datatype=>array(
+			type	=>'alphanum',
+			length	=>'350'),
+		transaction=>array(
+			table	=>array('abono_nomina'),
+			type	=>array('column'))
+	);
+	
+	$this -> Campos[valores_abono_int_cesantias] = array(
+		name	=>'valores_abono_int_cesantias',
+		id		=>'valores_abono_int_cesantias',
+		type	=>'hidden',
+		datatype=>array(
+			type	=>'alphanum',
+			length	=>'350'),
+		transaction=>array(
+			table	=>array('abono_nomina'),
+			type	=>array('column'))
+	);
 	
 	$this -> Campos[causaciones_abono_nomina] = array(
 		name	=>'causaciones_abono_nomina',
 		id		=>'causaciones_abono_nomina',
+		type	=>'hidden',
+		datatype=>array(
+			type	=>'alphanum',
+			length	=>'350'),
+		transaction=>array(
+			table	=>array('abono_nomina'),
+			type	=>array('column'))
+	);
+	
+	$this -> Campos[causaciones_abono_primas] = array(
+		name	=>'causaciones_abono_primas',
+		id		=>'causaciones_abono_primas',
+		type	=>'hidden',
+		datatype=>array(
+			type	=>'alphanum',
+			length	=>'350'),
+		transaction=>array(
+			table	=>array('abono_nomina'),
+			type	=>array('column'))
+	);
+	$this -> Campos[causaciones_abono_cesantias] = array(
+		name	=>'causaciones_abono_cesantias',
+		id		=>'causaciones_abono_cesantias',
+		type	=>'hidden',
+		datatype=>array(
+			type	=>'alphanum',
+			length	=>'350'),
+		transaction=>array(
+			table	=>array('abono_nomina'),
+			type	=>array('column'))
+	);
+	
+	$this -> Campos[causaciones_abono_vacaciones] = array(
+		name	=>'causaciones_abono_vacaciones',
+		id		=>'causaciones_abono_vacaciones',
+		type	=>'hidden',
+		datatype=>array(
+			type	=>'alphanum',
+			length	=>'350'),
+		transaction=>array(
+			table	=>array('abono_nomina'),
+			type	=>array('column'))
+	);
+	
+	$this -> Campos[causaciones_abono_int_cesantias] = array(
+		name	=>'causaciones_abono_int_cesantias',
+		id		=>'causaciones_abono_int_cesantias',
 		type	=>'hidden',
 		datatype=>array(
 			type	=>'alphanum',
