@@ -12,7 +12,7 @@ final class SolicPeriodosModel extends Db{
 	if(is_numeric($empleado_id)){	
 	
 		$select_contrato = "SELECT c.contrato_id,c.sueldo_base,c.fecha_inicio, DATEDIFF(CURDATE(),c.fecha_inicio) as dias_trabajados
-	FROM contrato c WHERE c.empleado_id=$empleado_id AND estado='A' ";
+	                       FROM contrato c WHERE c.empleado_id=$empleado_id AND estado='A' ";
 	//echo $select_contrato;
 	$result_contrato = $this -> DbFetchAll($select_contrato,$Conex); 
 	
@@ -47,22 +47,26 @@ final class SolicPeriodosModel extends Db{
 		
 	for($j=0;$j<count($periodo);$j++){
 		
-		
-		$select_dias_otorgados="SELECT dias_disfrutados FROM detalle_liquidacion_vacaciones WHERE periodo_inicio='".$periodo[$j]['fecha_inicial']."' AND periodo_fin ='".$periodo[$j]['fecha_final']."' AND  liquidacion_vacaciones_id IN (SELECT liquidacion_vacaciones_id FROM liquidacion_vacaciones WHERE contrato_id=$contrato_id)";
+		$k=1+$j;
+		$select_dias_otorgados="SELECT dias_disfrutados,dias_pagados
+		                        FROM detalle_liquidacion_vacaciones WHERE periodo_inicio='".$periodo[$j]['fecha_inicial']."' 
+								AND periodo_fin ='".$periodo[$j]['fecha_final']."' AND  liquidacion_vacaciones_id 
+								IN (SELECT liquidacion_vacaciones_id FROM liquidacion_vacaciones WHERE contrato_id=$contrato_id)";
 	
 		$result_dias_otorgados = $this -> DbFetchAll($select_dias_otorgados,$Conex); 
 	
 		$dias_otorgados 	 = $result_dias_otorgados[0]['dias_disfrutados'];
+		$dias_pagados 	     = $result_dias_otorgados[0]['dias_pagados'];
 		
 		/*if($dias_otorgados > 0 ){
 			$dias_a_disfrutar= $periodo[$j]['dias_ganados'] - $dias_otorgados;
 		}else{*/
-			$dias_a_disfrutar = $periodo[$j]['dias_ganados'];
+		$dias_a_disfrutar = $periodo[$j]['dias_ganados'];
 		
-																																															   		$fecha_inicio_hidden = str_replace("-","",$periodo[$j]['fecha_inicial']);
+	    $fecha_inicio_hidden = str_replace("-","",$periodo[$j]['fecha_inicial']);
 		$fecha_final_hidden = str_replace("-","",$periodo[$j]['fecha_final']);
 																																																				
-																																																												   $results[$j]=array(fecha_inicio_hidden=>$fecha_inicio_hidden,fecha_final_hidden=>$fecha_final_hidden,numero_periodo=>$j,inicio_periodo=>$periodo[$j]['fecha_inicial'],fin_periodo=>$periodo[$j]['fecha_final'],dias_ganados=>$dias_a_disfrutar,dias_otorgados=>$dias_otorgados);
+	    $results[$j]=array(fecha_inicio_hidden=>$fecha_inicio_hidden,fecha_final_hidden=>$fecha_final_hidden,numero_periodo=>$k,inicio_periodo=>$periodo[$j]['fecha_inicial'],fin_periodo=>$periodo[$j]['fecha_final'],dias_ganados=>$dias_a_disfrutar,dias_otorgados=>$dias_otorgados,dias_pagados=>$dias_pagados);
 		
 		
 	}

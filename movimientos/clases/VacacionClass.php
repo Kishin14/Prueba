@@ -23,11 +23,14 @@ final class Vacacion extends Controler{
     $Model  -> SetUsuarioId($this -> getUsuarioId(),$this -> getOficinaId());
 	
     $Layout -> SetGuardar   ($Model -> getPermiso($this -> getActividadId(),INSERT,$this -> getConex()));
-    $Layout -> SetActualizar($Model -> getPermiso($this -> getActividadId(),UPDATE,$this -> getConex()));
+	$Layout -> SetActualizar($Model -> getPermiso($this -> getActividadId(),UPDATE,$this -> getConex()));
+	$Layout -> setAnular     	($Model -> getPermiso($this -> getActividadId(),'ANULAR',$this -> getConex()));
 	$Layout -> setImprimir	($Model -> getPermiso($this -> getActividadId(),'PRINT',$this -> getConex()));
     $Layout -> SetLimpiar   ($Model -> getPermiso($this -> getActividadId(),CLEAR,$this -> getConex()));
 	
-    $Layout -> SetCampos($this -> Campos);
+	$Layout -> SetCampos($this -> Campos);
+	
+	$Layout ->  setCausalesAnulacion($Model -> getCausalesAnulacion($this -> getConex()));
 	
 	//// LISTAS MENU ////
 	$liquidacion_vacaciones_id = $_REQUEST['liquidacion_vacaciones_id'];
@@ -94,9 +97,12 @@ final class Vacacion extends Controler{
   protected function onclickSave(){
 
   	require_once("VacacionModelClass.php");
-    $Model = new VacacionModel();
+	$Model = new VacacionModel();
 	
-	$return = $Model -> Save($this -> Campos,$this -> getOficinaId(),$this -> getConex());
+	$fecha_registro = date("Y-m-d H:i:s");
+	$usuario_id = $this -> getUsuarioId();
+	
+	$return = $Model -> Save($this -> Campos,$usuario_id,$fecha_registro,$this -> getOficinaId(),$this -> getConex());
 	
 	if($Model -> GetNumError() > 0){
 	  exit('Ocurrio una inconsistencia');
@@ -148,16 +154,20 @@ final class Vacacion extends Controler{
     $Model = new VacacionModel();
 	$liquidacion_vacaciones_id 	= $_REQUEST['liquidacion_vacaciones_id'];
 	$fecha 			= $_REQUEST['fecha_liquidacion'];
+	$valor 			= $_REQUEST['valor'];
+	$si_empleado 	= $_REQUEST['si_empleado'];
+
 	$empresa_id = $this -> getEmpresaId(); 
 	$oficina_id = $this -> getOficinaId();	
-	$usuario_id = $this -> getUsuarioId();		
+	$usuario_id = $this -> getUsuarioId();	
 	
+	$con_fecha = date("Y-m-d H:i:s");
 	
     $mesContable     = $Model -> mesContableEstaHabilitado($empresa_id,$oficina_id,$fecha,$this -> getConex());
     $periodoContable = $Model -> PeriodoContableEstaHabilitado($this -> getConex());
 	
     if($mesContable && $periodoContable){
-		$return=$Model -> getContabilizarReg($liquidacion_vacaciones_id,$empresa_id,$oficina_id,$usuario_id,$mesContable,$periodoContable,$this -> getConex());
+		$return=$Model -> getContabilizarReg($liquidacion_vacaciones_id,$empresa_id,$oficina_id,$usuario_id,$con_fecha,$mesContable,$periodoContable,$valor,$si_empleado,$this -> getConex());
 		if($return==true){
 			exit("true");
 		}else{
@@ -216,6 +226,59 @@ final class Vacacion extends Controler{
 	$Data[0]['dia_reintegro']= $dia_reintegro;
 	  $this -> getArrayJSON($Data);
    }
+
+   protected function CalcularLiqTodos($Conex){
+	  
+	require_once("VacacionModelClass.php");
+    $Model = new VacacionModel();
+	
+	$data = $Model -> getCalcularLiqTodos($this -> getConex());
+
+	if(strlen($Model -> GetError()) > 0){
+	   exit('Error al realizar calculo');
+	 }else{
+	    $this -> getArrayJSON($data);
+	  }
+	
+   }
+
+     protected function onclickCancellation(){
+  
+     require_once("VacacionModelClass.php");
+	 
+     $Model                 = new VacacionModel(); 
+	 $liquidacion_vacaciones_id         = $this -> requestDataForQuery('liquidacion_vacaciones_id','integer');
+	 $causal_anulacion_id   = $this -> requestDataForQuery('causal_anulacion_id','integer');	 
+	 $observacion_anulacion = $this -> requestDataForQuery('observacion_anulacion','text');
+	 $usuario_anulo_id      = $this -> getUsuarioId();
+	
+	 $estado=$Model -> comprobar_estado($liquidacion_vacaciones_id,$this -> getConex());
+	 
+	 if($estado[0]['estado']=='I'){
+		 exit('No se puede Anular, La Liquidaci&oacute;n previamente estaba Anulada');
+
+	 }else if($estado[0]['estado']=='C' && $estado[0]['estado_mes']==0){
+		 
+		 exit('No se puede Anular, El mes contable de la Liquidaci&oacute;n esta Cerrado');
+		 
+	 }else if($estado[0]['estado']=='C' && $estado[0]['estado_periodo']==0){
+		 
+		 exit('No se puede Anular, El periodo contable de la Liquidaci&oacute;n esta Cerrado');
+
+	 }
+	 if($estado[0]['si_empleado']=='1'){
+		 $Model -> cancellation($liquidacion_vacaciones_id,$estado[0]['encabezado_registro_id'],$causal_anulacion_id,$observacion_anulacion,$usuario_anulo_id,$this -> getConex());
+	 }elseif($estado[0]['si_empleado']=='ALL'){
+		 $Model -> cancellation1($liquidacion_vacaciones_id,$estado[0]['encabezado_registro_id'],$estado[0]['fecha_liquidacion'],$causal_anulacion_id,$observacion_anulacion,$usuario_anulo_id,$this -> getConex());		 
+	 }
+	
+	 if(strlen($Model -> GetError()) > 0){
+	  exit('false');
+	 }else{
+	    exit('true');
+	  }
+	
+  } 
 
 
 //BUSQUEDA
@@ -287,7 +350,7 @@ final class Vacacion extends Controler{
 		type =>'text',
 		Boostrap =>'si',
 		required=>'yes',
-		size    =>'45',
+		size    =>'35',
 		suggest => array(
 		name =>'empleado',
 		setId =>'empleado_id',
@@ -346,6 +409,38 @@ final class Vacacion extends Controler{
 			type	=>array('column'))
 		
 	);
+
+	$this -> Campos[valor_pagos] = array(
+		name	=>'valor_pagos',
+		id		=>'valor_pagos',
+		type	=>'text',
+		Boostrap =>'si',
+		required=>'yes',
+		readonly=>'yes',
+	 	datatype=>array(
+			type	=>'text',
+			length	=>'250'),
+		transaction=>array(
+			table	=>array('liquidacion_vacaciones'),
+			type	=>array('column'))
+		
+	);
+
+	$this -> Campos[valor_total] = array(
+		name	=>'valor_total',
+		id		=>'valor_total',
+		type	=>'text',
+		Boostrap =>'si',
+		required=>'yes',
+		readonly=>'yes',
+	 	datatype=>array(
+			type	=>'text',
+			length	=>'250'),
+		transaction=>array(
+			table	=>array('liquidacion_vacaciones'),
+			type	=>array('column'))
+		
+	);
 	
 	$this -> Campos[concepto_item] = array(
 		name	=>'concepto_item',
@@ -362,7 +457,7 @@ final class Vacacion extends Controler{
 		id		=>'concepto',
 		type	=>'text',
 		Boostrap =>'si',
-		size	=>78,
+		size	=>50,
 		readonly=>'yes',
 		required=>'yes',
 	 	datatype=>array(
@@ -379,6 +474,37 @@ final class Vacacion extends Controler{
 		id		=>'dias',
 		type	=>'text',
 		Boostrap =>'si',
+		required=>'yes',
+		readonly=>'yes',
+	 	datatype=>array(
+			type	=>'text',
+			length	=>'250'),
+		transaction=>array(
+			table =>array('liquidacion_vacaciones'),
+			type =>array('column'))	
+	);
+
+	$this -> Campos[dias_disfrutar] = array(
+		name	=>'dias_disfrutar',
+		id		=>'dias_disfrutar',
+		type	=>'text',
+		Boostrap =>'si',
+		required=>'yes',
+		readonly=>'yes',
+	 	datatype=>array(
+			type	=>'text',
+			length	=>'250'),
+		transaction=>array(
+			table =>array('liquidacion_vacaciones'),
+			type =>array('column'))	
+	);
+
+	$this -> Campos[dias_pagados] = array(
+		name	=>'dias_pagados',
+		id		=>'dias_pagados',
+		type	=>'text',
+		Boostrap =>'si',
+		readonly=>'yes',
 		required=>'yes',
 	 	datatype=>array(
 			type	=>'text',
@@ -443,7 +569,7 @@ final class Vacacion extends Controler{
 		id		=>'observaciones',
 		type	=>'text',
 		Boostrap =>'si',
-		size	=>81,
+		size	=>50,
 		
 		required=>'yes',
 	 	datatype=>array(
@@ -476,10 +602,13 @@ final class Vacacion extends Controler{
 		id		=>'si_empleado',
 		type	=>'select',
 		Boostrap =>'si',
-		options	=>array(array(value=>'1',text=>'UNO',selected=>'ALL'),array(value=>'ALL',text=>'TODOS',selected=>'ALL')),
-		selected=>0,
+		options	=>array(array(value=>'1',text=>'UNO'),array(value=>'ALL',text=>'TODOS')),
+		selected=>1,
 		required=>'yes',
-		onchange=>'Empleado_si()'
+		onchange=>'Empleado_si()',
+		transaction=>array(
+		 	table =>array('liquidacion_vacaciones'),
+		 	type =>array('column'))
 	);
 	
 	 	$this -> Campos[print_out] = array(
@@ -507,7 +636,71 @@ final class Vacacion extends Controler{
 		type	   =>'button',
 		value	   =>'CANCEL'
 
-	);			
+	);	
+	
+		$this -> Campos[usuario_id] = array(
+		name 	=>'usuario_id',
+		id  	=>'usuario_id',
+		type 	=>'hidden',
+		//required=>'yes',
+		datatype=>array(
+			type =>'integer',
+			length =>'11'),
+		transaction=>array(
+			table =>array('liquidacion_vacaciones'),
+			type =>array('column'))
+	);
+
+	$this -> Campos[fecha_registro] = array(
+		name 	=>'fecha_registro',
+		id  	=>'fecha_registro',
+		type 	=>'hidden',
+		//required=>'yes',
+		datatype=>array(
+			type =>'text',
+			length =>date('Y-m-d H:i:s')),
+		transaction=>array(
+			table =>array('liquidacion_vacaciones'),
+			type =>array('column'))
+	);
+
+	//ANULACION
+  	$this -> Campos[usuario_anulo_id] = array(
+	   	name =>'usuario_anulo_id',
+	   	id =>'usuario_anulo_id',
+	   	type =>'hidden',
+	   	//required=>'yes',
+	   	datatype=>array(
+			type=>'integer')
+  	);
+
+  	$this -> Campos[fecha_anulacion] = array(
+	   	name =>'fecha_anulacion',
+	   	id =>'fecha_anulacion',
+	   	type =>'hidden',
+	   	//required=>'yes',
+	   	datatype=>array(
+			type=>'text')
+  	);
+
+  	$this -> Campos[observacion_anulacion] = array(
+	   	name =>'observacion_anulacion',
+	   	id =>'observacion_anulacion',
+	   	type =>'textarea',
+	   	required=>'yes',
+	   	datatype=>array(
+			type=>'tex')
+  	);
+
+	$this -> Campos[causal_anulacion_id] = array(
+		name =>'causal_anulacion_id',
+		id  =>'causal_anulacion_id',
+		type =>'select',
+		required=>'yes',
+		datatype=>array(
+			type =>'text',
+			length =>'2')
+   );
 
 
 	/**********************************
@@ -527,6 +720,15 @@ final class Vacacion extends Controler{
 		type	=>'button',
 		value	=>'Actualizar',
 		disabled=>'disabled',
+	);
+
+	  	$this -> Campos[anular] = array(
+		name	=>'anular',
+		id		=>'anular',
+		type	=>'button',
+		value	=>'Anular',
+		disabled=>'disabled',
+		onclick =>'onclickCancellation(this.form)'
 	);
 
 	$this -> Campos[imprimir] = array(
