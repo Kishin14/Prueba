@@ -468,18 +468,22 @@ final class Registrar extends Controler{
 		
 
 		$data = $Model -> validarPeriodicidad($periodicidad,$this -> getConex());
-        
-		if($data > 0){
+	   
+		if($Model -> GetNumError() > 0){
+	       exit("Error al validar la periodicidad");
+	    }else{
           $this -> getArrayJSON($data);
-		} 
+		}
 		
 	}else{
 
 		$data = $Model -> validarPeriodicidad($periodicidad,$this -> getConex());
         
-		if($data > 0){
-			$this -> getArrayJSON($data);	 //echo("El sistema solo liquidara la nomina para los empleados que tengan la periodicidad ".$periodicidad." Si desea liquidar los siguientes contratos: ".$resultado."<br><br>Actualice la periodicidad de cada uno, de lo contrario continue con el proceso.");
-		} 
+		if($Model -> GetNumError() > 0){
+	       exit("Error al validar la periodicidad");
+	    }else{
+          $this -> getArrayJSON($data);
+		}
 
 	}
 

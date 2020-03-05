@@ -273,8 +273,8 @@ $(document).ready(function(){
 
 				var data = $.parseJSON(resp);
                 
-				if(data != ''){
-					
+				if(data != null){
+					alertJquery("entra");
 					if(data.length > 1){
 						var mensaje = '';
 						for(var i = 0; i < data.length; i++){
@@ -357,6 +357,35 @@ $(document).ready(function(){
 						alertJquery("Este contrato no se liquidar&aacute: <br>" + mensaje + "<br>Por favor tenga en cuenta que la liquidaci&oacuten que se esta haciendo tiene periodicidad: <b style='color:red'>"+periodicidad2);
 
 						}
+				}else{
+					var QueryString = "ACTIONCONTROLER=onclickSave&previsual=true&empleados=" + empleados + "&fecha_inicial=" + fecha_inicial + "&fecha_final=" + fecha_final + "&periodicidad=" + periodicidad + "&area_laboral=" + area_laboral + "&centro_de_costo_id=" + centro_de_costo_id + "&contrato_id=" + contrato_id;
+
+					$.ajax({
+						type: "POST",
+						url: "RegistrarClass.php?rand=" + Math.random(),
+						data: QueryString,
+
+						success: function (resp) {
+
+							try {
+								if (resp > 0) {
+
+									alertJquery("Existe una liquidaci&oacute;n Previa  para las fechas seleccionadas. <br>Por favor verifique Liquidaci&oacute;n No " + resp);
+
+								} else {
+
+									if (resp.indexOf('<html>') != -1) {
+										document.location.href = "RegistrarClass.php?" + QueryString;
+									} else {
+										alertJquery(resp, "atencion");
+									}
+
+								}
+							} catch (e) {
+								alertJquery("se presento un inconveniente: " + e, "Atencion");
+							}
+						}
+					});
 				}
 			
 		
