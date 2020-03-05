@@ -37,9 +37,9 @@ final class PagoLayout extends View{
      $this -> TplInclude -> IncludeCss("../../../framework/css/reset.css");
      $this -> TplInclude -> IncludeCss("../../../framework/css/general.css");
      $this -> TplInclude -> IncludeCss("../../../framework/css/jquery.alerts.css");
-	 $this -> TplInclude -> IncludeCss("../css/pago.css");	 
+	   $this -> TplInclude -> IncludeCss("../css/pago.css");	 
 	
-	 $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.js");
+	   $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.js");
      $this -> TplInclude -> IncludeJs("../../../framework/js/jqcalendar/jquery.ui.datepicker.js");
      $this -> TplInclude -> IncludeJs("../../../framework/js/jqcalendar/jquery.ui.datepicker-es.js");
      $this -> TplInclude -> IncludeJs("../../../framework/js/ajaxupload.3.6.js");
@@ -51,32 +51,49 @@ final class PagoLayout extends View{
      $this -> TplInclude -> IncludeJs("../js/pago.js");
      $this -> TplInclude -> IncludeJs("../../../framework/js/jqeffects/jquery.magnifier.js");
      $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.alerts.js");
-	 $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.filestyle.js");
+	   $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.filestyle.js");
 	
-     $this -> assign("CSSSYSTEM",			$this -> TplInclude -> GetCssInclude());
+     $this -> assign("CSSSYSTEM",			  $this -> TplInclude -> GetCssInclude());
      $this -> assign("JAVASCRIPT",			$this -> TplInclude -> GetJsInclude());
-     $this -> assign("FORM1",				$Form1 -> FormBegin());
-     $this -> assign("FORM1END",			$Form1 -> FormEnd());
-     $this -> assign("BUSQUEDA",			$this -> objectsHtml -> GetobjectHtml($this -> fields[busqueda]));
-     $this -> assign("ABONOID",				$this -> objectsHtml -> GetobjectHtml($this -> fields[abono_nomina_id]));
+     $this -> assign("FORM1",				    $Form1 -> FormBegin());
+     $this -> assign("FORM1END",		  	$Form1 -> FormEnd());
+     $this -> assign("BUSQUEDA",		  	$this -> objectsHtml -> GetobjectHtml($this -> fields[busqueda]));
+     $this -> assign("ABONOID",				  $this -> objectsHtml -> GetobjectHtml($this -> fields[abono_nomina_id]));
      $this -> assign("NUMSOPORTE",			$this -> objectsHtml -> GetobjectHtml($this -> fields[numero_soporte]));
-     $this -> assign("NUMCHEQUE",			$this -> objectsHtml -> GetobjectHtml($this -> fields[num_cheque]));	 
-	 $this -> assign("EMPLEADOID",			$this -> objectsHtml -> GetobjectHtml($this -> fields[empleado_id]));	 
-	 $this -> assign("EMPLEADO",			$this -> objectsHtml -> GetobjectHtml($this -> fields[empleado]));
-     $this -> assign("EMPLEADOS",			$this -> objectsHtml -> GetobjectHtml($this -> fields[empleados]));
+     $this -> assign("NUMCHEQUE",		  	$this -> objectsHtml -> GetobjectHtml($this -> fields[num_cheque]));	 
+	   $this -> assign("EMPLEADOID",			$this -> objectsHtml -> GetobjectHtml($this -> fields[empleado_id]));	 
+	   $this -> assign("EMPLEADO",			  $this -> objectsHtml -> GetobjectHtml($this -> fields[empleado]));
+     $this -> assign("EMPLEADOS",			  $this -> objectsHtml -> GetobjectHtml($this -> fields[empleados]));
 	 
-	 $this -> assign("EMPLEADONIT",			$this -> objectsHtml -> GetobjectHtml($this -> fields[empleado_nit]));	
-	 $this -> assign("FECHA",				$this -> objectsHtml -> GetobjectHtml($this -> fields[fecha]));	
-	 $this -> assign("ENCABEZADOID",		$this -> objectsHtml -> GetobjectHtml($this -> fields[encabezado_registro_id]));	 	 
-	 $this -> assign("VALORPAGO",			$this -> objectsHtml -> GetobjectHtml($this -> fields[valor_abono_nomina]));
-	 $this -> assign("VALORESPAGO",			$this -> objectsHtml -> GetobjectHtml($this -> fields[valores_abono_nomina]));
+	 $this -> assign("EMPLEADONIT",			  $this -> objectsHtml -> GetobjectHtml($this -> fields[empleado_nit]));	
+	 $this -> assign("FECHA",				      $this -> objectsHtml -> GetobjectHtml($this -> fields[fecha]));	
+	 $this -> assign("ENCABEZADOID",		  $this -> objectsHtml -> GetobjectHtml($this -> fields[encabezado_registro_id]));
+   
+   	 	 
+	 $this -> assign("VALORPAGO",			    $this -> objectsHtml -> GetobjectHtml($this -> fields[valor_abono_nomina]));
+	 $this -> assign("VALORPAGOPRIMA",	  $this -> objectsHtml -> GetobjectHtml($this -> fields[valor_abono_primas]));
+	 $this -> assign("VALORPAGOCESANTIAS",$this -> objectsHtml -> GetobjectHtml($this -> fields[valor_abono_cesantias]));
+	 $this -> assign("VALORPAGOVACACIONES",$this -> objectsHtml -> GetobjectHtml($this -> fields[valor_abono_vacaciones]));
+	 $this -> assign("VALORPAGOINTCESANTIAS",$this -> objectsHtml -> GetobjectHtml($this -> fields[valor_abono_int_cesantias]));
+	 $this -> assign("VALORPAGOTOTAL",    $this -> objectsHtml -> GetobjectHtml($this -> fields[valor_abono_total]));
+	
 	 
-	 $this -> assign("CONCEPTONOMI",		$this -> objectsHtml -> GetobjectHtml($this -> fields[concepto_abono_nomina]));		 	 	 
-	 $this -> assign("CAUSACIONNOMI",		$this -> objectsHtml -> GetobjectHtml($this -> fields[causaciones_abono_nomina]));	
-		 
-	 $this -> assign("FECHAINGRESO",		$this -> objectsHtml -> GetobjectHtml($this -> fields[ingreso_abono_nomina]));		 
-	 $this -> assign("ESTADO",				$this -> objectsHtml -> GetobjectHtml($this -> fields[estado_abono_nomina]));	
-
+	 $this -> assign("CONCEPTONOMI",		  $this -> objectsHtml -> GetobjectHtml($this -> fields[concepto_abono_nomina]));		
+	 $this -> assign("FECHAINGRESO",		  $this -> objectsHtml -> GetobjectHtml($this -> fields[ingreso_abono_nomina]));		 
+	 $this -> assign("ESTADO",			  	  $this -> objectsHtml -> GetobjectHtml($this -> fields[estado_abono_nomina]));	
+   
+	 $this -> assign("CAUSACIONNOMI",		  $this -> objectsHtml -> GetobjectHtml($this -> fields[causaciones_abono_nomina]));	
+	 $this -> assign("CAUSACIONPRIMA",		$this -> objectsHtml -> GetobjectHtml($this -> fields[causaciones_abono_primas]));	
+	 $this -> assign("CAUSACIONCESANTIAS",$this -> objectsHtml -> GetobjectHtml($this -> fields[causaciones_abono_cesantias]));	
+	 $this -> assign("CAUSACIONVACACIONES",$this -> objectsHtml -> GetobjectHtml($this -> fields[causaciones_abono_vacaciones]));	
+	 $this -> assign("CAUSACIONINTCESANTIAS",$this -> objectsHtml -> GetobjectHtml($this -> fields[causaciones_abono_int_cesantias]));	
+   
+   $this -> assign("VALORESPAGO",			  $this -> objectsHtml -> GetobjectHtml($this -> fields[valores_abono_nomina]));
+   $this -> assign("VALORESPAGOPRIMAS",	$this -> objectsHtml -> GetobjectHtml($this -> fields[valores_abono_primas]));
+   $this -> assign("VALORESPAGOCESANTIAS",$this -> objectsHtml -> GetobjectHtml($this -> fields[valores_abono_cesantias]));
+   $this -> assign("VALORESPAGOVACACIONES",$this -> objectsHtml -> GetobjectHtml($this -> fields[valores_abono_vacaciones]));
+   $this -> assign("VALORESPAGOINTCESANTIAS",$this -> objectsHtml -> GetobjectHtml($this -> fields[valores_abono_int_cesantias]));
+   
 
 	 /***********************
 	     Anulacion Registro

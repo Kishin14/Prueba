@@ -154,7 +154,7 @@ final class reporteHojaVidaModel extends Db{
 
   public function getliquida_cesantias($contrato_id,$Conex){ 
 
-	   	$select = "SELECT lc.*,IF(lc.periodo=1,'PRIMER SEMESTRE','SEGUNDO SEMESTRE')AS periodo,IF(lc.tipo_liquidacion='T','TOTAL','PARCIAL')AS tipo_liquidacion,(CASE WHEN lc.estado='I' THEN '<span style=\'color:#FF0000;\'>
+	   	$select = "SELECT lc.*,IF(lc.tipo_liquidacion='T','TOTAL','PARCIAL')AS tipo_liquidacion,(CASE WHEN lc.estado='I' THEN '<span style=\'color:#FF0000;\'>
 		 INACTIVO</span>' WHEN lc.estado='A' THEN 'ACTIVO' ELSE '<span style=\'color:#008000;\'>
 		 CONTABILIZADO</span>' END)AS estado,CONCAT('','<a href=\"\../../movimientos/clases/CesantiasClass.php?liquidacion_cesantias_id=',lc.liquidacion_cesantias_id,'\" target=\"_blank\">','<input type=\"button\" class=\"btn btn-info\" value=\"IR A LIQUIDACION\" style=\"padding: 0.055rem 0.55rem\">','</a>' )AS ir,
 		 (CONCAT_WS('','<a href=\"javascript:void(0)\" onClick=\"viewDoc(',lc.encabezado_registro_id,')\">','','<input type=\"button\" class=\"btn btn-info\" value=\"VER LIQUIDACION\" style=\"padding: 0.055rem 0.55rem\"> </a>' )) AS ver

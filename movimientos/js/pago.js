@@ -58,26 +58,67 @@ function cargardiv(){
 	
 	if(parseInt(empleado_id)>0 && empleados=='U'){
 		
-		$("#iframeSolicitud").attr("src","SolicFacturasClass.php?empleado_id="+empleado_id+"&empleados="+empleados+"&rand="+Math.random());
+	   $("#iframeSolicitud").attr("src","SolicFacturasClass.php?empleados="+empleados+"&empleado_id="+empleado_id+"&rand="+Math.random()); 
+		
 		$("#divSolicitudFacturas").dialog({
-			title: 'Nomina Pendiente de Pago',
+			title: 'Saldos Pendiente de Pago',
 			width: 880,
-			height: 395,
+			height: 500, 
 			closeOnEscape:true,
+			position: 'center',
 			show: 'scale',
-			hide: 'scale'
+			hide: 'scale',
+			open: function(event, ui) {
+				var firstButton = $(this).parent().find('.ui-dialog-buttonpane button:first')
+				firstButton.css({ right:'320px', color: 'green'});
+			},
+			buttons: {"ADICIONAR": function(){
+		 
+				var respuesta = window.frames[1].setSolicitud();
+				
+				if(respuesta.length > 0){
+					
+					alertJquery(respuesta,"Validacion");
+					
+				}else {
+					closeDialog();
+				}
+					
+			 }
+			}
 		});
+		
 	
 	}else if(empleados=='T'){
 
-		$("#iframeSolicitud").attr("src","SolicFacturasClass.php?empleados="+empleados+"&rand="+Math.random());
+		$("#iframeSolicitud").attr("src","SolicFacturasClass.php?empleados="+empleados+"&rand="+Math.random()); 
+		
 		$("#divSolicitudFacturas").dialog({
-			title: 'Nomina Pendiente de Pago',
+			title: 'Saldos Pendiente de Pago',
 			width: 880,
-			height: 395,
+			height: 500, 
 			closeOnEscape:true,
+			position: 'center',
 			show: 'scale',
-			hide: 'scale'
+			hide: 'scale',
+			open: function(event, ui) {
+				var firstButton = $(this).parent().find('.ui-dialog-buttonpane button:first')
+				firstButton.css({ right:'320px', color: 'green'});
+			},
+			buttons: {"ADICIONAR": function(){
+		 
+				var respuesta = window.frames[1].setSolicitud();
+				
+				if(respuesta.length > 0){
+					
+					alertJquery(respuesta,"Validacion");
+					
+				}else {
+					closeDialog();
+				}
+					
+			 }
+			}
 		});
 		
 	}else{
@@ -94,38 +135,6 @@ function cargardatos(){
 	var causaciones_abono_nomina  	= $('#causaciones_abono_nomina').val();
 	var liquidacion_novedad_id		= causaciones_abono_nomina.split(",");
 
-	/*
-	for( var i in liquidacion_novedad_id){
-		if(liquidacion_novedad_id[i]!=''){
-		
-			var QueryString = "ACTIONCONTROLER=setSolicitud&factura_proveedor_id="+factura_proveedor_id[i]+"&rand="+Math.random();
-			$.ajax({
-				url     : "PagoClass.php",
-				data    : QueryString,
-				success : function(resp){
-					
-					var resp 			= $.parseJSON(resp);
-					var consecutivo_id  = resp[0]['consecutivo_id'];
-					var tipo			= resp[0]['tipo'];	
-					var orden_no		= resp[0]['orden_no'];	
-					var codfactura_prov	= resp[0]['codfactura_proveedor'];	
-					var manifiesto		= resp[0]['manifiesto'];	
-					if(parseInt(orden_no)>0){ 
-						var factura= " "+orden_no+", Factura: "+codfactura_prov; 
-						detalle_concepto += tipo+": "+factura+" / ";
-					}else if(manifiesto!='' && manifiesto!= null){ 
-						var factura=manifiesto;
-						detalle_concepto += tipo+": "+factura+" / ";
-					}else{ 
-						var factura='';
-						detalle_concepto += tipo+" / ";
-					}
-					
-					$("#concepto_abono_nomina").val(detalle_concepto);
-				}
-			});
-		}
-	}*/
 	$("#concepto_abono_nomina").val('ABONO NOMINA');
 }
 
@@ -202,6 +211,7 @@ function PagoOnReset(formulario){
     if($('#limpiar'))    		$('#limpiar').attr("disabled","");	
 	if($('#imprimir'))    	    $('#imprimir').attr("disabled","true");	
 	if($('#saveDetallepuc'))  	$('#saveDetallepuc').attr("style","display:inherit");
+	$("#empleados").val('U');
     $("#totalDebito").html("0.00");
     $("#totalCredito").html("0.00");	  
     clearFind();
@@ -419,7 +429,7 @@ function OnclickContabilizar(){
 					 $("#totalDebito").html(totalDebito);
 					 $("#totalCredito").html(totalCredito);	
 					 
-					 if(parseFloat(totalDebito)==parseFloat(totalCredito) /*&& parseFloat(totalCredito)==parseFloat(removeFormatCurrency(valor))*/ && parseFloat(removeFormatCurrency(valor))>0){
+					 if(parseFloat(totalDebito) == parseFloat(totalCredito) && parseFloat(removeFormatCurrency(valor))>0){
 						var QueryString = "ACTIONCONTROLER=getContabilizar&abono_nomina_id="+abono_nomina_id+"&ingreso_abono_nomina="+ingreso_abono_nomina;	
 	
 						$.ajax({
