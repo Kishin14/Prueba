@@ -30,7 +30,26 @@ final class RegistrarModel extends Db{
 	         (SELECT CONCAT_WS(' ',t.primer_nombre,t.segundo_nombre,t.primer_apellido,t.segundo_apellido,t.razon_social) FROM tercero t,empleado e WHERE t.tercero_id=e.tercero_id AND e.empleado_id=c.empleado_id) AS empleado
 	         FROM contrato c WHERE c.estado = 'A' AND c.fecha_terminacion BETWEEN '$fecha_inicial' AND '$fecha_final' $consulta";
 	$result = $this -> DbFetchAll($select,$Conex,true);
+    
+	return $result;
 
+  }
+
+  public function validarPeriodicidad($periodicidad,$Conex){
+	
+	$contrato_id = $_REQUEST['contrato_id'];
+
+	if($contrato_id > 0){
+		$consulta = 'AND c.contrato_id ='.$contrato_id;
+	}else{
+		$consulta ='';
+	}
+
+	$select="SELECT c.numero_contrato,(CASE c.periodicidad WHEN 'M' THEN 'MENSUAL' WHEN 'Q' THEN 'QUINCENAL' WHEN 'S' THEN 'SEMANAL' ELSE 'TODAS' END)AS periodicidad,
+	         (SELECT CONCAT_WS(' ',t.primer_nombre,t.segundo_nombre,t.primer_apellido,t.segundo_apellido,t.razon_social) FROM tercero t,empleado e WHERE t.tercero_id=e.tercero_id AND e.empleado_id=c.empleado_id) AS empleado
+	         FROM contrato c WHERE c.estado = 'A' AND c.periodicidad != '$periodicidad' $consulta";
+	$result = $this -> DbFetchAll($select,$Conex,true);
+    
 	return $result;
 
   }
@@ -58,6 +77,7 @@ final class RegistrarModel extends Db{
 
 	$select_per = "SELECT * FROM datos_periodo
 			WHERE periodo_contable_id = (SELECT periodo_contable_id FROM periodo_contable WHERE anio=$anio)";
+			
 	$result_per = $this -> DbFetchAll($select_per,$Conex,true);
 	
 	$limite_subsidio            = $result_per[0]['limite_subsidio'];
@@ -1137,7 +1157,7 @@ final class RegistrarModel extends Db{
 	                            (SELECT c.nombre FROM centro_de_costo c WHERE c.centro_de_costo_id=l.centro_de_costo_id) AS centro_de_costo
 	                            FROM liquidacion_novedad l
                                 ORDER BY l.liquidacion_novedad_id DESC LIMIT 1"; 
-	 
+	
 	 $resultLiquidacion      = $this -> DbFetchAll($selectLiquidacion,$Conex,true);
 
 	 $liquidacion_novedad_id = $resultLiquidacion[0]['liquidacion_novedad_id'];

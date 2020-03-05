@@ -4,6 +4,7 @@
     
    <meta http-equiv="content-type" content="text/html; charset=utf-8">
    <link rel="stylesheet" href="../../../framework/css/bootstrap1.css">
+    <script src="../../../framework/js/moment.min.js"></script>
    </head><body>
     {$JAVASCRIPT}
     {$TABLEGRIDJS}
@@ -14,7 +15,7 @@
     <fieldset>
       <legend>{$TITLEFORM}</legend>
       <div id="table_find">
-        <table>
+        <table align="center">
             <tbody>
              <tr>
                <td><label>Busqueda Empleado: </label></td>
@@ -34,11 +35,13 @@
         {$FECHASTATIC}
 		{$FORM1}
         <fieldset class="section">
-		<table align="center" width="70%">
+		<table align="center" width="75%">
         	<tbody>
                 <tr>
                     <td><label>Liquidacion Novedad No. : </label></td>
                     <td>{$CONSECUTIVO}{$LIQUIDACIONID}{$USUARIO_ID}{$FECHAREG}</td>
+                     <td><label>Periodo Liquidacion : </label></td>
+                <td>{$PERIODOLIQUIDA}</td>
                 </tr>
           		<tr>
 		            <td><label>Fecha Inicial : </label></td>

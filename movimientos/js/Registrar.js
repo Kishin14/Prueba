@@ -1,7 +1,193 @@
 // JavaScript Document
 //eventos asignados a los objetos
-var	formSubmitted = false;			
+var	formSubmitted = false;
+var fecha_oculta = '';			
 $(document).ready(function(){
+
+	
+
+	$("#fecha_inicial").change(function () {
+
+		var periodo_liquida = $('#periodo').val();
+
+		if(periodo_liquida > 0){
+
+			var fecha_inicial = $(this).val();
+			var ano = moment(fecha_inicial).format('YYYY');
+			var mes = moment(fecha_inicial).format('MM');
+
+        if(periodo_liquida == 1){
+
+			var fecha_inicio = new Date($(this).val());
+			var dias = 07;
+			var fecha_fin = fecha_inicio.setDate(fecha_inicio.getDate() + dias);
+			var fecha_final = moment(fecha_fin).format('YYYY-MM-DD');
+	
+
+			$('#fecha_final').val(fecha_final);
+			$('#periodicidad').val('S');
+			fecha_oculta = fecha_final;
+			
+
+		}else if(periodo_liquida == 2){
+
+			var dia = '01';
+			var dia_fin = '15';
+			
+			fecha_ini_sin_formato = '' + ano + '-' + mes + '-' + dia + '';
+			fecha_fin_sin_formato = '' + ano + '-' + mes + '-' + dia_fin + '';
+
+			fecha_inicio = moment(fecha_ini_sin_formato).format('YYYY-MM-DD');
+			fecha_fin    = moment(fecha_fin_sin_formato).format('YYYY-MM-DD');
+
+				$(this).val(fecha_inicio);
+				$('#fecha_final').val(fecha_fin);
+				$('#periodicidad').val('Q');
+			    fecha_oculta = fecha_fin;
+
+			}else if(periodo_liquida == 3){
+
+				var dia = '16';
+				var dia_fin = new Date(ano, mes, 0).getDate();
+
+				fecha_ini_sin_formato = '' + ano + '-' + mes + '-' + dia + '';
+				fecha_fin_sin_formato = '' + ano + '-' + mes + '-' + dia_fin + '';
+
+				fecha_inicio = moment(fecha_ini_sin_formato).format('YYYY-MM-DD');
+				fecha_fin = moment(fecha_fin_sin_formato).format('YYYY-MM-DD');
+				$(this).val(fecha_inicio);
+				$('#fecha_final').val(fecha_fin);
+				$('#periodicidad').val('Q');
+			    fecha_oculta = fecha_fin;
+
+			}else if(periodo_liquida == 4){
+
+				var dia = '01';
+				var dia_fin = new Date(ano, mes, 0).getDate();
+
+				fecha_ini_sin_formato = '' + ano + '-' + mes + '-' + dia + '';
+				fecha_fin_sin_formato = '' + ano + '-' + mes + '-' + dia_fin + '';
+
+				fecha_inicio = moment(fecha_ini_sin_formato).format('YYYY-MM-DD');
+				fecha_fin = moment(fecha_fin_sin_formato).format('YYYY-MM-DD');
+				$(this).val(fecha_inicio);
+				$('#fecha_final').val(fecha_fin);
+				$('#periodicidad').val('M');
+			    fecha_oculta = fecha_fin;
+
+			}else{
+			    $('#periodicidad').val('T');
+			}
+
+		}else{
+			alertJquery("¡Por favor primero seleccione un periodo a liquidar!","Atención");
+			$(this).val('');
+		}
+		
+	});
+
+	$("#periodo").change(function () {
+
+		var periodo_liquida = $(this).val();
+		var fecha_inicial = $('#fecha_inicial').val();
+
+		if (periodo_liquida == 5) {
+			$('#fecha_final').attr("disabled", "");
+		}else{
+			$('#fecha_final').attr("disabled", "disabled");
+		}
+
+		if(fecha_inicial != '') {
+
+			var ano = moment(fecha_inicial).format('YYYY');
+			var mes = moment(fecha_inicial).format('MM');
+
+			if (periodo_liquida == 1) {
+
+				var fecha_inicio = new Date(fecha_inicial);
+				var dias = 07;
+				var fecha_fin = fecha_inicio.setDate(fecha_inicio.getDate() + dias);
+				var fecha_final = moment(fecha_fin).format('YYYY-MM-DD');
+
+
+				$('#fecha_final').val(fecha_final);
+				$('#periodicidad').val('S');
+				fecha_oculta = fecha_final;
+
+
+			} else if (periodo_liquida == 2) {
+
+				var dia = '01';
+				var dia_fin = '15';
+
+				fecha_ini_sin_formato = '' + ano + '-' + mes + '-' + dia + '';
+				fecha_fin_sin_formato = '' + ano + '-' + mes + '-' + dia_fin + '';
+
+				fecha_inicio = moment(fecha_ini_sin_formato).format('YYYY-MM-DD');
+				fecha_fin = moment(fecha_fin_sin_formato).format('YYYY-MM-DD');
+
+				$('#fecha_inicial').val(fecha_inicio);
+				$('#fecha_final').val(fecha_fin);
+				$('#periodicidad').val('Q');
+				fecha_oculta = fecha_fin;
+
+			} else if (periodo_liquida == 3) {
+
+				var dia = '16';
+				var dia_fin = new Date(ano, mes, 0).getDate();
+
+				fecha_ini_sin_formato = '' + ano + '-' + mes + '-' + dia + '';
+				fecha_fin_sin_formato = '' + ano + '-' + mes + '-' + dia_fin + '';
+
+				fecha_inicio = moment(fecha_ini_sin_formato).format('YYYY-MM-DD');
+				fecha_fin = moment(fecha_fin_sin_formato).format('YYYY-MM-DD');
+				$('#fecha_inicial').val(fecha_inicio);
+				$('#fecha_final').val(fecha_fin);
+				$('#periodicidad').val('Q');
+				fecha_oculta = fecha_fin;
+
+			} else if (periodo_liquida == 4) {
+
+				var dia = '01';
+				var dia_fin = new Date(ano, mes, 0).getDate();
+
+				fecha_ini_sin_formato = '' + ano + '-' + mes + '-' + dia + '';
+				fecha_fin_sin_formato = '' + ano + '-' + mes + '-' + dia_fin + '';
+
+				fecha_inicio = moment(fecha_ini_sin_formato).format('YYYY-MM-DD');
+				fecha_fin = moment(fecha_fin_sin_formato).format('YYYY-MM-DD');
+				$('#fecha_inicial').val(fecha_inicio);
+				$('#fecha_final').val(fecha_fin);
+				$('#periodicidad').val('M');
+				fecha_oculta = fecha_fin;
+
+			} else {
+				$('#periodicidad').val('T');
+			}
+
+		}
+
+
+
+	});
+
+
+	$("#fecha_final").change(function () {
+
+		var fecha_final= $(this).val();
+
+		var periodo = $('#periodo').val();
+
+		if(periodo != 5){
+
+			if(fecha_final != fecha_oculta){
+				$('#fecha_final').val(fecha_oculta);
+			}
+
+		}
+	});
+
+
 
   	$("#tipo_impresion").change(function(){
 									
@@ -74,36 +260,109 @@ $(document).ready(function(){
 	var periodicidad       = $("#periodicidad").val();
 	var area_laboral       = $("#area_laboral").val();
 	var centro_de_costo_id = $("#centro_de_costo_id").val();	
-	var contrato_id        = $("#contrato_id").val();	
+	var contrato_id        = $("#contrato_id").val();
+	
+	var QueryString = "ACTIONCONTROLER=validaPeriodo&empleados="+empleados+"&periodicidad="+periodicidad+"&contrato_id=" + contrato_id;
 
-	var QueryString = "ACTIONCONTROLER=onclickSave&previsual=true&empleados="+empleados+"&fecha_inicial="+fecha_inicial+"&fecha_final="+fecha_final+"&periodicidad="+periodicidad+"&area_laboral="+area_laboral+"&centro_de_costo_id="+centro_de_costo_id+"&contrato_id="+contrato_id;
+		$.ajax({
+			type: "POST",
+			url: "RegistrarClass.php?rand=" + Math.random(),
+			data: QueryString,
 
-	$.ajax({
-    type: "POST",
-    url: "RegistrarClass.php?rand=" + Math.random(),
-    data: QueryString,
-    success: function(resp) {
+			success: function (resp) {	
+
+				var data = $.parseJSON(resp);
+                
+				if(data != ''){
+					
+					if(data.length > 1){
+						var mensaje = '';
+						for(var i = 0; i < data.length; i++){
+
+							var numero_contrato = data[i]['numero_contrato'];
+							var empleado = data[i]['empleado'];
+							var periodicidad1 = data[i]['periodicidad'];
+
+							mensaje = mensaje + "\n <b>Contrato " + numero_contrato + "--" + empleado+"--"+periodicidad1+"</b>\n";
+						}
+
+						if(periodicidad == 'S'){
+							periodicidad2 =' SEMANAL';
+						}else if(periodicidad == 'Q'){
+							periodicidad2 = 'QUINCENAL';
+						}else if(periodicidad == 'M'){
+							periodicidad2 = 'MENSUAL';
+						}else{
+							periodicidad2 = 'TODAS';
+						}
+
+						jConfirm("Estos contratos no se liquidar&aacuten: <br>"+mensaje+"<br>Por favor tenga en cuenta que la liquidacion que se esta haciendo tiene periodicidad: <b style='color:red'>"+periodicidad2+"</b><br><br>¿Esta seguro que desea continuar?", "Validacion",
+
+							function (r) {
+								if (r) {
+									//Codigo si se le da ACEPTAR al Jconfirm.
+									var QueryString = "ACTIONCONTROLER=onclickSave&previsual=true&empleados=" + empleados + "&fecha_inicial=" + fecha_inicial + "&fecha_final=" + fecha_final + "&periodicidad=" + periodicidad + "&area_laboral=" + area_laboral + "&centro_de_costo_id=" + centro_de_costo_id + "&contrato_id=" + contrato_id;
+
+									$.ajax({
+										type: "POST",
+										url: "RegistrarClass.php?rand=" + Math.random(),
+										data: QueryString,
+
+										success: function (resp) {
+
+											try {
+												if (resp > 0) {
+
+													alertJquery("Existe una liquidaci&oacute;n Previa  para las fechas seleccionadas. <br>Por favor verifique Liquidaci&oacute;n No " + resp);
+
+												} else {
+
+													if (resp.indexOf('<html>') != -1) {
+														document.location.href = "RegistrarClass.php?" + QueryString;
+													} else {
+														alertJquery(resp, "atencion");
+													}
+
+												}
+											} catch (e) {
+												alertJquery("se presento un inconveniente: " + e, "Atencion");
+											}
+										}
+									});
+
+
+								} else {
+									alertJquery("La nomina no se liquidar&aacute","Atencion");
+								}
+							}); 
+						}else{
+
+							var numero_contrato = data[0]['numero_contrato'];
+							var empleado = data[0]['empleado'];
+							var periodicidad1 = data[0]['periodicidad'];
+
+							mensaje = "\n <b>Contrato " + numero_contrato + "--" + empleado + "-- Periodicidad: " + periodicidad1 + "</b>\n";
+						
+
+								if (periodicidad == 'S') {
+									periodicidad2 = ' SEMANAL';
+								} else if (periodicidad == 'Q') {
+									periodicidad2 = 'QUINCENAL';
+								} else if (periodicidad == 'M') {
+									periodicidad2 = 'MENSUAL';
+								} else {
+									periodicidad2 = 'TODAS';
+								}
+
+						alertJquery("Este contrato no se liquidar&aacute: <br>" + mensaje + "<br>Por favor tenga en cuenta que la liquidaci&oacuten que se esta haciendo tiene periodicidad: <b style='color:red'>"+periodicidad2);
+
+						}
+				}
+			
 		
-		
-      try {
-		 if (resp > 0){
-
-			  alertJquery("Existe una liquidaci&oacute;n Previa  para las fechas seleccionadas. <br>Por favor verifique Liquidaci&oacute;n No "+resp);
-			  
-		 }else{
-			 
-			if (resp.indexOf('<html>') != -1){
-				document.location.href = "RegistrarClass.php?" + QueryString;
-			}else{
-				 alertJquery(resp, "atencion");
 			}
-			 	  
-		 } 
-      } catch (e) {
-		 alertJquery("se presento un inconveniente: "+e,"Atencion");
-      }
-    }
-  });
+
+		});
 
   }
 
@@ -126,7 +385,8 @@ function setDataFormWithResponse(){
       $('#contrato').attr("disabled","true");
 	  $('#empleados').attr("disabled","true");
 	  $('#fecha_inicial').attr("disabled","true");
-	  $('#fecha_final').attr("disabled","true");	
+	  $('#fecha_final').attr("disabled","true");
+	  $('#periodo').attr("disabled", "true");	
 
 	  $('#centro_de_costo_id').attr("disabled","true");
 	  
@@ -250,6 +510,7 @@ function RegistrarOnReset(){
 	$("#busqueda1").val('');
     $('#fecha_inicial').attr("disabled","");
 	$('#fecha_final').attr("disabled","");	
+	$('#periodo').attr("disabled", "");
 	
 	if($('#periodicidad')) $('#periodicidad').val("T");			
 	if($('#periodicidad'))    $('#periodicidad').attr("disabled","true");			

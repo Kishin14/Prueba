@@ -58,10 +58,10 @@ final class Registrar extends Controler{
 		name	=>'fecha_final',
 		id		=>'fecha_final',
 		type	=>'text',
+		disabled =>'yes',
 		required=>'yes',
 		value	=>'',
-		//tabindex=>'3',
-	    datatype=>array(
+		datatype=>array(
 			type	=>'date'),
 		transaction=>array(
 			table	=>array('liquidacion_novedad'),
@@ -83,13 +83,25 @@ final class Registrar extends Controler{
 			type	=>array('column'))
 		
    );
+
+   $this -> Campos[periodo] = array(
+		name =>'periodo',
+		id  =>'periodo',
+		type =>'select',
+		Boostrap =>'si',
+		options => array(array(value=>'1',text=>'SEMANAL'),array(value=>'2',text=>'PRIMERA QUINCENA'),array(value=>'3',text=>'SEGUNDA QUINCENA'),array(value=>'4',text=>'MES COMPLETO'),array(value=>'5',text=>'RANGO FECHAS')),
+		required=>'yes',
+		datatype=>array(
+			type =>'text',
+			length =>'2')
+   );
    
    $this -> Campos[periodicidad] = array(
 		name =>'periodicidad',
 		id  =>'periodicidad',
 		type =>'select',
 		Boostrap =>'si',
-		options => array(array(value=>'Q',text=>'QUINCENAL'),array(value=>'M',text=>'MENSUAL'),array(value=>'T',text=>'TODOS',selected=>'T')),
+		options => array(array(value=>'S',text=>'SEMANAL'),array(value=>'Q',text=>'QUINCENAL'),array(value=>'M',text=>'MENSUAL'),array(value=>'T',text=>'TODOS',selected=>'T')),
 		//required=>'yes',
 		disabled => 'disabled',
 		datatype=>array(
@@ -148,7 +160,7 @@ final class Registrar extends Controler{
 		   id =>'contrato',
 		   Boostrap =>'si',
 	   	type =>'text',
-			size    =>'30',
+			size    =>'20',
 	   	suggest => array(
 			name =>'contrato',
 			setId =>'contrato_id')
@@ -439,6 +451,41 @@ final class Registrar extends Controler{
     $this -> getArrayJSON($Data  -> GetData());
   }
 
+  protected function validaPeriodo(){
+	
+	require_once("RegistrarModelClass.php");
+	require_once("RegistrarLayoutClass.php");
+
+	$Model    = new RegistrarModel();
+	$Layout   = new RegistrarLayout($this -> getTitleTab(),$this -> getTitleForm());
+
+    $empleados          =   $_REQUEST['empleados'];
+	$periodicidad       =	$_REQUEST['periodicidad'];
+
+	if($empleados=='U'){
+		
+		$contrato_id = $_REQUEST['contrato_id'];
+		
+
+		$data = $Model -> validarPeriodicidad($periodicidad,$this -> getConex());
+        
+		if($data > 0){
+          $this -> getArrayJSON($data);
+		} 
+		
+	}else{
+
+		$data = $Model -> validarPeriodicidad($periodicidad,$this -> getConex());
+        
+		if($data > 0){
+			$this -> getArrayJSON($data);	 //echo("El sistema solo liquidara la nomina para los empleados que tengan la periodicidad ".$periodicidad." Si desea liquidar los siguientes contratos: ".$resultado."<br><br>Actualice la periodicidad de cada uno, de lo contrario continue con el proceso.");
+		} 
+
+	}
+
+  }
+  
+
   protected function onclickSave(){
 
 	require_once("RegistrarModelClass.php");
@@ -451,9 +498,20 @@ final class Registrar extends Controler{
 	$fecha_inicial      =   $_REQUEST['fecha_inicial'];
 	$fecha_final        =   $_REQUEST['fecha_final'];
 	$periodicidad       =	$_REQUEST['periodicidad'];
+	$periodo            =	$_REQUEST['periodo'];
 	$area_laboral       =	$_REQUEST['area_laboral'];
 	$centro_de_costo_id =	$_REQUEST['centro_de_costo_id'];	
-	$dias	            = intval(floor(abs((strtotime($fecha_inicial)-strtotime($fecha_final))/86400))+1);
+
+	if($periodo == 1){
+       $dias = 7;
+	}else if($periodo == 2 || $periodo == 3){
+       $dias = 15;
+	}else if($periodo == 4){
+	   $dias = 30;
+	}else{
+	   $dias = intval(floor(abs((strtotime($fecha_inicial)-strtotime($fecha_final))/86400))+1);
+	}
+
 
 	$previsual          =	$_REQUEST['previsual'];
 	
@@ -476,7 +534,7 @@ final class Registrar extends Controler{
 		
 		$contrato_id = $_REQUEST['contrato_id'];
 		$result = $Model -> validarContratos($fecha_inicial,$fecha_final,$this -> getConex());
-
+        
 		if($result > 0){
 
 				$numero_contrato = $result[0]['numero_contrato'];
@@ -486,6 +544,19 @@ final class Registrar extends Controler{
 			
 			exit("No puede liquidar la nomina hasta que actualice la fecha de terminación o realice la liquidación final del siguiente contrato: ".$resultado);
 		}
+
+/* 		$result = $Model -> validarPeriodicidad($periodicidad,$this -> getConex());
+        
+		if($result > 0){
+
+				$numero_contrato = $result[0]['numero_contrato'];
+				$empleado = $result[0]['empleado'];
+				$periodicidad = $result[0]['periodicidad'];
+
+				$resultado = '<br><br> N° Contrato: '. $numero_contrato.' '.$empleado;
+			
+			exit("No puede liquidar la nomina hasta que actualice la periodicidad del siguiente contrato: ".$resultado."<br><br>El empleado en este momento cuenta con una periodicidad: <b style='color:#ed121a'>".$periodicidad."<b>");
+		}  */
 
 		$comprobar = $Model -> ComprobarLiquidacion($_REQUEST['contrato_id'],$fecha_inicial,$fecha_final,$periodicidad,$area,$this -> getConex());
 		if($comprobar[0]['consecutivo']>0) exit($comprobar[0]['consecutivo']);

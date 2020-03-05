@@ -69,7 +69,7 @@ final class RegistrarLayout extends View{
      $this -> assign("ESTADO",			$this -> objectsHtml -> GetobjectHtml($this -> fields[estado]));
 	  $this -> assign("USUARIO_ID",		$this -> objectsHtml -> GetobjectHtml($this -> fields[usuario_id]));
 	  $this -> assign("FECHAREG",		$this -> objectsHtml -> GetobjectHtml($this -> fields[fecha_registro]));	  
-	
+	  $this -> assign("PERIODOLIQUIDA",		$this -> objectsHtml -> GetobjectHtml($this -> fields[periodo]));
 	  $this -> assign("PERIODICIDAD",		$this -> objectsHtml -> GetobjectHtml($this -> fields[periodicidad]));	 	 
 	  $this -> assign("AREAS",		$this -> objectsHtml -> GetobjectHtml($this -> fields[area_laboral]));	 	 
 	
