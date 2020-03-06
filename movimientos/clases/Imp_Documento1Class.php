@@ -95,7 +95,7 @@ final class Imp_Documento{
 //	   $pdf->Cell(15,5,$imputaciones[$i]['codigo_centro_costo'],1,0,'C');		   
 	   $pdf->Cell(15,5,$imputaciones[$i]['codigo_cento'],1,0,'C');		   
 	  // $pdf->Cell(69,5,substr($imputaciones[$i]['descripcion'],0,33),1,0,'L');	
-	   $pdf->Cell(69,5,substr($encabezado[0]['concepto'],0,33),1,0,'L');	
+	   $pdf->Cell(69,5,substr($imputaciones[$i]['descripcion'],0,33),1,0,'L');	
 	   $pdf->Cell(28,5,number_format($imputaciones[$i]['debito'],2,',','.'),1,0,'R');	
 	   $pdf->Cell(28,5,number_format($imputaciones[$i]['credito'],2,',','.'),1,0,'R');	   
 	 

@@ -49,7 +49,7 @@ final class Imp_DocumentoModel extends Db{
 				
         $select = "SELECT i.*,
 				(SELECT codigo_puc FROM puc WHERE puc_id=i.puc_id) AS puc_cod,(SELECT numero_identificacion FROM tercero WHERE tercero_id = i.tercero_id) AS identificacion_tercero,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = i.centro_de_costo_id) AS codigo_cento				
-         FROM  imputacion_contable i   WHERE i.encabezado_registro_id = $encabezado_registro_id ";		
+         FROM  imputacion_contable i   WHERE i.encabezado_registro_id = $encabezado_registro_id ";	
 	
 	    $result = $this -> DbFetchAll($select,$Conex);
 
