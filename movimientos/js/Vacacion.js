@@ -570,7 +570,7 @@ $(document).ready(function(){
         var fecha_reintegro = moment(fecha_final).add(1, 'days').format("YYYY-MM-DD");
 		$("#fecha_reintegro").val(fecha_reintegro);
 		
-        var dias_disfrutar = moment(fecha_final).diff(moment(fecha_inicio), 'days');
+        var dias_disfrutar = (moment(fecha_final).diff(moment(fecha_inicio), 'days'))+1;
 		$("#dias_disfrutar").val(dias_disfrutar);
 
 		if (si_empleado == 1) {

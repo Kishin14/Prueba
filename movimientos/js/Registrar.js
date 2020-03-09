@@ -274,7 +274,7 @@ $(document).ready(function(){
 				var data = $.parseJSON(resp);
                 
 				if(data != null){
-					alertJquery("entra");
+					
 					if(data.length > 1){
 						var mensaje = '';
 						for(var i = 0; i < data.length; i++){
@@ -452,7 +452,7 @@ function setDataFormWithResponse1(){
       var url 	    = "DetalleRegistrarClass.php?fecha_inicial="+fecha_inicial+"&fecha_final="+fecha_final+"&rango=T";
       
       $("#detalleRegistrarNovedad").attr("src",url);
-      
+	  $('#periodo').attr("disabled", "true");
 	  $('#contrato').attr("disabled","true");
 	  $('#empleados').attr("disabled","true");
 	  $('#fecha_inicial').attr("disabled","true");
