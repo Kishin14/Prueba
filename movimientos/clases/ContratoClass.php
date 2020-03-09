@@ -541,7 +541,7 @@ final class Contrato extends Controler{
 			id  =>'periodicidad',
 			type =>'select',
 			Boostrap =>'si',
-			options => array(array(value=>'T',text=>'TODAS'),array(value=>'S',text=>'SEMANAL'),array(value=>'Q',text=>'QUINCENAL'),array(value=>'M',text=>'MENSUAL')),
+			options => array(array(value=>'T',text=>'TODAS'),array(value=>'S',text=>'SEMANAL'),array(value=>'Q',text=>'QUINCENAL'),array(value=>'M',text=>'MENSUAL'),array(value=>'H',text=>'HORA'),array(value=>'D',text=>'DIAS')),
 			required=>'yes',
 			datatype=>array(
 			 type =>'text',

@@ -292,11 +292,13 @@ $(document).ready(function(){
 							periodicidad2 = 'QUINCENAL';
 						}else if(periodicidad == 'M'){
 							periodicidad2 = 'MENSUAL';
-						}else{
+						}else if(periodicidad =='T'){
 							periodicidad2 = 'TODAS';
 						}
+						
 
-						jConfirm("Estos contratos no se liquidar&aacuten: <br>"+mensaje+"<br>Por favor tenga en cuenta que la liquidacion que se esta haciendo tiene periodicidad: <b style='color:red'>"+periodicidad2+"</b><br><br>¿Esta seguro que desea continuar?", "Validacion",
+
+						jConfirm("Estos contratos no se liquidar&aacuten, excepto si la periodicidad de esta liquidacion es TODOS: <br>"+mensaje+"<br>Por favor tenga en cuenta que la liquidacion que se esta haciendo tiene periodicidad: <b style='color:red'>"+periodicidad2+"</b><br><br>¿Esta seguro que desea continuar?", "Validacion",
 
 							function (r) {
 								if (r) {

@@ -45,7 +45,7 @@ final class RegistrarModel extends Db{
 		$consulta ='';
 	}
 
-	$select="SELECT c.numero_contrato,(CASE c.periodicidad WHEN 'M' THEN 'MENSUAL' WHEN 'Q' THEN 'QUINCENAL' WHEN 'S' THEN 'SEMANAL' ELSE 'TODAS' END)AS periodicidad,
+	$select="SELECT c.numero_contrato,(CASE c.periodicidad WHEN 'M' THEN 'MENSUAL' WHEN 'Q' THEN 'QUINCENAL' WHEN 'S' THEN 'SEMANAL' WHEN 'H' THEN 'HORAS' WHEN 'T' THEN 'TODAS' ELSE 'DIAS' END)AS periodicidad,
 	         (SELECT CONCAT_WS(' ',t.primer_nombre,t.segundo_nombre,t.primer_apellido,t.segundo_apellido,t.razon_social) FROM tercero t,empleado e WHERE t.tercero_id=e.tercero_id AND e.empleado_id=c.empleado_id) AS empleado
 	         FROM contrato c WHERE c.estado = 'A' AND c.periodicidad != '$periodicidad' $consulta";
 	$result = $this -> DbFetchAll($select,$Conex,true);
