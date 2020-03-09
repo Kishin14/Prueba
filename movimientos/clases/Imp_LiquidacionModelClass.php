@@ -41,6 +41,8 @@ final class Imp_LiquidacionModel extends Db{
 				AND dl.liquidacion_novedad_id=ln.liquidacion_novedad_id AND ln.estado!='A' GROUP BY ln.contrato_id ORDER BY empleado";
 				
 		  $result = $this -> DbFetchAll($select,$Conex,true); 
+		  //exit(print_r($result));
+
 		  
 	  
 	}else{
@@ -64,7 +66,8 @@ final class Imp_LiquidacionModel extends Db{
 				AND dl.liquidacion_novedad_id=ln.liquidacion_novedad_id AND dl.debito>0 AND dl.sueldo_pagar=0 AND ln.estado!='A' AND dl.concepto_area_id IS NULL
 				GROUP BY dl.concepto ORDER BY dl.detalle_liquidacion_novedad_id ASC ";
 				
-	  	$result = $this -> DbFetchAll($select,$Conex,true);
+		  $result = $this -> DbFetchAll($select,$Conex,true);
+		  //exit(print_r($result));
 	  
 	}else{
    	    $result = array();
