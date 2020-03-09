@@ -298,7 +298,7 @@ $(document).ready(function(){
 						
 
 
-						jConfirm("Estos contratos no se liquidar&aacuten, excepto si la periodicidad de esta liquidacion es TODOS: <br>"+mensaje+"<br>Por favor tenga en cuenta que la liquidacion que se esta haciendo tiene periodicidad: <b style='color:red'>"+periodicidad2+"</b><br><br>¿Esta seguro que desea continuar?", "Validacion",
+						jConfirm("Estos contratos no se liquidar&aacuten. Excepto si la periodicidad de esta liquidaci&oacuten es <b>'TODOS'</b>: <br>"+mensaje+"<br>Por favor tenga en cuenta que la liquidacion que se esta haciendo tiene periodicidad: <b style='color:red'>"+periodicidad2+"</b><br><br>¿Esta seguro que desea continuar?", "Validacion",
 
 							function (r) {
 								if (r) {
@@ -315,7 +315,7 @@ $(document).ready(function(){
 											try {
 												if (resp > 0) {
 
-													alertJquery("Existe una liquidaci&oacute;n Previa  para las fechas seleccionadas. <br>Por favor verifique Liquidaci&oacute;n No " + resp);
+													alertJquery("Existe una liquidaci&oacuten Previa  para las fechas seleccionadas. <br>Por favor verifique Liquidaci&oacute;n No " + resp);
 
 												} else {
 
