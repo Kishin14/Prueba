@@ -514,23 +514,25 @@ final class Registrar extends Controler{
 	   $dias = 30;
 	}else{
 	   $dias = intval(floor(abs((strtotime($fecha_inicial)-strtotime($fecha_final))/86400))+1);
+			if (substr($fecha_final, 5, 2) == '02' && substr($fecha_final, 8, 2) == '28') {
+			$dias = ($dias + 2);
+		}
+
+		if (substr($fecha_final, 5, 2) == '02' && substr($fecha_final, 8, 2) == '29') {
+			$dias = ($dias + 1);
+		}
+
+		if (substr($fecha_final, 8, 2) == '31') {
+			$dias = ($dias - 1);
+		}
+
 	}
 
 
 	$previsual          =	$_REQUEST['previsual'];
 	
 	$dias_real = $dias;
-	if(substr($fecha_final,5,2)=='02' && substr($fecha_final,8,2)=='28'){
-		$dias = ($dias+2);
-	}
-	
-	if(substr($fecha_final,5,2)=='02' && substr($fecha_final,8,2)=='29'){
-		$dias = ($dias+1);
-	}	
 
-	if(substr($fecha_final,8,2)=='31'){
-		$dias = ($dias-1);
-	}	
 
 	if(substr($fecha_inicial,0,4)!=substr($fecha_final,0,4)) exit("Las fechas Inicial y final no pueden ser en diferente A&ntilde;o");
 	

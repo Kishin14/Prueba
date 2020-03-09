@@ -42,7 +42,6 @@ final class Imp_LiquidacionModel extends Db{
 				
 		  $result = $this -> DbFetchAll($select,$Conex,true); 
 		  
-		  //die(print_r($result));
 	  
 	}else{
    	    $result = array();
@@ -227,7 +226,7 @@ final class Imp_LiquidacionModel extends Db{
 				WHERE ln.fecha_inicial = (SELECT fecha_inicial FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id ) 
 				AND ln.fecha_final = (SELECT fecha_final FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id )  AND ln.area_laboral=(SELECT area_laboral FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id) AND ln.periodicidad=(SELECT periodicidad FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id)
 				AND dl.liquidacion_novedad_id=ln.liquidacion_novedad_id AND ln.estado!='A'";
-				//echo ($select);
+
 				
 	  	$result = $this -> DbFetchAll($select,$Conex,true); 
 	  
