@@ -565,7 +565,7 @@ final class Registrar extends Controler{
 		}  */
 
 		$comprobar = $Model -> ComprobarLiquidacion($_REQUEST['contrato_id'],$fecha_inicial,$fecha_final,$periodicidad,$area,$this -> getConex());
-		if($comprobar[0]['consecutivo']>0) exit($comprobar[0]['consecutivo']);
+		if($comprobar[0]['consecutivo']>0) exit($comprobar[0]['consecutivo']);//Se valida si ese contrato no esta Finalizado
 
 		$result = $Model -> Save($this -> getUsuarioId(),$this -> Campos,$dias,$dias_real,$previsual,$this -> getConex());
 
