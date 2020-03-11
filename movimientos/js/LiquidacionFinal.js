@@ -141,100 +141,29 @@ function LiquidacionFinalOnReset(formulario){
 }
 
 function restaFechas(f1,f2){
-	var aFecha1 = f1.split('-'); 
-	var aFecha2 = f2.split('-'); 
-	var fFecha1 = Date.UTC(aFecha1[0],aFecha1[1]-1,aFecha1[2]); 
-	var fFecha2 = Date.UTC(aFecha2[0],aFecha2[1]-1,aFecha2[2]); 
-	var dif = fFecha2 - fFecha1;
-	var dias = Math.floor(dif / (1000 * 60 * 60 * 24))
-	dias= (dias+1); 
-	var meses=parseInt(dias/30);
-	var meses_res= ((dias/30)-meses);
 	
-	var date = new Date();
-	var ultimoDia = new Date(aFecha1[0], aFecha1[1], 0);
-	var ultimoDiaFin = new Date(aFecha2[0], aFecha2[1], 0);
+	var QueryString   = 'ACTIONCONTROLER=restaFechasCont&fechaInicial='+f1+'&fechaFinal='+f2;
+	var dias          = 0;
+	$.ajax({
+	async      : false,
+	url        : "LiquidacionFinalClass.php?rand="+Math.random(),
+	data       : QueryString,
+	beforeSend : function(){
+	showDivLoading();
+	},
+	success    : function(resp){
+	try{
+	
+		dias = resp;
 
-	if(aFecha1[0]==aFecha2[0] && aFecha1[1]==aFecha2[1] && aFecha1[2]=='01' &&  aFecha2[2]==ultimoDia.getDate() ){
-		dias=30;
-	}else if(meses==1 && ultimoDiaFin.getDate()==31 && aFecha2[2]==31){
-		
-		 fFecha1 = Date.UTC(aFecha1[0],aFecha2[1]-1,aFecha1[2]); 
-		 fFecha2 = Date.UTC(aFecha2[0],aFecha2[1]-1,aFecha2[2]); 
-		 dif = fFecha2 - fFecha1;
-		 dias = Math.floor(dif / (1000 * 60 * 60 * 24))
-		 dias= (dias+30); 
-		
-	}else if(meses==1){
-		 if(aFecha1[2]<=aFecha2[2]){		
-			 fFecha1 = Date.UTC(aFecha1[0],aFecha2[1]-1,aFecha1[2]); 
-			 fFecha2 = Date.UTC(aFecha2[0],aFecha2[1]-1,aFecha2[2]); 
-			 dif = fFecha2 - fFecha1;
-			 dias = Math.floor(dif / (1000 * 60 * 60 * 24))
-			 dias= (dias+31); 
-		 }else{
-			fFecha1 = Date.UTC(aFecha2[0],aFecha2[1]-1,aFecha1[2]); 
-			fFecha2 = Date.UTC(aFecha2[0],aFecha2[1],aFecha2[2]); 
-			dif = fFecha2 - fFecha1;
-			dias = Math.floor(dif / (1000 * 60 * 60 * 24));
-			dias= (dias+30); 
-			 
-		 }
-	}else if(meses>1){
-		 var cont_mes=0;
-		 if(aFecha1[0]==aFecha2[0]){
-			 if(aFecha1[2]<=aFecha2[2]){
-				var dia_ult = aFecha2[2]!=31 ? aFecha2[2] : 30; 
-				fFecha1 = Date.UTC(aFecha2[0],aFecha2[1]-1,aFecha1[2]); 
-				fFecha2 = Date.UTC(aFecha2[0],aFecha2[1]-1,dia_ult); 
-				dif = fFecha2 - fFecha1;
-		 		var dias_dif = Math.floor(dif / (1000 * 60 * 60 * 24))				 
-				
-				cont_mes=parseInt(aFecha2[1])-parseInt(aFecha1[1]);
-				dias=((cont_mes*30)+dias_dif+1);
-			 }else{
-				fFecha1 = Date.UTC(aFecha2[0],aFecha2[1]-1,aFecha1[2]); 
-				fFecha2 = Date.UTC(aFecha2[0],aFecha2[1],aFecha2[2]); 
-				dif = fFecha2 - fFecha1;
-				var dias_dif = Math.floor(dif / (1000 * 60 * 60 * 24))				 
-				 
-				cont_mes=parseInt(aFecha2[1])-parseInt(aFecha1[1]);
-				dias=(((cont_mes-1)*30)+dias_dif);
-				 
-			 }
-		 }else{
-			 //FALTA CUANDO ES MAS DE UN ANIO A OTRO
-			 if(aFecha1[1]<=aFecha2[1]){
-				//ok
-				fFecha1 = Date.UTC(aFecha2[0],aFecha2[1],aFecha1[2]); 
-				fFecha2 = Date.UTC(aFecha2[0],aFecha2[1],aFecha2[2]); 
-				dif = fFecha2 - fFecha1;
-		 		var dias_dif = Math.floor(dif / (1000 * 60 * 60 * 24))				 
+	}catch(e){
 
-				var meses_dif_dias=((aFecha2[1]-aFecha1[1])*30); 
-				
-				var dif_year_dias= ((aFecha2[0]-aFecha1[0])*360);
-				dias = parseInt(dias_dif+meses_dif_dias+dif_year_dias);
-				 
-				   
-			 }else{
-				//ok
-				fFecha1 = Date.UTC(aFecha2[0],aFecha2[1],aFecha1[2]); 
-				fFecha2 = Date.UTC(aFecha2[0],aFecha2[1],aFecha2[2]); 
-				dif = fFecha2 - fFecha1;
-		 		var dias_dif = Math.floor(dif / (1000 * 60 * 60 * 24))				 
+	alertJquery("Se presento un error :"+e,"Error");
 
-				
-				var meses_dif_dias=(((12-(aFecha1[1]-aFecha2[1])))*30); 
-
-				var dif_year_dias= (((aFecha2[0]-1)-aFecha1[0])*360);
-
-				dias = parseInt(dias_dif+meses_dif_dias+dif_year_dias+1);
-
-			 }
-		 }
-		 
 	}
+	removeDivLoading();
+	} 
+	});
 
 	return dias;
 }
@@ -439,7 +368,7 @@ $(document).ready(function(){
 	if(this.id == 'guardar'){
 			if(!formSubmitted){
 				 formSubmitted = true;
-				 console.log(formulario);
+			
 				 $('#blur').val('false');
 				 Send(formulario,'onclickSave',null,LiquidacionFinalOnSave);
 			}
