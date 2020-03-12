@@ -79,7 +79,8 @@ final class VacacionLayout extends View{
 	 $this -> assign("CONCEPTO",			$this -> objectsHtml -> GetobjectHtml($this -> fields[concepto]));		 
 	 $this -> assign("CONCEPTOITEM",		$this -> objectsHtml -> GetobjectHtml($this -> fields[concepto_item]));	
    $this -> assign("DIASDESCONTAR",		$this -> objectsHtml -> GetobjectHtml($this -> fields[dias]));
-   $this -> assign("DIASDISFRUTAR",		$this -> objectsHtml -> GetobjectHtml($this -> fields[dias_disfrutar]));	
+   $this -> assign("DIASDISFRUTAR",		$this -> objectsHtml -> GetobjectHtml($this -> fields[dias_disfrutar]));
+   $this -> assign("DIASDISFRUTAREAL",		$this -> objectsHtml -> GetobjectHtml($this -> fields[dias_disfrutar_real]));	
    $this -> assign("VALORLIQUIDACION",	$this -> objectsHtml -> GetobjectHtml($this -> fields[valor]));	
    $this -> assign("DIASPAGAR",		$this -> objectsHtml -> GetobjectHtml($this -> fields[dias_pagados]));	
    $this -> assign("VALORLIQUIDACIONPAGAR",	$this -> objectsHtml -> GetobjectHtml($this -> fields[valor_pagos]));

@@ -551,19 +551,6 @@ final class Registrar extends Controler{
 			exit("No puede liquidar la nomina hasta que actualice la fecha de terminación o realice la liquidación final del siguiente contrato: ".$resultado);
 		}
 
-/* 		$result = $Model -> validarPeriodicidad($periodicidad,$this -> getConex());
-        
-		if($result > 0){
-
-				$numero_contrato = $result[0]['numero_contrato'];
-				$empleado = $result[0]['empleado'];
-				$periodicidad = $result[0]['periodicidad'];
-
-				$resultado = '<br><br> N° Contrato: '. $numero_contrato.' '.$empleado;
-			
-			exit("No puede liquidar la nomina hasta que actualice la periodicidad del siguiente contrato: ".$resultado."<br><br>El empleado en este momento cuenta con una periodicidad: <b style='color:#ed121a'>".$periodicidad."<b>");
-		}  */
-
 		$comprobar = $Model -> ComprobarLiquidacion($_REQUEST['contrato_id'],$fecha_inicial,$fecha_final,$periodicidad,$area,$this -> getConex());
 		if($comprobar[0]['consecutivo']>0) exit($comprobar[0]['consecutivo']);
 

@@ -47,7 +47,8 @@ final class RegistrarModel extends Db{
 
 	$select="SELECT c.numero_contrato,(CASE c.periodicidad WHEN 'M' THEN 'MENSUAL' WHEN 'Q' THEN 'QUINCENAL' WHEN 'S' THEN 'SEMANAL' WHEN 'H' THEN 'HORAS' WHEN 'T' THEN 'TODAS' ELSE 'DIAS' END)AS periodicidad,
 	         (SELECT CONCAT_WS(' ',t.primer_nombre,t.segundo_nombre,t.primer_apellido,t.segundo_apellido,t.razon_social) FROM tercero t,empleado e WHERE t.tercero_id=e.tercero_id AND e.empleado_id=c.empleado_id) AS empleado
-	         FROM contrato c WHERE c.estado = 'A' AND c.periodicidad != '$periodicidad' $consulta";
+			 FROM contrato c WHERE c.estado = 'A' AND c.periodicidad != '$periodicidad' $consulta";
+			 
 	$result = $this -> DbFetchAll($select,$Conex,true);
     
 	return $result;
@@ -70,7 +71,6 @@ final class RegistrarModel extends Db{
 	$anio            = substr($_REQUEST['fecha_final'],0,4);
 	$contrato_id     = $_REQUEST['contrato_id'];
 
-	
 	$deb_total=0;
 	$cre_total=0;
 	$dias_total = $dias;
@@ -204,11 +204,12 @@ final class RegistrarModel extends Db{
 		$numero_identificacion_pension =  $result[$i]['numero_identificacion_pension'];
 		$digito_verificacion_pension   =  $result[$i]['digito_verificacion_pension']!='' ? $result[$i]['digito_verificacion_pension'] : 'NULL';		
 
-		$select_vac = "SELECT  c.*, DATEDIFF(IF(fecha_dis_final>'$fecha_final','$fecha_final',fecha_dis_final),IF(fecha_dis_inicio>'$fecha_inicial',fecha_dis_inicio,'$fecha_inicial')) AS diferencia
+		$select_vac = "SELECT  c.*, DATEDIFF(IF(fecha_reintegro>'$fecha_final','$fecha_final',fecha_reintegro),IF(fecha_dis_inicio>'$fecha_inicial',fecha_dis_inicio,'$fecha_inicial')) AS diferencia
 				FROM 	liquidacion_vacaciones c
-				WHERE c.estado!='A' AND c.contrato_id=$contrato_id AND ('$fecha_inicial' BETWEEN  fecha_dis_inicio AND fecha_dis_final OR '$fecha_final'  BETWEEN  fecha_dis_inicio AND fecha_dis_final)";
+				WHERE c.estado ='C' AND c.contrato_id=$contrato_id AND ('$fecha_inicial' BETWEEN  fecha_dis_inicio AND fecha_reintegro OR '$fecha_final'  BETWEEN  fecha_dis_inicio AND fecha_reintegro)";
+		
 		$result_vac = $this -> DbFetchAll($select_vac,$Conex,true);
-		$dife_vacas= $result_vac[0]['diferencia']>0 ? ($result_vac[0]['diferencia']+1) : 0;
+		$dife_vacas= $result_vac[0]['diferencia']>0 ? ($result_vac[0]['diferencia']) : 0;
 
 		if($dias_real<=$result[$i]['dias_lice_nore']){
 			$dias     = 0;
@@ -773,11 +774,11 @@ final class RegistrarModel extends Db{
 		$numero_identificacion_pension =  $result[$i]['numero_identificacion_pension'];
 		$digito_verificacion_pension =  $result[$i]['digito_verificacion_pension']!='' ? $result[$i]['digito_verificacion_pension'] : 'NULL';
 
-		$select_vac = "SELECT  c.*, DATEDIFF(IF(fecha_dis_final>'$fecha_final','$fecha_final',fecha_dis_final),IF(fecha_dis_inicio>'$fecha_inicial',fecha_dis_inicio,'$fecha_inicial')) AS diferencia
+		$select_vac = "SELECT  c.*, DATEDIFF(IF(fecha_reintegro>'$fecha_final','$fecha_final',fecha_reintegro),IF(fecha_dis_inicio>'$fecha_inicial',fecha_dis_inicio,'$fecha_inicial')) AS diferencia
 				FROM 	liquidacion_vacaciones c
-				WHERE c.estado!='A' AND c.contrato_id=$contrato_id AND (('$fecha_inicial' BETWEEN  fecha_dis_inicio AND fecha_dis_final OR '$fecha_final' BETWEEN  fecha_dis_inicio AND fecha_dis_final) OR ('$fecha_inicial' < fecha_dis_inicio AND fecha_dis_final < '$fecha_final'))";
+				WHERE c.estado = 'C' AND c.contrato_id=$contrato_id AND (('$fecha_inicial' BETWEEN  fecha_dis_inicio AND fecha_reintegro OR '$fecha_final' BETWEEN  fecha_dis_inicio AND fecha_reintegro) OR ('$fecha_inicial' < fecha_dis_inicio AND fecha_reintegro < '$fecha_final'))";
 		$result_vac = $this -> DbFetchAll($select_vac,$Conex,true);
-		$dife_vacas= $result_vac[0]['diferencia']>0 ? ($result_vac[0]['diferencia']+1) : 0;
+		$dife_vacas= $result_vac[0]['diferencia']>0 ? ($result_vac[0]['diferencia']) : 0;
 
 		if($dias_real<=$result[$i]['dias_lice_nore']){
 			$dias = 0;
@@ -937,7 +938,7 @@ final class RegistrarModel extends Db{
 			$credito=intval((intval(((($sueldo_base)/30)*$dias)+$total_base)*$result_per[0]['desc_emple_salud'])/100);
 			$deb_total=$deb_total+$debito;
 			$cre_total=$cre_total+$credito;
-			//exit("JDFC23");
+			
 			$detalle_liquidacion_novedad_id = $this -> DbgetMaxConsecutive("detalle_liquidacion_novedad","detalle_liquidacion_novedad_id",$Conex,false,1);
 			$insert = "INSERT INTO 	detalle_liquidacion_novedad (detalle_liquidacion_novedad_id,puc_id,liquidacion_novedad_id,debito,credito,fecha_inicial,fecha_final,dias,observacion,concepto,tercero_id,numero_identificacion,digito_verificacion) 
 			VALUES ($detalle_liquidacion_novedad_id,$puc_salud,$liquidacion_novedad_id,$debito,$credito,'$fecha_inicial','$fecha_final',$dias,'$observacion','SALUD',$tercero_eps_id,$numero_identificacion_eps,$digito_verificacion_eps)";
@@ -1138,7 +1139,7 @@ final class RegistrarModel extends Db{
 		//sueldo a pagar
 		$debito=0;
 		$credito=($deb_total-$cre_total);
-		//exit("JDFC18");
+		
 		$detalle_liquidacion_novedad_id = $this -> DbgetMaxConsecutive("detalle_liquidacion_novedad","detalle_liquidacion_novedad_id",$Conex,false,1);
 		$insert = "INSERT INTO 	detalle_liquidacion_novedad (detalle_liquidacion_novedad_id,puc_id,liquidacion_novedad_id,debito,credito,fecha_inicial,fecha_final,dias,observacion,concepto,sueldo_pagar,tercero_id,numero_identificacion,digito_verificacion) 
 		VALUES ($detalle_liquidacion_novedad_id,$puc_sueldo_pagar,$liquidacion_novedad_id,$debito,$credito,'$fecha_inicial','$fecha_final',$dias,'$observacion','SUELDO PAGAR',1,$tercero_id,$numero_identificacion,$digito_verificacion)";

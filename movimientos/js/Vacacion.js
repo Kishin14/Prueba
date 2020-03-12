@@ -572,6 +572,7 @@ $(document).ready(function(){
 		
         var dias_disfrutar = (moment(fecha_final).diff(moment(fecha_inicio), 'days'))+1;
 		$("#dias_disfrutar").val(dias_disfrutar);
+		$("#dias_disfrutar_real").val(dias_disfrutar);
 
 		if (si_empleado == 1) {
 
@@ -620,7 +621,8 @@ $(document).ready(function(){
 		var fecha_reintegro = $('#fecha_reintegro').val();
 		var dias = $("#dias").val();
 
-		var dias_dif = moment(fecha_reintegro).diff(moment(fecha_inicio), 'days');
+		var dias_dif = (moment(fecha_reintegro).diff(moment(fecha_inicio), 'days'));
+		$("#dias_disfrutar_real").val(dias_dif);
 		var porcentaje = ((dias * 30) / (100));
 
 		var dias_max = parseInt(dias) + parseInt(porcentaje);

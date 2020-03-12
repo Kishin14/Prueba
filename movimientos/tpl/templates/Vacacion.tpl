@@ -63,10 +63,15 @@
           <tr>
             <td><label>Fecha inicio : </label></td>
             <td>{$FECHAINI}</td>
+             <td><a href="javascript:void(0);" title="Presiona aqui para saber acerca de este campo."  name="myBtn"><img src="../../../framework/media/images/modulos/manual.png" width="16" height="18" onclick="alert_unico(this,'Informaci&oacute;n','Antes de seleccionar la fecha inicial debemos tener en cuenta que primero se tiene que selecionar un empleado y un periodo de liquidaci&oacute;n. Al seleccionar un periodo se nos calcular&aacute;n los dias a descontar.')"/></a></td>
             <td><label>Fecha final : </label></td>
             <td>{$FECHAFIN}</td>
+            <td><a href="javascript:void(0);" title="Presiona aqui para saber acerca de este campo."  name="myBtn"><img src="../../../framework/media/images/modulos/manual.png" width="16" height="18" onclick="alert_unico(this,'Informaci&oacute;n','Por favor tenga en cuenta que esta fecha es autocompletada. Es decir, al seleccionar la fecha de inicio se calcular&aacute; la fecha final pero debemos tener presente que el sistema calcula esta fecha contando 15 dias incluyendo domingos y festivos, por tanto es recomendable modificar esta fecha puesto que de esta depende el calculo de los dias a disfrutar.')"/></a></td>
             <td><label>Fecha reintegro : </label></td>
             <td>{$FECHAREINTEGRO}</td>
+            
+            <td><a href="javascript:void(0);" title="Presiona aqui para saber acerca de este campo."  name="myBtn"><img src="../../../framework/media/images/modulos/manual.png" width="16" height="18" onclick="alert_unico(this,'Informaci&oacute;n','Esta fecha es recomendable modificarla cuando un trabajador decide no disfrutar completamente sus vacaciones. Segun la fecha en que se reintegre el trabajador asi mismo se calcularan los dias a disfrutar realmente')"/></a></td>
+      
         </tr>
       </table>
       
@@ -84,18 +89,21 @@
             <tr>
               <td><label>Dias a disfrutar  : </label></td>
               <td>{$DIASDISFRUTAR}</td>
-              <td><label>Valor : </label></td>
+              <td><label>Valor Liquidación : </label></td>
               <td>{$VALORLIQUIDACION}</td>
+          </tr>
+          <tr>
+              <td><label>Dias a disfrutar realmente  : </label></td>
+              <td>{$DIASDISFRUTAREAL}</td>
           </tr>
            <tr>
               <td id="dias_pagar"><label>Dias a pagar  : </label></td>
               <td>{$DIASPAGAR}</td>
-              <td id="valor_pagar"><label>Valor : </label></td>
+              <td id="valor_pagar"><label>Valor Dias a Pagar: </label></td>
               <td>{$VALORLIQUIDACIONPAGAR}</td>
           </tr>
            <tr>
               <td colspan="2">&nbsp;</td>
-              <td><label>Valor Total Liquidacion : </label></td>
               <td>{$VALORTOTAL}</td>
           </tr>        
           </table>

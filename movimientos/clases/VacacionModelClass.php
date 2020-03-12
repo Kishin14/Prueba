@@ -55,6 +55,7 @@ final class VacacionModel extends Db{
 		$fecha_reintegro			= $this -> requestDataForQuery('fecha_reintegro','date');
 		$dias 	 					= $this -> requestDataForQuery('dias','integer');
 		$dias_disfrutar 	 		= $this -> requestDataForQuery('dias_disfrutar','integer');
+		$dias_disfrutar_real 	 	= $this -> requestDataForQuery('dias_disfrutar_real','integer');
 		$valor				        = $this -> requestDataForQuery('valor','numeric');
 		$dias_pagados 	 		    = $this -> requestDataForQuery('dias_pagados','integer');
 		$valor_pagos				= $this -> requestDataForQuery('valor_pagos','numeric');
@@ -84,11 +85,11 @@ final class VacacionModel extends Db{
 		if($result > 0){
             exit("¡Existe una liquidacion de vacaciones con las mismas fechas para este contrato, por favor revise nuevamente.!");
 		}
-
+        //guarda la liquidacion de vacaciones
 		$insert_vacaciones = "INSERT INTO liquidacion_vacaciones 
-		(liquidacion_vacaciones_id,contrato_id,fecha_liquidacion,fecha_dis_inicio,fecha_dis_final,fecha_reintegro,dias,dias_disfrutar,valor,dias_pagados,valor_pagos,valor_total,observaciones,concepto,usuario_id,fecha_registro,si_empleado)
+		(liquidacion_vacaciones_id,contrato_id,fecha_liquidacion,fecha_dis_inicio,fecha_dis_final,fecha_reintegro,dias,dias_disfrutar,dias_disfrutar_real,valor,dias_pagados,valor_pagos,valor_total,observaciones,concepto,usuario_id,fecha_registro,si_empleado)
 		VALUES
-		($liquidacion_vacaciones_id,$contrato_id,$fecha_liquidacion,$fecha_dis_inicio,$fecha_dis_final,$fecha_reintegro,$dias,$dias_disfrutar,$valor,$dias_pagados,$valor_pagos,$valor_total,$observaciones,$concepto,$usuario_id,'$fecha_registro',$si_empleado)";
+		($liquidacion_vacaciones_id,$contrato_id,$fecha_liquidacion,$fecha_dis_inicio,$fecha_dis_final,$fecha_reintegro,$dias,$dias_disfrutar,$dias_disfrutar_real,$valor,$dias_pagados,$valor_pagos,$valor_total,$observaciones,$concepto,$usuario_id,'$fecha_registro',$si_empleado)";
 		$this -> query($insert_vacaciones,$Conex,true);
 		
 		
@@ -104,8 +105,8 @@ final class VacacionModel extends Db{
 				$fecha_inicial_periodo = $item_fr[0];
 				$fecha_final_periodo = $item_fr[1];
 				$dias_ganados	= $item_fr[2];
-				//$dias_disfrutados = $item_fr[3];
 				
+				//guarda el detalle de la liquidacion de las vacaciones
 				$insert_detalles = "INSERT INTO detalle_liquidacion_vacaciones (liquidacion_vacaciones_id,periodo_inicio,periodo_fin,dias_ganados,dias_disfrutados,dias_pagados) 						                                    VALUES
 								    ($liquidacion_vacaciones_id,$fecha_inicial_periodo,$fecha_final_periodo,$dias_ganados,$dias,$dias_pagados)";
 				$this -> query($insert_detalles,$Conex,true); 
@@ -154,40 +155,40 @@ final class VacacionModel extends Db{
 		
 		if($valor_consolidado>0){
 			
-			if($valor_consolidado>$valor_total){
-				$valor_consolidado = $valor_total;
+			if($valor_consolidado>$valor){
+				$valor_consolidado = $valor;
 			}
 			
 			$valor_ingresado   = intval($valor_consolidado); 
 			
-			
+			//registro consolidado
 			$insert_det_puc_cons ="INSERT INTO detalle_vacaciones_puc (liquidacion_vacaciones_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_vacaciones,porcentaje_vacaciones,formula_vacaciones,desc_vacaciones,deb_item_vacaciones,cre_item_vacaciones,valor_liquida,contrapartida)
 		VALUES
-		($liquidacion_vacaciones_id,$puc_consolidado_vacaciones,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF($centro_costo_consolidado>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,$valor_ingresado,0,0,0)";
+		($liquidacion_vacaciones_id,$puc_consolidado_vacaciones,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF($centro_costo_consolidado>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,$valor_ingresado,0,$valor_ingresado,0)";
 			$this -> query($insert_det_puc_cons,$Conex,true); 
 		}
 		
 		if($valor_provision>0){
 			
+			//registro provisiones
 			
-			
-				if(($valor_total-$valor_ingresado)>$valor_provision){
+				if(($valor-$valor_ingresado)>$valor_provision){
 					$insert_det_puc_prov ="INSERT INTO detalle_vacaciones_puc (liquidacion_vacaciones_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_vacaciones,porcentaje_vacaciones,formula_vacaciones,desc_vacaciones,deb_item_vacaciones,cre_item_vacaciones,valor_liquida,contrapartida)
 		VALUES
-		($liquidacion_vacaciones_id,$puc_provision_vacaciones,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_provision,IF($centro_costo_provision>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_provision),'NULL'),0,'NULL','NULL',$observaciones,$valor_provision,0,0,0)";
+		($liquidacion_vacaciones_id,$puc_provision_vacaciones,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_provision,IF($centro_costo_provision>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_provision),'NULL'),0,'NULL','NULL',$observaciones,$valor_provision,0,$valor_provision,0)";
 					
 				}else{
-					$valor_provision = $valor_total-$valor_ingresado;
+					$valor_provision = $valor-$valor_ingresado;
 					$insert_det_puc_prov ="INSERT INTO detalle_vacaciones_puc (liquidacion_vacaciones_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_vacaciones,porcentaje_vacaciones,formula_vacaciones,desc_vacaciones,deb_item_vacaciones,cre_item_vacaciones,valor_liquida,contrapartida)
 		VALUES
-		($liquidacion_vacaciones_id,$puc_provision_vacaciones,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_provision,IF($centro_costo_provision>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_provision),'NULL'),0,'NULL','NULL',$observaciones,$valor_provision,0,0,0)";
+		($liquidacion_vacaciones_id,$puc_provision_vacaciones,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_provision,IF($centro_costo_provision>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_provision),'NULL'),0,'NULL','NULL',$observaciones,$valor_provision,0,$valor_provision,0)";
 		
 				}
 				
 				$this -> query($insert_det_puc_prov,$Conex,true); 
 					
 		}
-		if($valor_total>$valor_guardado){
+		if($valor>$valor_guardado){
 			if($area_laboral=='A'){
 				$puc_diferencia = $puc_admin;
 			}elseif($area_laboral=='O'){
@@ -195,10 +196,12 @@ final class VacacionModel extends Db{
 			}elseif($area_laboral=='C'){
 				$puc_diferencia = $puc_venta;
 			}
-			$diferencia= $valor_total-$valor_guardado;
+			$diferencia= $valor-$valor_guardado;
+
+			//registro produccion
 			$insert_det_puc_dife ="INSERT INTO detalle_vacaciones_puc (liquidacion_vacaciones_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_vacaciones,porcentaje_vacaciones,formula_vacaciones,desc_vacaciones,deb_item_vacaciones,cre_item_vacaciones,valor_liquida,contrapartida)
 		VALUES
-		($liquidacion_vacaciones_id,$puc_diferencia,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_provision,IF($centro_costo_provision>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_provision),'NULL'),0,'NULL','NULL',$observaciones,$diferencia,0,0,0)";
+		($liquidacion_vacaciones_id,$puc_diferencia,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_provision,IF($centro_costo_provision>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_provision),'NULL'),0,'NULL','NULL',$observaciones,$diferencia,0,$diferencia,0)";
 		$this -> query($insert_det_puc_dife,$Conex,true); 
 		
 		}
@@ -208,26 +211,31 @@ final class VacacionModel extends Db{
 		
 		$porcentaje_pension = $result_descuentos[0]['desc_emple_pension'];
 		$porcentaje_salud   = $result_descuentos[0]['desc_emple_salud'];
-		//exit("asdasd".$porcentaje_pension.$porcentaje_salud.$select_descuentos);
-		$descuento_pension = ($valor_total*$porcentaje_pension)/100;
-		$descuento_salud = ($valor_total*$porcentaje_salud)/100;
 		
-		$valor_pagar = $valor_total-($descuento_pension+$descuento_salud);
+		$descuento_pension = ($valor*$porcentaje_pension)/100;
+		$descuento_salud = ($valor*$porcentaje_salud)/100;
 		
+		$valor_pagar = $valor-($descuento_pension+$descuento_salud);
+
+		$observaciones_salud = str_replace("'",'',$observaciones)." -DESC SALUD";
+		$observaciones_pension = str_replace("'",'',$observaciones)." -DESC PENSION";
+		
+		//regristro descuento salud
 		$insert_desc_salud ="INSERT INTO detalle_vacaciones_puc (liquidacion_vacaciones_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_vacaciones,porcentaje_vacaciones,formula_vacaciones,desc_vacaciones,deb_item_vacaciones,cre_item_vacaciones,valor_liquida,contrapartida)
 		VALUES
-		($liquidacion_vacaciones_id,$puc_salud,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_provision,IF($centro_costo_provision>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_provision),'NULL'),0,'NULL','NULL',$observaciones,0,$descuento_salud,0,0)";
+		($liquidacion_vacaciones_id,$puc_salud,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_provision,IF($centro_costo_provision>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_provision),'NULL'),0,'NULL','NULL','$observaciones_salud',0,$descuento_salud,$descuento_salud,0)";
 		$this -> query($insert_desc_salud,$Conex,true);
-		//exit($insert_desc_salud);
+		
+		//registro descuento pension
 		$insert_desc_pension ="INSERT INTO detalle_vacaciones_puc (liquidacion_vacaciones_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_vacaciones,porcentaje_vacaciones,formula_vacaciones,desc_vacaciones,deb_item_vacaciones,cre_item_vacaciones,valor_liquida,contrapartida)
 		VALUES
-		($liquidacion_vacaciones_id,$puc_pension,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_provision,IF($centro_costo_provision>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_provision),'NULL'),0,'NULL','NULL',$observaciones,0,$descuento_pension,0,0)";
+		($liquidacion_vacaciones_id,$puc_pension,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_provision,IF($centro_costo_provision>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_provision),'NULL'),0,'NULL','NULL','$observaciones_pension',0,$descuento_pension,$descuento_pension,0)";
 		$this -> query($insert_desc_pension,$Conex,true);
 		
-		
+		//registro contrapartida
 		$insert_det_puc_contra ="INSERT INTO detalle_vacaciones_puc (liquidacion_vacaciones_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_vacaciones,porcentaje_vacaciones,formula_vacaciones,desc_vacaciones,deb_item_vacaciones,cre_item_vacaciones,valor_liquida,contrapartida)
 		VALUES
-		($liquidacion_vacaciones_id,$puc_contrapartida,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_provision,IF($centro_costo_provision>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_provision),'NULL'),0,'NULL','NULL',$observaciones,0,$valor_pagar,0,1)";
+		($liquidacion_vacaciones_id,$puc_contrapartida,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_provision,IF($centro_costo_provision>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_provision),'NULL'),0,'NULL','NULL',$observaciones,0,$valor_pagar,$valor_pagar,1)";
 		$this -> query($insert_det_puc_contra,$Conex,true);
 		
 	$this -> Commit($Conex);  
@@ -300,10 +308,12 @@ final class VacacionModel extends Db{
 								$concepto = "'LIQ TODOS DESDE: ".str_replace("'","",$fecha_dis_inicio)."HASTA: ".str_replace("'","",$fecha_dis_final)."'";
 								
 								$liquidacion_vacaciones_id 	= $this -> DbgetMaxConsecutive("liquidacion_vacaciones","liquidacion_vacaciones_id",$Conex,false,1);
+								
+								//registro liquidacion vacaciones todos
 								$insert_vacaciones = "INSERT INTO liquidacion_vacaciones 
-								(liquidacion_vacaciones_id,contrato_id,fecha_liquidacion,fecha_dis_inicio,fecha_dis_final,fecha_reintegro,dias,dias_disfrutar,valor,dias_pagados,valor_pagos,valor_total,observaciones,concepto,usuario_id,fecha_registro)
+								(liquidacion_vacaciones_id,contrato_id,fecha_liquidacion,fecha_dis_inicio,fecha_dis_final,fecha_reintegro,dias,dias_disfrutar,dias_disfrutar_real,valor,dias_pagados,valor_pagos,valor_total,observaciones,concepto,usuario_id,fecha_registro)
 								VALUES
-								($liquidacion_vacaciones_id,$contrato_id,$fecha_liquidacion,$fecha_dis_inicio,$fecha_dis_final,$fecha_reintegro,$dias,$dias_disfrutar,$sueldo_base,$dias_pagados,$valor_pagos,$sueldo_base,$observaciones,$concepto,$usuario_id,'$fecha_registro')";
+								($liquidacion_vacaciones_id,$contrato_id,$fecha_liquidacion,$fecha_dis_inicio,$fecha_dis_final,$fecha_reintegro,$dias,$dias_disfrutar,$dias_disfrutar_real,$sueldo_base,$dias_pagados,$valor_pagos,$sueldo_base,$observaciones,$concepto,$usuario_id,'$fecha_registro')";
 								$this -> query($insert_vacaciones,$Conex,true);
 								
 								
@@ -315,7 +325,8 @@ final class VacacionModel extends Db{
 									if($item_id!=''){
 										
 										$item_fr = split('-',$item_id);
-
+										
+										//registro detalle liquidacion vacaciones
 										$insert_detalles = "INSERT INTO detalle_liquidacion_vacaciones (liquidacion_vacaciones_id,periodo_inicio,periodo_fin,dias_ganados,dias_disfrutados,dias_pagados) 						                                    VALUES
 															($liquidacion_vacaciones_id,'$periodo_inicio','$periodo_fin',$dias,$dias,0)";
 										
@@ -359,14 +370,16 @@ final class VacacionModel extends Db{
 								
 								$valor_guardado = intval($valor_consolidado)+intval($valor_provision);
 								
+								//registro consolidado
 								$insert_det_puc_cons ="INSERT INTO detalle_vacaciones_puc (liquidacion_vacaciones_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_vacaciones,porcentaje_vacaciones,formula_vacaciones,desc_vacaciones,deb_item_vacaciones,cre_item_vacaciones,valor_liquida,contrapartida)
 								VALUES
-								($liquidacion_vacaciones_id,$puc_consolidado_vacaciones,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF($centro_costo_consolidado>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,$valor_consolidado,0,0,0)";
+								($liquidacion_vacaciones_id,$puc_consolidado_vacaciones,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF($centro_costo_consolidado>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,$valor_consolidado,0,$valor_consolidado,0)";
 								$this -> query($insert_det_puc_cons,$Conex,true); 
 								
+								//registro provisiones
 								$insert_det_puc_prov ="INSERT INTO detalle_vacaciones_puc (liquidacion_vacaciones_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_vacaciones,porcentaje_vacaciones,formula_vacaciones,desc_vacaciones,deb_item_vacaciones,cre_item_vacaciones,valor_liquida,contrapartida)
 								VALUES
-								($liquidacion_vacaciones_id,$puc_provision_vacaciones,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_provision,IF($centro_costo_provision>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_provision),'NULL'),0,'NULL','NULL',$observaciones,$valor_provision,0,0,0)";
+								($liquidacion_vacaciones_id,$puc_provision_vacaciones,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_provision,IF($centro_costo_provision>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_provision),'NULL'),0,'NULL','NULL',$observaciones,$valor_provision,0,$valor_provision,0)";
 								$this -> query($insert_det_puc_prov,$Conex,true); 
 								
 								if($sueldo_base>$valor_guardado){
@@ -380,7 +393,7 @@ final class VacacionModel extends Db{
 									$diferencia= $sueldo_base-$valor_guardado;
 									$insert_det_puc_prov ="INSERT INTO detalle_vacaciones_puc (liquidacion_vacaciones_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_vacaciones,porcentaje_vacaciones,formula_vacaciones,desc_vacaciones,deb_item_vacaciones,cre_item_vacaciones,valor_liquida,contrapartida)
 								VALUES
-								($liquidacion_vacaciones_id,$puc_diferencia,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_provision,IF($centro_costo_provision>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_provision),'NULL'),0,'NULL','NULL',$observaciones,$diferencia,0,0,0)";
+								($liquidacion_vacaciones_id,$puc_diferencia,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_provision,IF($centro_costo_provision>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_provision),'NULL'),0,'NULL','NULL',$observaciones,$diferencia,0,$diferencia,0)";
 								$this -> query($insert_det_puc_prov,$Conex,true); 
 								
 								}
@@ -395,21 +408,26 @@ final class VacacionModel extends Db{
 								$descuento_salud = ($sueldo_base*$porcentaje_salud)/100;
 								
 								$valor_pagar = $sueldo_base-($descuento_pension+$descuento_salud);
+
+								$observaciones_salud = str_replace("'",'',$observaciones)." -DESC SALUD";
+		                        $observaciones_pension = str_replace("'",'',$observaciones)." -DESC PENSION";
 								
+								//registro descuento salud todos
 								$insert_desc_salud ="INSERT INTO detalle_vacaciones_puc (liquidacion_vacaciones_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_vacaciones,porcentaje_vacaciones,formula_vacaciones,desc_vacaciones,deb_item_vacaciones,cre_item_vacaciones,valor_liquida,contrapartida)
 								VALUES
-								($liquidacion_vacaciones_id,$puc_salud,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_provision,IF($centro_costo_provision>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_provision),'NULL'),0,'NULL','NULL',$observaciones,0,$descuento_salud,0,0)";
+								($liquidacion_vacaciones_id,$puc_salud,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_provision,IF($centro_costo_provision>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_provision),'NULL'),0,'NULL','NULL','$observaciones_salud',0,$descuento_salud,$descuento_salud,0)";
 								$this -> query($insert_desc_salud,$Conex,true);
-								//exit($insert_desc_salud);
+								
+								//registro descuento pension todos
 								$insert_desc_pension ="INSERT INTO detalle_vacaciones_puc (liquidacion_vacaciones_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_vacaciones,porcentaje_vacaciones,formula_vacaciones,desc_vacaciones,deb_item_vacaciones,cre_item_vacaciones,valor_liquida,contrapartida)
 								VALUES
-								($liquidacion_vacaciones_id,$puc_pension,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_provision,IF($centro_costo_provision>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_provision),'NULL'),0,'NULL','NULL',$observaciones,0,$descuento_pension,0,0)";
+								($liquidacion_vacaciones_id,$puc_pension,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_provision,IF($centro_costo_provision>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_provision),'NULL'),0,'NULL','NULL','$observaciones_pension',0,$descuento_pension,$descuento_pension,0)";
 								$this -> query($insert_desc_pension,$Conex,true);
 								
-								
+								//registro contrapartida todos
 								$insert_det_puc_contra ="INSERT INTO detalle_vacaciones_puc (liquidacion_vacaciones_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_vacaciones,porcentaje_vacaciones,formula_vacaciones,desc_vacaciones,deb_item_vacaciones,cre_item_vacaciones,valor_liquida,contrapartida)
 								VALUES
-								($liquidacion_vacaciones_id,$puc_contrapartida,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_provision,IF($centro_costo_provision>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_provision),'NULL'),0,'NULL','NULL',$observaciones,0,$valor_pagar,0,1)";
+								($liquidacion_vacaciones_id,$puc_contrapartida,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_provision,IF($centro_costo_provision>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_provision),'NULL'),0,'NULL','NULL',$observaciones,0,$valor_pagar,$valor_pagar,1)";
 								$this -> query($insert_det_puc_contra,$Conex,true);
 								
 								$liquidacion_vacacion .= ','.$liquidacion_vacaciones_id;

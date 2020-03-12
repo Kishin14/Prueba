@@ -18,7 +18,7 @@ final class PatronalesModel extends Db{
     
 
 
-  public function SaveTodos($oficina_id,$usuario_id,$Campos,$dias1,$Conex){
+  public function SaveTodos($oficina_id,$usuario_id,$Campos,$dias,$Conex){
 	
 	$this -> assignValRequest('usuario_id',$usuario_id);
 	$this -> assignValRequest('fecha_registro',date('Y-m-d H:i'));
@@ -102,6 +102,7 @@ final class PatronalesModel extends Db{
 			AND ln.fecha_final<='$fecha_final' AND ln.contrato_id=l.contrato_id) AS dias,
 			
 			((SELECT DATEDIFF(IF(l.fecha_final > '$fecha_final','$fecha_final',l.fecha_final),IF(l.fecha_inicial < c.fecha_inicio,c.fecha_inicio,l.fecha_inicial)))+1)as dias_real,
+
 			(SELECT SUM((DATEDIFF(IF(l.fecha_final > '$fecha_final','$fecha_final',l.fecha_final),IF(l.fecha_inicial>'$fecha_inicial',l.fecha_inicial,'$fecha_inicial')))) 
 			FROM licencia l WHERE l.remunerado=0 AND  l.contrato_id=c.contrato_id AND ('$fecha_inicial' BETWEEN  l.fecha_inicial AND l.fecha_final OR '$fecha_final'  BETWEEN  l.fecha_inicial AND l.fecha_final OR l.fecha_inicial BETWEEN '$fecha_inicial' AND '$fecha_final') )  AS dias_lice_nore,
 			
@@ -193,11 +194,20 @@ final class PatronalesModel extends Db{
 		$contrato_id =  $result[$i]['contrato_id'];
 		$sueldo_base =$result[$i]['sueldo_base'];
 		$subsidio_transporte = $result[$i]['subsidio_transporte'];
-		//$dias = $result[$i]['dias_real']-$result[$i]['dias_lice_nore'];
-		//$dias_reales = $result[$i]['dias_real'];
 
-		$dias_real = $result[$i]['dias'] > $result[$i]['dias_real'] ? $result[$i]['dias']: $result[$i]['dias_real'] ;
-		$dias = $dias_real;
+
+		//tomamos los dias a pagar
+		$select="SELECT dias_pagados FROM liquidacion_vacaciones WHERE estado = 'C' AND contrato_id = $contrato_id AND (fecha_dis_inicio BETWEEN '$fecha_inicial' AND '$fecha_final') OR (fecha_dis_final BETWEEN '$fecha_inicial' AND '$fecha_final')";
+		
+		$result_pag = $this -> DbFetchAll($select,$Conex,true);
+
+		$dias_laborados = $result_pag[0]['dias_pagados'];
+
+        if($dias_laborados > 0){
+		/* $dias_real = $result[$i]['dias'] > $result[$i]['dias_real'] ? $result[$i]['dias']: $result[$i]['dias_real']; */
+		    $dias = $dias+$dias_laborados;
+		}
+		
 		//$dias = $dias_real-$result[$i]['dias_lice_nore'];
 
 
@@ -262,14 +272,13 @@ final class PatronalesModel extends Db{
 		//$total_base=$valor_deven+$valor_diurnas+$valor_nocturnas+$valor_diurnas_fes+$valor_nocturnas_fes+$valor_recargo_noc-$des_val_inc;
 		$total_base=($subsidio_base+$valor_deven+$valor_diurnas+$valor_nocturnas+$valor_diurnas_fes+$valor_nocturnas_fes+$valor_recargo_noc+$valor_recargo_doc)-$des_val_inc;
 		
-
-
+        $dias_pat = ($dias-$dias_laborados);
 		if($result[$i]['prestaciones_sociales']==1 || ($result[$i]['prestaciones_sociales']==0 && $result[$i]['salud']==1)){
 
 			//salud
 			if($sueldo_base>=$limite_fondopen){//cuando supera los limites calcula salud patron
 				$por_salud = $result_per[0]['desc_empre_salud'];
-				$valor_salud=intval(intval((((($sueldo_base))/30)*$dias_reales)+$total_base)*($por_salud/100));
+				$valor_salud=intval(intval((((($sueldo_base))/30)*$dias_pat)+$total_base)*($por_salud/100));
 				$debito=$valor_salud;
 				$credito=0;
 
@@ -277,7 +286,7 @@ final class PatronalesModel extends Db{
 
 				$detalle_liquidacion_patronal_id = $this -> DbgetMaxConsecutive("detalle_liquidacion_patronal","detalle_liquidacion_patronal_id",$Conex,false,1);
 				$insert = "INSERT INTO 	detalle_liquidacion_patronal (detalle_liquidacion_patronal_id,puc_id,liquidacion_patronal_id,liquidacion_novedad_id,debito,credito,fecha_inicial,fecha_final,dias,concepto,centro_de_costo_id,codigo_centro_costo,tercero_id,numero_identificacion,digito_verificacion) 
-				VALUES ($detalle_liquidacion_patronal_id,$puc_salud,$liquidacion_patronal_id,$liquidacion_novedad_id, $debito,$credito,'$fecha_inicial','$fecha_final',$dias,'SALUD $empleado',$centro_de_costo_idg,'$codigo_centrog',$tercero_eps_id,$numero_identificacion_eps,$digito_verificacion_eps)";
+				VALUES ($detalle_liquidacion_patronal_id,$puc_salud,$liquidacion_patronal_id,$liquidacion_novedad_id, $debito,$credito,'$fecha_inicial','$fecha_final',$dias_pat,'SALUD $empleado',$centro_de_costo_idg,'$codigo_centrog',$tercero_eps_id,$numero_identificacion_eps,$digito_verificacion_eps)";
 				$this -> query($insert,$Conex,true);
 		
 				$debito=0;
@@ -285,17 +294,17 @@ final class PatronalesModel extends Db{
 		
 				$detalle_liquidacion_patronal_id = $this -> DbgetMaxConsecutive("detalle_liquidacion_patronal","detalle_liquidacion_patronal_id",$Conex,false,1);
 				$insert = "INSERT INTO 	detalle_liquidacion_patronal (detalle_liquidacion_patronal_id,puc_id,liquidacion_patronal_id,liquidacion_novedad_id,debito,credito,fecha_inicial,fecha_final,dias,concepto,centro_de_costo_id,codigo_centro_costo,tercero_id,numero_identificacion,digito_verificacion) 
-				VALUES ($detalle_liquidacion_patronal_id,$puc_contra_salud_id,$liquidacion_patronal_id,$liquidacion_novedad_id, $debito,$credito,'$fecha_inicial','$fecha_final',$dias,'SALUD $empleado',$centro_de_costo_id,'$codigo_centro',$tercero_eps_id,$numero_identificacion_eps,$digito_verificacion_eps)";
+				VALUES ($detalle_liquidacion_patronal_id,$puc_contra_salud_id,$liquidacion_patronal_id,$liquidacion_novedad_id, $debito,$credito,'$fecha_inicial','$fecha_final',$dias_pat,'SALUD $empleado',$centro_de_costo_id,'$codigo_centro',$tercero_eps_id,$numero_identificacion_eps,$digito_verificacion_eps)";
 				$this -> query($insert,$Conex,true);
 			}elseif($result[$i]['prestaciones_sociales']==0 && $result[$i]['salud']==1){//calculo salud para contratos sin prestaciones pero pago salud al 100%
 				$por_salud = ($result_per[0]['desc_empre_salud']+$result_per[0]['desc_emple_salud']);
-				$valor_salud=intval(intval((((($sueldo_base))/30)*$dias_reales)+$total_base)*($por_salud/100));
+				$valor_salud=intval(intval((((($sueldo_base))/30)*$dias_pat)+$total_base)*($por_salud/100));
 				$debito=$valor_salud;
 				$credito=0;
 		
 				$detalle_liquidacion_patronal_id = $this -> DbgetMaxConsecutive("detalle_liquidacion_patronal","detalle_liquidacion_patronal_id",$Conex,false,1);
 				$insert = "INSERT INTO 	detalle_liquidacion_patronal (detalle_liquidacion_patronal_id,puc_id,liquidacion_patronal_id,liquidacion_novedad_id,debito,credito,fecha_inicial,fecha_final,dias,concepto,centro_de_costo_id,codigo_centro_costo,tercero_id,numero_identificacion,digito_verificacion) 
-				VALUES ($detalle_liquidacion_patronal_id,$puc_salud,$liquidacion_patronal_id,$liquidacion_novedad_id, $debito,$credito,'$fecha_inicial','$fecha_final',$dias,'SALUD $empleado',$centro_de_costo_idg,'$codigo_centrog',$tercero_eps_id,$numero_identificacion_eps,$digito_verificacion_eps)";
+				VALUES ($detalle_liquidacion_patronal_id,$puc_salud,$liquidacion_patronal_id,$liquidacion_novedad_id, $debito,$credito,'$fecha_inicial','$fecha_final',$dias_pat,'SALUD $empleado',$centro_de_costo_idg,'$codigo_centrog',$tercero_eps_id,$numero_identificacion_eps,$digito_verificacion_eps)";
 				$this -> query($insert,$Conex,true);
 		
 				$debito=0;
@@ -303,7 +312,7 @@ final class PatronalesModel extends Db{
 		
 				$detalle_liquidacion_patronal_id = $this -> DbgetMaxConsecutive("detalle_liquidacion_patronal","detalle_liquidacion_patronal_id",$Conex,false,1);
 				$insert = "INSERT INTO 	detalle_liquidacion_patronal (detalle_liquidacion_patronal_id,puc_id,liquidacion_patronal_id,liquidacion_novedad_id,debito,credito,fecha_inicial,fecha_final,dias,concepto,centro_de_costo_id,codigo_centro_costo,tercero_id,numero_identificacion,digito_verificacion) 
-				VALUES ($detalle_liquidacion_patronal_id,$puc_contra_salud_id,$liquidacion_patronal_id,$liquidacion_novedad_id, $debito,$credito,'$fecha_inicial','$fecha_final',$dias,'SALUD $empleado',$centro_de_costo_id,'$codigo_centro',$tercero_eps_id,$numero_identificacion_eps,$digito_verificacion_eps)";
+				VALUES ($detalle_liquidacion_patronal_id,$puc_contra_salud_id,$liquidacion_patronal_id,$liquidacion_novedad_id, $debito,$credito,'$fecha_inicial','$fecha_final',$dias_pat,'SALUD $empleado',$centro_de_costo_id,'$codigo_centro',$tercero_eps_id,$numero_identificacion_eps,$digito_verificacion_eps)";
 				$this -> query($insert,$Conex,true);
 				
 			}
@@ -311,14 +320,15 @@ final class PatronalesModel extends Db{
 		if($result[$i]['prestaciones_sociales']==1 || ($result[$i]['prestaciones_sociales']==0 && $result[$i]['arl']==1)){
 			//arl
 			$por_arl = $result[$i]['desc_empre_arl'];
-			$valor_arl=intval(intval(((($sueldo_base)/30)*$dias)+$total_base)*($por_arl/100));
+			$valor_arl=intval(intval(((($sueldo_base)/30)*$dias_pat)+$total_base)*($por_arl/100));
+		   
 			$valor_arl=round($valor_arl);
 			$debito=$valor_arl;
 			$credito=0;
 	
 			$detalle_liquidacion_patronal_id = $this -> DbgetMaxConsecutive("detalle_liquidacion_patronal","detalle_liquidacion_patronal_id",$Conex,false,1);
 			$insert = "INSERT INTO 	detalle_liquidacion_patronal (detalle_liquidacion_patronal_id,puc_id,liquidacion_patronal_id,liquidacion_novedad_id,debito,credito,fecha_inicial,fecha_final,dias,concepto,centro_de_costo_id,codigo_centro_costo,tercero_id,numero_identificacion,digito_verificacion) 
-			VALUES ($detalle_liquidacion_patronal_id,$puc_arl,$liquidacion_patronal_id,$liquidacion_novedad_id, $debito,$credito,'$fecha_inicial','$fecha_final',$dias,'ARL $empleado',$centro_de_costo_idg,'$codigo_centrog',$tercero_arl_id,$numero_identificacion_arl,$digito_verificacion_arl)";
+			VALUES ($detalle_liquidacion_patronal_id,$puc_arl,$liquidacion_patronal_id,$liquidacion_novedad_id, $debito,$credito,'$fecha_inicial','$fecha_final',$dias_pat,'ARL $empleado',$centro_de_costo_idg,'$codigo_centrog',$tercero_arl_id,$numero_identificacion_arl,$digito_verificacion_arl)";
 			$this -> query($insert,$Conex,true);
 	
 			$debito=0;
@@ -326,20 +336,20 @@ final class PatronalesModel extends Db{
 	
 			$detalle_liquidacion_patronal_id = $this -> DbgetMaxConsecutive("detalle_liquidacion_patronal","detalle_liquidacion_patronal_id",$Conex,false,1);
 			$insert = "INSERT INTO 	detalle_liquidacion_patronal (detalle_liquidacion_patronal_id,puc_id,liquidacion_patronal_id,liquidacion_novedad_id,debito,credito,fecha_inicial,fecha_final,dias,concepto,centro_de_costo_id,codigo_centro_costo,tercero_id,numero_identificacion,digito_verificacion) 
-			VALUES ($detalle_liquidacion_patronal_id,$puc_contra_arl_id,$liquidacion_patronal_id,$liquidacion_novedad_id, $debito,$credito,'$fecha_inicial','$fecha_final',$dias,'ARL $empleado',$centro_de_costo_id,'$codigo_centro',$tercero_arl_id,$numero_identificacion_arl,$digito_verificacion_arl)";
+			VALUES ($detalle_liquidacion_patronal_id,$puc_contra_arl_id,$liquidacion_patronal_id,$liquidacion_novedad_id, $debito,$credito,'$fecha_inicial','$fecha_final',$dias_pat,'ARL $empleado',$centro_de_costo_id,'$codigo_centro',$tercero_arl_id,$numero_identificacion_arl,$digito_verificacion_arl)";
 			$this -> query($insert,$Conex,true);
 		}
 		if($result[$i]['prestaciones_sociales']==1){
 			//pension
 			$por_pension = $result_per[0]['desc_empre_pens'];
-			$valor_pension=intval(intval((((($sueldo_base))/30)*$dias)+$total_base)*($por_pension/100));
+			$valor_pension=intval(intval((((($sueldo_base))/30)*$dias_pat)+$total_base)*($por_pension/100));
 			$valor_pension=round($valor_pension);
 			$debito=$valor_pension;
 			$credito=0;
 
 			$detalle_liquidacion_patronal_id = $this -> DbgetMaxConsecutive("detalle_liquidacion_patronal","detalle_liquidacion_patronal_id",$Conex,false,1);
 			$insert = "INSERT INTO 	detalle_liquidacion_patronal (detalle_liquidacion_patronal_id,puc_id,liquidacion_patronal_id,liquidacion_novedad_id,debito,credito,fecha_inicial,fecha_final,dias,concepto,centro_de_costo_id,codigo_centro_costo,tercero_id,numero_identificacion,digito_verificacion) 
-			VALUES ($detalle_liquidacion_patronal_id,$puc_pens,$liquidacion_patronal_id,$liquidacion_novedad_id, $debito,$credito,'$fecha_inicial','$fecha_final',$dias,'PENSION $empleado',$centro_de_costo_idg,'$codigo_centrog',$tercero_pension_id,$numero_identificacion_pension,$digito_verificacion_pension)";
+			VALUES ($detalle_liquidacion_patronal_id,$puc_pens,$liquidacion_patronal_id,$liquidacion_novedad_id, $debito,$credito,'$fecha_inicial','$fecha_final',$dias_pat,'PENSION $empleado',$centro_de_costo_idg,'$codigo_centrog',$tercero_pension_id,$numero_identificacion_pension,$digito_verificacion_pension)";
 			$this -> query($insert,$Conex,true);
 	
 			$debito=0;
@@ -347,7 +357,7 @@ final class PatronalesModel extends Db{
 	
 			$detalle_liquidacion_patronal_id = $this -> DbgetMaxConsecutive("detalle_liquidacion_patronal","detalle_liquidacion_patronal_id",$Conex,false,1);
 			$insert = "INSERT INTO 	detalle_liquidacion_patronal (detalle_liquidacion_patronal_id,puc_id,liquidacion_patronal_id,liquidacion_novedad_id,debito,credito,fecha_inicial,fecha_final,dias,concepto,centro_de_costo_id,codigo_centro_costo,tercero_id,numero_identificacion,digito_verificacion) 
-			VALUES ($detalle_liquidacion_patronal_id,$puc_contra_pension_id,$liquidacion_patronal_id,$liquidacion_novedad_id, $debito,$credito,'$fecha_inicial','$fecha_final',$dias,'PENSION $empleado',$centro_de_costo_id,'$codigo_centro',$tercero_pension_id,$numero_identificacion_pension,$digito_verificacion_pension)";
+			VALUES ($detalle_liquidacion_patronal_id,$puc_contra_pension_id,$liquidacion_patronal_id,$liquidacion_novedad_id, $debito,$credito,'$fecha_inicial','$fecha_final',$dias_pat,'PENSION $empleado',$centro_de_costo_id,'$codigo_centro',$tercero_pension_id,$numero_identificacion_pension,$digito_verificacion_pension)";
 			$this -> query($insert,$Conex,true);
 	
 			
