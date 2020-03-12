@@ -552,7 +552,7 @@ final class Registrar extends Controler{
 		}
 
 		$comprobar = $Model -> ComprobarLiquidacion($_REQUEST['contrato_id'],$fecha_inicial,$fecha_final,$periodicidad,$area,$this -> getConex());
-		if($comprobar[0]['consecutivo']>0) exit($comprobar[0]['consecutivo']);
+		if($comprobar[0]['consecutivo']>0) exit($comprobar[0]['consecutivo']);//Se valida si ese contrato no esta Finalizado
 
 		$result = $Model -> Save($this -> getUsuarioId(),$this -> Campos,$dias,$dias_real,$previsual,$this -> getConex());
 
@@ -790,11 +790,14 @@ final class Registrar extends Controler{
 				AND d.liquidacion_novedad_id=l.liquidacion_novedad_id AND d.credito>0 AND d.sueldo_pagar=0 AND l.estado!='A') AS total_credito,";
 
 		  for($i=0;$i<count($con_deb);$i++){
+
 			  $select_deb.=" (SELECT SUM(d.debito) FROM   liquidacion_novedad l, detalle_liquidacion_novedad d
 				WHERE l.fecha_inicial = (SELECT fecha_inicial FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id ) 
 				AND l.fecha_final = (SELECT fecha_final FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id ) AND l.estado!='A'
 				AND d.liquidacion_novedad_id=l.liquidacion_novedad_id AND l.contrato_id=ln.contrato_id AND d.concepto LIKE ('".$con_deb[$i]['concepto']."') ) AS ".str_replace(" ","_",$con_deb[$i]['concepto']).", ";
-			  	$con_deb1[$i]['concepto']=str_replace(" ","_",$con_deb[$i]['concepto']);
+				  $con_deb1[$i]['concepto']=str_replace(" ","_",$con_deb[$i]['concepto']);
+				  
+				
 		  }
 		  
 		   for($i=0;$i<count($con_deb);$i++){
@@ -870,6 +873,8 @@ final class Registrar extends Controler{
 				AND d.liquidacion_novedad_id=l.liquidacion_novedad_id AND d.concepto LIKE ('".$con_sal[$i]['concepto']."') ) AS ".str_replace(" ","_",$con_sal[$i]['concepto']).", ";
 			   
 		  }
+
+		 // exit(print_r($con_creExt1).print_r($con_sal1));
 		   
 		  //exit('test : '.$select_tot_sal);
 

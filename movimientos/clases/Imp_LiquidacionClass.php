@@ -70,7 +70,10 @@ final class Imp_Liquidacion{
 				WHERE l.fecha_inicial = (SELECT fecha_inicial FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id ) 
 				AND l.fecha_final = (SELECT fecha_final FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id ) AND l.estado!='A'
 				AND d.liquidacion_novedad_id=l.liquidacion_novedad_id AND l.contrato_id=ln.contrato_id AND d.concepto LIKE ('".$con_deb[$i]['concepto']."') ) AS ".str_replace(" ","_",$con_deb[$i]['concepto']).", ";
-			  	$con_deb1[$i]['concepto']=str_replace(" ","_",$con_deb[$i]['concepto']);
+
+
+				  $con_deb1[$i]['concepto']=str_replace(" ","_",$con_deb[$i]['concepto']);
+
 		  }
 		  
 		   for($i=0;$i<count($con_deb);$i++){

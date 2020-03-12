@@ -329,7 +329,7 @@ final class RegistrarModel extends Db{
 					WHERE n.contrato_id=$contrato_id AND n.tipo_novedad='V'  AND n.estado='A' AND '$fecha_final' BETWEEN  n.fecha_inicial AND n.fecha_final AND c.concepto_area_id=n.concepto_area_id AND c.base_salarial='SI'";
 			$resultdeve = $this -> DbFetchAll($selectdeve,$Conex,true);
 			$valor_deven = $resultdeve[0]['valor_deven']>0 ? $resultdeve[0]['valor_deven'] : 0;
-
+			
 			$selectext = "SELECT  
 					h.vr_horas_diurnas AS valor_diurnas,
 					h.vr_horas_nocturnas AS valor_nocturnas,
@@ -338,8 +338,8 @@ final class RegistrarModel extends Db{
 					h.vr_horas_recargo_noc AS valor_recargo_noc
 					
 					FROM 	hora_extra h
-					WHERE h.contrato_id=$contrato_id AND h.estado='E' AND h.fecha_inicial>='$fecha_inicial' AND h.fecha_final<='$fecha_final' ";			
-					
+					WHERE h.contrato_id=$contrato_id AND h.estado='E' AND h.fecha_inicial>='$fecha_inicial' AND h.fecha_final<='$fecha_final' ";	
+
 			$resultext           = $this -> DbFetchAll($selectext,$Conex,true); 
 			$valor_diurnas       = $resultext[0]['valor_diurnas']>0 ? $resultext[0]['valor_diurnas'] : 0;
 			$valor_nocturnas     = $resultext[0]['valor_nocturnas']>0 ? $resultext[0]['valor_nocturnas'] : 0;			
@@ -347,7 +347,8 @@ final class RegistrarModel extends Db{
 			$valor_nocturnas_fes = $resultext[0]['valor_nocturnas_fes']>0 ? $resultext[0]['valor_nocturnas_fes'] : 0;			
 			$valor_recargo_noc   = $resultext[0]['valor_recargo_noc']>0 ? $resultext[0]['valor_recargo_noc'] : 0;			
 			
-			$total_base=$valor_deven+$valor_diurnas+$valor_nocturnas+$valor_diurnas_fes+$valor_nocturnas_fes+$valor_recargo_noc-$des_val_inc;
+			$total_base=$valor_deven+$valor_diurnas+$valor_nocturnas+$valor_diurnas_fes+$valor_nocturnas_fes+$valor_recargo_noc-$des_val_inc;		
+			
 			//salud
 
 			$debito    = 0;
@@ -392,6 +393,16 @@ final class RegistrarModel extends Db{
 				$this -> query($insert,$Conex,true);
 
 			}
+		}else if($result[$i]['prestaciones_sociales']==0 && $result[$i]['salud']==1){
+			$debito    = 0;
+			$credito   = intval((intval(((($sueldo_base)/30)*$dias)+$total_base)*$result_per[0]['desc_emple_salud'])/100);
+			$deb_total = $deb_total+$debito;
+			$cre_total = $cre_total+$credito;
+			
+			$detalle_liquidacion_novedad_id = $this -> DbgetMaxConsecutive("detalle_liquidacion_novedad","detalle_liquidacion_novedad_id",$Conex,false,1);
+			$insert = "INSERT INTO 	detalle_liquidacion_novedad (detalle_liquidacion_novedad_id,puc_id,liquidacion_novedad_id,debito,credito,fecha_inicial,fecha_final,dias,observacion,concepto,tercero_id,numero_identificacion,digito_verificacion) 
+			VALUES ($detalle_liquidacion_novedad_id,$puc_salud,$liquidacion_novedad_id,$debito,$credito,'$fecha_inicial','$fecha_final',$dias,'$observacion','SALUD',$tercero_eps_id,$numero_identificacion_eps,$digito_verificacion_eps)";
+			$this -> query($insert,$Conex,true);
 		}
 		//Ingreso de horas extras
 		
@@ -976,6 +987,16 @@ final class RegistrarModel extends Db{
 
 			}
 
+		}else if($result[$i]['prestaciones_sociales']==0 && $result[$i]['salud']==1){
+			$debito    = 0;
+			$credito   = intval((intval(((($sueldo_base)/30)*$dias)+$total_base)*$result_per[0]['desc_emple_salud'])/100);
+			$deb_total = $deb_total+$debito;
+			$cre_total = $cre_total+$credito;
+			
+			$detalle_liquidacion_novedad_id = $this -> DbgetMaxConsecutive("detalle_liquidacion_novedad","detalle_liquidacion_novedad_id",$Conex,false,1);
+			$insert = "INSERT INTO 	detalle_liquidacion_novedad (detalle_liquidacion_novedad_id,puc_id,liquidacion_novedad_id,debito,credito,fecha_inicial,fecha_final,dias,observacion,concepto,tercero_id,numero_identificacion,digito_verificacion) 
+			VALUES ($detalle_liquidacion_novedad_id,$puc_salud,$liquidacion_novedad_id,$debito,$credito,'$fecha_inicial','$fecha_final',$dias,'$observacion','SALUD',$tercero_eps_id,$numero_identificacion_eps,$digito_verificacion_eps)";
+			$this -> query($insert,$Conex,true);
 		}
 
 		//ingreso de horas extras

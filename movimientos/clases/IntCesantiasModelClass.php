@@ -87,7 +87,7 @@ final class IntCesantiasModel extends Db{
 
 	public function comprobar_liquidaciones_cesan_edicion($contrato_id,$fecha_corte,$Conex){
 	
-		$select = "SELECT l.fecha_corte, l.liquidacion_cesantias_id,
+		$select = "SELECT l.fecha_corte, l.liquidacion_int_cesantias_id,
 					IF(l.fecha_corte>= '$fecha_corte','SI','NO') AS validacion_posterior
 					FROM liquidacion_int_cesantias l
 					WHERE l.contrato_id =$contrato_id AND l.estado='A' ORDER BY l.fecha_corte DESC   ";
