@@ -274,10 +274,9 @@ final class LiquidacionFinalModel extends Db
 
         if ($contrato_id > 0) {
 
-            $select = "SELECT l.fecha_liquidacion, l.periodo
+            $select = "SELECT l.fecha_liquidacion, l.periodo, l.inicial
 		FROM liquidacion_prima l
-		WHERE l.contrato_id = $contrato_id AND l.estado!='I' ORDER BY l.fecha_liquidacion DESC LIMIT 1";
-
+        WHERE l.contrato_id = $contrato_id AND l.estado!='I' ORDER BY l.fecha_liquidacion DESC LIMIT 1";
             $result = $this->DbFetchAll($select, $Conex, true);
 
         } else {
@@ -472,7 +471,7 @@ final class LiquidacionFinalModel extends Db
                 forma_pago_id,valor,numero_soporte,tercero_id,periodo_contable_id,mes_contable_id,consecutivo,
                 fecha,concepto,puc_id,estado,fecha_registro,modifica,usuario_id,$causal_anulacion_id AS causal_anulacion_id,
                 $observacion_anulacion AS observaciones FROM encabezado_de_registro WHERE encabezado_registro_id = $encabezado_registro_id";
-                
+
             $this->query($insert, $Conex, true);
 
             $insert = "INSERT INTO imputacion_contable_anulada SELECT  imputacion_contable_id AS

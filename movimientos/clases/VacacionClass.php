@@ -429,10 +429,7 @@ final class Vacacion extends Controler{
 	$this -> Campos[valor_total] = array(
 		name	=>'valor_total',
 		id		=>'valor_total',
-		type	=>'text',
-		Boostrap =>'si',
-		required=>'yes',
-		readonly=>'yes',
+		type	=>'hidden',
 	 	datatype=>array(
 			type	=>'text',
 			length	=>'250'),
@@ -487,6 +484,21 @@ final class Vacacion extends Controler{
 	$this -> Campos[dias_disfrutar] = array(
 		name	=>'dias_disfrutar',
 		id		=>'dias_disfrutar',
+		type	=>'text',
+		Boostrap =>'si',
+		required=>'yes',
+		readonly=>'yes',
+	 	datatype=>array(
+			type	=>'text',
+			length	=>'250'),
+		transaction=>array(
+			table =>array('liquidacion_vacaciones'),
+			type =>array('column'))	
+	);
+
+	$this -> Campos[dias_disfrutar_real] = array(
+		name	=>'dias_disfrutar_real',
+		id		=>'dias_disfrutar_real',
 		type	=>'text',
 		Boostrap =>'si',
 		required=>'yes',

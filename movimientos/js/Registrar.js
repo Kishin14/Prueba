@@ -356,7 +356,7 @@ $(document).ready(function(){
 									periodicidad2 = 'TODAS';
 								}
 
-						alertJquery("Este contrato no se liquidar&aacute: <br>" + mensaje + "<br>Por favor tenga en cuenta que la liquidaci&oacuten que se esta haciendo tiene periodicidad: <b style='color:red'>"+periodicidad2);
+						alertJquery("¡Este contrato no se liquidar&aacute!. Si desea puede actualizar la periodicidad en el contrato: <br>" + mensaje + "<br>Por favor tenga en cuenta que la liquidaci&oacuten que se esta haciendo tiene periodicidad: <b style='color:red'>"+periodicidad2);
 
 						}
 				}else{

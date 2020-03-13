@@ -339,11 +339,11 @@ final class LiquidacionFinal extends Controler
             // prima
             $data_prima = $Model->getDetallesPrima($contrato_id, $_REQUEST['fecha_final'], $this->getConex());
 
-            if ($data_prima[0]['periodo'] == 2) {
+            if ($data_prima[0]['periodo'] == 2 && $data_prima[0]['inicial'] == 0) {
                 $fecha_ultima = substr($data_prima[0]['fecha_liquidacion'], 0, 4) . '-12-31';
                 $dias_prima = $Model->getDias($fecha_ultima, $_REQUEST['fecha_final'], $this->getConex());
                 $dias_prima = ($dias_prima + 1);
-            } elseif ($data_prima[0]['periodo'] == 1) {
+            } elseif ($data_prima[0]['periodo'] == 1 && $data_prima[0]['inicial'] == 0) {
                 $fecha_ultima = substr($data_prima[0]['fecha_liquidacion'], 0, 4) . '-06-30';
                 $dias_prima = $Model->getDias($fecha_ultima, $_REQUEST['fecha_final'], $this->getConex());
                 $dias_prima = ($dias_prima + 1);
