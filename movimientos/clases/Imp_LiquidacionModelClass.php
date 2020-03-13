@@ -5,7 +5,7 @@ require_once("../../../framework/clases/PermisosFormClass.php");
 
 final class Imp_LiquidacionModel extends Db{ 
   
-  public function getLiquidacion($select_deb_total,$select_cre_total,$select_deb,$select_cre,$select_debExt,$select_creExt,$select_sal,$oficina_id,$empresa_id,$Conex){
+  public function getLiquidacion($select_deb_total,$select_cre_total,$select_deb,$select_cre,$select_debExt,$select_creExt,$select_sal,$diasIncapacidad,$oficina_id,$empresa_id,$Conex){
  
     $liquidacion_novedad_id = $this -> requestDataForQuery('liquidacion_novedad_id','integer');
 	
@@ -27,10 +27,6 @@ final class Imp_LiquidacionModel extends Db{
 				FROM empleado e, tercero t, contrato c  WHERE c.contrato_id=ln.contrato_id AND e.empleado_id=c.empleado_id AND t.tercero_id=e.tercero_id) AS empleado,
 				(SELECT t.numero_identificacion 
 				FROM empleado e, tercero t, contrato c  WHERE c.contrato_id=ln.contrato_id AND e.empleado_id=c.empleado_id AND t.tercero_id=e.tercero_id) AS identificacion, 
-					
-				((SELECT SUM((DATEDIFF(IF(l.fecha_final>ln.fecha_final,ln.fecha_final,l.fecha_final),IF(l.fecha_inicial>ln.fecha_inicial,l.fecha_inicial,ln.fecha_inicial))+1)) 
-			    FROM licencia l WHERE l.remunerado=1 AND l.estado='A' AND   l.contrato_id=ln.contrato_id AND (ln.fecha_inicial BETWEEN  l.fecha_inicial AND l.fecha_final OR ln.fecha_final  BETWEEN  l.fecha_inicial AND l.fecha_final OR l.fecha_inicial BETWEEN ln.fecha_inicial AND ln.fecha_final) )  )AS dias_incapacidad,
-					
 
 				(SELECT ca.nombre_cargo	FROM cargo ca, contrato c  WHERE c.contrato_id=ln.contrato_id AND c.cargo_id=ca.cargo_id) AS cargo, 
 				(SELECT c.sueldo_base	FROM  contrato c  WHERE c.contrato_id=ln.contrato_id ) AS sueldo_base 				
@@ -41,7 +37,26 @@ final class Imp_LiquidacionModel extends Db{
 				AND dl.liquidacion_novedad_id=ln.liquidacion_novedad_id AND ln.estado!='A' GROUP BY ln.contrato_id ORDER BY empleado";
 				
 		  $result = $this -> DbFetchAll($select,$Conex,true); 
-		  //exit(print_r($result));
+		
+		  for ($i=0; $i < count($result); $i++) { 
+		
+			if(array_search($result[$i]['contrato_id'],array_column($diasIncapacidad,'contrato_id')) !== false){//SE VALIDA SI ESE CONTRATO ESTA O NO ESTA EN EL ARRAY DE DIAS NO REMUNERADOS
+	
+				for ($j=0; $j < count($diasIncapacidad); $j++) { 
+	
+					if($diasIncapacidad[$j]['contrato_id']==$result[$i]['contrato_id']){//SE VALIDA SI ESE CONTRATO ES IGUAL AL CONTRATO EN EL ARRAY DE DIAS NO REMUNERADOS PARA ANEXARLO
+	
+						$result[$i]['dias_incapacidad'] = $diasIncapacidad[$j]['dias'];
+	
+					}
+					
+				}
+	
+			}else{
+				$result[$i]['dias_incapacidad'] = '';//EN CASO CONTRARIO NO ANEXE EL DIA
+			}
+	
+		}
 
 		  
 	  
@@ -51,7 +66,30 @@ final class Imp_LiquidacionModel extends Db{
 	
 	return $result;
   }
+  public function getDiasIncapacidad($liquidacion_novedad_id,$Conex){
+	$select = "SELECT 
+	
+		l.fecha_inicial, 
+		l.fecha_final,
+		ln.contrato_id
+		
+		FROM 
+		
+		licencia l,
+		liquidacion_novedad ln
+		
+		WHERE 
 
+		l.remunerado=1 AND 
+		l.estado='A' AND   
+		l.contrato_id=ln.contrato_id AND 
+		(ln.fecha_inicial BETWEEN  l.fecha_inicial AND l.fecha_final OR ln.fecha_final  BETWEEN  l.fecha_inicial AND l.fecha_final OR l.fecha_inicial BETWEEN ln.fecha_inicial AND ln.fecha_final) AND
+		ln.fecha_inicial = (SELECT fecha_inicial FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id ) AND ln.fecha_final = (SELECT fecha_final FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id ) AND ln.area_laboral=(SELECT area_laboral FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id) AND ln.periodicidad=(SELECT periodicidad FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id)";
+		
+	$result = $this -> DbFetchAll($select,$Conex,true);
+
+	return $result;
+  }
 
   public function getConceptoDebito($Conex){
  

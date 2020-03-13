@@ -392,16 +392,6 @@ final class RegistrarModel extends Db{
 				$this -> query($insert,$Conex,true);
 
 			}
-		}else if($result[$i]['prestaciones_sociales']==0 && $result[$i]['salud']==1){
-			$debito    = 0;
-			$credito   = intval((intval(((($sueldo_base)/30)*$dias)+$total_base)*$result_per[0]['desc_emple_salud'])/100);
-			$deb_total = $deb_total+$debito;
-			$cre_total = $cre_total+$credito;
-			
-			$detalle_liquidacion_novedad_id = $this -> DbgetMaxConsecutive("detalle_liquidacion_novedad","detalle_liquidacion_novedad_id",$Conex,false,1);
-			$insert = "INSERT INTO 	detalle_liquidacion_novedad (detalle_liquidacion_novedad_id,puc_id,liquidacion_novedad_id,debito,credito,fecha_inicial,fecha_final,dias,observacion,concepto,tercero_id,numero_identificacion,digito_verificacion) 
-			VALUES ($detalle_liquidacion_novedad_id,$puc_salud,$liquidacion_novedad_id,$debito,$credito,'$fecha_inicial','$fecha_final',$dias,'$observacion','SALUD',$tercero_eps_id,$numero_identificacion_eps,$digito_verificacion_eps)";
-			$this -> query($insert,$Conex,true);
 		}
 		//Ingreso de horas extras
 		
@@ -616,7 +606,47 @@ final class RegistrarModel extends Db{
 	} 
   }
 
-  public function SaveTodos($usuario_id,$Campos,$dias,$dias_real,$periodicidad,$area_laboral,$centro_de_costo_id,$previsual,$Conex){
+  public function FechasLicenRe($fecha_inicial,$fecha_final,$Conex){
+	$select = "SELECT 
+		l.fecha_inicial,
+		l.fecha_final,
+		c.contrato_id
+		FROM 
+		licencia l, 
+		tipo_incapacidad ti,
+		contrato c 
+		WHERE 
+		l.remunerado=1  AND 
+		l.estado!='I' AND 
+		l.contrato_id=c.contrato_id AND 
+		ti.tipo_incapacidad_id=l.tipo_incapacidad_id AND 
+		ti.tipo='L' AND 
+		('$fecha_inicial' BETWEEN  l.fecha_inicial AND l.fecha_final OR '$fecha_final'  BETWEEN  l.fecha_inicial AND l.fecha_final OR l.fecha_inicial BETWEEN '$fecha_inicial' AND '$fecha_final')";
+	$result = $this->DbFetchAll($select,$Conex,true);
+	return $result;
+  }
+
+  public function FechasLicenNoRe($fecha_inicial,$fecha_final,$Conex){
+	$select = "SELECT 
+		l.fecha_inicial,
+		l.fecha_final,
+		c.contrato_id
+		FROM 
+		licencia l, 
+		tipo_incapacidad ti,
+		contrato c 
+		WHERE 
+		l.remunerado=0  AND 
+		l.estado!='I' AND 
+		l.contrato_id=c.contrato_id AND 
+		ti.tipo_incapacidad_id=l.tipo_incapacidad_id AND 
+		ti.tipo='L' AND 
+		('$fecha_inicial' BETWEEN  l.fecha_inicial AND l.fecha_final OR '$fecha_final'  BETWEEN  l.fecha_inicial AND l.fecha_final OR l.fecha_inicial BETWEEN '$fecha_inicial' AND '$fecha_final')";
+	$result = $this->DbFetchAll($select,$Conex,true);
+	return $result;
+  }
+
+  public function SaveTodos($usuario_id,$Campos,$dias,$dias_real,$periodicidad,$area_laboral,$centro_de_costo_id,$previsual,$diasArrayNoRe,$diasArrayRe,$Conex){
 	
 	$this -> assignValRequest('usuario_id',$usuario_id);
 	$this -> assignValRequest('fecha_registro',date('Y-m-d H:i'));
@@ -669,13 +699,8 @@ final class RegistrarModel extends Db{
 	$val_recargo_nocturna=$result_per[0]['val_recargo_nocturna'];
 	
 	$select = "SELECT  c.*, t.prestaciones_sociales, t.salud,
-			IF(c.fecha_inicio BETWEEN '$fecha_inicial'  AND '$fecha_final',DATEDIFF(CONCAT_WS(' ',c.fecha_inicio,'23:59:59'),'$fecha_inicial'),0) AS dias_desc,
-			(SELECT SUM((DATEDIFF(IF(l.fecha_final>'$fecha_final','$fecha_final',l.fecha_final),IF(l.fecha_inicial>'$fecha_inicial',l.fecha_inicial,'$fecha_inicial'))+1)) 
-			FROM licencia l, tipo_incapacidad ti WHERE l.remunerado=1  AND l.estado!='I' AND l.contrato_id=c.contrato_id AND ti.tipo_incapacidad_id=l.tipo_incapacidad_id AND ti.tipo='L' AND ('$fecha_inicial' BETWEEN  l.fecha_inicial AND l.fecha_final OR '$fecha_final'  BETWEEN  l.fecha_inicial AND l.fecha_final OR l.fecha_inicial BETWEEN '$fecha_inicial' AND '$fecha_final') )  AS dias_lice_re,
 			
-			(SELECT SUM((DATEDIFF(IF(l.fecha_final>'$fecha_final','$fecha_final',l.fecha_final),IF(l.fecha_inicial>'$fecha_inicial',l.fecha_inicial,'$fecha_inicial'))+1)) 
-			FROM licencia l, tipo_incapacidad ti WHERE l.remunerado=0 AND l.estado!='I' AND  l.contrato_id=c.contrato_id AND ti.tipo_incapacidad_id=l.tipo_incapacidad_id AND ti.tipo='L' AND ('$fecha_inicial' BETWEEN  l.fecha_inicial AND l.fecha_final OR '$fecha_final'  BETWEEN  l.fecha_inicial AND l.fecha_final OR l.fecha_inicial BETWEEN '$fecha_inicial' AND '$fecha_final') )  AS dias_lice_nore,
-			
+			IF(c.fecha_inicio BETWEEN '$fecha_inicial'  AND '$fecha_final',DATEDIFF(CONCAT_WS(' ',c.fecha_inicio,'23:59:59'),'$fecha_inicial'),0) AS dias_desc,			
 			
 			(SELECT e.tercero_id  FROM empresa_prestaciones e WHERE e.empresa_id=c.empresa_eps_id ) AS tercero_eps_id,	
 			(SELECT t.numero_identificacion  FROM empresa_prestaciones e, tercero t WHERE e.empresa_id=c.empresa_eps_id AND t.tercero_id=e.tercero_id) AS numero_identificacion_eps,
@@ -693,6 +718,44 @@ final class RegistrarModel extends Db{
 		
 	$result = $this -> DbFetchAll($select,$Conex,true); 
 	
+	//BLOQUE DE CODIGO PARA ANEXAR LOS DIAS A LOS CONTRATOS EN EL ARRAY PARA DIAS NO REMUNERADOS
+	for ($i=0; $i < count($result); $i++) { 
+		
+		if(array_search($result[$i]['contrato_id'],array_column($diasArrayNoRe,'contrato_id')) !== false){//SE VALIDA SI ESE CONTRATO ESTA O NO ESTA EN EL ARRAY DE DIAS NO REMUNERADOS
+
+			for ($j=0; $j < count($diasArrayNoRe); $j++) { 
+
+				if($diasArrayNoRe[$j]['contrato_id']==$result[$i]['contrato_id']){//SE VALIDA SI ESE CONTRATO ES IGUAL AL CONTRATO EN EL ARRAY DE DIAS NO REMUNERADOS PARA ANEXARLO
+
+					$result[$i]['dias_lice_nore'] = $diasArrayNoRe[$j]['dias'];
+
+				}
+				
+			}
+
+		}else{
+			$result[$i]['dias_lice_nore'] = 0;//EN CASO CONTRARIO NO ANEXE EL DIA
+		}
+
+		//BLOQUE DE CODIGO PARA ANEXAR LOS DIAS A LOS CONTRATOS EN EL ARRAY PARA DIAS REMUNERADOS
+		if(array_search($result[$i]['contrato_id'],array_column($diasArrayRe,'contrato_id')) !== false){
+
+			for ($j=0; $j < count($diasArrayRe); $j++) { 
+
+				if($diasArrayRe[$j]['contrato_id']==$result[$i]['contrato_id']){
+
+					$result[$i]['dias_lice_re'] = $diasArrayRe[$j]['dias'];
+
+				}
+				
+			}
+
+		}else{
+			$result[$i]['dias_lice_re'] = 0;
+		}
+
+	}
+
 	$this -> Begin($Conex);
 
 	for($i=0;$i<count($result);$i++){	
@@ -824,7 +887,6 @@ final class RegistrarModel extends Db{
 		$select_inca = "SELECT (DATEDIFF(IF(l.fecha_final>'$fecha_final','$fecha_final',l.fecha_final),IF(l.fecha_inicial>'$fecha_inicial',l.fecha_inicial,'$fecha_inicial'))+1) AS dias_inca, ti.dia, ti.porcentaje,ti.descuento  
 					FROM licencia l, tipo_incapacidad ti WHERE  l.contrato_id=$contrato_id AND l.estado!='I' AND ti.tipo_incapacidad_id=l.tipo_incapacidad_id AND ti.tipo='I'  AND ('$fecha_inicial' BETWEEN  l.fecha_inicial AND l.fecha_final OR '$fecha_final'  BETWEEN  l.fecha_inicial AND l.fecha_final OR l.fecha_inicial BETWEEN '$fecha_inicial' AND '$fecha_final') ";
 
-		
 		$result_inca = $this -> DbFetchAll($select_inca,$Conex,true);
 		
 		
@@ -849,19 +911,18 @@ final class RegistrarModel extends Db{
 		}
 
 		
+		
 
 		
 		$dias_sub=$dias_sub-$dias_inca_sub;//resta los dias incapacidad
 
 		
 		//salario
-		$debito=intval((($sueldo_base/30)*$dias_sub)-$des_val_inc);		
-		//$debito=intval((($sueldo_base/30)*$dias_sub));		
+		$debito=intval((($sueldo_base/30)*$dias));		
 		$credito=0;
 		$deb_total=$deb_total+$debito;
 		$cre_total=$cre_total+$credito;
 		$dias_sal = $dias - $dias_inca_sub;
-
 		
 		$detalle_liquidacion_novedad_id = $this -> DbgetMaxConsecutive("detalle_liquidacion_novedad","detalle_liquidacion_novedad_id",$Conex,false,1);
 		//exit("***".$puc_sal."***"."JDFC26");
@@ -894,7 +955,6 @@ final class RegistrarModel extends Db{
 			$credito=0;
 			$deb_total=$deb_total+$debito;
 			$cre_total=$cre_total+$credito;
-
 			
 			
 			$detalle_liquidacion_novedad_id = $this -> DbgetMaxConsecutive("detalle_liquidacion_novedad","detalle_liquidacion_novedad_id",$Conex,false,1);
@@ -986,16 +1046,6 @@ final class RegistrarModel extends Db{
 
 			}
 
-		}else if($result[$i]['prestaciones_sociales']==0 && $result[$i]['salud']==1){
-			$debito    = 0;
-			$credito   = intval((intval(((($sueldo_base)/30)*$dias)+$total_base)*$result_per[0]['desc_emple_salud'])/100);
-			$deb_total = $deb_total+$debito;
-			$cre_total = $cre_total+$credito;
-			
-			$detalle_liquidacion_novedad_id = $this -> DbgetMaxConsecutive("detalle_liquidacion_novedad","detalle_liquidacion_novedad_id",$Conex,false,1);
-			$insert = "INSERT INTO 	detalle_liquidacion_novedad (detalle_liquidacion_novedad_id,puc_id,liquidacion_novedad_id,debito,credito,fecha_inicial,fecha_final,dias,observacion,concepto,tercero_id,numero_identificacion,digito_verificacion) 
-			VALUES ($detalle_liquidacion_novedad_id,$puc_salud,$liquidacion_novedad_id,$debito,$credito,'$fecha_inicial','$fecha_final',$dias,'$observacion','SALUD',$tercero_eps_id,$numero_identificacion_eps,$digito_verificacion_eps)";
-			$this -> query($insert,$Conex,true);
 		}
 
 		//ingreso de horas extras
