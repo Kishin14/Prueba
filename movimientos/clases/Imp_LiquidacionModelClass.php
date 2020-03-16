@@ -29,7 +29,7 @@ final class Imp_LiquidacionModel extends Db{
 				FROM empleado e, tercero t, contrato c  WHERE c.contrato_id=ln.contrato_id AND e.empleado_id=c.empleado_id AND t.tercero_id=e.tercero_id) AS identificacion, 
 
 				(SELECT ca.nombre_cargo	FROM cargo ca, contrato c  WHERE c.contrato_id=ln.contrato_id AND c.cargo_id=ca.cargo_id) AS cargo, 
-				(SELECT c.sueldo_base	FROM  contrato c  WHERE c.contrato_id=ln.contrato_id ) AS sueldo_base 				
+				(SELECT c.sueldo_base	FROM  contrato c  WHERE c.contrato_id=ln.contrato_id) AS sueldo_base 				
 
 				FROM liquidacion_novedad ln, detalle_liquidacion_novedad dl
 				WHERE ln.fecha_inicial = (SELECT fecha_inicial FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id ) 
@@ -82,8 +82,6 @@ final class Imp_LiquidacionModel extends Db{
 		WHERE 
 
 		ln.contrato_id = l.contrato_id AND 
-		
-		l.remunerado=1 AND 
 		
 		l.estado='A' AND   ln.estado!='A' AND
 		

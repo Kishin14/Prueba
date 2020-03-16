@@ -832,6 +832,7 @@ final class RegistrarModel extends Db{
 	
 		$this -> DbInsertTable("liquidacion_novedad",$Campos,$Conex,true,false);
 		$contrato_id =  $result[$i]['contrato_id'];
+		
 		$sueldo_base=$result[$i]['sueldo_base'];
 		$subsidio_transporte= $result[$i]['subsidio_transporte'];
 		$ingreso_nosalarial=$result[$i]['ingreso_nosalarial'];
@@ -913,17 +914,16 @@ final class RegistrarModel extends Db{
 
 		
 		
-
 		
-		$dias_sub=$dias_sub-$dias_inca_sub;//resta los dias incapacidad
-
+		$dias_sub = $dias_sub - $dias_inca_sub; //resta los dias incapacidad al subsidio
+		$dias_r = $dias - $dias_inca_sub; //resta los dias incapacidad a los dias
 		
 		//salario
-		$debito=intval((($sueldo_base/30)*$dias));		
-		$credito=0;
-		$deb_total=$deb_total+$debito;
-		$cre_total=$cre_total+$credito;
-		$dias_sal = $dias - $dias_inca_sub;
+		$debito = intval((($sueldo_base / 30) * $dias_r));
+		$credito = 0;
+		$deb_total = $deb_total + $debito;
+		$cre_total = $cre_total + $credito;
+		$dias_sal = $dias_r;
 		
 		$detalle_liquidacion_novedad_id = $this -> DbgetMaxConsecutive("detalle_liquidacion_novedad","detalle_liquidacion_novedad_id",$Conex,false,1);
 		//exit("***".$puc_sal."***"."JDFC26");
