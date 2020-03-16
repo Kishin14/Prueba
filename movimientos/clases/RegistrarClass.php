@@ -881,6 +881,7 @@ exit("No puede liquidar la nomina hasta que actualice la periodicidad del siguie
 
                     //exit('test : '.$select_tot_sal);
 					$liquidacion_novedad_id = $this -> requestDataForQuery('liquidacion_novedad_id','integer');
+                    
 					$diasIncapacidad = $Model -> getDiasIncapacidad($liquidacion_novedad_id,$this->getConex());
 					
 					$diasIncapacidad = $this->groupArrayDias($diasIncapacidad, 'contrato_id');

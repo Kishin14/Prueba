@@ -71,22 +71,33 @@ final class Imp_LiquidacionModel extends Db{
 	
 		l.fecha_inicial, 
 		l.fecha_final,
-		ln.contrato_id
+		ln.contrato_id,
+		l.licencia_id
 		
 		FROM 
 		
-		licencia l,
-		liquidacion_novedad ln
+		liquidacion_novedad ln,
+		licencia l
 		
 		WHERE 
 
-		l.remunerado=1 AND 
-		l.estado='A' AND   
-		l.contrato_id=ln.contrato_id AND 
-		(ln.fecha_inicial BETWEEN  l.fecha_inicial AND l.fecha_final OR ln.fecha_final  BETWEEN  l.fecha_inicial AND l.fecha_final OR l.fecha_inicial BETWEEN ln.fecha_inicial AND ln.fecha_final) AND
-		ln.fecha_inicial = (SELECT fecha_inicial FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id ) AND ln.fecha_final = (SELECT fecha_final FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id ) AND ln.area_laboral=(SELECT area_laboral FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id) AND ln.periodicidad=(SELECT periodicidad FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id)";
+		ln.contrato_id = l.contrato_id AND 
 		
-	$result = $this -> DbFetchAll($select,$Conex,true);
+		l.remunerado=1 AND 
+		
+		l.estado='A' AND   ln.estado!='A' AND
+		
+		(ln.fecha_inicial BETWEEN  l.fecha_inicial AND l.fecha_final OR ln.fecha_final  BETWEEN  l.fecha_inicial AND l.fecha_final OR l.fecha_inicial BETWEEN ln.fecha_inicial AND ln.fecha_final) AND
+		
+		ln.fecha_inicial = (SELECT fecha_inicial FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id ) AND 
+		
+		ln.fecha_final  = (SELECT fecha_final FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id ) AND 
+		
+		ln.area_laboral = (SELECT area_laboral FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id) AND
+		
+		ln.periodicidad = (SELECT periodicidad FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id)"; 
+		
+		$result = $this -> DbFetchAll($select,$Conex,true);
 
 	return $result;
   }
