@@ -1,6 +1,8 @@
 <?php
 
-final class Imp_Liquidacion{
+require_once "../../../framework/clases/ControlerClass.php";
+
+final class Imp_Liquidacion extends Controler{
 
   private $Conex;
   private $empresa_id;
@@ -150,8 +152,17 @@ final class Imp_Liquidacion{
 			   
 		  }
 		   
+                    
+		  $diasIncapacidad = $Model -> getDiasIncapacidad($liquidacion_novedad_id,$this -> Conex);
+		  
+		  $diasIncapacidad = $this->groupArrayDias($diasIncapacidad, 'contrato_id');
+		   
 
-	      $Layout -> setLiquidacion($con_deb1,$con_cre1,$con_debExt1,$con_creExt1,$con_sal1,$Model -> getLiquidacion($select_deb_total,$select_cre_total,$select_deb,$select_cre,$select_debExt,$select_creExt,$select_sal,$oficina_id,$this -> getEmpresaId,$this -> Conex),$Model -> getTotales($select_tot_deb,$select_tot_cre,$select_tot_debExt,$select_tot_creExt,$select_tot_sal,$this -> getEmpresaId,$this -> Conex));
+	      $Layout -> setLiquidacion($con_deb1,$con_cre1,$con_debExt1,$con_creExt1,$con_sal1,
+									
+									$Model -> getLiquidacion($select_deb_total,$select_cre_total,$select_deb,
+									$select_cre,
+									$select_debExt,$select_creExt,$select_sal,$diasIncapacidad,$oficina_id,$this -> getEmpresaId,$this -> Conex),$Model -> getTotales($select_tot_deb,$select_tot_cre,$select_tot_debExt,$select_tot_creExt,$select_tot_sal,$this -> getEmpresaId,$this -> Conex));
 
 		  
 	  }elseif($_REQUEST['tipo_impresion']=='DP'){
@@ -194,7 +205,63 @@ final class Imp_Liquidacion{
 	  	$Layout -> RenderMain();	  
 	  }
     
-  }   
+  }
+	 
+  public function groupArrayDias($array, $groupkey){
+	   
+	$contador = 0;//se inicializa un contador	
+	if (count($array) > 0) {
+		$keys = array_keys($array[0]);
+		$removekey = array_search($groupkey, $keys);if ($removekey === false) {
+			return array("Clave \"$groupkey\" no existe");
+		} else {
+			unset($keys[$removekey]);
+		}
+
+		$groupcriteria = array();
+		$return = array();
+		foreach ($array as $value) {
+			$item = null;
+			foreach ($keys as $key) {
+				$item[$key] = $value[$key];
+			}
+			$busca = array_search($value[$groupkey], $groupcriteria);
+			if ($busca === false) {
+				$groupcriteria[] = $value[$groupkey];
+				$return[] = array($groupkey => $value[$groupkey], 'groupeddata' => array());
+				$busca = count($return) - 1;
+			}
+			$return[$busca]['groupeddata'][] = $item;
+		}
+		
+		//LA VARIABLE RETURN NOS MUESTRA EL ARRAY AGRUPADO POR CONTRATO ID
+
+		//NOTA: EL ARRAY DE FECHAS DEBE CONTENER 2 ITEMS LLAMADOS 'fecha_inicial' y 'fecha_final' OBLIGATORIAMENTE
+
+		for ($i = 0; $i < count($return); $i++) {
+
+			$countDias = 0;//se inicializa dias
+
+			for ($j = 0; $j < count($return[$i]['groupeddata']); $j++) {
+			
+				$countDias += $this->restaFechasCont($return[$i]['groupeddata'][$j]['fecha_inicial'],$return[$i]['groupeddata'][$j]['fecha_final']);//Se acumulan la cantidad dias restados de los respectivas licencias por separado
+
+				$contrato_id_array = $return[$i]['contrato_id'];//Se le agrega el contrato ID en el Array para diferenciar los dias
+				
+			}
+			$arrayDias[$contador]['dias']       =$countDias;//Aqui se Alimentan los Dias
+			$arrayDias[$contador]['contrato_id']=$contrato_id_array;//Aqui se Alimentan los Contratos
+			$contador ++;
+		}
+
+		return $arrayDias;
+
+
+	} else {
+		return array();
+	}
+
+}   
   
 	
 }

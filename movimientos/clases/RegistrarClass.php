@@ -692,8 +692,14 @@ exit("No puede liquidar la nomina hasta que actualice la periodicidad del siguie
 				AND d.liquidacion_novedad_id=l.liquidacion_novedad_id AND d.concepto LIKE ('" . $con_sal[$i]['concepto'] . "') ) AS " . str_replace(" ", "_", $con_sal[$i]['concepto']) . ", ";
 
                     }
-
-                    $Layout->setLiquidacion($con_deb1, $con_cre1, $con_debExt1, $con_creExt1, $con_sal1, $Model->getLiquidacion($select_deb_total, $select_cre_total, $select_deb, $select_cre, $select_debExt, $select_creExt, $select_sal, $this->getOficinaId(), $this->getEmpresaId(), $this->getConex()), $Model->getTotales($select_tot_deb, $select_tot_cre, $select_tot_debExt, $select_tot_creExt, $select_tot_sal, $this->getEmpresaId(), $this->getConex()));
+                    
+                    $liquidacion_novedad_id = $this -> requestDataForQuery('liquidacion_novedad_id','integer');
+                    
+					$diasIncapacidad = $Model -> getDiasIncapacidad($liquidacion_novedad_id,$this->getConex());
+					
+					$diasIncapacidad = $this->groupArrayDias($diasIncapacidad, 'contrato_id');
+                    
+                    $Layout->setLiquidacion($con_deb1, $con_cre1, $con_debExt1, $con_creExt1, $con_sal1, $Model->getLiquidacion($select_deb_total, $select_cre_total, $select_deb, $select_cre, $select_debExt, $select_creExt, $select_sal,$diasIncapacidad,$this->getOficinaId(), $this->getEmpresaId(), $this->getConex()), $Model->getTotales($select_tot_deb, $select_tot_cre, $select_tot_debExt, $select_tot_creExt, $select_tot_sal, $this->getEmpresaId(), $this->getConex()));
 
                     $Layout->exportToExcel('Imp_LiquidacionExcel.tpl');
 
@@ -877,9 +883,6 @@ exit("No puede liquidar la nomina hasta que actualice la periodicidad del siguie
 
                     }
 
-                    // exit(print_r($con_creExt1).print_r($con_sal1));
-
-                    //exit('test : '.$select_tot_sal);
 					$liquidacion_novedad_id = $this -> requestDataForQuery('liquidacion_novedad_id','integer');
                     
 					$diasIncapacidad = $Model -> getDiasIncapacidad($liquidacion_novedad_id,$this->getConex());
