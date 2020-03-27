@@ -216,7 +216,8 @@ $(document).ready(function(){
 				  var responseArray       = $.parseJSON(response); 
 				  var tipo             	  = responseArray['tipo'];
 				  var tiempo_contrato  	  = responseArray['tiempo_contrato'];
-  				  var prestaciones_sociales= responseArray['prestaciones_sociales'];
+				  var prestaciones_sociales= responseArray['prestaciones_sociales'];
+				  $('#tiempo_contrato').val(tiempo_contrato);
 				  if(tipo=='F'){
 					$("#fecha_terminacion").addClass("obligatorio");	
 					$("#fecha_terminacion").addClass("requerido");	
@@ -239,7 +240,7 @@ $(document).ready(function(){
 					$('#horario_ini,#horario_fin,#empresa_caja,#empresa_cesan').val("");  
 				  }
 				  
-				  if(!isNaN(tiempo_contrato)){  			
+				  if(!isNaN(tiempo_contrato)){ 
 					  calculaFechaFin(tiempo_contrato);
 				  }
 
@@ -253,8 +254,9 @@ $(document).ready(function(){
 	 }
   });
   
-  $('#fecha_inicio').change(function(){
-	  calculaFechaFin();
+  $('#fecha_inicio').change(function(){	  
+	  var tiempo_contrato = $('#tiempo_contrato').val();
+	  calculaFechaFin(tiempo_contrato);
 	});
 ///INICIO VALIDACION FECHAS DE REPORTE
  
@@ -324,6 +326,7 @@ $(document).ready(function(){
 
 
 function calculaFechaFin(tiempo_contrato){
+
 	var fechai = $('#fecha_inicio').val();
 
 	if(fechai != ''){

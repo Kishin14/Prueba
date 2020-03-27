@@ -46,6 +46,7 @@ final class ContratoModel extends Db{
 	}
 	
 	public function calculaFecha($tiempo_contrato,$fecha_inicio,$Conex){
+		
 		$select ="SELECT DATE_ADD('$fecha_inicio', INTERVAL $tiempo_contrato MONTH) as fecha"; 
 		$result    = $this -> DbFetchAll($select,$Conex,true);
 		$fecha = $result[0]['fecha'];

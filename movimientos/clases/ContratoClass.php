@@ -189,9 +189,8 @@ final class Contrato extends Controler{
 		require_once("ContratoModelClass.php");
 		$Model = new ContratoModel();
 		$Data                  = array();
-		$tiempo_contrato   		= $_REQUEST['tiempo_contrato']; 
+		$tiempo_contrato   		= $_REQUEST['tiempo_contrato'];
 		$fecha_inicio   		= $_REQUEST['fechai']; 
-		//echo "fecha inicio ".$fecha_inicio." tiempo contrato ".$tiempo_contrato;
 		$Data  = $Model -> calculaFecha($tiempo_contrato,$fecha_inicio,$this -> getConex());
 		
 		echo json_encode($Data);
