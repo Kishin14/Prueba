@@ -67,7 +67,7 @@ final class LicenciaModel extends Db{
 		AS contrato 
 		
 		FROM contrato c,  tercero t, empleado e WHERE c.empleado_id=e.empleado_id AND e.tercero_id=t.tercero_id AND c.contrato_id=n.contrato_id)AS contrato
-		FROM licencia n WHERE n.licencia_id = $licencia_id";
+		FROM licencia n WHERE n.licencia_id = $licencia_id"; 
 		$result = $this -> DbFetchAll($select,$Conex);
 		return $result;
 	}
