@@ -61,20 +61,26 @@
           </tr>
           
           <tr>
-            <td colspan="2">&nbsp;</td>
             <td><label>Salario Base  : </label></td>
             <td>{$SALARIO}</td>
             <td><label>Fecha Inicio Contrato  : </label></td>
             <td>{$FECHAINICONT}</td>
+            <td><label>Estado  : </label></td>
+            <td>{$ESTADO}</td>
           </tr>
+
           <tr>
+          <td colspan="6">
+           	<fieldset class="section">
+            <legend>LIQUIDACION</legend>
+            	<table align="center">
+            <tr>
             <td ><label>Tipo Liquidacion :</label></td>
             <td >{$TIPOLIQUIDACION}</td>
            
            	<td><label>Valor Liquidacion : </label></td>
             <td>{$VALORLIQUIDACION}</td>
-            <td><label>Estado  : </label></td>
-            <td>{$ESTADO}</td>
+            
             
           </tr>
          <!-- <tr>
@@ -93,7 +99,27 @@
             <td><label>Periodo  : </label></td>
             <td>{$PERIODO}</td>
             
-          </tr>                    
+          </tr> 
+          </table> 
+          </fieldset> 
+          </tr>       
+          <tr>
+          <td colspan="6">
+           	<fieldset class="section">
+            <legend>CONTABILIZACIÓN</legend>
+            	<table align="center">  
+              <tr>
+                <td align="center">&nbsp;</td>
+                <td align="center">&nbsp;</td>
+                <td align="center">&nbsp;</td>
+                <td align="center">&nbsp;</td>
+                <td align="center">&nbsp;</td>
+                <td align="center">&nbsp;</td>
+              </tr>
+              </table>
+            </fieldset>
+          </td>
+          </tr>        
           <tr>
             <td align="center">&nbsp;</td>
             <td align="center">&nbsp;</td>
