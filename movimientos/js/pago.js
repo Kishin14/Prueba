@@ -76,9 +76,9 @@ function cargardiv(){
 		 
 				var respuesta = window.frames[1].setSolicitud();
 				
-				if(respuesta.length > 0){
+				if(respuesta == 'false'){
 					
-					alertJquery(respuesta,"Validacion");
+					alertJquery('Debe Seleccionar minimo una Liquidacion',"Validacion");
 					
 				}else {
 					closeDialog();
@@ -131,11 +131,12 @@ function closeDialog(){
 }
 
 function cargardatos(){
+	
+	$("#concepto_abono_nomina").val('ABONO NOMINA');
 	var detalle_concepto='';
 	var causaciones_abono_nomina  	= $('#causaciones_abono_nomina').val();
 	var liquidacion_novedad_id		= causaciones_abono_nomina.split(",");
 
-	$("#concepto_abono_nomina").val('ABONO NOMINA');
 }
 
 function PagoOnSave(formulario,resp){
@@ -408,7 +409,11 @@ function getTotalDebitoCredito(abono_nomina_id){
 function OnclickContabilizar(){
 	var abono_nomina_id	= $("#abono_nomina_id").val();	
 	var ingreso_abono_nomina 		= $("#ingreso_abono_nomina").val();		
-	var valor 				 		= $("#valor_abono_nomina").val();		
+	var valor 				 		= $("#valor_abono_nomina").val();
+	var valor_primas		 		= $("#valor_abono_primas").val();
+	var valor_cesantias		 		= $("#valor_abono_cesantias").val();
+	var valor_vacaciones	 		= $("#valor_abono_vacaciones").val();
+	var valor_int_cesantias	 		= $("#valor_abono_int_cesantias").val();
 	var QueryString 		 		= "ACTIONCONTROLER=getTotalDebitoCredito&abono_nomina_id="+abono_nomina_id;	
 
 	if(parseInt(abono_nomina_id)>0){
@@ -429,7 +434,7 @@ function OnclickContabilizar(){
 					 $("#totalDebito").html(totalDebito);
 					 $("#totalCredito").html(totalCredito);	
 					 
-					 if(parseFloat(totalDebito) == parseFloat(totalCredito) && parseFloat(removeFormatCurrency(valor))>0){
+					 if(parseFloat(totalDebito) == parseFloat(totalCredito) && (parseFloat(removeFormatCurrency(valor))>0 || parseFloat(removeFormatCurrency(valor_primas))>0 || parseFloat(removeFormatCurrency(valor_cesantias))>0 || parseFloat(removeFormatCurrency(valor_vacaciones))>0 || parseFloat(removeFormatCurrency(valor_int_cesantias))>0)){
 						var QueryString = "ACTIONCONTROLER=getContabilizar&abono_nomina_id="+abono_nomina_id+"&ingreso_abono_nomina="+ingreso_abono_nomina;	
 	
 						$.ajax({
@@ -454,7 +459,7 @@ function OnclickContabilizar(){
 								}
 							}
 						});
-					 }else if(parseFloat(totalDebito)==parseFloat(totalCredito) && parseFloat(totalCredito)!=parseFloat(removeFormatCurrency(valor))){
+					 }else if(parseFloat(totalDebito)==parseFloat(totalCredito) && (parseFloat(totalCredito)!=parseFloat(removeFormatCurrency(valor)) || parseFloat(totalCredito)!=parseFloat(removeFormatCurrency(valor_primas)) || parseFloat(totalCredito)!=parseFloat(removeFormatCurrency(valor_cesantias)) || parseFloat(totalCredito)!=parseFloat(removeFormatCurrency(valor_vacaciones)) || parseFloat(totalCredito)!=parseFloat(removeFormatCurrency(valor_int_cesantias)))){
 						alertJquery('El valor del registro no coincide con las sumas :<b>NO SE CONTABILIZARA</b>','Contabilizacion'); 
 					 }else{
 						alertJquery('No existen sumas iguales :<b>NO SE CONTABILIZARA</b>','Contabilizacion'); 
