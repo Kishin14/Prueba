@@ -76,9 +76,8 @@ final class VacacionModel extends Db{
 		$centro_de_costo_id	 = $result_contrato[0]['centro_de_costo_id'];
 
 		$select="SELECT l.contrato_id FROM liquidacion_vacaciones l 
-		         WHERE l.fecha_dis_inicio BETWEEN $fecha_dis_inicio AND $fecha_dis_final 
-				 OR l.fecha_dis_final BETWEEN $fecha_dis_inicio AND $fecha_dis_final 
-				 AND l.contrato_id = $contrato_id";
+		         WHERE l.contrato_id = $contrato_id AND l.estado!='I' AND ((l.fecha_dis_inicio BETWEEN $fecha_dis_inicio AND $fecha_dis_final)
+OR (l.fecha_dis_final BETWEEN $fecha_dis_inicio AND $fecha_dis_final))";
 				 
 		$result = $this -> DbFetchAll($select,$Conex); 
 
