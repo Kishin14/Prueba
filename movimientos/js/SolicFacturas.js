@@ -67,9 +67,7 @@ function checkRow(obj){
 
 
 function setSolicitud(){
-	
-	console.log('test');
-	
+		
 	detalle_ss_id_nomina         = '';
 	detalle_ss_id_primas         = '';
 	detalle_ss_id_cesantias      = '';
@@ -88,7 +86,7 @@ function setSolicitud(){
 	pago_saldo_int_cesantias  = 0;
 	pago_saldo_vacaciones     = 0;
 	
-	var retorno               = ''; 
+	var retorno               = 'false'; 
 	
 	$(document).find("input[name=nomina]:checked").each(function(){
 
@@ -140,7 +138,8 @@ function setSolicitud(){
 
 	
 	if(pago_saldo_nomina>0 && $("#tableNomina tr").length > 2){
-		
+
+		retorno = 'true';
 		parent.document.forms[0]['causaciones_abono_nomina'].value = detalle_ss_id_nomina;
 		parent.document.forms[0]['valores_abono_nomina'].value     = detalle_valores_nomina;
 		parent.document.forms[0]['valor_abono_nomina'].value       = setFormatCurrency(pago_saldo_nomina);
@@ -152,8 +151,10 @@ function setSolicitud(){
 		parent.document.forms[0]['valor_abono_nomina'].value       = 0;
 		
 	}else{
-		
-		retorno += "No ha escogido una de las Nominas Pendientes. Por favor Seleccione una de las Nominas !! .<br><br>";
+		parent.document.forms[0]['causaciones_abono_nomina'].value = '';
+		parent.document.forms[0]['valores_abono_nomina'].value     = '';
+		parent.document.forms[0]['valor_abono_nomina'].value       = 0;
+		//retorno += "No ha escogido una de las Nominas Pendientes. Por favor Seleccione una de las Nominas !! .<br><br>";
 	}
 	
 	
@@ -161,6 +162,7 @@ function setSolicitud(){
 	
 	if(pago_saldo_primas>0 && $("#tablePrimas tr").length > 2){
 		
+		retorno = 'true';
 		parent.document.forms[0]['causaciones_abono_primas'].value = detalle_ss_id_primas;
 		parent.document.forms[0]['valores_abono_primas'].value     = detalle_valores_primas;
 		parent.document.forms[0]['valor_abono_primas'].value       = setFormatCurrency(pago_saldo_primas);
@@ -172,8 +174,10 @@ function setSolicitud(){
 		parent.document.forms[0]['valor_abono_primas'].value       = 0;
 		
 	}else{
-		
-		retorno += "No ha escogido una de las Primas Pendientes. Por favor Seleccione una de las Primas !! .<br><br>";
+		parent.document.forms[0]['causaciones_abono_primas'].value = '';
+		parent.document.forms[0]['valores_abono_primas'].value     = '';
+		parent.document.forms[0]['valor_abono_primas'].value       = 0;
+		//retorno += "No ha escogido una de las Primas Pendientes. Por favor Seleccione una de las Primas !! .<br><br>";
 	}
 	
 	
@@ -181,6 +185,7 @@ function setSolicitud(){
 	
 	if(pago_saldo_cesantias>0 && $("#tableCesantias tr").length > 2){
 		
+		retorno = 'true';
 		parent.document.forms[0]['causaciones_abono_cesantias'].value = detalle_ss_id_cesantias;
 		parent.document.forms[0]['valores_abono_cesantias'].value     = detalle_valores_cesantias;
 		parent.document.forms[0]['valor_abono_cesantias'].value       = setFormatCurrency(pago_saldo_cesantias);
@@ -193,8 +198,10 @@ function setSolicitud(){
 		parent.document.forms[0]['valor_abono_cesantias'].value       = 0;
 		
 	}else{
-		
-		retorno += "No ha escogido una de las Cesantias Pendientes. Por favor Seleccione una de las Cesantias !! .<br><br>";
+		parent.document.forms[0]['causaciones_abono_cesantias'].value = '';
+		parent.document.forms[0]['valores_abono_cesantias'].value     = '';
+		parent.document.forms[0]['valor_abono_cesantias'].value       = 0;
+		//retorno += "No ha escogido una de las Cesantias Pendientes. Por favor Seleccione una de las Cesantias !! .<br><br>";
 	}
 	
 	
@@ -202,6 +209,7 @@ function setSolicitud(){
 	
 	if(pago_saldo_int_cesantias>0 && $("#tableIntCesantias tr").length > 2){
 		
+		retorno = 'true';
 		parent.document.forms[0]['causaciones_abono_int_cesantias'].value = detalle_ss_id_int_cesantias;
 		parent.document.forms[0]['valores_abono_int_cesantias'].value     = detalle_valores_int_cesantias;
 		parent.document.forms[0]['valor_abono_int_cesantias'].value       = setFormatCurrency(pago_saldo_int_cesantias);
@@ -214,8 +222,10 @@ function setSolicitud(){
 		parent.document.forms[0]['valor_abono_int_cesantias'].value       = 0;
 		
 	}else{
-		
-		retorno += "No ha escogido una de los Intereses de Cesantias Pendientes. Por favor Seleccione una de los Intereses de Cesantias !! .<br><br>";
+		parent.document.forms[0]['causaciones_abono_int_cesantias'].value = '';
+		parent.document.forms[0]['valores_abono_int_cesantias'].value     = '';
+		parent.document.forms[0]['valor_abono_int_cesantias'].value       = 0;
+		//retorno += "No ha escogido una de los Intereses de Cesantias Pendientes. Por favor Seleccione una de los Intereses de Cesantias !! .<br><br>";
 
 	}
 	
@@ -223,6 +233,7 @@ function setSolicitud(){
 	
 	if(pago_saldo_vacaciones>0 && $("#tableVacaciones tr").length > 2){
 		
+		retorno = 'true';
 		parent.document.forms[0]['causaciones_abono_vacaciones'].value = detalle_ss_id_vacaciones;
 		parent.document.forms[0]['valores_abono_vacaciones'].value     = detalle_valores_vacaciones;
 		parent.document.forms[0]['valor_abono_vacaciones'].value       = setFormatCurrency(pago_saldo_vacaciones);
@@ -234,12 +245,14 @@ function setSolicitud(){
 		parent.document.forms[0]['valor_abono_vacaciones'].value       = 0;
 		
 	}else{
-		
-		retorno += "No ha escogido una de las Vacaciones Pendientes. Por favor Seleccione una de las Vacaciones !!.";
+		parent.document.forms[0]['causaciones_abono_vacaciones'].value = '';
+		parent.document.forms[0]['valores_abono_vacaciones'].value     = '';
+		parent.document.forms[0]['valor_abono_vacaciones'].value       = 0;
+		//retorno += "No ha escogido una de las Vacaciones Pendientes. Por favor Seleccione una de las Vacaciones !!.";
 
 	}
 	
-	if(retorno.length == 0) parent.cargardatos();
+	if(retorno == 'true') parent.cargardatos();
 	
 	return retorno;
 }
