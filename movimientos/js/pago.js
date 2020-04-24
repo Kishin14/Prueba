@@ -109,10 +109,10 @@ function cargardiv(){
 		 
 				var respuesta = window.frames[1].setSolicitud();
 				
-				if(respuesta.length > 0){
-					
-					alertJquery(respuesta,"Validacion");
-					
+				if (respuesta == 'false') {
+
+					alertJquery('Debe Seleccionar minimo una Liquidacion', "Validacion");
+
 				}else {
 					closeDialog();
 				}
