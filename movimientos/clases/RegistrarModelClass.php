@@ -849,10 +849,11 @@ final class RegistrarModel extends Db{
 		$numero_identificacion_pension =  $result[$i]['numero_identificacion_pension'];
 		$digito_verificacion_pension =  $result[$i]['digito_verificacion_pension']!='' ? $result[$i]['digito_verificacion_pension'] : 'NULL';
 
-		$select_vac = "SELECT  c.*, DATEDIFF(IF(fecha_reintegro>'$fecha_final','$fecha_final',fecha_reintegro),IF(fecha_dis_inicio>'$fecha_inicial',fecha_dis_inicio,'$fecha_inicial')) AS diferencia
+		$select_vac = "SELECT  SUM(DATEDIFF(IF(fecha_reintegro>'$fecha_final','$fecha_final',fecha_reintegro),IF(fecha_dis_inicio>'$fecha_inicial',fecha_dis_inicio,'$fecha_inicial'))) AS diferencia
 				FROM 	liquidacion_vacaciones c
 				WHERE c.estado = 'C' AND c.contrato_id=$contrato_id AND (('$fecha_inicial' BETWEEN  fecha_dis_inicio AND fecha_reintegro OR '$fecha_final' BETWEEN  fecha_dis_inicio AND fecha_reintegro) OR ('$fecha_inicial' < fecha_dis_inicio AND fecha_reintegro < '$fecha_final'))";
 		$result_vac = $this -> DbFetchAll($select_vac,$Conex,true);
+		
 		$dife_vacas= $result_vac[0]['diferencia']>0 ? ($result_vac[0]['diferencia']) : 0;
 
 		if($dias_real<=$result[$i]['dias_lice_nore']){

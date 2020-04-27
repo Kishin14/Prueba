@@ -338,15 +338,11 @@ final class LiquidacionFinal extends Controler
 
             // prima
             $data_prima = $Model->getDetallesPrima($contrato_id, $_REQUEST['fecha_final'], $this->getConex());
-
+            $fecha_ultima = $data_prima[0]['fecha_liquidacion'];
             if ($data_prima[0]['periodo'] == 2 && $data_prima[0]['inicial'] == 0) {
-                $fecha_ultima = substr($data_prima[0]['fecha_liquidacion'], 0, 4) . '-12-31';
-                $dias_prima = $Model->getDias($fecha_ultima, $_REQUEST['fecha_final'], $this->getConex());
-                $dias_prima = ($dias_prima + 1);
+                $dias_prima = $this->restaFechasCont($fecha_ultima, $_REQUEST['fecha_final']);
             } elseif ($data_prima[0]['periodo'] == 1 && $data_prima[0]['inicial'] == 0) {
-                $fecha_ultima = substr($data_prima[0]['fecha_liquidacion'], 0, 4) . '-06-30';
-                $dias_prima = $Model->getDias($fecha_ultima, $_REQUEST['fecha_final'], $this->getConex());
-                $dias_prima = ($dias_prima + 1);
+                $dias_prima = $this->restaFechasCont($fecha_ultima, $_REQUEST['fecha_final']);
             } else {
                 $dias_prima = $dias;
                 $fecha_ultima = $_REQUEST['fecha_inicio'];
@@ -698,7 +694,12 @@ final class LiquidacionFinal extends Controler
 
             for ($i = 0; $i < count($data_ded); $i++) {
                 $deta_ded = $Model->getDetallesDeduccionesDetalle($contrato_id, $data_ded[$i]['concepto_area_id'], $fecha_final, $this->getConex());
-                $valor_debe = $data_ded[$i]['valor'] - $deta_ded[0]['valor'];
+
+                if ($data_ded[$i]['valor'] == $deta_ded[$i]['valor']) {
+                    $valor_debe = $data_ded[$i]['valor'] - $deta_ded[$i]['valor'];
+                } else {
+                    $valor_debe = $data_ded[$i]['valor'];
+                }
 
                 if ($valor_debe > 0) { //si debe
                     $datos[$x]['concepto'] = 'DEBE ' . $data_ded[$i]['concepto'];

@@ -51,7 +51,7 @@ final class SolicPeriodosModel extends Db{
 		$select_dias_otorgados="SELECT dias_disfrutados,dias_pagados
 		                        FROM detalle_liquidacion_vacaciones WHERE periodo_inicio='".$periodo[$j]['fecha_inicial']."' 
 								AND periodo_fin ='".$periodo[$j]['fecha_final']."' AND  liquidacion_vacaciones_id 
-								IN (SELECT liquidacion_vacaciones_id FROM liquidacion_vacaciones WHERE contrato_id=$contrato_id)";
+								IN (SELECT liquidacion_vacaciones_id FROM liquidacion_vacaciones WHERE contrato_id=$contrato_id AND estado != 'I')";
 	
 		$result_dias_otorgados = $this -> DbFetchAll($select_dias_otorgados,$Conex); 
 	

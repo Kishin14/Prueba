@@ -274,7 +274,7 @@ final class LiquidacionFinalModel extends Db
 
         if ($contrato_id > 0) {
 
-            $select = "SELECT l.fecha_liquidacion, l.periodo, l.inicial
+            $select = "SELECT ADDDATE(l.fecha_liquidacion, INTERVAL 1 DAY) AS fecha_liquidacion, l.periodo, l.inicial
 		FROM liquidacion_prima l
         WHERE l.contrato_id = $contrato_id AND l.estado!='I' ORDER BY l.fecha_liquidacion DESC LIMIT 1";
             $result = $this->DbFetchAll($select, $Conex, true);
@@ -343,7 +343,7 @@ final class LiquidacionFinalModel extends Db
             $select = "SELECT dl.debito AS valor
 		FROM liquidacion_novedad l, detalle_liquidacion_novedad dl
 		WHERE l.contrato_id = $contrato_id AND l.estado!='A' AND dl.liquidacion_novedad_id=l.liquidacion_novedad_id AND l.fecha_final='$fecha_final'  AND dl.concepto_area_id IS NOT NULL";
-//echo $select;
+        
             $result = $this->DbFetchAll($select, $Conex, true);
 
         } else {
