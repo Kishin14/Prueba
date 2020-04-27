@@ -285,12 +285,16 @@ final class BasesLayout extends View{
 		$this	->	assign("PUCCONTRAFONDPENID",$this	->	objectsHtml	->	GetobjectHtml($this	->	fields[puc_contra_fonpension_id]));
 		$this	->	assign("PUCCONTRAFONDPEN",	$this	->	objectsHtml	->	GetobjectHtml($this	->	fields[puc_contra_fonpension]));
 		$this	->	assign("LIMITEFONDO",		$this	->	objectsHtml	->	GetobjectHtml($this	->	fields[limite_fondo]));
+		// $this	->	assign("PERIODONUEVO",		$this	->	objectsHtml	->	GetobjectHtml($this	->	fields[periodo_contable_nuevo]));
+		$this	->	assign("SALARIONUEVO",		$this	->	objectsHtml	->	GetobjectHtml($this	->	fields[salario_nuevo]));
+		$this	->	assign("SUBSIDIONUEVO",		$this	->	objectsHtml	->	GetobjectHtml($this	->	fields[sub_nuevo]));
 
 		if($this -> Guardar)
 			$this -> assign("GUARDAR",	$this -> objectsHtml -> GetobjectHtml($this -> fields[guardar]));
 
 		if($this -> Actualizar)
 			$this -> assign("ACTUALIZAR",$this -> objectsHtml -> GetobjectHtml($this -> fields[actualizar]));
+	   		$this -> assign("DUPLICAR",	$this -> objectsHtml -> GetobjectHtml($this -> fields[duplicar]));
 
 		if($this -> Borrar)
 			$this -> assign("BORRAR",	$this -> objectsHtml -> GetobjectHtml($this -> fields[borrar]));
@@ -302,6 +306,11 @@ final class BasesLayout extends View{
 	public function SetPeriodoContable($periodo_contable_id){
 		$this -> fields[periodo_contable_id]['options'] = $periodo_contable_id;
 		$this -> assign("PERIODOCONTABLE",$this -> objectsHtml -> GetobjectHtml($this -> fields[periodo_contable_id]));
+	}
+
+	public function SetPeriodoContableNuevo($periodo_contable_nuevo){
+		$this -> fields[periodo_contable_nuevo]['options'] = $periodo_contable_nuevo;
+		$this -> assign("PERIODONUEVO",$this -> objectsHtml -> GetobjectHtml($this -> fields[periodo_contable_nuevo]));
 	}
 
    public function SetTiposDocumentoContable($DocumentosContables){

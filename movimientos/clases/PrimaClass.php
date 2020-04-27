@@ -195,7 +195,7 @@ final class Prima extends Controler{
 	  
 	}
   
-   protected function setVencimiento($Conex){
+   protected function setVencimiento(){
 	  
   	$dias 	 = $_REQUEST['dias'];
 	$fecha 	 = $_REQUEST['fecha'];
@@ -205,6 +205,20 @@ final class Prima extends Controler{
 	$Data[0]['dia_fin']= $dia_fin;
 	$Data[0]['dia_reintegro']= $dia_reintegro;
 	  $this -> getArrayJSON($Data);
+   }
+
+   protected function Liq_Anterior($Conex){
+	  
+	require_once("PrimaModelClass.php");
+	$Model = new PrimaModel();
+	$empleado_id 	= $_REQUEST['empleado_id'];
+	$periodo 	= $_REQUEST['periodo'];
+	$fecha_liquidacion 	= $_REQUEST['fecha_liquidacion'];
+	$oficina_id = $this -> getOficinaId();
+	
+	$Data = $Model -> Liq_Anterior($empleado_id,$fecha_liquidacion,$periodo,$oficina_id,$this -> getConex());
+	
+	echo json_encode($Data);
    }
 
 
@@ -339,7 +353,7 @@ final class Prima extends Controler{
 		required=>'yes',
 		readonly=>'yes',
 	 	datatype=>array(
-			type	=>'text',
+			type	=>'integer',
 			length	=>'250'),
 		transaction=>array(
 			table	=>array('liquidacion_prima'),
@@ -347,6 +361,34 @@ final class Prima extends Controler{
 		
 	);
 	
+	$this -> Campos[valor_parcial] = array(
+		name	=>'valor_parcial',
+		id		=>'valor_parcial',
+		type	=>'hidden',
+		datatype=>array(
+			type	=>'integer',
+			length	=>'11')
+	);
+
+	$this -> Campos[acumulado] = array(
+		name	=>'acumulado',
+		id		=>'acumulado',
+		type	=>'text',
+		disabled=>'yes',
+		datatype=>array(
+			type	=>'integer',
+			length	=>'11')
+	);
+
+	$this -> Campos[diferencia] = array(
+		name	=>'diferencia',
+		id		=>'diferencia',
+		type	=>'text',
+		disabled=>'yes',
+		datatype=>array(
+			type	=>'integer',
+			length	=>'11')
+	);
 
 		
 	

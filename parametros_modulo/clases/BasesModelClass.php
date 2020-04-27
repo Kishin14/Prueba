@@ -16,6 +16,31 @@ final class BasesModel extends Db{
 		return $this -> Permisos -> getPermiso($ActividadId,$Permiso,$Conex);
 	}
 
+	public function duplicar($Campos,$Conex){
+	 
+		$this -> Begin($Conex);
+	
+			$sub_nuevo 				= $this -> requestDataForQuery('sub_nuevo','integer');
+			$salario_nuevo  			= $this -> requestDataForQuery('salario_nuevo','integer');
+			$periodo_contable_nuevo	= $this -> requestDataForQuery('periodo_contable_nuevo','integer');
+
+
+			$select = "SELECT d.id_datos FROM datos_periodo d WHERE d.periodo_contable_id = $periodo_contable_nuevo";
+			$result    = $this -> DbFetchAll($select,$Conex);
+
+			if($result[0]['id_datos']>0){ exit('El periodo seleccionado Tiene una Configuracion Previa'); }	
+
+			
+			$id_datos   = $this -> DbgetMaxConsecutive("datos_periodo","id_datos",$Conex,true,1);
+			$this -> assignValRequest('sub_transporte',$sub_nuevo);
+			$this -> assignValRequest('salrio',$salario_nuevo);
+			$this -> assignValRequest('periodo_contable_id',$periodo_contable_nuevo);
+			$this -> assignValRequest('id_datos',$id_datos);
+			$this -> DbInsertTable("datos_periodo",$Campos,$Conex,true,false);
+
+		$this -> Commit($Conex); 
+	}
+
 	public function selectDatosBasesId($id_datos,$Conex){
 
 		$select = "
@@ -165,6 +190,11 @@ final class BasesModel extends Db{
 
 	public function GetPeriodoContable($Conex){
 		return $this -> DbFetchAll("SELECT periodo_contable_id AS value, anio AS text FROM periodo_contable",$Conex,
+		$ErrDb = false);
+	}
+	
+	public function GetPeriodoContableNuevo($Conex){
+		return $this -> DbFetchAll("SELECT periodo_contable_id AS value, anio AS text, IF(periodo_contable_id IN(SELECT periodo_contable_id FROM datos_periodo),periodo_contable_id,'')AS disabled FROM periodo_contable",$Conex,
 		$ErrDb = false);
 	}
 

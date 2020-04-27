@@ -300,12 +300,33 @@
     </fieldset>
     <table width="99%">     
         <tr>
-            <td  align="center">{$GUARDAR}&nbsp;{$ACTUALIZAR}&nbsp;{$BORRAR}&nbsp;{$LIMPIAR}</td>
+            <td  align="center">{$GUARDAR}&nbsp;{$ACTUALIZAR}&nbsp;{$BORRAR}&nbsp;{$DUPLICAR}&nbsp;{$LIMPIAR}</td>
         </tr>
     </table>
     {$FORM1END}
     </fieldset>
     <fieldset>{$GRIDPARAMETROS}</fieldset>
+    <div id="divAnulacion">
+      <form>
+        <table>       
+          <tr>
+            <td><label>Periodo contable :</label></td>
+            <td>{$PERIODONUEVO}</td>
+          </tr>          
+          <tr>
+            <td><label>Salario mínimo :</label></td>
+            <td>{$SALARIONUEVO}</td>
+          </tr>
+          <tr>
+            <td><label>Subsidio Transporte :</label></td>
+            <td>{$SUBSIDIONUEVO}</td>
+          </tr> 
+          <tr>
+            <td colspan="2" align="center">{$DUPLICAR}</td>
+          </tr>                    
+        </table>
+      </form>
+    </div>
 
 </body>
 </html>

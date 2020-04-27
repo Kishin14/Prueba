@@ -80,6 +80,9 @@ final class PrimaLayout extends View{
 	 $this -> assign("SALARIO",		   		$this -> objectsHtml -> GetobjectHtml($this -> fields[salario]));
 	 $this -> assign("TIPOLIQUIDACION",		$this -> objectsHtml -> GetobjectHtml($this -> fields[tipo_liquidacion]));		 
 	  $this -> assign("VALORLIQUIDACION",	$this -> objectsHtml -> GetobjectHtml($this -> fields[valor]));	
+	  $this -> assign("VALORLIQUIDACIONPARCIAL",	$this -> objectsHtml -> GetobjectHtml($this -> fields[valor_parcial]));	
+	  $this -> assign("VALORACUMULADO",	$this -> objectsHtml -> GetobjectHtml($this -> fields[acumulado]));	
+	  $this -> assign("VALORDIFERENCIA",	$this -> objectsHtml -> GetobjectHtml($this -> fields[diferencia]));	
 	  $this -> assign("FECHAINICONT",		$this -> objectsHtml -> GetobjectHtml($this -> fields[fecha_inicio_contrato]));
      
      $this -> assign("OBSERVACION",    		$this -> objectsHtml -> GetobjectHtml($this -> fields[observaciones]));

@@ -24,18 +24,35 @@ final class PrimaModel extends Db{
 		$periodo   	   				= $this -> requestDataForQuery('periodo','integer');
 		$fecha_liquidacion 	 		= $this -> requestDataForQuery('fecha_liquidacion','date');		
 		$valor   					= $this -> requestDataForQuery('valor','numeric');
+		$valor_parcial  			= $this -> requestDataForQuery('valor_parcial','numeric');
 		$si_empleado			    = $this -> requestDataForQuery('si_empleado','text');
 		$tipo_liquidacion			= $this -> requestDataForQuery('tipo_liquidacion','text');
+		$acumulado					= $this -> requestDataForQuery('acumulado','integer');
+		$diferencia					= $this -> requestDataForQuery('diferencia','integer');
+
+
 		
 		if($si_empleado == "'1'"){
 			
 			$this -> Begin($Conex);
-				$select_contrato = "SELECT c.contrato_id,(SELECT e.tercero_id FROM empleado e WHERE e.empleado_id=c.empleado_id)as tercero_id,c.area_laboral,(c.sueldo_base+c.subsidio_transporte) as sueldo_base,c.fecha_inicio, DATEDIFF(CURDATE(),c.fecha_inicio) as dias_trabajados FROM contrato c WHERE c.empleado_id=$empleado_id AND estado='A' ";
+
+				$select_contrato = "SELECT c.contrato_id,(SELECT e.tercero_id FROM empleado e WHERE e.empleado_id=c.empleado_id)as tercero_id,c.area_laboral,(c.sueldo_base+c.subsidio_transporte) as sueldo_base,c.fecha_inicio, DATEDIFF($fecha_liquidacion ,c.fecha_inicio) as dias_trabajados,centro_de_costo_id,fecha_ult_prima,valor_prima FROM contrato c WHERE c.empleado_id=$empleado_id AND estado='A' ";
 				
 				$result_contrato = $this -> DbFetchAll($select_contrato,$Conex); 
 				$contrato_id	 = $result_contrato[0]['contrato_id'];
 				$tercero_id	 = $result_contrato[0]['tercero_id'];
+				$centro_de_costo_id = $result_contrato[0]['centro_de_costo_id'];
 				$area_laboral	 = $result_contrato[0]['area_laboral'];
+				$fecha_ult_prima	 = $result_contrato[0]['fecha_ult_prima'];
+				$valor_prima	 = $result_contrato[0]['valor_prima'];
+
+				$liq_anterior = $this -> Liq_Anterior($empleado_id,$fecha_liquidacion,$periodo,$oficina_id,$Conex);
+
+				$fecha_anterior = substr($liq_anterior[0]['fecha_liquidacion'],0,4);
+				$fecha_liquidacion_valida = substr($fecha_liquidacion,0,4);
+				$periodo_anterior    = $liq_anterior[0]['periodo'];
+				$total    = $liq_anterior[0]['total'];
+
 				
 				$estado = "'A'";
 				$liquidacion_prima_id 		= $this -> DbgetMaxConsecutive("liquidacion_prima","liquidacion_prima_id",$Conex,false,1);
@@ -46,27 +63,12 @@ final class PrimaModel extends Db{
 				($liquidacion_prima_id,$contrato_id,$fecha_liquidacion,$estado,$valor,$tipo_liquidacion,$periodo,$observaciones)";
 				//exit($insert_prima);
 				$this -> query($insert_prima,$Conex,true);
-				
-				/*
-				$detalle_liquidacion = $_REQUEST['concepto_item'];
-				
-				 $item				= split(',',$detalle_liquidacion);
-				 
-				  foreach($item as $item_id){
-					if($item_id!=''){
-						
-						$item_fr	= split('-',$item_id);
-						
-						$fecha_inicial_periodo = $item_fr[0];
-						$fecha_final_periodo = $item_fr[1];
-						$dias_ganados	= $item_fr[2];
-						$dias_disfrutados = $item_fr[3];
-						
-						$insert_detalles = "INSERT INTO detalle_liquidacion_prima (liquidacion_prima_id,periodo_inicio,periodo_fin,dias_ganados,dias_disfrutados) 						                                    VALUES
-											($liquidacion_prima_id,$fecha_inicial_periodo,$fecha_final_periodo,$dias_ganados,$dias_disfrutados)";
-						$this -> query($insert_detalles,$Conex,true); 
-					}
-				  }*/
+
+
+				$update = "UPDATE contrato SET fecha_ult_prima=$fecha_liquidacion,valor_prima=$valor
+							WHERE contrato_id=$contrato_id";	
+				$this -> query($update,$Conex,true);
+
 				  
 				$select_datos_ter="SELECT numero_identificacion,digito_verificacion FROM tercero WHERE tercero_id=$tercero_id";
 				$result_datos_ter = $this -> DbFetchAll($select_datos_ter,$Conex) ;
@@ -77,7 +79,7 @@ final class PrimaModel extends Db{
 				$select_parametros="SELECT 
 				puc_prima_prov_id,puc_prima_cons_id,puc_prima_contra_id,puc_admon_prima_id,puc_ventas_prima_id,puc_produ_prima_id,tipo_documento_id
 				FROM parametros_liquidacion_nomina WHERE oficina_id=$oficina_id";
-				$result_parametros = $this -> DbFetchAll($select_parametros,$Conex); 
+				$result_parametros = $this -> DbFetchAll($select_parametros,$Conex,true); 
 				
 				$puc_provision_prima = $result_parametros[0]['puc_prima_prov_id'];
 				$puc_consolidado_prima = $result_parametros[0]['puc_prima_cons_id'];
@@ -87,29 +89,19 @@ final class PrimaModel extends Db{
 				$puc_operativo			= $result_parametros[0]['puc_produ_prima_id'];
 				
 				$tipo_doc				= $result_parametros[0]['tipo_documento_id'];
+
+				$consulta_periodo = " AND fecha BETWEEN COALECE($fecha_ult_prima,$fecha_liquidacion_valida) AND $fecha_liquidacion)";
 				
-				$select_consolidado = "SELECT SUM(credito-debito)as neto,centro_de_costo_id FROM imputacion_contable WHERE puc_id=$puc_consolidado_prima AND tercero_id=$tercero_id AND encabezado_registro_id IN (SELECT encabezado_registro_id FROM encabezado_de_registro WHERE estado='C' AND fecha <=$fecha_liquidacion)";
-				
+				$select_consolidado = "SELECT SUM(credito-debito)as neto,centro_de_costo_id FROM imputacion_contable WHERE puc_id=$puc_consolidado_prima AND tercero_id=$tercero_id AND encabezado_registro_id IN (SELECT encabezado_registro_id FROM encabezado_de_registro WHERE estado='C' $consulta_periodo)";
+		
 				$result_consolidado = $this -> DbFetchAll($select_consolidado,$Conex,true); 
-				
-				 //if(!count($result_consolidado)>0){exit("No se encontraron valores en la cuenta consolidados para este tercero!!");}
 				
 				
 				$valor_consolidado = $result_consolidado[0]['neto']>0 ? intval($result_consolidado[0]['neto']) : 0 ;
 				$centro_costo_consolidado = $result_consolidado[0]['centro_de_costo_id']>0 ? $result_consolidado[0]['centro_de_costo_id'] : 'NULL';
 				
-				$select_provision = "SELECT SUM(credito-debito)as neto,centro_de_costo_id  FROM imputacion_contable WHERE puc_id=$puc_provision_prima AND tercero_id=$tercero_id AND encabezado_registro_id IN (SELECT encabezado_registro_id FROM encabezado_de_registro WHERE estado='C' AND fecha <=$fecha_liquidacion)";
 				
-				$result_provision = $this -> DbFetchAll($select_provision,$Conex,true); 
-				
-				 //if(!count($result_provision)>0){exit("No se encontraron valores en la cuenta provisionados para este tercero!!");}
-				
-				
-				$valor_provision = $result_provision[0]['neto'] >0 ?  intval($result_provision[0]['neto']) : 0;
-				$centro_costo_provision = $result_provision[0]['centro_de_costo_id']>0 ? $result_provision[0]['centro_de_costo_id'] : 'NULL';
-				
-				
-				$valor_guardado = intval($valor_consolidado)+intval($valor_provision);
+				$valor_guardado = intval($valor_consolidado);
 				
 				if($valor_consolidado>0){
 					
@@ -117,14 +109,6 @@ final class PrimaModel extends Db{
 					VALUES
 					($liquidacion_prima_id,$puc_consolidado_prima,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF($centro_costo_consolidado>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,$valor_consolidado,0,0,0)";
 					$this -> query($insert_det_puc_cons,$Conex,true); 
-					
-				}
-				if($valor_provision>0){
-					
-					$insert_det_puc_prov ="INSERT INTO detalle_prima_puc (liquidacion_prima_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_prima,porcentaje_prima,formula_prima,desc_prima,deb_item_prima,cre_item_prima,valor_liquida,contrapartida)
-					VALUES
-					($liquidacion_prima_id,$puc_provision_prima,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_provision,IF($centro_costo_provision>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_provision),'NULL'),0,'NULL','NULL',$observaciones,$valor_provision,0,0,0)";
-					$this -> query($insert_det_puc_prov,$Conex,true); 
 					
 				}
 				if($valor>$valor_guardado){
@@ -135,32 +119,47 @@ final class PrimaModel extends Db{
 					}elseif($area_laboral=='C'){
 						$puc_diferencia = $puc_venta;
 					}
-					
-					$diferencia= $valor-$valor_guardado;
-					
+
+				if($diferencia>0){
 					$insert_det_puc_gas ="INSERT INTO detalle_prima_puc (liquidacion_prima_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_prima,porcentaje_prima,formula_prima,desc_prima,deb_item_prima,cre_item_prima,valor_liquida,contrapartida)
-				VALUES
-				($liquidacion_prima_id,$puc_diferencia,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_provision,IF(COALESCE($centro_costo_provision,0)>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_provision),'NULL'),0,'NULL','NULL',$observaciones,$diferencia,0,0,0)";
-				$this -> query($insert_det_puc_gas,$Conex,true); 
-				
+					VALUES
+					($liquidacion_prima_id,$puc_diferencia,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF(COALESCE($centro_costo_consolidado,0)>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,$diferencia,0,0,0)";
+					$this -> query($insert_det_puc_gas,$Conex,true);
+					
+				}else{
+
+					$insert_det_puc_gas ="INSERT INTO detalle_prima_puc (liquidacion_prima_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_prima,porcentaje_prima,formula_prima,desc_prima,deb_item_prima,cre_item_prima,valor_liquida,contrapartida)
+					VALUES
+					($liquidacion_prima_id,$puc_diferencia,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF(COALESCE($centro_costo_consolidado,0)>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,0,ABS($diferencia),0,0)";
+					$this -> query($insert_det_puc_gas,$Conex,true);
+					
 				}
+				
+			
+			}
+							
 				
 				$insert_det_puc_contra ="INSERT INTO detalle_prima_puc (liquidacion_prima_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_prima,porcentaje_prima,formula_prima,desc_prima,deb_item_prima,cre_item_prima,valor_liquida,contrapartida)
 				VALUES
-				($liquidacion_prima_id,$puc_contrapartida,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_provision,IF($centro_costo_provision>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_provision),'NULL'),0,'NULL','NULL',$observaciones,0,$valor,0,0)";
+				($liquidacion_prima_id,$puc_contrapartida,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_de_costo_id,IF($centro_de_costo_id>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_de_costo_id),'NULL'),0,'NULL','NULL',$observaciones,0,$valor,0,1)";
 				$this -> query($insert_det_puc_contra,$Conex,true);
 				
 			$this -> Commit($Conex);  
 		}else
 		{
 			$this -> Begin($Conex);
+
+			
 			
 			$select="SELECT c.contrato_id,c.sueldo_base FROM contrato c, tipo_contrato t WHERE c.estado='A' AND t.tipo_contrato_id=c.tipo_contrato_id AND t.prestaciones_sociales=1";
 			
 			$result = $this -> DbFetchAll($select,$Conex);
+
 			$consecutivo 		= $this -> DbgetMaxConsecutive("liquidacion_prima","consecutivo",$Conex,false,1);
 			
 			foreach($result as $resultado){
+
+
 				
 					$contrato_id = $resultado[contrato_id];
 					
@@ -174,7 +173,26 @@ final class PrimaModel extends Db{
 				$area_laboral	 = $result_contrato[0]['area_laboral'];
 				$dias_laborados	 = $result_contrato[0]['dias_laborados']>180 ? 180 : $result_contrato[0]['dias_laborados'] -1;
 				$sueldo_base	 = $result_contrato[0]['sueldo_base'];
-			 	$valor = intval(($dias_laborados*($sueldo_base/2))/180);
+				$centro_de_costo_id = $result_contrato[0]['centro_de_costo_id'];
+				$valor = intval(($dias_laborados*($sueldo_base/2))/180);
+
+				 
+				$liq_anterior = $this -> Liq_Anterior($empleado_id,$fecha_liquidacion,$periodo,$oficina_id,$Conex);
+
+				$fecha_anterior = substr($liq_anterior[0]['fecha_liquidacion'],0,4);
+				$fecha_liquidacion_valida = substr($fecha_liquidacion,0,4);
+				$periodo_anterior    = $liq_anterior[0]['periodo'];
+				$total    = $liq_anterior[0]['total'];
+
+				
+				
+				if ($fecha_anterior ==$fecha_liquidacion_valida && $periodo_anterior==$periodo) {
+					$prima = (($sueldo_base/2)-$total);
+					$valor=$prima;
+				}elseif ($fecha_anterior ==$fecha_liquidacion_valida && $periodo_anterior!=$periodo) {
+					$prima = (($sueldo_base/2));
+					$valor=$prima;
+				}
 				
 				$estado = "'A'";
 				$liquidacion_prima_id 		= $this -> DbgetMaxConsecutive("liquidacion_prima","liquidacion_prima_id",$Conex,false,1);
@@ -185,7 +203,10 @@ final class PrimaModel extends Db{
 				($liquidacion_prima_id,$consecutivo,$contrato_id,$fecha_liquidacion,$estado,$valor,$tipo_liquidacion,$periodo,$observaciones)";
 				//exit($insert_prima);
 				$this -> query($insert_prima,$Conex,true);
-				
+
+				$update = "UPDATE contrato SET fecha_ult_prima=$fecha_liquidacion,valor_prima=$valor
+							WHERE contrato_id=$contrato_id";	
+				$this -> query($update,$Conex,true);				
 				
 				  
 				$select_datos_ter="SELECT numero_identificacion,digito_verificacion, CONCAT_WS(' ',primer_nombre,segundo_nombre,primer_apellido,segundo_apellido) as nombre FROM tercero WHERE tercero_id=$tercero_id";
@@ -211,76 +232,59 @@ final class PrimaModel extends Db{
 				
 				$tipo_doc				= $result_parametros[0]['tipo_documento_id'];
 				
-				$select_consolidado = "SELECT SUM(credito-debito)as neto,centro_de_costo_id FROM imputacion_contable WHERE puc_id=$puc_consolidado_prima AND tercero_id=$tercero_id AND encabezado_registro_id IN (SELECT encabezado_registro_id FROM encabezado_de_registro WHERE estado='C' AND fecha <=$fecha_liquidacion)";
-				// echo $select_consolidado;
-				 $result_consolidado = $this -> DbFetchAll($select_consolidado,$Conex,true); 
-				 
-				 //if(!$result_consolidado[0]['neto']>0){exit("No se encontraron valores en la cuenta consolidados para el tercero $nombre_tercero");}
+				$consulta_periodo = " AND fecha BETWEEN COALECE($fecha_ult_prima,$fecha_liquidacion_valida) AND $fecha_liquidacion)";
+				
+				$select_consolidado = "SELECT SUM(credito-debito)as neto,centro_de_costo_id FROM imputacion_contable WHERE puc_id=$puc_consolidado_prima AND tercero_id=$tercero_id AND encabezado_registro_id IN (SELECT encabezado_registro_id FROM encabezado_de_registro WHERE estado='C' $consulta_periodo)";
+		
+				$result_consolidado = $this -> DbFetchAll($select_consolidado,$Conex,true); 
 				
 				
 				$valor_consolidado = $result_consolidado[0]['neto']>0 ? intval($result_consolidado[0]['neto']) : 0 ;
 				$centro_costo_consolidado = $result_consolidado[0]['centro_de_costo_id']>0 ? $result_consolidado[0]['centro_de_costo_id'] : 'NULL';
 				
-				$select_provision = "SELECT SUM(credito-debito)as neto,centro_de_costo_id  FROM imputacion_contable WHERE puc_id=$puc_provision_prima AND tercero_id=$tercero_id AND encabezado_registro_id IN (SELECT encabezado_registro_id FROM encabezado_de_registro WHERE estado='C' AND fecha <=$fecha_liquidacion)";
 				
-				$result_provision = $this -> DbFetchAll($select_provision,$Conex,true); 
-				
-				//if(!$result_provision[0]['neto']>0){exit("No se encontraron valores en la cuenta provisionados para el tercero $nombre_tercero");}				
-				$valor_provision = $result_provision[0]['neto']>0 ? intval($result_provision[0]['neto']) : 0 ;
-				$centro_costo_provision = $result_provision[0]['centro_de_costo_id']>0 ? $result_provision[0]['centro_de_costo_id'] : 'NULL';
-				
-				
-				$valor_guardado = intval($valor_consolidado)+intval($valor_provision);
+				$valor_guardado = intval($valor_consolidado);
 				
 				if($valor_consolidado>0){
 					
 					$insert_det_puc_cons ="INSERT INTO detalle_prima_puc (liquidacion_prima_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_prima,porcentaje_prima,formula_prima,desc_prima,deb_item_prima,cre_item_prima,valor_liquida,contrapartida)
-				VALUES
-				($liquidacion_prima_id,$puc_consolidado_prima,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF($centro_costo_consolidado>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,$valor_consolidado,0,0,0)";
+					VALUES
+					($liquidacion_prima_id,$puc_consolidado_prima,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF($centro_costo_consolidado>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,$valor_consolidado,0,0,0)";
 					$this -> query($insert_det_puc_cons,$Conex,true); 
 					
 				}
-				if($valor_provision>0){
-					
-					$insert_det_puc_prov ="INSERT INTO detalle_prima_puc (liquidacion_prima_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_prima,porcentaje_prima,formula_prima,desc_prima,deb_item_prima,cre_item_prima,valor_liquida,contrapartida)
-				VALUES
-				($liquidacion_prima_id,$puc_provision_prima,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_provision,IF($centro_costo_provision>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_provision),'NULL'),0,'NULL','NULL',$observaciones,$valor_provision,0,0,0)";
-					$this -> query($insert_det_puc_prov,$Conex,true); 
-					
-				}
 				
-				if($area_laboral=='A'){
-					$puc_diferencia = $puc_admin;
-				}elseif($area_laboral=='O'){
-					$puc_diferencia = $puc_operativo;
-				}elseif($area_laboral=='C'){
-					$puc_diferencia = $puc_venta;
-				}
-
-
 				if($valor>$valor_guardado){
-					
-					$diferencia= intval($valor-$valor_guardado);
+					if($area_laboral=='A'){
+						$puc_diferencia = $puc_admin;
+					}elseif($area_laboral=='O'){
+						$puc_diferencia = $puc_operativo;
+					}elseif($area_laboral=='C'){
+						$puc_diferencia = $puc_venta;
+					}
 
+				if($diferencia>0){
 					$insert_det_puc_gas ="INSERT INTO detalle_prima_puc (liquidacion_prima_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_prima,porcentaje_prima,formula_prima,desc_prima,deb_item_prima,cre_item_prima,valor_liquida,contrapartida)
 					VALUES
-					($liquidacion_prima_id,$puc_diferencia,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_provision,IF(COALESCE($centro_costo_provision,0)>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_provision),'NULL'),0,'NULL','NULL',$observaciones,$diferencia,0,0,0)";
-				
+					($liquidacion_prima_id,$puc_diferencia,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF(COALESCE($centro_costo_consolidado,0)>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,$diferencia,0,0,0)";
+					$this -> query($insert_det_puc_gas,$Conex,true);
+					
 				}else{
 
-					$diferencia= intval($valor_guardado-$valor);
-
 					$insert_det_puc_gas ="INSERT INTO detalle_prima_puc (liquidacion_prima_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_prima,porcentaje_prima,formula_prima,desc_prima,deb_item_prima,cre_item_prima,valor_liquida,contrapartida)
 					VALUES
-					($liquidacion_prima_id,$puc_diferencia,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_provision,IF(COALESCE($centro_costo_provision,0)>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_provision),'NULL'),0,'NULL','NULL',$observaciones,0,$diferencia,0,0)";
+					($liquidacion_prima_id,$puc_diferencia,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF(COALESCE($centro_costo_consolidado,0)>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,0,ABS($diferencia),0,0)";
+					$this -> query($insert_det_puc_gas,$Conex,true);
 					
 				}
-
-				$this -> query($insert_det_puc_gas,$Conex,true); 
+				
+			
+			}
+							
 				
 				$insert_det_puc_contra ="INSERT INTO detalle_prima_puc (liquidacion_prima_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_prima,porcentaje_prima,formula_prima,desc_prima,deb_item_prima,cre_item_prima,valor_liquida,contrapartida)
 				VALUES
-				($liquidacion_prima_id,$puc_contrapartida,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_provision,IF($centro_costo_provision>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_provision),'NULL'),0,'NULL','NULL',$observaciones,0,$valor,0,1)";
+				($liquidacion_prima_id,$puc_contrapartida,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_de_costo_id,IF($centro_de_costo_id>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_de_costo_id),'NULL'),0,'NULL','NULL',$observaciones,0,$valor,0,1)";
 				$this -> query($insert_det_puc_contra,$Conex,true);
 				
 			
@@ -468,6 +472,68 @@ final class PrimaModel extends Db{
 		exit("No se encontr&oacute; un contrato activo para el empleado!!");
 	}
 	
+   }
+	
+   public function Liq_Anterior($empleado_id,$fecha_liquidacion,$periodo,$oficina_id,$Conex){
+
+		if ($fecha_liquidacion !='') {
+			$select_contrato = "SELECT c.contrato_id,(SELECT e.tercero_id FROM empleado e WHERE e.empleado_id=c.empleado_id)as tercero_id,c.area_laboral,(c.sueldo_base+c.subsidio_transporte) as sueldo_base,c.fecha_inicio, DATEDIFF($fecha_liquidacion ,c.fecha_inicio) as dias_trabajados FROM contrato c WHERE c.empleado_id=$empleado_id AND estado='A' ";
+				
+		$result_contrato = $this -> DbFetchAll($select_contrato,$Conex); 
+		$contrato_id	 = $result_contrato[0]['contrato_id'];
+		$tercero_id	 = $result_contrato[0]['tercero_id'];
+		$area_laboral	 = $result_contrato[0]['area_laboral'];
+
+
+		$select_parametros="SELECT 
+		puc_prima_prov_id,puc_prima_cons_id,puc_prima_contra_id,puc_admon_prima_id,puc_ventas_prima_id,puc_produ_prima_id,tipo_documento_id
+		FROM parametros_liquidacion_nomina WHERE oficina_id=$oficina_id";
+		$result_parametros = $this -> DbFetchAll($select_parametros,$Conex,true); 
+		
+		$puc_provision_prima = $result_parametros[0]['puc_prima_prov_id'];
+		$puc_consolidado_prima = $result_parametros[0]['puc_prima_cons_id'];
+		$puc_contrapartida		  = $result_parametros[0]['puc_prima_contra_id'];
+		$puc_admin				= $result_parametros[0]['puc_admon_prima_id'];
+		$puc_venta				= $result_parametros[0]['puc_ventas_prima_id'];
+		$puc_operativo			= $result_parametros[0]['puc_produ_prima_id'];
+		
+		$tipo_doc				= $result_parametros[0]['tipo_documento_id'];
+
+		/* $consulta_periodo = $periodo == 1 ? " AND fecha BETWEEN CONCAT_WS('-',DATE_FORMAT('$fecha_liquidacion', '%Y'),'01','01') AND CONCAT_WS('-',DATE_FORMAT('$fecha_liquidacion', '%Y'),'06','30')" : " AND fecha BETWEEN CONCAT_WS('-',DATE_FORMAT('$fecha_liquidacion', '%Y'),'07','01') AND CONCAT_WS('-',DATE_FORMAT('$fecha_liquidacion', '%Y'),'12','31')" ; */
+		
+		
+		$select_cont ="SELECT contrato_id,fecha_ult_prima FROM contrato WHERE empleado_id = $empleado_id";
+		$result_cont = $this -> DbFetchAll($select_cont,$Conex,$ErrDb = false);
+		$contrato_id = $result_cont[0]['contrato_id'];
+		$fecha_ult_prima = $result_cont[0]['fecha_ult_prima'];
+	 
+		$select = "SELECT *	FROM liquidacion_prima WHERE contrato_id=$contrato_id AND estado='A' ORDER BY fecha_liquidacion DESC LIMIT 1"; 
+		// exit( $select.'si');
+		$result = $this -> DbFetchAll($select,$Conex,$ErrDb = false);
+
+		$fecha_liquidacion_anterior = $result_consolidado[0]['fecha_liquidacion'];
+
+		$consulta_periodo = " AND fecha BETWEEN COALESE($fecha_liquidacion_anterior,$fecha_ult_prima) AND $fecha_liquidacion"; 
+		
+		$select_consolidado = "SELECT SUM(credito-debito)as neto,centro_de_costo_id FROM imputacion_contable WHERE puc_id=$puc_consolidado_prima AND tercero_id=$tercero_id AND encabezado_registro_id IN (SELECT encabezado_registro_id FROM encabezado_de_registro WHERE estado='C' $consulta_periodo)";
+		
+		$result_consolidado = $this -> DbFetchAll($select_consolidado,$Conex,true); 
+		
+		
+		$valor_consolidado = $result_consolidado[0]['neto']>0 ? intval($result_consolidado[0]['neto']) : 0 ;
+		$centro_costo_consolidado = $result_consolidado[0]['centro_de_costo_id']>0 ? $result_consolidado[0]['centro_de_costo_id'] : 'NULL';
+		
+		
+		$valor_guardado = intval($valor_consolidado);
+
+		$result['valor_guardado'] = $valor_guardado;
+
+			if(count($result)>0){
+				return $result;
+			}else {
+				exit("No se encontr&oacute; un contrato activo para el empleado!!");
+			}
+		}
    }
    
  	public function GetTipoConcepto($Conex){

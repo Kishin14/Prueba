@@ -27,6 +27,7 @@ final class Bases extends Controler{
 
 		//LISTA MENU
 		$Layout -> SetPeriodoContable($Model -> GetPeriodoContable($this -> getConex()));
+		$Layout -> SetPeriodoContableNuevo($Model -> GetPeriodoContableNuevo($this -> getConex()));
 		$Layout -> SetTiposDocumentoContable($Model -> getTiposDocumentoContable($this -> getConex()));
 
 		//// GRID ////
@@ -281,6 +282,21 @@ final class Bases extends Controler{
 		}
 	}
 
+	protected function onclickDuplicar(){
+  
+		require_once("BasesModelClass.php");
+	  
+	  $Model = new BasesModel();
+	  $Model -> duplicar($this -> Campos,$this -> getConex());
+	  
+	  if(strlen($Model -> GetError()) > 0){
+		exit('false');
+	  }else{
+		  exit('true');
+	  }
+	  
+	}
+
 
 	protected function onclickDelete(){
 
@@ -365,6 +381,45 @@ final class Bases extends Controler{
 				table	=>array('datos_periodo'),
 				type	=>array('column'))
 		);
+		//INICIO div duplica
+
+		$this -> Campos[periodo_contable_nuevo] = array(
+			name	=>'periodo_contable_nuevo',
+			id		=>'periodo_contable_nuevo',
+			type	=>'select',
+			Boostrap =>'si',
+			options	=>null,
+			required=>'yes',
+			datatype=>array(
+				type	=>'int',
+				length	=>'11')
+		);
+
+		$this -> Campos[salario_nuevo] = array(
+			name	=>'salario_nuevo',
+			id		=>'salario_nuevo',
+			type	=>'text',
+			Boostrap =>'si',
+			// required=>'yes',
+			size=>10,
+			datatype=>array(
+				type	=>'numeric',
+				length	=>'45')
+		);
+
+		$this -> Campos[sub_nuevo] = array(
+			name	=>'sub_nuevo',
+			id		=>'sub_nuevo',
+			type	=>'text',
+			Boostrap =>'si',
+			required=>'yes',
+			size=>10,
+			datatype=>array(
+				type	=>'numeric',
+				length	=>'45')
+		);
+
+		//FIN div duplica
 
 
 		$this -> Campos[puc_admon_sal_id] = array(
@@ -3045,6 +3100,16 @@ final class Bases extends Controler{
 			disabled=>'disabled',
 			// tabindex=>'20'
 		);
+
+		$this -> Campos[duplicar] = array(
+			name	=>'duplicar',
+			id		=>'duplicar',
+			type	=>'button',
+			value	=>'Duplicar',
+			// tabindex=>'22',
+			onclick	=>'onclickDuplicar()'
+		);
+
 
 		$this -> Campos[borrar] = array(
 			name	=>'borrar',
