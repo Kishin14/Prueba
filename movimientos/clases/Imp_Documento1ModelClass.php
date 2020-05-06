@@ -48,7 +48,7 @@ final class Imp_DocumentoModel extends Db{
 	if(is_numeric($encabezado_registro_id)){
 				
         $select = "SELECT i.*,
-				(SELECT codigo_puc FROM puc WHERE puc_id=i.puc_id) AS puc_cod,(SELECT numero_identificacion FROM tercero WHERE tercero_id = i.tercero_id) AS identificacion_tercero,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = i.centro_de_costo_id) AS codigo_cento				
+				(SELECT codigo_puc FROM puc WHERE puc_id=i.puc_id) AS puc_cod,(SELECT ti.descripcion FROM tipo_identificacion ti,tercero t WHERE ti.tipo_identificacion_id=t.tipo_identificacion_id AND t.tercero_id = i.tercero_id LIMIT 1)AS tipo_ident,(SELECT CONCAT_WS(' - ',razon_social,primer_nombre,segundo_nombre,primer_apellido,segundo_apellido) FROM tercero WHERE tercero_id = i.tercero_id)AS nombre_identificacion,(SELECT numero_identificacion FROM tercero WHERE tercero_id = i.tercero_id) AS identificacion_tercero,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = i.centro_de_costo_id) AS codigo_cento				
          FROM  imputacion_contable i   WHERE i.encabezado_registro_id = $encabezado_registro_id ";	
 	
 	    $result = $this -> DbFetchAll($select,$Conex);

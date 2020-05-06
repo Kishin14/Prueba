@@ -255,12 +255,27 @@ final class LiquidacionFinalModel extends Db
 
         if ($contrato_id > 0) {
 
-            $select = "SELECT SUM(dl.dias_disfrutados) AS dias_va,
-		(SELECT dlv.periodo_fin FROM liquidacion_vacaciones lv, detalle_liquidacion_vacaciones dlv
-		 WHERE lv.contrato_id = $contrato_id AND lv.estado!='I' AND dlv.liquidacion_vacaciones_id=lv.liquidacion_vacaciones_id ORDER BY dlv.periodo_fin DESC LIMIT 1 ) AS fecha_ultima
-		FROM liquidacion_vacaciones l, detalle_liquidacion_vacaciones dl
-		WHERE l.contrato_id = $contrato_id AND l.estado!='I' AND dl.liquidacion_vacaciones_id=l.liquidacion_vacaciones_id ";
-
+            $select = "SELECT 
+                SUM(dl.dias_disfrutados) AS dias_va,
+                (SELECT 
+                    dlv.periodo_fin 
+                    FROM 
+                    liquidacion_vacaciones lv, 
+                    detalle_liquidacion_vacaciones dlv
+                    WHERE 
+                    lv.contrato_id = $contrato_id AND 
+                    lv.estado!='I' AND 
+                    dlv.liquidacion_vacaciones_id=lv.liquidacion_vacaciones_id 
+                    ORDER BY dlv.periodo_fin DESC LIMIT 1
+                ) AS fecha_ultima
+		    FROM 
+            liquidacion_vacaciones l, 
+            detalle_liquidacion_vacaciones dl
+		    WHERE 
+            l.contrato_id = $contrato_id AND 
+            l.estado!='I' AND 
+            dl.liquidacion_vacaciones_id=l.liquidacion_vacaciones_id ";
+            
             $result = $this->DbFetchAll($select, $Conex, true);
 
         } else {

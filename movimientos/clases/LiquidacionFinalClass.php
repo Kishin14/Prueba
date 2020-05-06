@@ -435,13 +435,13 @@ final class LiquidacionFinal extends Controler
 
             // vacaciones
             $data_vaca = $Model->getDetallesVacaciones($contrato_id, $_REQUEST['fecha_final'], $this->getConex());
-            $periodos = $dias / 365;
-            $dias_dis = intval(15 * $periodos);
+            //$periodos = $dias / 360;
+            //$dias_dis = intval(15 * $periodos);
             if ($data_vaca[0]['dias_va'] <= 0) {
                 $dias_deb_vac = $dias;
             } else {
                 $per_disfru = $data_vaca[0]['dias_va'] / 15;
-                $dias_deb_vac = ($dias - ($per_disfru * 360)) + 1;
+                $dias_deb_vac = ($dias - ($per_disfru * 360));
             }
 
             $valor_vacas = intval((($data[0]['sueldo_base']) * $dias_deb_vac) / 720);
@@ -525,7 +525,7 @@ final class LiquidacionFinal extends Controler
         //indemnizacion
         if ($_REQUEST['justificado'] == 'S') {
 
-            $periodos = $dias / 365;
+            $periodos = $dias / 360;
 
             if ($periodos > 1) {
                 $periodo_otros = ($periodos - 1);
