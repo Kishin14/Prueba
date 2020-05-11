@@ -112,6 +112,7 @@
 				name	=>'porcentaje',
 				id		=>'porcentaje',
 				type	=>'text',
+				Boostrap =>'si',
 				required=>'yes',
 				datatype=>array(
 					type	=>'numeric',
@@ -125,6 +126,7 @@
 				name	=>'rango_ini',
 				id		=>'rango_ini',
 				type	=>'text',
+				Boostrap =>'si',
 				required=>'yes',
 				datatype=>array(
 					type	=>'numeric',
@@ -138,6 +140,7 @@
 				name	=>'rango_fin',
 				id		=>'rango_fin',
 				type	=>'text',
+				Boostrap =>'si',
 				required=>'yes',
 				datatype=>array(
 					type	=>'numeric',
@@ -151,7 +154,7 @@
 				name	=>'periodo_contable_id',
 				id		=>'periodo_contable_id',
 				type	=>'select',
-				options	=>null,
+				Boostrap =>'si',
 				required=>'yes',
 				datatype=>array(
 					type	=>'alphanum',
@@ -202,6 +205,7 @@
 				id		=>'busqueda',
 				type	=>'text',
 				size	=>'85',
+				Boostrap =>'si',
 				// tabindex=>'1',
 				suggest=>array(
 					name	=>'fondo_pensional',
