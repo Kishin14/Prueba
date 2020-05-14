@@ -88,13 +88,13 @@ final class LiquidacionFinal extends Controler
         $liquidacion_definitiva_id = $_REQUEST['liquidacion_definitiva_id'];
     
         if ($contrato_id > 0 && ($liquidacion_definitiva_id == '' || $liquidacion_definitiva_id == 'NULL')) {
-
             $datosResult = $this -> previsualizar($contrato_id, $liquidacion_definitiva_id, $blur);
             
             $datos = $datosResult['first_array'];
             $datos_con = $datosResult['second_array'];
-
+            
         }elseif($liquidacion_definitiva_id>0){
+            
             $datos = $this -> setResultados($liquidacion_definitiva_id); 
             
         }
@@ -121,28 +121,31 @@ final class LiquidacionFinal extends Controler
     {
         require_once "LiquidacionFinalModelClass.php";
         $Model = new LiquidacionFinalModel();
-       
+        
         $valor_pagar = 0;
         $prestaciones = 0;
         $liquidacion = 0;
         $deducciones = 0;
         $devengados = 0;
-
+        
         $fecha_final = $_REQUEST['fecha_final'];
         $periodo = substr($fecha_final, 0, 4);
         $datos_periodo = $Model->getDatosperiodo($periodo, $this->getConex());
-
+        
         //$dias = $Model -> getDias($_REQUEST['fecha_inicio'],$_REQUEST['fecha_final'],$this -> getConex());
         $dias = $this->restaFechasCont($_REQUEST['fecha_inicio'], $_REQUEST['fecha_final']);
-
+        
         //prestaciones
         $data = $Model->getDetallesContrato($contrato_id, $dias, $this->getConex());
+        //die(print_r($data));
+
         $tercero_id = $data[0]['tercero_id'];
         $x = 0;
         $c = 0;
         $datos = array();
         $datos_con = array();
-
+        
+        
         //validación si se pagan prestaciones:
         if ($data[0]['prestaciones'] != 0) {
             //cesantias

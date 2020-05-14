@@ -192,7 +192,7 @@ final class LiquidacionFinalModel extends Db
 
     public function getDetallesContrato($contrato_id, $dias, $Conex)
     {
-
+            
         if ($contrato_id > 0) {
 
             $select = "SELECT c.*,
@@ -223,7 +223,8 @@ final class LiquidacionFinalModel extends Db
 
             $select = "SELECT DATEDIFF(CONCAT_WS(' ','$fecha_final','23:59:59'), ADDDATE(l.fecha_corte, INTERVAL 1 DAY)) AS dias_dif,  ADDDATE(l.fecha_corte, INTERVAL 1 DAY) AS fecha_corte
 		FROM liquidacion_cesantias l
-		WHERE l.contrato_id = $contrato_id AND l.estado!='I' ORDER BY l.fecha_ultimo_corte DESC LIMIT 1";
+        WHERE l.contrato_id = $contrato_id AND l.estado!='I' ORDER BY l.fecha_ultimo_corte DESC LIMIT 1";
+        //die($select);
 
             $result = $this->DbFetchAll($select, $Conex, true);
 

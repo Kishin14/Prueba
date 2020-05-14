@@ -131,10 +131,15 @@ final class Contrato extends Controler{
 	protected function onclickUpdate(){
 
 		require_once("ContratoModelClass.php");
+
 		$Model = new ContratoModel();
+
 		$contrato_id=$_REQUEST['contrato_id'];
+
 		$estado = $Model -> selectEstado($contrato_id,$this -> getConex());
+
 		if($estado!='A'){ exit('Solo permite Actualizar Contratos en Estado de Edici&oacute;n'); }		
+		
 		$Model -> Update($this -> Campos,$this -> getConex());
 		if($Model -> GetNumError() > 0){
 			exit('Ocurrio una inconsistencia');

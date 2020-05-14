@@ -13,6 +13,7 @@ $(document).ready(function () {
         var intervalo = window.setInterval(function () { updateGrid() }, 50000);
     }
 
+
     var QueryString = "ACTIONCONTROLER=ProximosVencer";
 
     $.ajax({
@@ -36,7 +37,7 @@ $(document).ready(function () {
                 var empleado = data[i]['empleado'];
                 var dias_dif = data[i]['dias_dif'];
 
-                    contratos = contratos + "\n" + empleado + "--" + numero_contrato + "\n <p style='color:red; font-weight:bold;'>Fecha de Terminación: " + fecha_terminacion + " vigencia "+dias_dif+" dias</p>";
+                    contratos = contratos + "\n" + empleado + "--" + numero_contrato + "\n <p style='color:red; font-weight:bold;'>Fecha de Terminación: " + fecha_terminacion + " vigencia " + dias_dif + " dias</p><button id = 'actualizar' onclick='submit(numero_contrato);'>Actualizar</button>";
 
                 }
                 
@@ -113,4 +114,9 @@ function reloadGrid() {
 
     $("#refresh_QUERYGRID_mandoContratos").click();
 
+}
+
+
+function submit(numero_contrato) {
+    alert("juan" +numero_contrato);
 }

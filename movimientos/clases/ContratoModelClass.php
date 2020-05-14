@@ -285,7 +285,7 @@ final class ContratoModel extends Db{
 
 				$select ="SELECT liquidacion_cesantias_id	FROM liquidacion_cesantias	WHERE	contrato_id = $contrato_id AND inicial=1 AND estado='C'"; 
 				$result    = $this -> DbFetchAll($select,$Conex,true);
-				if($result[0]['liquidacion_cesantias_id']>0){
+				if(count($result)==0){
 					$liquidacion_cesantias_id    = $this -> DbgetMaxConsecutive("liquidacion_cesantias","liquidacion_cesantias_id",$Conex,true,1);
 					$insert = "INSERT INTO liquidacion_cesantias (liquidacion_cesantias_id,fecha_liquidacion,fecha_corte,fecha_ultimo_corte,beneficiario, contrato_id, empleado_id,salario,fecha_inicio_contrato,estado,observaciones,inicial) 
 									VALUES ($liquidacion_cesantias_id,'$fecha_ult_cesantias','$fecha_ult_cesantias','$fecha_ult_cesantias','2',$contrato_id,$empleado_id,$sueldo_base,$fecha_inicio,'C' ,'REGISTRO INICIAL CONTRATO',1)"; 
@@ -296,7 +296,7 @@ final class ContratoModel extends Db{
 			if($fecha_ult_intcesan!=''){
 				$select ="SELECT liquidacion_int_cesantias_id	FROM liquidacion_int_cesantias	WHERE	contrato_id = $contrato_id AND inicial=1 AND estado='C'"; 
 				$result    = $this -> DbFetchAll($select,$Conex,true);
-				if($result[0]['liquidacion_int_cesantias_id']>0){
+				if(count($result)==0){
 				
 					$liquidacion_int_cesantias_id    = $this -> DbgetMaxConsecutive("liquidacion_int_cesantias","liquidacion_int_cesantias_id",$Conex,true,1);
 					$insert = "INSERT INTO liquidacion_int_cesantias (liquidacion_int_cesantias_id,fecha_liquidacion,fecha_corte,fecha_ultimo_corte,beneficiario, contrato_id, empleado_id,salario,fecha_inicio_contrato,estado,observaciones,inicial) 
@@ -308,7 +308,7 @@ final class ContratoModel extends Db{
 			if($fecha_ult_prima!=''){
 				$select ="SELECT liquidacion_prima_id	FROM liquidacion_prima	WHERE	contrato_id = $contrato_id AND inicial=1 AND estado='C'"; 
 				$result    = $this -> DbFetchAll($select,$Conex,true);
-				if($result[0]['liquidacion_prima']>0){
+				if(count($result)==0){
 				
 					$periodo = intval(substr($fecha_ult_prima,5,2))>=7 ? 2 : 1;
 					$liquidacion_prima_id    = $this -> DbgetMaxConsecutive("liquidacion_prima","liquidacion_prima_id",$Conex,true,1);
@@ -322,7 +322,7 @@ final class ContratoModel extends Db{
 			if($fecha_ult_vaca!=''){
 				$select ="SELECT liquidacion_vacaciones_id	FROM liquidacion_vacaciones	WHERE	contrato_id = $contrato_id AND inicial=1 AND estado='C'"; 
 				$result    = $this -> DbFetchAll($select,$Conex,true);
-				if($result[0]['liquidacion_vacaciones_id']>0){
+				if(count($result)==0){
 
 					$liquidacion_vacaciones_id    = $this -> DbgetMaxConsecutive("liquidacion_vacaciones","liquidacion_vacaciones_id",$Conex,true,1);
 					$insert = "INSERT INTO liquidacion_vacaciones (liquidacion_vacaciones_id,contrato_id,fecha_liquidacion,fecha_reintegro,dias,concepto,observaciones,estado,inicial) 
