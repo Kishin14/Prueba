@@ -24,6 +24,7 @@
     {$FORM1}
     {$RETENCIONID}
     <fieldset class="section">
+    <a href="javascript:void(0);"   title="Presiona aqui para saber acerca de las clases de riesgo."  name="myBtn"><img src="../../../framework/media/images/modulos/manual.png" width="16" height="18" onclick="alert_unico(this,'Informaci&oacute;n','Definicion Retencion Salarial: Deducción del salario bruto que efectúan las empresas e ingresan en Hacienda como pago a cuenta del trabajador por su impuesto sobre la renta. Permite controlar el fraude, además de financiar por anticipado a la Administración. Este formulario funciona de la siguiente forma: Ingresaremos un porcentaje el cual se le descontara al empleado segun los UVT Que este gane, al ingresar los UVT el sistema calculará el rango inicio y fin en pesos indicandonos que los que esten ganando el dinero que se presenta entre estos dos rangos se le hara el descuento del porcentaje anteriormente estipulado.')"/></a>
         <table align="center">
             <tr>
                 <td><label>Periodo Contable : </label></td>
@@ -60,6 +61,19 @@
                 <td colspan="7" align="center">{$GUARDAR}&nbsp;{$ACTUALIZAR}&nbsp;{$BORRAR}&nbsp;{$LIMPIAR}</td>
             </tr>
         </table>
+           <!--INICIO Cuadro de informacion-->
+    <div id="MyModal" class="modal">
+    
+        <!-- Modal content -->
+        <div class="modal-content" style="width:70%;">
+            <span class="close">&times;</span>
+            <h5 id="h5"> </h5>
+            <h4 align="center"><img src="../../../framework/media/images/alerts/info.png" /></h4>
+            <p id="p"></p>
+        </div>
+    
+    </div>
+    <!--FIN Cuadro de informacion-->
     {$FORM1END}
     </fieldset>
     <fieldset>{$GRIDPARAMETROS}</fieldset>

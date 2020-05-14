@@ -2,13 +2,22 @@
 var formSubmitted = false;
 function setDataFormWithResponse(){
     var tipo_contratoId = $('#tipo_contrato_id').val();
+
     RequiredRemove();
-
+    
     var tipo_contrato  = new Array({campos:"tipo_contrato_id",valores:$('#tipo_contrato_id').val()});
-	var forma       = document.forms[0];
-	var controlador = 'ContratoClass.php';
+    var forma       = document.forms[0];
+    var controlador = 'ContratoClass.php';
+    
+    FindRow(tipo_contrato,forma,controlador,null,function(resp){
+      
+      if ($('#tipo').val() == 'I') {
+        $('#tiempo_contrato').attr('disabled', true);
+      }
+      if ($('#tipo').val() == 'F') {
+        $('#tiempo_contrato').attr('disabled', false);
+      }
 
-	FindRow(tipo_contrato,forma,controlador,null,function(resp){
       if($('#guardar'))    $('#guardar').attr("disabled","true");
       if($('#actualizar')) $('#actualizar').attr("disabled","");
       if($('#borrar'))     $('#borrar').attr("disabled","");

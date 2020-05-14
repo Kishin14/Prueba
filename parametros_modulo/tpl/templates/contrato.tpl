@@ -41,14 +41,12 @@
                 
             </tr>
             <tr>
-                <td><label>Tiempo Contrato (meses) : </label></td>
-                <td>{$TIEMPOCONTRATO}</td>
-                
-                
+                <td><label>Tipo : </label></td>
+                <td>{$TIPO}</td>             
             </tr>
             <tr>
-                <td><label>Tipo : </label></td>
-                <td>{$TIPO}</td>
+                <td><label>Tiempo Contrato (meses) : </label></td>
+                <td>{$TIEMPOCONTRATO}</td>       
                 <td><label>Indemnizaci&oacute;n  : </label></td>
                 <td>{$INDEMNIZACION}</td>
             </tr>
