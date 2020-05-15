@@ -318,6 +318,24 @@ final class Pago extends Controler{
 			length	=>'20')
 	);
 
+	$this -> Campos[desde] = array(
+		name	=>'desde',
+		id		=>'desde',
+		type	=>'text',
+	 	datatype=>array(
+			type	=>'date',
+			length	=>'10')		
+	);
+
+	$this -> Campos[hasta] = array(
+		name	=>'hasta',
+		id		=>'hasta',
+		type	=>'text',
+	 	datatype=>array(
+			type	=>'date',
+			length	=>'10')		
+	);
+
 	$this -> Campos[fecha] = array(
 		name	=>'fecha',
 		id		=>'fecha',

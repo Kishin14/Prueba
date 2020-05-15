@@ -8,7 +8,51 @@ $(document).ready(function(){
 		
 	});
 	compara_cantidad();
+	checkedAll();
 });
+
+function checkedAll() {
+
+	$("#checkedAll").click(function () {
+		if ($(this).is(":checked")) {
+			$("input[name=nomina]").attr("checked", "true");
+		} else {
+			$("input[name=nomina]").attr("checked", "");
+		}
+	});
+
+	$("#checkedAllVac").click(function () {
+		if ($(this).is(":checked")) {
+			$("input[name=vacaciones]").attr("checked", "true");
+		} else {
+			$("input[name=vacaciones]").attr("checked", "");
+		}
+	});
+
+	$("#checkedAllPri").click(function () {
+		if ($(this).is(":checked")) {
+			$("input[name=primas]").attr("checked", "true");
+		} else {
+			$("input[name=primas]").attr("checked", "");
+		}
+	});
+
+	$("#checkedAllCes").click(function () {
+		if ($(this).is(":checked")) {
+			$("input[name=cesantias]").attr("checked", "true");
+		} else {
+			$("input[name=cesantias]").attr("checked", "");
+		}
+	});
+
+	$("#checkedAllInt").click(function () {
+		if ($(this).is(":checked")) {
+			$("input[name=int_cesantias]").attr("checked", "true");
+		} else {
+			$("input[name=int_cesantias]").attr("checked", "");
+		}
+	});
+}
 
 
 function compara_cantidad(){

@@ -23,15 +23,20 @@ final class SolicFacturas extends Controler{
     $Model  = new SolicFacturasModel();
     
     $empleado_id 	= $_REQUEST['empleado_id'];
-	  $empleados 	  = $_REQUEST['empleados'];
+    $empleados 	  = $_REQUEST['empleados'];
+    $desde 	= $_REQUEST['desde'];
+	  $hasta 	  = $_REQUEST['hasta'];
 	
     $Layout -> setIncludes();
 	
     $consul_emp = $empleado_id>0 ? " AND l.contrato_id IN (SELECT contrato_id FROM contrato WHERE empleado_id=$empleado_id) " : "";
-        
+    $consul_fecha_desde = $desde != '' && $hasta == '' ? " AND l.fecha_inicial = '$desde'" : "";
+    $consul_fecha_hasta = $desde == '' && $hasta != '' ? " AND l.fecha_final = '$hasta'" : "";
+    $consul_fechas = $desde != '' && $hasta != '' ? " AND l.fecha_inicial BETWEEN '$desde' AND '$hasta' AND l.fecha_final BETWEEN '$desde' AND '$hasta'" : "";
+    
     if($empleados!=''){	
 	
-    $Layout -> SetSolicFacturas  ($Model -> getSolicFacturas($consul_emp,$empleados,$this -> getConex()));
+    $Layout -> SetSolicFacturas  ($Model -> getSolicFacturas($consul_emp,$empleados,$consul_fecha_desde,$consul_fecha_hasta,$consul_fechas,$this -> getConex()));
     $Layout -> SetSolicVacaciones($Model -> getSolicVacaciones($consul_emp,$empleados,$this -> getConex()));
     $Layout -> SetSolicPrimas    ($Model -> getSolicPrimas($consul_emp,$empleados,$this -> getConex()));
     $Layout -> SetSolicCesantias ($Model -> getSolicCesantias($consul_emp,$empleados,$this -> getConex()));

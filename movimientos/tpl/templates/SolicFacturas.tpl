@@ -20,7 +20,7 @@
             <th colspan="10">SALDOS NOMINA</th>
           </tr>
           <tr>
-            <th>&nbsp;</th>
+            <th><input type="checkbox" id="checkedAll"></th>
             <th>LIQ_#</th>
             <th>CONTRATO</th>
             <th>EMPLEADO</th>
@@ -63,7 +63,7 @@
             <th colspan="10">SALDOS VACACIONES</th>
           </tr>
           <tr>
-            <th>&nbsp;</th>
+            <th><input type="checkbox" id="checkedAllVac"></th>
             <th>LIQ_#</th>
             <th>CONTRATO</th>
             <th>EMPLEADO</th>
@@ -104,7 +104,7 @@
             <th colspan="10">SALDOS PRIMAS</th>
           </tr>
           <tr>
-            <th>&nbsp;</th>
+            <th><input type="checkbox" id="checkedAllPri"></th>
             <th>LIQ_#</th>
             <th>CONTRATO</th>
             <th>EMPLEADO</th>
@@ -145,7 +145,7 @@
             <th colspan="10">SALDOS CESANTIAS</th>
           </tr>
           <tr>
-            <th>&nbsp;</th>
+            <th><input type="checkbox" id="checkedAllCes"></th>
             <th>LIQ_#</th>
             <th>CONTRATO</th>
             <th>EMPLEADO</th>
@@ -186,7 +186,7 @@
             <th colspan="10">SALDOS INTERESES CESANTIAS</th>
           </tr>
           <tr>
-            <th>&nbsp;</th>
+            <th><input type="checkbox" id="checkedAllInt"></th>
             <th>LIQ_#</th>
             <th>CONTRATO</th>
             <th>EMPLEADO</th>

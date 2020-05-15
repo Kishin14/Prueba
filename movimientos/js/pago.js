@@ -53,12 +53,15 @@ function setDataFormWithResponse(){
 
 
 function cargardiv(){
+
 	var empleado_id  = $('#empleado_id').val();
 	var empleados  = $('#empleados').val();
-	
+	var desde = $('#desde').val();
+	var hasta = $('#hasta').val();
+
 	if(parseInt(empleado_id)>0 && empleados=='U'){
 		
-	   $("#iframeSolicitud").attr("src","SolicFacturasClass.php?empleados="+empleados+"&empleado_id="+empleado_id+"&rand="+Math.random()); 
+	   $("#iframeSolicitud").attr("src","SolicFacturasClass.php?empleados="+empleados+"&empleado_id="+empleado_id+"&desde="+desde+"&hasta="+hasta+"&rand="+Math.random()); 
 		
 		$("#divSolicitudFacturas").dialog({
 			title: 'Saldos Pendiente de Pago',
@@ -91,7 +94,7 @@ function cargardiv(){
 	
 	}else if(empleados=='T'){
 
-		$("#iframeSolicitud").attr("src","SolicFacturasClass.php?empleados="+empleados+"&rand="+Math.random()); 
+		$("#iframeSolicitud").attr("src", "SolicFacturasClass.php?empleados=" + empleados + "&desde=" + desde + "&hasta=" + hasta + "&rand="+Math.random()); 
 		
 		$("#divSolicitudFacturas").dialog({
 			title: 'Saldos Pendiente de Pago',
