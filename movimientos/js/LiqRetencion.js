@@ -1,4 +1,88 @@
 $(document).ready(function(){
+
+	$('#aportes_pension,#aportes_salud,#aportes_fondop,#st_icr,#pago_vivienda,#deduccion_dependiente,#salud_prepagada,#st_d,#st_re,#aportes_vol_empl,#aportes_afc,#otras_rentas,#sub1,#sub2,#sub3,#sub4,#rte,#cifra_control,#total_deduccion,#validau,#ingreso_mensual,#ingreso_gravado').val(0);
+
+	$('#sub1,#sub2,#sub3,#sub4,#rte,#cifra_control,#total_deduccion,#validau,#ingreso_mensual,#ingreso_gravado').attr("disable","true");
+
+	$('#aportes_pension,#aportes_salud,#aportes_fondop').change(function(){
+
+		var aportes_pension = parseFloat($('#aportes_pension').val());
+		var aportes_salud = parseFloat($('#aportes_salud').val());
+		var aportes_fondop = parseFloat($('#aportes_fondop').val());
+		var total_suma = parseFloat($('#total_suma').val());
+		var uvt = parseFloat($('#uvt').val());
+
+		var uvt_max = parseFloat((420)*(uvt));
+		var total = parseFloat((aportes_pension)+(aportes_salud)+(aportes_fondop));
+		var sub1 = parseFloat((total_suma)-(total));
+
+		$('#st_icr').val(total);
+		$('#sub1').val(sub1);
+		$('#validau').val(uvt_max);
+		
+		var cifra_control =  Math.round(parseFloat((sub1)*(0.40)));
+		$('#cifra_control').val(cifra_control);
+		
+	 });
+	
+	 $('#pago_vivienda,#deduccion_dependiente,#salud_prepagada').change(function(){
+
+		var pago_vivienda = parseFloat($('#pago_vivienda').val());
+		var deduccion_dependiente = parseFloat($('#deduccion_dependiente').val());
+		var salud_prepagada = parseFloat($('#salud_prepagada').val());
+		var sub1 = parseFloat($('#sub1').val());
+		
+		var total = parseFloat((pago_vivienda)+(deduccion_dependiente)+(salud_prepagada));
+		var sub2 = parseFloat((sub1)-(total));
+
+		$('#st_d').val(total);
+		$('#sub2').val(sub2);
+		
+	 });
+	 
+	 $('#aportes_vol_empl,#aportes_afc,#otras_rentas').change(function(){
+
+		var aportes_vol_empl = parseFloat($('#aportes_vol_empl').val());
+		var aportes_afc = parseFloat($('#aportes_afc').val());
+		var otras_rentas = parseFloat($('#otras_rentas').val());
+		var sub2 = parseFloat($('#sub2').val());
+		
+		var total = parseFloat((aportes_vol_empl)+(aportes_afc)+(otras_rentas));
+		var sub3 = parseFloat((sub2)-(total));
+
+		$('#st_re').val(total);
+		$('#sub3').val(sub3);
+
+		var rte = parseFloat((sub3)*(0.25));
+		var sub4 = parseFloat((sub3)-(rte));
+
+		$('#rte').val(rte);
+		$('#sub4').val(sub4);
+
+		var st_d = parseFloat($('#st_d').val());
+		var st_re = parseFloat($('#st_re').val());
+		var total_deduccion = Math.round(parseFloat((st_d)+(st_re)+(rte)));
+
+		$('#total_deduccion').val(total_deduccion);
+
+
+		var cifra_control = parseFloat($('#cifra_control').val());
+		var total_deduccion = parseFloat($('#total_deduccion').val());
+		var sub1 = parseFloat($('#sub1').val());
+		var sub4 = parseFloat($('#sub4').val());
+
+		ingreso_mensual = (total_deduccion>cifra_control)?Math.round(parseFloat((sub1)-(cifra_control))):sub4;
+
+		$('#ingreso_mensual').val(ingreso_mensual);
+		
+		var uvt = $('#uvt').val();
+		var ingreso_gravado = Math.round(parseFloat((ingreso_mensual)/(uvt)));
+		$('#ingreso_gravado').val(ingreso_gravado);
+
+		
+	 });
+
+
 	
 	 $('#fecha_inicio').change(function(){
 
@@ -62,9 +146,10 @@ $(document).ready(function(){
 });
 
 
-function renovar(contrato_id){
-	
-	parent.renovarcontrato(contrato_id);
+function renovar(contrato_id,total_suma,uvt){
+	$('#aportes_pension,#aportes_salud,#aportes_fondop,#st_icr,#pago_vivienda,#deduccion_dependiente,#salud_prepagada,#st_d,#st_re,#aportes_vol_empl,#aportes_afc,#otras_rentas,#sub1,#sub2,#sub3,#sub4,#rte,#cifra_control,#total_deduccion,#validau,#ingreso_mensual,#ingreso_gravado').val(0);
+	parent.renovarcontrato(contrato_id,total_suma,uvt);
+
 }
 
 
@@ -157,16 +242,20 @@ function closeDialog(){
 	$("#Renovarmarco").dialog('close');
 }
 
-function renovarcontrato(contrato_id){
+function renovarcontrato(contrato_id,total_suma,uvt){
 	
    if(parseInt(contrato_id)>0){
 	   
+	   var fecha_inicio2 = parent.$("#fecha_inicio").val();
+	   var fecha_final2 = parent.$("#fecha_final").val();
 	   $("#contrato_id").val(contrato_id);
+	   $("#total_suma").val(total_suma);
+	   $("#uvt").val(uvt);
 	   
 		$("#Renovarmarco").dialog({
 		  title: 'Liquidar Retenciones',
-		  width: 750,
-		  height: 640,
+		  width: 1000,
+		  height: 700,
 		  closeOnEscape:true
 		 });
 	   
@@ -174,7 +263,7 @@ function renovarcontrato(contrato_id){
 	 alertJquery("Por favor seleccione un contrato!","Validaci&oacute;n");
 	   
    }
-   setDataContrato(contrato_id);
+   setDataContrato(contrato_id,fecha_inicio2,fecha_final2);
 }
 
 function finalizarcontrato(contrato_id){
@@ -257,12 +346,12 @@ function setDataActualizar(contrato_id){
 	
 }
 
-function setDataContrato(contrato_id){
+function setDataContrato(contrato_id,fecha_inicio,fecha_final){
 
 	
 
 		   		   		   
-	var QueryString = "ACTIONCONTROLER=getDataContrato&contrato_id="+contrato_id;
+	var QueryString = "ACTIONCONTROLER=getDataContrato&contrato_id="+contrato_id+"&fecha_final="+fecha_final+"&fecha_inicio="+fecha_inicio;
 	
    $.ajax({
 	 url        : "LiqRetencionClass.php?rand="+Math.random(),
@@ -273,27 +362,47 @@ function setDataContrato(contrato_id){
 	 success    : function(resp){
 	 		 
 		 try{
-			 var dataResp = $.parseJSON(resp);	 
+			var dataResp = $.parseJSON(resp);
+			$("#contrato_liq_id").val(contrato_id);				 
+			$("#consecutivo_renueva").val(dataResp[0]['numero_contrato']);		 			 
+			$("#numero_meses").val(dataResp[0]['empleado_id']);	 				 				 			 				 				 	
+			if (dataResp[0]['contabilizar']=='SI') {
+				$("#total_suma").val(dataResp[0]['devengado']);
+				$("#uvt").val(dataResp[0]['uvt']);
 
-			 $("#contrato_id").val(dataResp[0]['contrato_id']);				 
-			 $("#consecutivo_renueva").val(dataResp[0]['numero_contrato']);		 			 
-			 $("#fecha_inicio2").val(dataResp[0]['fecha_inicio']);				 				 
-			 $("#fecha_final2").val(dataResp[0]['fecha_terminacion']);
-			 $("#fecha_inicio_renovacion").val(dataResp[0]['fecha_inicio_renovacion']);				 				 
-			 $("#fecha_final_renovacion").val(dataResp[0]['fecha_final_renovacion']);
-			 $("#numero_meses").val(dataResp[0]['empleado_id']);
-			 $("#administracion").val(dataResp[0]['subsidio_transporte']);
-			 $("#canon_renovacion").val(dataResp[0]['sueldo_base']);
-			 $("#propietario_renueva").val(dataResp[0]['estado']);			 				 				 			 				 				 	
+				$("#aportes_pension").val(dataResp[0]['aportes_pension']);
+				$("#aportes_salud").val(dataResp[0]['aportes_salud']);
+				$("#aportes_fondop").val(dataResp[0]['aportes_fondop']);
+				$("#st_icr").val(dataResp[0]['st_icr']);
+				$("#sub1").val(dataResp[0]['sub1']);
 
-			 var today = new Date();
-			var fecha_inicio_renovacion = document.getElementById("fecha_inicio_renovacion").value;
-	  		if (Date.parse(fecha_inicio_renovacion) > today) {
-     				alertJquery('La fecha de inicio no puede ser mayor a la fecha actual.');
-     				$('#renovar').attr("disabled","true");
-    			}else{
-    				$('#renovar').attr("disabled","");
-    			}
+				$("#pago_vivienda").val(dataResp[0]['pago_vivienda']);
+				$("#deduccion_dependiente").val(dataResp[0]['deduccion_dependiente']);
+				$("#salud_prepagada").val(dataResp[0]['salud_prepagada']);
+				$("#st_d").val(dataResp[0]['st_d']);
+				$("#sub2").val(dataResp[0]['sub2']);
+				
+				$("#aportes_vol_empl").val(dataResp[0]['aportes_vol_empl']);
+				$("#aportes_afc").val(dataResp[0]['aportes_afc']);
+				$("#otras_rentas").val(dataResp[0]['otras_rentas']);
+				$("#st_re").val(dataResp[0]['st_re']);
+				$("#sub3").val(dataResp[0]['sub3']);
+				
+				$("#rte").val(dataResp[0]['rte']);
+				$("#sub4").val(dataResp[0]['sub4']);
+
+				$("#cifra_control").val(dataResp[0]['cifra_control']);
+				$("#total_deduccion").val(dataResp[0]['total_deduccion']);
+				$("#validau").val(dataResp[0]['validau']);
+
+				$("#ingreso_gravado").val(dataResp[0]['ingreso_gravado']);
+				$("#ingreso_mensual").val(dataResp[0]['ingreso_mensual']);
+				$("#renovar").css("disabled","true");
+				alertJquery("Ya existe una Liquidación para este empleado.");
+			}else{
+				$("#renovar").css("disabled","");	
+
+			}
 		 
 		 }catch(e){
 			   alertJquery(resp,"Error :"+e);
@@ -388,20 +497,47 @@ function onclickFinalizar(formulario){
 	}
 }
 
-function onclickRenovar(formulario){
+function onclickLiquidar(formulario){
 
 	if(ValidaRequeridos(formulario)){
-		
-			var contrato_id			=	$("#contrato_id").val();
-			var fecha_inicio			=	$("#fecha_inicio_renovacion").val();
-			var fecha_final				=	$("#fecha_final_renovacion").val();
-			var administracion			=	$("#administracion").val();
-			var canon_renovacion		=	$("#canon_renovacion").val();
-			var canon_viejo				=	$("#canon_viejo").val();
-			var observacion_renovacion	=	$("#observacion_renovacion").val();
+
+			var contrato_id				=	$("#contrato_liq_id").val();
+			var fecha_inicio			=	$("#fecha_inicio").val();
+			var fecha_final				=	$("#fecha_final").val();
+			
+			var total_suma 				= parseFloat($('#total_suma').val());
+			var uvt 					= parseFloat($('#uvt').val());
+
+			var aportes_pension 		= parseFloat($('#aportes_pension').val());
+			var aportes_salud 			= parseFloat($('#aportes_salud').val());
+			var aportes_fondop 			= parseFloat($('#aportes_fondop').val());
+			var st_icr 					= parseFloat($('#st_icr').val());
+			var sub1 					= parseFloat($('#sub1').val());
+			
+			var pago_vivienda 			= parseFloat($('#pago_vivienda').val());
+			var deduccion_dependiente 	= parseFloat($('#deduccion_dependiente').val());
+			var salud_prepagada 		= parseFloat($('#salud_prepagada').val());
+			var st_d 					= parseFloat($('#st_d').val());
+			var sub2 					= parseFloat($('#sub2').val());
+			
+			var aportes_vol_empl 		= parseFloat($('#aportes_vol_empl').val());
+			var aportes_afc 			= parseFloat($('#aportes_afc').val());
+			var otras_rentas 			= parseFloat($('#otras_rentas').val());
+			var st_re 					= parseFloat($('#st_re').val());
+			var sub3 					= parseFloat($('#sub3').val());
+			
+			var rte 					= parseFloat($('#rte').val());
+			var sub4 					= parseFloat($('#sub4').val());	
+
+			var cifra_control 			= parseFloat($('#cifra_control').val());
+			var total_deduccion 		= parseFloat($('#total_deduccion').val());
+			var validau 				= parseFloat($('#validau').val());
+
+			var ingreso_gravado 		= parseFloat($('#ingreso_gravado').val());	
+			var ingreso_mensual 		= parseFloat($('#ingreso_mensual').val());	
 			
 			if(parseInt(contrato_id)>0){
-				var QueryString = "ACTIONCONTROLER=onclickRenovar&contrato_id="+contrato_id+"&fecha_inicio="+fecha_inicio+"&fecha_final="+fecha_final+"&administracion="+administracion+"&canon_renovacion="+canon_renovacion+"&canon_viejo="+canon_viejo+"&observacion_renovacion="+observacion_renovacion;
+				var QueryString = "ACTIONCONTROLER=onclickLiquidar&contrato_id="+contrato_id+"&fecha_inicio="+fecha_inicio+"&fecha_final="+fecha_final+"&total_suma="+total_suma+"&uvt="+uvt+"&aportes_pension="+aportes_pension+"&aportes_salud="+aportes_salud+"&aportes_fondop="+aportes_fondop+"&st_icr="+st_icr+"&sub1="+sub1+"&pago_vivienda="+pago_vivienda+"&deduccion_dependiente="+deduccion_dependiente+"&salud_prepagada="+salud_prepagada+"&st_d="+st_d+"&sub2="+sub2+"&aportes_vol_empl="+aportes_vol_empl+"&aportes_afc="+aportes_afc+"&otras_rentas="+otras_rentas+"&st_re="+st_re+"&sub3="+sub3+"&rte="+rte+"&sub4="+sub4+"&cifra_control="+cifra_control+"&total_deduccion="+total_deduccion+"&validau="+validau+"&ingreso_gravado="+ingreso_gravado+"&ingreso_mensual="+ingreso_mensual;
 				$.ajax({
 					url        : "LiqRetencionClass.php?rand="+Math.random(),
 					data       : QueryString,
@@ -429,7 +565,7 @@ function onclickRenovar(formulario){
 	}
 }
 
-function onclickActualizar(formulario){
+function onclickContabilizar(formulario){
 
 	if(ValidaRequeridos(formulario)){
 		
@@ -442,7 +578,7 @@ function onclickActualizar(formulario){
 			var observacion_actualiza	=	$("#observacion_actualiza").val();
 			
 			if(parseInt(contrato_id)>0){
-				var QueryString = "ACTIONCONTROLER=onclickActualizar&contrato_id="+contrato_id+"&fecha_inicio="+fecha_inicio+"&fecha_final="+fecha_final+"&administracion="+administracion+"&canon="+canon+"&canon_antiguo_actualiza="+canon_antiguo_actualiza+"&observacion_actualiza="+observacion_actualiza;
+				var QueryString = "ACTIONCONTROLER=onclickContabilizar&contrato_id="+contrato_id+"&fecha_inicio="+fecha_inicio+"&fecha_final="+fecha_final+"&administracion="+administracion+"&canon="+canon+"&canon_antiguo_actualiza="+canon_antiguo_actualiza+"&observacion_actualiza="+observacion_actualiza;
 				$.ajax({
 					url        : "LiqRetencionClass.php?rand="+Math.random(),
 					data       : QueryString,

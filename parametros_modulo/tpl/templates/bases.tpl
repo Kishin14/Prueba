@@ -150,7 +150,7 @@
         </table>
     </fieldset>
     <fieldset class="section">
-    <legend>Prestaciones Sociales</legend>
+    <legend>Seguridad Social</legend>
         <table width="99%">   
             <tr>
                 <td align="center"><label>Concepto</label></td>
@@ -187,6 +187,20 @@
                 <td>{$PUCVENTASARL}{$PUCVENTASARLID}</td>
                 <td>{$PUCPRODUCCARL}{$PUCPRODUCCARLID}</td>
                 <td>{$PUCCONTRAARL}{$PUCCONTRAARLID}</td>
+            </tr>
+        </table>
+    </fieldset>
+    <fieldset class="section">
+    <legend>Prestaciones Sociales</legend>
+        <table width="99%">   
+            <tr>
+                <td align="center"><label>Concepto</label></td>
+                <td align="center"><label>% Empleado</label></td>
+                <td align="center"><label>% Empresa</label></td>                  
+                <td><label>Puc Admon</label></td>
+                <td><label>Puc Ventas</label></td>
+                <td><label>Puc Producci&oacute;n</label></td>
+                <td><label>Puc Contrapartida</label></td>
             </tr>
             <tr>
                 <td><label>Cesantias</label></td>
@@ -232,6 +246,15 @@
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td>{$PUCCONTRAFONDPEN}{$PUCCONTRAFONDPENID}</td>
+            </tr>
+            <tr>
+                <td><label>Retenci&oacute;n</label></td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>{$PUCRETENCION}{$PUCRETENCIONID}</td>
             </tr>
             
         </table>

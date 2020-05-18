@@ -31,9 +31,10 @@
 				</thead>
 				<tbody>
 	                {if $DATA.alerta eq ''}
+						
 						{foreach name=reporte from=$DATA item=k}
-                
-
+					
+						{math assign='total_suma' equation='a+b+c+d+e' a=$k.sueldo_base b=$k.subsidio_transporte c=$k.hora_extra d=$k.vacaciones e=$k.primas}
                             <tr>
                                 <td style="vertical-align: middle;">&nbsp;{$k.contrato_id}</td>
                                 <td style="vertical-align: middle;">{$k.prefijo}</td>
@@ -44,9 +45,9 @@
                                 <td style="vertical-align: middle;">&nbsp;${$k.subsidio_transporte|number_format:0:',':'.'}</td>
                                 <td style="vertical-align: middle;">&nbsp;${$k.hora_extra|number_format:0:',':'.'}</td>
                                 <td style="vertical-align: middle;">&nbsp;${$k.vacaciones|number_format:0:',':'.'}</td>
-                                <td style="vertical-align: middle;">&nbsp;${$k.primasr|number_format:0:',':'.'}</td>
+                                <td style="vertical-align: middle;">&nbsp;${$k.primas|number_format:0:',':'.'}</td>
                                 <td style="vertical-align: middle;">&nbsp;{$k.estado}</td>
-                                <td style="vertical-align: middle;"><input type="button" name="renovarcontrato" style="padding:0.175rem 0.75rem;" class="btn btn-primary" onClick="renovar({$k.contrato_id});" value="Liquidar Retenciones"></input></td>
+                                <td style="vertical-align: middle;"><input type="button" name="renovarcontrato" style="padding:0.175rem 0.75rem;" class="btn btn-primary" onClick="renovar({$k.contrato_id},{$total_suma},{$k.uvt});" value="Liquidar Retenciones" /></td>
 
                             </tr>
                         {/foreach}

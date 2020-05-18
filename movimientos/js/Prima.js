@@ -615,7 +615,7 @@ function Liq_AnteriorParcial(){
 
 $(document).ready(function(){
 
-
+	Empleado_si();
 	$("#si_empleado").change(function(){										
 		if($("#si_empleado").val()=='ALL'){
 				$("#divConta").css("display","none");

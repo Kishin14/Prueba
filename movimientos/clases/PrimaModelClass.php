@@ -511,9 +511,9 @@ final class PrimaModel extends Db{
 		// exit( $select.'si');
 		$result = $this -> DbFetchAll($select,$Conex,$ErrDb = false);
 
-		$fecha_liquidacion_anterior = $result_consolidado[0]['fecha_liquidacion'];
+		$fecha_liquidacion_anterior = $result[0]['fecha_liquidacion'];
 
-		$consulta_periodo = " AND fecha BETWEEN COALESE($fecha_liquidacion_anterior,$fecha_ult_prima) AND $fecha_liquidacion"; 
+		$consulta_periodo = " AND fecha BETWEEN COALESCE('$fecha_liquidacion_anterior','$fecha_ult_prima') AND '$fecha_liquidacion'"; 
 		
 		$select_consolidado = "SELECT SUM(credito-debito)as neto,centro_de_costo_id FROM imputacion_contable WHERE puc_id=$puc_consolidado_prima AND tercero_id=$tercero_id AND encabezado_registro_id IN (SELECT encabezado_registro_id FROM encabezado_de_registro WHERE estado='C' $consulta_periodo)";
 		

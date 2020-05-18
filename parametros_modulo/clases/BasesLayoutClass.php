@@ -285,6 +285,8 @@ final class BasesLayout extends View{
 		$this	->	assign("PUCCONTRAFONDPENID",$this	->	objectsHtml	->	GetobjectHtml($this	->	fields[puc_contra_fonpension_id]));
 		$this	->	assign("PUCCONTRAFONDPEN",	$this	->	objectsHtml	->	GetobjectHtml($this	->	fields[puc_contra_fonpension]));
 		$this	->	assign("LIMITEFONDO",		$this	->	objectsHtml	->	GetobjectHtml($this	->	fields[limite_fondo]));
+		$this	->	assign("PUCRETENCIONID",		$this	->	objectsHtml	->	GetobjectHtml($this	->	fields[puc_contra_retencion_id]));
+		$this	->	assign("PUCRETENCION",		$this	->	objectsHtml	->	GetobjectHtml($this	->	fields[puc_contra_retencion]));
 		// $this	->	assign("PERIODONUEVO",		$this	->	objectsHtml	->	GetobjectHtml($this	->	fields[periodo_contable_nuevo]));
 		$this	->	assign("SALARIONUEVO",		$this	->	objectsHtml	->	GetobjectHtml($this	->	fields[salario_nuevo]));
 		$this	->	assign("SUBSIDIONUEVO",		$this	->	objectsHtml	->	GetobjectHtml($this	->	fields[sub_nuevo]));

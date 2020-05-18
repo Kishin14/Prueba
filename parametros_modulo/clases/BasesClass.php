@@ -773,6 +773,8 @@ final class Bases extends Controler{
 				type	=>array('column'))
 		);
 
+		
+
 		$this -> Campos[puc_contra_trans] = array(
 			name	=>'puc_contra_trans',
 			id		=>'puc_contra_trans',
@@ -785,6 +787,32 @@ final class Bases extends Controler{
 				name	=>'cuentas_movimiento',
 				setId	=>'puc_contra_trans_id')
 		);	  
+
+		$this -> Campos[puc_contra_retencion] = array(
+			name	=>'puc_contra_retencion',
+			id		=>'puc_contra_retencion',
+			type	=>'text',
+			Boostrap =>'si',
+			required=>'yes',
+			size=>16,
+			datatype=>array(type=>'text'),
+			suggest=>array(
+				name	=>'cuentas_movimiento',
+				setId	=>'puc_contra_trans_id')
+		);	  
+		
+		$this -> Campos[puc_contra_retencion_id] = array(
+			name	=>'puc_contra_retencion_id',
+			id		=>'puc_contra_retencion_id',
+			type	=>'hidden',
+			required=>'yes',
+			datatype=>array(
+				type	=>'integer',
+				length	=>'20'),
+			transaction=>array(
+				table	=>array('datos_periodo'),
+				type	=>array('column'))
+		);
 
 		$this -> Campos[dias_lab] = array(
 			name	=>'dias_lab',

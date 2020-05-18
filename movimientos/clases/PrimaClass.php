@@ -351,7 +351,6 @@ final class Prima extends Controler{
 		type	=>'text',
 		Boostrap =>'si',
 		required=>'yes',
-		readonly=>'yes',
 	 	datatype=>array(
 			type	=>'integer',
 			length	=>'250'),
