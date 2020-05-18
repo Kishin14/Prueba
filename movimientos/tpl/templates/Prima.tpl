@@ -76,7 +76,7 @@
             	<table align="center">
             <tr>
             <td ><label>Tipo Liquidacion :</label></td>
-            <td >{$TIPOLIQUIDACION}</td>
+            <td >{$TIPOLIQUIDACION}&nbsp;<a href="javascript:void(0);" title="Presiona aqui para saber acerca de este campo."  name="myBtn"><img src="../../../framework/media/images/modulos/manual.png" width="16" height="18" onclick="alert_unico(this,'Informaci&oacute;n','TOTAL SEMESTRE: cuando seleccionamos este tipo de liquidación, estamos indicandole al sistema que debe liquidar la prima por los 6 meses que le corresponden al empleado.  PARCIAL SEMESTRE: Cuando seleccionamos este tipo de liquidación le estamos indicando al sistema que debe liquidar la prima con un rango de tiempo menor a los 6 meses, segun se necesite.')"/></a></td>
            
            	<td><label>Valor Liquidacion : </label></td>
             <td>{$VALORLIQUIDACION}</td>
@@ -184,6 +184,19 @@
 		</p>
 	  </div>
 	</div>    
+    <!--INICIO Cuadro de informacion-->
+    <div id="MyModal" class="modal">
+    
+        <!-- Modal content -->
+        <div class="modal-content" style="width:70%;">
+            <span class="close">&times;</span>
+            <h3 id="h5" align="center"> </h3>
+            <h4 align="center"><img src="../../../framework/media/images/alerts/info.png" /></h4>
+            <p id="p" align="center"></p>
+        </div>
+    
+    </div>
+    <!--FIN Cuadro de informacion-->
 </fieldset>
     
     <fieldset>{$GRIDPARAMETROS}</fieldset>

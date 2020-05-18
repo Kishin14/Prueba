@@ -22,6 +22,7 @@ final class mandoContratosLayout extends View
         $this->TplInclude->IncludeCss("../../../facturacion/Contratos/css/mandoContratos.css");
         $this->TplInclude->IncludeCss("../../../framework/css/jquery.alerts.css");
         $this->TplInclude->IncludeCss("../../../framework/sweetalert2/dist/sweetalert2.min.css");
+        $this->TplInclude->IncludeCss("../../../framework/css/bootstrap1.css");
 
         $this->TplInclude->IncludeJs("../../../framework/js/jquery.js");
         $this->TplInclude->IncludeJs("../../../framework/js/jqcalendar/jquery.ui.datepicker.js");

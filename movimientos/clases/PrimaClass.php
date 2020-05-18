@@ -402,7 +402,7 @@ final class Prima extends Controler{
 		id  =>'tipo_liquidacion',
 		type =>'select',
 		Boostrap =>'si',
-		options => array(array(value=>'T',text=>'TOTAL',selected=>'T'),array(value=>'P',text=>'PARCIAL',selected=>'T')),
+		options => array(array(value=>'T',text=>'TOTAL SEMESTRE',selected=>'T'),array(value=>'P',text=>'PARCIAL SEMESTRE',selected=>'T')),
 		required=>'yes',
 		datatype=>array(
 			type =>'text',

@@ -43,6 +43,8 @@ final class reporteHojaVida extends Controler{
 	if($si_tipo==1){
 	 $consulta_cliente=" s.contrato_id =".$contrato_id;
 	 $data  = $Model -> getReporte($consulta_cliente,$this -> getConex());
+	 $data1 = $Model -> getReporte1($consulta_cliente,$this -> getConex());
+
 
 	}else{
 	 $consulta_cliente=" (s.contrato_id IN (SELECT c.contrato_id FROM empleado e, contrato c WHERE e.empleado_id=c.empleado_id AND e.tercero_id=".$tercero_id."))";
@@ -54,8 +56,7 @@ final class reporteHojaVida extends Controler{
  		$data_eps  = $Model -> getempresa_eps($data[$i]['contrato_id'],$this -> getConex());
  		$data[$i]['empresa_eps'] = $data_eps;
 	 }
-	//   exit(print_r($data));
-
+	
  	for ($i=0; $i < count($data) ; $i++) { 
  		$data_pension  = $Model -> getempresa_pension($data[$i]['contrato_id'],$this -> getConex());
  		$data[$i]['empresa_pension'] = $data_pension;
@@ -122,6 +123,7 @@ final class reporteHojaVida extends Controler{
 			$Layout -> setCssInclude("../../../framework/css/bootstrap.css");
 			$Layout -> assign("JAVASCRIPT",$Layout -> getJsInclude());
 			$Layout -> setVar("REMESAS",$data);
+			$Layout -> setVar("HISTORIAL",$data1);
 	
 			$Layout	-> RenderLayout('ReporteHojaVidaResult.tpl');		
 

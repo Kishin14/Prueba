@@ -50,13 +50,13 @@ function contratos() {
                     var empleado = data[i]['empleado'];
                     var dias_dif = data[i]['dias_dif'];
 
-                    contratos = contratos + "\n" + empleado + "--" + numero_contrato + "\n <p style='color:red; font-weight:bold;'>Fecha de Terminación: " + fecha_terminacion + " vigencia " + dias_dif + " dias</p><button id = 'actualizar' onclick='renovar(" + contrato_id + ");'>Actualizar</button>";
+                    contratos = contratos + "\n" + empleado + "-" + numero_contrato + "\n <p style='color:red; font-weight:bold;'>Fecha Terminación: " + fecha_terminacion + " vigencia " + dias_dif + " dias</p><button class = 'btn btn-danger' id = 'actualizar' onclick='renovar(" + contrato_id + ");'>Actualizar</button>";
 
                 }
                 if (contratos != ''){
                     Swal.fire(
                         'Atención',
-                        '<h4 style="font-family:Arial, Helvetica, sans-serif">¡Estos contratos vencerán proximamente! <br><br>' + contratos + '</h4>',
+                        '<h4 style="font-family:Arial, Helvetica, sans-serif">¡Estos contratos vencerán proximamente! <br><br>' + contratos + '<br></h4>',
                         'info'
                     )
                 }
@@ -87,7 +87,7 @@ function contratos() {
                             var empleado1 = data1[i]['empleado'];
                             var dias_dif1 = data1[i]['dias_dif'];
 
-                            contratos1 = contratos1 + "\n" + empleado1 + "--" + numero_contrato1 + "\n <p style='color:red; font-weight:bold;'>Fecha de Terminación: " + fecha_terminacion1 + " vigencia " + dias_dif1 + " dias</p><button id = 'actualizar' onclick='renovar(" + contrato_id + ");'>Actualizar</button>";
+                            contratos1 = contratos1 + "\n" + empleado1 + "-" + numero_contrato1 + "\n <p style='color:red; font-weight:bold;'>Fecha Terminación: " + fecha_terminacion1 + " vigencia " + dias_dif1 + " dias</p><button class = 'btn btn-danger' id = 'actualizar' onclick='renovar(" + contrato_id + ");'>Actualizar</button><br>";
 
                         }
 
