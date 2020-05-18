@@ -22,6 +22,7 @@
           <tr>
             <th class="borderLeft borderTop borderRight">NUMERO IDENTIFICACION</th>
             <th class="borderLeft borderTop borderRight">NOMBRE EMPLEADO</th>
+            <th class="borderLeft borderTop borderRight">GENERO</th>
             <th class="borderLeft borderTop borderRight">DIRECCION</th> 
             <th class="borderLeft borderTop borderRight">TELEFONO</th>
             <th class="borderLeft borderTop borderRight">MOVIL</th>
@@ -36,9 +37,7 @@
           <tr bgcolor="{cycle values="#eeeeee,#d0d0d0"}">  
           <td class="borderLeft borderTop borderRight" align="center">{$r.numero_identificacion}</td>  
           <td class="borderLeft borderTop borderRight" align="center">{$r.empleado_id}</td> 
-                  
-		              
-			                        
+          <td class="borderLeft borderTop borderRight" align="center">{$r.sexo}</td> 
             <td class="borderLeft borderTop borderRight" align="center">{$r.direccion}</td>                         
             <td class="borderLeft borderTop borderRight" align="center">{$r.telefono}</td>
             <td class="borderLeft borderTop borderRight" align="center">{$r.movil}</td>

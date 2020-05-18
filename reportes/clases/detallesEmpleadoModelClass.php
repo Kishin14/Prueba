@@ -21,7 +21,7 @@ final class detallesEmpleadoModel extends Db{
 		$i=0;
 		foreach($results as $items){
 		
-		$result[$i]=array(empleado_id=>$items[empleado_id],numero_identificacion=>$items[numero_identificacion],direccion=>$items[direccion],telefono=>$items[telefono],movil=>$items[movil],ubicacion_id=>$items[ubicacion_id],nombre_cargo=>$items[nombre_cargo]
+		$result[$i]=array(empleado_id=>$items[empleado_id],sexo=>$items[sexo],numero_identificacion=>$items[numero_identificacion],direccion=>$items[direccion],telefono=>$items[telefono],movil=>$items[movil],ubicacion_id=>$items[ubicacion_id],nombre_cargo=>$items[nombre_cargo]
 						 );
 		$i++;
 		}
@@ -45,7 +45,7 @@ final class detallesEmpleadoModel extends Db{
 		$i=0;
 		foreach($results as $items){
 		
-		$result[$i]=array(empleado_id=>$items[empleado_id],numero_identificacion=>$items[numero_identificacion],direccion=>$items[direccion],telefono=>$items[telefono],movil=>$items[movil],ubicacion_id=>$items[ubicacion_id],nombre_cargo=>$items[nombre_cargo]
+		$result[$i]=array(empleado_id=>$items[empleado_id],sexo=>$items[sexo],numero_identificacion=>$items[numero_identificacion],direccion=>$items[direccion],telefono=>$items[telefono],movil=>$items[movil],ubicacion_id=>$items[ubicacion_id],nombre_cargo=>$items[nombre_cargo]
 						 );
 		$i++;
 		}
@@ -75,7 +75,7 @@ final class detallesEmpleadoModel extends Db{
 		$i=0;
 		foreach($results as $items){
 		
-		$result[$i]=array(numero_identificacion=>$items[numero_identificacion],empleado_id=>$items[empleado_id],direccion=>$items[direccion],telefono=>$items[telefono],
+		$result[$i]=array(numero_identificacion=>$items[numero_identificacion],empleado_id=>$items[empleado_id],sexo=>$items[sexo],direccion=>$items[direccion],telefono=>$items[telefono],
 						  movil=>$items[movil],ubicacion_id=>$items[ubicacion_id],fecha=>$items[fecha],nombre_cargo=>$items[nombre_cargo]);
 		$i++;
 		}
@@ -96,7 +96,7 @@ final class detallesEmpleadoModel extends Db{
 		$i=0;
 		foreach($results as $items){
 		
-		$result[$i]=array(numero_identificacion=>$items[numero_identificacion],empleado_id=>$items[empleado_id],direccion=>$items[direccion],telefono=>$items[telefono],
+		$result[$i]=array(numero_identificacion=>$items[numero_identificacion],empleado_id=>$items[empleado_id],sexo=>$items[sexo],direccion=>$items[direccion],telefono=>$items[telefono],
 						  movil=>$items[movil],ubicacion_id=>$items[ubicacion_id],fecha=>$items[fecha],nombre_cargo=>$items[nombre_cargo]);
 		$i++;
 		}
