@@ -674,23 +674,10 @@ $(document).ready(function(){
 	
 	  });
 	
-<<<<<<< HEAD
-	$("#tipo_liquidacion").change(function(){										
+	$("#tipo_liquidacion,#fecha_liquidacion,#periodo").change(function(){										
       if($("#si_empleado").val()=='ALL' && $("#tipo_liquidacion").val()=='P'){
 		    $("#valor").val('');
 		} 
-=======
-	  /* $("#fecha_liquidacion,#periodo").change(function(){										
-		cargardiv();
-	
-	  }); */
-	
-	$("#tipo_liquidacion,#fecha_liquidacion,#periodo").change(function(){										
-		if($("#si_empleado").val()=='ALL' && $("#tipo_liquidacion").val()=='P'){
-				alertJquery("No es posible hacer una liquidacion parcial para todos los empleados!!","Validacion Liquidacion Prima");
-				$("#tipo_liquidacion").val('T');
-		}
->>>>>>> Oscar
 		
 		if($("#si_empleado").val()=='1' && $("#tipo_liquidacion").val()=='T'){
 			Liq_AnteriorTotal();
