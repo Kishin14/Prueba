@@ -28,6 +28,12 @@ final class reporteHojaVidaModel extends Db{
 	return $opciones;
    }
 
+   public function getReporte1($consulta_cliente,$Conex){ 
+
+	$select= "SELECT";
+
+   }
+
 
   public function getReporte($consulta_cliente,$Conex){ 
 	   	

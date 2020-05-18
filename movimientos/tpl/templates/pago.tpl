@@ -12,21 +12,34 @@
 <body>
     <fieldset>
         <legend>{$TITLEFORM}</legend>
-		<div id="table_find"><table><tr><td><label>Busqueda : </label></td><td>{$BUSQUEDA}</td></tr></table></div>    
+		<div id="table_find">
+        <table align="center">
+         <tr>
+            <td><label>Busqueda : </label></td>
+         </tr>
+         <tr>
+            <td>{$BUSQUEDA}</td>
+         </tr>
+        </table>
+        </div>    
+
         {$FORM1}
         <fieldset class="section">
         <table align="center" width="100%">
+            <table width="90%" align="center">
             <tr>
-        	    <td width="15%"><label>Forma de Pago :</label></td>
+        	    <td><label>Forma de Pago :</label></td>
             	<td align="left">{$PAGO}</td>
-	            <td><label>Tipo de Documento : </label></td>
-    	        <td>{$DOCID}</td>
+	            <td colspan="2"><label>Tipo de Documento : </label></td>
+    	        <td colspan="2">{$DOCID}</td>
             </tr>
             <tr>
                 <td><label>Aplica a: </label></td>
                 <td>{$EMPLEADOS}</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
+                <td><a href="javascript:void(0);" title="Presiona aqui para saber acerca de este campo."  name="myBtn"><img src="../../../framework/media/images/modulos/manual.png" width="16" height="18" onclick="alert_unico(this,'Informaci&oacute;n','El rango de fechas (DESDE --- HASTA) se utiliza para que al momento de dar clik en el icono de buscar pendientes, nos filtre solamente las liquidaciones que coincidan con los rangos de fecha estipulados, teniendo en cuenta de que estos campos no son obligatorios.')"/></a>&nbsp;<label>Desde: </label></td>
+                <td>{$DESDE}</td>
+                <td><label>Hasta: </label></td>
+                <td>{$HASTA}</td>
             </tr>
             
             <tr>
@@ -41,8 +54,8 @@
                 <td><label>Fecha de pago : </label></td>
                 <td>{$FECHA}</td>
             </tr>
-            
-            <table width="55%">
+            </table>
+            <table width="55%" align="center">
         
             <tr>
                 <td><label>Valor Pago Nomina : </label></td>
@@ -115,6 +128,20 @@
            <iframe id="iframeSolicitud"  style="height:100%"></iframe> 
              <!-- <iframe id="iframePendientes" style="height:100%"></iframe>-->
         </div>
+
+        <!--INICIO Cuadro de informacion-->
+    <div id="MyModal" class="modal">
+    
+        <!-- Modal content -->
+        <div class="modal-content" style="width:70%;">
+            <span class="close">&times;</span>
+            <h3 id="h5" align="center"> </h3>
+            <h4 align="center"><img src="../../../framework/media/images/alerts/info.png" /></h4>
+            <p id="p" align="center"></p>
+        </div>
+    
+    </div>
+    <!--FIN Cuadro de informacion-->
     
         
 	</fieldset>

@@ -115,9 +115,9 @@ final class mandoContratosModel extends Db
         if (strlen($this->GetError()) > 0) {
             $this->Rollback($Conex);
         } else {
-
+            $fecha = ;
             $update1 = "UPDATE historial_contrato SET
-					  observacion_ren='$observacion_ren'
+					  observacion_ren='$observacion_ren',fecha_actualizacion='$fecha' 
 				    WHERE contrato_id = $contrato_id";
 
             $this->query($update1, $Conex, true);

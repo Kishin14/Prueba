@@ -7,7 +7,7 @@ final class SolicFacturasModel extends Db{
 
   private $Permisos;
   
-  public function getSolicFacturas($consul_emp,$empleados,$Conex){
+  public function getSolicFacturas($consul_emp,$empleados,$consul_fecha_desde,$consul_fecha_hasta,$consul_fechas,$Conex){
 	
 		$select = "SELECT 
 					l.liquidacion_novedad_id,
@@ -32,12 +32,12 @@ final class SolicFacturasModel extends Db{
 					)  AS saldo
 				
 					FROM liquidacion_novedad l, detalle_liquidacion_novedad d
-					WHERE l.estado='C' AND d.liquidacion_novedad_id=l.liquidacion_novedad_id $consul_emp AND d.sueldo_pagar=1 AND (d.debito+d.credito)>0
+					WHERE l.estado='C' AND d.liquidacion_novedad_id=l.liquidacion_novedad_id $consul_emp AND d.sueldo_pagar=1 $consul_fecha_desde $consul_fecha_hasta $consul_fechas  AND (d.debito+d.credito)>0
 					AND ((d.debito+d.credito)  >	(SELECT SUM(ra.rel_valor_abono_nomina) AS abonos FROM  relacion_abono_nomina ra, abono_nomina ab 
 					WHERE ra.liquidacion_novedad_id=l.liquidacion_novedad_id AND ab.abono_nomina_id=ra.abono_nomina_id AND ab.estado_abono_nomina='C' )
 					OR 	(SELECT SUM(ra.rel_valor_abono_nomina) AS abonos FROM  relacion_abono_nomina ra, abono_nomina ab 
 					WHERE ra.liquidacion_novedad_id=l.liquidacion_novedad_id AND ab.abono_nomina_id=ra.abono_nomina_id AND ab.estado_abono_nomina='C' ) IS NULL) ";
-				//echo $select;
+				
 		  $result = $this -> DbFetchAll($select,$Conex,true); 
 	
 		return $result;

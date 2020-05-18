@@ -66,7 +66,9 @@ final class PagoLayout extends View{
      $this -> assign("EMPLEADOS",			  $this -> objectsHtml -> GetobjectHtml($this -> fields[empleados]));
 	 
 	 $this -> assign("EMPLEADONIT",			  $this -> objectsHtml -> GetobjectHtml($this -> fields[empleado_nit]));	
-	 $this -> assign("FECHA",				      $this -> objectsHtml -> GetobjectHtml($this -> fields[fecha]));	
+   $this -> assign("FECHA",				      $this -> objectsHtml -> GetobjectHtml($this -> fields[fecha]));	
+   $this -> assign("DESDE",				      $this -> objectsHtml -> GetobjectHtml($this -> fields[desde]));	
+   $this -> assign("HASTA",				      $this -> objectsHtml -> GetobjectHtml($this -> fields[hasta]));	
 	 $this -> assign("ENCABEZADOID",		  $this -> objectsHtml -> GetobjectHtml($this -> fields[encabezado_registro_id]));
    
    	 	 
