@@ -137,7 +137,7 @@ final class RegistrarModel extends Db{
 			$puc_fesdiu  = $result_per[0]['puc_admon_fesdiu_id'];			
 			$puc_fesnoc  = $result_per[0]['puc_admon_fesnoc_id'];
 			$puc_recnoc  = $result_per[0]['puc_admon_recnoc_id'];	
-			$puc_contra_retencion_id       = $result_per[0]['puc_contra_retencion_id'];		
+			// $puc_contra_retencion_id       = $result_per[0]['puc_contra_retencion_id'];		
 			
 		}elseif($result[$i]['area_laboral']=='O'){
 			
@@ -153,7 +153,7 @@ final class RegistrarModel extends Db{
 			$puc_fesdiu  = $result_per[0]['puc_produ_fesdiu_id'];			
 			$puc_fesnoc  = $result_per[0]['puc_produ_fesnoc_id'];						
 			$puc_recnoc  = $result_per[0]['puc_produ_recnoc_id'];	
-			$puc_contra_retencion_id       = $result_per[0]['puc_contra_retencion_id'];		
+			// $puc_contra_retencion_id       = $result_per[0]['puc_contra_retencion_id'];		
 			
 		}elseif($result[$i]['area_laboral']=='C'){
 
@@ -169,7 +169,7 @@ final class RegistrarModel extends Db{
 			$puc_fesdiu  = $result_per[0]['puc_ventas_fesdiu_id'];			
 			$puc_fesnoc  = $result_per[0]['puc_ventas_fesnoc_id'];						
 			$puc_recnoc  = $result_per[0]['puc_ventas_recnoc_id'];
-			$puc_contra_retencion_id       = $result_per[0]['puc_contra_retencion_id'];			
+			// $puc_contra_retencion_id       = $result_per[0]['puc_contra_retencion_id'];			
 			
 
 		}else{
@@ -185,7 +185,7 @@ final class RegistrarModel extends Db{
 			$puc_fesdiu  ='';			
 			$puc_fesnoc  ='';						
 			$puc_recnoc  ='';		
-			$puc_contra_retencion_id  ='';		
+			// $puc_contra_retencion_id  ='';		
 
 			exit('No Ha parametrizado Area para el contrato No '.$result[$i]['numero_contrato']);
 		}
@@ -355,7 +355,7 @@ final class RegistrarModel extends Db{
 			
 			$total_base=$valor_deven+$valor_diurnas+$valor_nocturnas+$valor_diurnas_fes+$valor_nocturnas_fes+$valor_recargo_noc-$des_val_inc;		
 			
-			//Liquidacion Retenciones
+			/* //Liquidacion Retenciones
 			$selectext = "SELECT  
 					lr.ingreso_gravado,
 					lr.uvt
@@ -368,7 +368,7 @@ final class RegistrarModel extends Db{
 			$uvt     			 = $resultext[0]['uvt']>0 ? $resultext[0]['uvt'] : 0;			
 			$valor_retencion = ($ingreso_gravado*$uvt);		
 			
-			$total_base=$total_base+$valor_retencion;		
+			$total_base=$total_base+$valor_retencion;	 */	
 			
 			//salud
 
@@ -528,7 +528,7 @@ final class RegistrarModel extends Db{
 			
 		}
 
-		//ingreso liquidacion retencion
+		/* //ingreso liquidacion retencion
 		
 		$select_rete = "SELECT  
 						lr.ingreso_gravado,
@@ -562,7 +562,7 @@ final class RegistrarModel extends Db{
 				FROM novedad_fija n, concepto_area c
 				WHERE n.contrato_id=$contrato_id AND n.estado='A' AND '$fecha_final' BETWEEN  n.fecha_inicial AND n.fecha_final AND c.concepto_area_id=n.concepto_area_id";
 				
-		$result2 = $this -> DbFetchAll($select2,$Conex,true);
+		$result2 = $this -> DbFetchAll($select2,$Conex,true); */
 		
 		
 		
@@ -858,7 +858,7 @@ final class RegistrarModel extends Db{
 			$puc_fesdiu=$result_per[0]['puc_admon_fesdiu_id'];			
 			$puc_fesnoc=$result_per[0]['puc_admon_fesnoc_id'];
 			$puc_recnoc=$result_per[0]['puc_admon_recnoc_id'];	
-			$puc_contra_retencion_id       = $result_per[0]['puc_contra_retencion_id'];		
+			// $puc_contra_retencion_id       = $result_per[0]['puc_contra_retencion_id'];		
 			
 		}elseif($result[$i]['area_laboral']=='O'){
 			$puc_sal=$result_per[0]['puc_produ_sal_id'];
@@ -873,7 +873,7 @@ final class RegistrarModel extends Db{
 			$puc_fesdiu=$result_per[0]['puc_produ_fesdiu_id'];			
 			$puc_fesnoc=$result_per[0]['puc_produ_fesnoc_id'];						
 			$puc_recnoc=$result_per[0]['puc_produ_recnoc_id'];	
-			$puc_contra_retencion_id       = $result_per[0]['puc_contra_retencion_id'];		
+			// $puc_contra_retencion_id       = $result_per[0]['puc_contra_retencion_id'];		
 			
 		}elseif($result[$i]['area_laboral']=='C'){
 			$puc_sal=$result_per[0]['puc_ventas_sal_id'];
@@ -888,7 +888,7 @@ final class RegistrarModel extends Db{
 			$puc_fesdiu=$result_per[0]['puc_ventas_fesdiu_id'];			
 			$puc_fesnoc=$result_per[0]['puc_ventas_fesnoc_id'];						
 			$puc_recnoc=$result_per[0]['puc_ventas_recnoc_id'];		
-			$puc_contra_retencion_id       = $result_per[0]['puc_contra_retencion_id'];	
+			// $puc_contra_retencion_id       = $result_per[0]['puc_contra_retencion_id'];	
 			
 
 		}else{
@@ -903,7 +903,7 @@ final class RegistrarModel extends Db{
 			$puc_fesdiu='';			
 			$puc_fesnoc='';						
 			$puc_recnoc='';			
-			$puc_contra_retencion_id='';			
+			// $puc_contra_retencion_id='';			
 			exit('No Ha parametrizado Area para el contrato No '.$result[$i]['numero_contrato']);
 		}
 		
@@ -1093,7 +1093,7 @@ final class RegistrarModel extends Db{
 			
 			$total_base=$valor_deven+$valor_diurnas+$valor_nocturnas+$valor_diurnas_fes+$valor_nocturnas_fes+$valor_recargo_noc-$des_val_inc;
 
-			//sumatoria  retencion 
+			/* //sumatoria  retencion 
 			$selectext = "SELECT  
 					lr.ingreso_gravado,
 					lr.uvt
@@ -1106,7 +1106,7 @@ final class RegistrarModel extends Db{
 			$uvt     			 = $resultext[0]['uvt']>0 ? $resultext[0]['uvt'] : 0;			
 			$valor_retencion = ($ingreso_gravado*$uvt);		
 			
-			$total_base=$total_base+$valor_retencion;	
+			$total_base=$total_base+$valor_retencion;	 */
 
 			//salud
 			$debito=0;
@@ -1267,7 +1267,7 @@ final class RegistrarModel extends Db{
 		}
 
 
-		//ingreso liquidacion retencion
+		/* //ingreso liquidacion retencion
 		
 		$select_rete = "SELECT  
 						lr.ingreso_gravado,
@@ -1300,7 +1300,7 @@ final class RegistrarModel extends Db{
 				WHERE n.contrato_id=$contrato_id AND n.estado='A' AND '$fecha_final' BETWEEN  n.fecha_inicial AND n.fecha_final AND c.concepto_area_id=n.concepto_area_id";
 
 			
-		$result2 = $this -> DbFetchAll($select2,$Conex,true);
+		$result2 = $this -> DbFetchAll($select2,$Conex,true); */
 
 		for($j=0;$j<count($result2);$j++){
 
