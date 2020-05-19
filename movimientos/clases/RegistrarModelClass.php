@@ -551,7 +551,7 @@ final class RegistrarModel extends Db{
 				$insert = "INSERT INTO 	detalle_liquidacion_novedad (detalle_liquidacion_novedad_id,puc_id,liquidacion_novedad_id,debito,credito,fecha_inicial,fecha_final,dias,concepto,tercero_id,numero_identificacion,digito_verificacion) 
 				VALUES ($detalle_liquidacion_novedad_id,$puc_contra_retencion_id,$liquidacion_novedad_id,$debito,$credito,'$fecha_inicial','$fecha_final',$dias,'LIQUIDACION RETENCION',$tercero_id,$numero_identificacion,$digito_verificacion)";
 			 
-				$this -> query($insert,$Conex,true);
+				$this -> query($insert,$Conex,true); */
 
 		//novedades
 		
@@ -562,7 +562,7 @@ final class RegistrarModel extends Db{
 				FROM novedad_fija n, concepto_area c
 				WHERE n.contrato_id=$contrato_id AND n.estado='A' AND '$fecha_final' BETWEEN  n.fecha_inicial AND n.fecha_final AND c.concepto_area_id=n.concepto_area_id";
 				
-		$result2 = $this -> DbFetchAll($select2,$Conex,true); */
+		$result2 = $this -> DbFetchAll($select2,$Conex,true);
 		
 		
 		
@@ -1039,7 +1039,7 @@ final class RegistrarModel extends Db{
 
 		if($sueldo_base<=$limite_sal){
 			//subsidio transporte
-			//exit("JDFC11");
+			
 			$debito=intval(($subsidio_transporte/30)*$dias_sub);
 			$credito=0;
 			$deb_total=$deb_total+$debito;
@@ -1290,7 +1290,7 @@ final class RegistrarModel extends Db{
 				$insert = "INSERT INTO 	detalle_liquidacion_novedad (detalle_liquidacion_novedad_id,puc_id,liquidacion_novedad_id,debito,credito,fecha_inicial,fecha_final,dias,concepto,tercero_id,numero_identificacion,digito_verificacion) 
 				VALUES ($detalle_liquidacion_novedad_id,$puc_contra_retencion_id,$liquidacion_novedad_id,$debito,$credito,'$fecha_inicial','$fecha_final',$dias,'LIQUIDACION RETENCION',$tercero_id,$numero_identificacion,$digito_verificacion)";
 			 
-				$this -> query($insert,$Conex,true);
+				$this -> query($insert,$Conex,true);*/
 
 		//novedades
 		$select2 = "SELECT  n.*, c.*,
@@ -1300,7 +1300,7 @@ final class RegistrarModel extends Db{
 				WHERE n.contrato_id=$contrato_id AND n.estado='A' AND '$fecha_final' BETWEEN  n.fecha_inicial AND n.fecha_final AND c.concepto_area_id=n.concepto_area_id";
 
 			
-		$result2 = $this -> DbFetchAll($select2,$Conex,true); */
+		$result2 = $this -> DbFetchAll($select2,$Conex,true); 
 
 		for($j=0;$j<count($result2);$j++){
 
