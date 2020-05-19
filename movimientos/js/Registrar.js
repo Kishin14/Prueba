@@ -651,16 +651,18 @@ function onclickCancellation(formulario){
 
 	if($("#divAnulacion").is(":visible")){
 	 
-	   var formularioPrincipal = document.getElementById('RegistrarForm');
-	   var causal_anulacion_id = $("#causal_anulacion_id").val();
-	   var observacion_anulacion       = $("#observacion_anulacion").val();
+	   var formularioPrincipal    = document.getElementById('RegistrarForm');
+	   var causal_anulacion_id    = $("#causal_anulacion_id").val();
+	   var observacion_anulacion  = $("#observacion_anulacion").val();
+	   var fecha_final            = $("#fecha_final").val();
+	   var contrato_id            = $("#contrato_id").val();
 	   
        if(ValidaRequeridos(formulario)){
 		   
 		   
 		 if(!formSubmitted){  
 	
-	     var QueryString = "ACTIONCONTROLER=onclickCancellation&liquidacion_novedad_id="+liquidacion_novedad_id+"&causal_anulacion_id="+causal_anulacion_id+"&observacion_anulacion="+observacion_anulacion;
+	     var QueryString = "ACTIONCONTROLER=onclickCancellation&liquidacion_novedad_id="+liquidacion_novedad_id+"&causal_anulacion_id="+causal_anulacion_id+"&observacion_anulacion="+observacion_anulacion+"&contrato_id="+contrato_id+"&fecha_final="+fecha_final;
 		
 	     $.ajax({
            url  : "RegistrarClass.php?rand="+Math.random(),

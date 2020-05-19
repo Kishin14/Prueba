@@ -119,6 +119,7 @@ final class RegistrarModel extends Db{
 	$this -> Begin($Conex);
 		
 	$this -> DbInsertTable("liquidacion_novedad",$Campos,$Conex,true,false);
+	
 	//inicio detalles
 	for($i=0;$i<count($result);$i++){	
 	
@@ -508,16 +509,20 @@ final class RegistrarModel extends Db{
 		}
 
 		//novedades
-		$select2 = "SELECT  n.*, c.*, 
+		
+		
+		$select2      = "SELECT  n.*, c.*, 
 				(SELECT t.numero_identificacion FROM tercero t WHERE t.tercero_id=n.tercero_id  ) AS numero_identificacion,
 				(SELECT t.digito_verificacion FROM tercero t WHERE t.tercero_id=n.tercero_id  ) AS digito_verificacion
 				FROM novedad_fija n, concepto_area c
 				WHERE n.contrato_id=$contrato_id AND n.estado='A' AND '$fecha_final' BETWEEN  n.fecha_inicial AND n.fecha_final AND c.concepto_area_id=n.concepto_area_id";
-					
+				
 		$result2 = $this -> DbFetchAll($select2,$Conex,true);
-
+		
+		
+		
 		for($j=0;$j<count($result2);$j++){
-
+			
 			if($result2[$j]['tipo_novedad']=='V'){
 				$debito =$result2[$j]['valor_cuota'];
 				$credito=0;
@@ -565,6 +570,10 @@ final class RegistrarModel extends Db{
 		
 	}
 	//fin detalles
+	
+	#Funcion para actualizar el estado a las novedades relacionadas con el contrato
+	
+	$this -> actualizarNovedad($Conex,$fecha_final,$contrato_id,'I');
 
 	if($previsual == 'true'){
 		
@@ -606,6 +615,35 @@ final class RegistrarModel extends Db{
 
 	} 
   }
+  
+  
+  public function actualizarNovedad($Conex,$fecha_final,$contrato_id,$estado){
+	  
+	$consul_estado = $estado == 'I' ? "AND n.estado='A'" : "AND n.estado='I'"; 
+	  
+	require_once("DetalleNovedadModelClass.php");	    
+	
+	$Model          = new DetalleNovedadModel();	 
+	
+	$select_novedad = "SELECT n.novedad_fija_id FROM novedad_fija n WHERE n.contrato_id=$contrato_id $consul_estado AND '$fecha_final' BETWEEN  n.fecha_inicial AND n.fecha_final";
+					   
+	$result_novedad = $this -> DbFetchAll($select_novedad,$Conex,true);
+	
+	for($n=0; $n<count($result_novedad); $n++){
+		
+		$result          =  $Model -> getDetallesNovedad($Conex,$result_novedad[$n]['novedad_fija_id']);
+		
+		$fecha_fin_cuota = $result[count($result)-1]['fecha_cuota'];
+		
+		$update_novedad  = "UPDATE novedad_fija SET estado = '$estado' WHERE  '$fecha_fin_cuota' <= '$fecha_final' AND 
+		
+		novedad_fija_id  = ".$result_novedad[$n]['novedad_fija_id'];
+		
+		$this -> query($update_novedad,$Conex,true); 
+		
+	}
+  }
+  
 
   public function FechasLicenRe($fecha_inicial,$fecha_final,$Conex){
 	$select = "SELECT 
@@ -1219,6 +1257,11 @@ final class RegistrarModel extends Db{
 		$deb_total=0;
 		$cre_total=0;
 		
+		
+		#Funcion para actualizar el estado a las novedades relacionadas con el contrato
+	
+		$this -> actualizarNovedad($Conex,$fecha_final,$contrato_id,'I');
+		
 	}
 			
 			
@@ -1285,19 +1328,7 @@ final class RegistrarModel extends Db{
    			FROM liquidacion_novedad l
 			WHERE l.liquidacion_novedad_id=$liquidacion_novedad_id";
 				
-	$result = $this -> DbFetchAll($select,$Conex,$ErrDb = false);
-	
-	return $result;
-  }
-  
-
-  public function selectLiquidacion1($liquidacion_novedad_id,$Conex){
-    				
-   $select = "SELECT l.fecha_inicial,l.fecha_final,l.liquidacion_novedad_id,l.empleados,l.estado,l.consecutivo,l.periodicidad,l.area_laboral
-   			FROM liquidacion_novedad l
-			WHERE l.liquidacion_novedad_id=$liquidacion_novedad_id";
-				
-	$result = $this -> DbFetchAll($select,$Conex,$ErrDb = false);
+	$result = $this -> DbFetchAll($select,$Conex,true);
 	
 	return $result;
   }
@@ -1376,6 +1407,11 @@ final class RegistrarModel extends Db{
 		$this -> query($update,$Conex,true);			  
 				
 	 }
+	 
+	 $contrato_id = $_REQUEST['contrato_id'];
+	 $fecha_final = $_REQUEST['fecha_final'];
+	 
+	 $this -> actualizarNovedad($Conex,$fecha_final,$contrato_id,'A');
 	 
      $this -> Commit($Conex);
   

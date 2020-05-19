@@ -19,8 +19,10 @@ final class DetalleNovedad extends Controler{
     $Model  = new DetalleNovedadModel();
 	
     $Layout -> setIncludes();
+	
+	$novedad_fija_id = $this -> requestDataForQuery('novedad_fija_id','integer');
 
-    $Layout -> setDetallesNovedad($Model -> getDetallesNovedad($this -> getConex()));
+    $Layout -> setDetallesNovedad($Model -> getDetallesNovedad($this -> getConex(),$novedad_fija_id));
 	
     $Layout -> RenderMain();
     

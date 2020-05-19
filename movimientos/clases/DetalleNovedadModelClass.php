@@ -7,9 +7,8 @@ final class DetalleNovedadModel extends Db{
 
   private $Permisos;
       
-  public function getDetallesNovedad($Conex){
+  public function getDetallesNovedad($Conex,$novedad_fija_id){
   
-	$novedad_fija_id = $this -> requestDataForQuery('novedad_fija_id','integer');
 	
 	if(is_numeric($novedad_fija_id)){
 	

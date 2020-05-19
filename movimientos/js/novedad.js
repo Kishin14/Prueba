@@ -205,7 +205,7 @@ function NovedadOnUpdate(formulario,resp){
 		$("#novedad_fija_id").val(resp[0]['novedad_fija_id']);
 		
 		var novedadId = $('#novedad_fija_id').val();
-		var url 		= "DetalleNovedadClass.php?novedad_fija_id="+novedadId;
+		var url 	  = "DetalleNovedadClass.php?novedad_fija_id="+novedadId;
 		
 		$("#detalleNovedad").attr("src",url);
 		
@@ -217,6 +217,7 @@ function NovedadOnUpdate(formulario,resp){
 		alertJquery("Ocurrio una inconsistencia : "+resp);
 	
        }catch(e){
+		parent.document.getElementById("detalleNovedad").contentWindow.location.reload(true);
 	 	alertJquery(e);
 	}
 }

@@ -26,6 +26,7 @@ final class NovedadModel extends Db{
 				$this -> DbInsertTable("novedad_fija",$Campos,$Conex,true,false);
 					
 			$this -> Commit($Conex);
+			
 		}elseif($empleados == "ALL"){
 			
 			$select="SELECT c.contrato_id FROM contrato c, tipo_contrato t WHERE c.estado='A' AND t.tipo_contrato_id=c.tipo_contrato_id AND t.prestaciones_sociales=1";
@@ -208,6 +209,7 @@ final class NovedadModel extends Db{
 	public function selectDatosNovedadId($novedad_fija_id,$Conex){
 		$select = "SELECT n.*,
 		REPLACE(REPLACE(REPLACE(FORMAT(n.valor_cuota, 2), '.', '@'), ',', '.'), '@', ',') AS valor_cuota,
+		'1' AS si_empleado,
 		(SELECT CONCAT_WS(' ',c.numero_contrato,'-',t.razon_social,t.primer_nombre,t.segundo_nombre,t.primer_apellido,t.segundo_apellido,'-',t.numero_identificacion) 
 		AS contrato FROM contrato c,  tercero t, empleado e WHERE c.empleado_id=e.empleado_id AND e.tercero_id=t.tercero_id AND c.contrato_id=n.contrato_id)AS contrato,
 		(SELECT CONCAT_WS(' ',t.razon_social,t.primer_nombre,t.segundo_nombre,t.primer_apellido,t.segundo_apellido)	AS tercero FROM tercero t WHERE t.tercero_id=n.tercero_id )AS tercero,

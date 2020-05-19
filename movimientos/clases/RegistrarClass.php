@@ -1073,18 +1073,19 @@ exit("No puede liquidar la nomina hasta que actualice la periodicidad del siguie
     //BUSQUEDA
     protected function onclickFind()
     {
-
         require_once "RegistrarModelClass.php";
-
+        
         $Model = new RegistrarModel();
-        $Liquidacion = $_REQUEST['liquidacion_novedad_id'];
+        $Liquidacion  = $_REQUEST['liquidacion_novedad_id'];
         $Liquidacion1 = $_REQUEST['liquidacion_novedad_id1'];
+        
         if ($Liquidacion > 0) {
             $Data = $Model->selectLiquidacion($Liquidacion, $this->getConex());
         } else {
-            $Data = $Model->selectLiquidacion1($Liquidacion1, $this->getConex());
+            $Data = $Model->selectLiquidacion($Liquidacion1, $this->getConex());
         }
-
+        
+       
         $this->getArrayJSON($Data);
 
     }
