@@ -150,8 +150,13 @@
         </table>
     </fieldset>
     <fieldset class="section">
+<<<<<<< HEAD
      <legend>Seguridad Social</legend>
              <table width="99%">   
+=======
+    <legend>Seguridad Social</legend>
+        <table width="99%">   
+>>>>>>> Oscar
             <tr>
                 <td align="center"><label>Concepto</label></td>
                 <td align="center"><label>% Empleado</label></td>
@@ -188,6 +193,7 @@
                 <td>{$PUCPRODUCCARL}{$PUCPRODUCCARLID}</td>
                 <td>{$PUCCONTRAARL}{$PUCCONTRAARLID}</td>
             </tr>
+<<<<<<< HEAD
              <tr>
                 <td><label>Fondo Pensi&oacute;n</label></td>
                 <td>{$DESC_FONDO}</td>
@@ -198,6 +204,9 @@
                 <td>{$PUCCONTRAFONDPEN}{$PUCCONTRAFONDPENID}</td>
             </tr>
             </table>
+=======
+        </table>
+>>>>>>> Oscar
     </fieldset>
     <fieldset class="section">
     <legend>Prestaciones Sociales</legend>
@@ -247,6 +256,27 @@
                 <td>{$PUCPRODUCCPRIMA}{$PUCPRODUCCPRIMAID}</td>
                 <td>{$PUCCONTRAPRIMA}{$PUCCONTRAPRIMAID}</td>
             </tr>
+<<<<<<< HEAD
+=======
+            <tr>
+                <td><label>Fondo Pensi&oacute;n</label></td>
+                <td>{$DESC_FONDO}</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>{$PUCCONTRAFONDPEN}{$PUCCONTRAFONDPENID}</td>
+            </tr>
+            <tr>
+                <td><label>Retenci&oacute;n</label></td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>{$PUCRETENCION}{$PUCRETENCIONID}</td>
+            </tr>
+>>>>>>> Oscar
             
         </table>
     </fieldset>
@@ -314,12 +344,33 @@
     </fieldset>
     <table width="99%">     
         <tr>
-            <td  align="center">{$GUARDAR}&nbsp;{$ACTUALIZAR}&nbsp;{$BORRAR}&nbsp;{$LIMPIAR}</td>
+            <td  align="center">{$GUARDAR}&nbsp;{$ACTUALIZAR}&nbsp;{$BORRAR}&nbsp;{$DUPLICAR}&nbsp;{$LIMPIAR}</td>
         </tr>
     </table>
     {$FORM1END}
     </fieldset>
     <fieldset>{$GRIDPARAMETROS}</fieldset>
+    <div id="divAnulacion">
+      <form>
+        <table>       
+          <tr>
+            <td><label>Periodo contable :</label></td>
+            <td>{$PERIODONUEVO}</td>
+          </tr>          
+          <tr>
+            <td><label>Salario mínimo :</label></td>
+            <td>{$SALARIONUEVO}</td>
+          </tr>
+          <tr>
+            <td><label>Subsidio Transporte :</label></td>
+            <td>{$SUBSIDIONUEVO}</td>
+          </tr> 
+          <tr>
+            <td colspan="2" align="center">{$DUPLICAR}</td>
+          </tr>                    
+        </table>
+      </form>
+    </div>
 
 </body>
 </html>

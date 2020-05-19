@@ -25,6 +25,92 @@ function BasesOnSaveOnUpdateonDelete(formulario,resp){
 	alertJquery(resp,"Depreciacion");
 }
 
+function onclickDuplicar(){
+	
+	if($("#divAnulacion").is(":visible")){
+
+	   var formulario 				= document.forms[0];
+	   var sub_nuevo 				= $("#sub_nuevo").val();
+	   var salario_nuevo  			= $("#salario_nuevo").val();
+	   var periodo_contable_nuevo   = $("#periodo_contable_nuevo").val();
+	   
+       if(ValidaRequeridos(formulario)){
+	
+	     var QueryString = "ACTIONCONTROLER=onclickDuplicar&"+FormSerialize(formulario)+"&sub_nuevo="+sub_nuevo+"&salario_nuevo="+salario_nuevo+"&periodo_contable_nuevo="+periodo_contable_nuevo;
+		
+	     $.ajax({
+           url  : "BasesClass.php",
+	       data : QueryString,
+	       beforeSend: function(){
+			   showDivLoading();
+	       },
+	       success : function(response){
+			              
+		     if($.trim(response) == 'true'){
+				 alertJquery('Duplicación de Ley Exitosa!','Parametros Ley');
+				 $("#refresh_QUERYGRID_Bases_Salariales").click();
+				 Reset(formulario);
+				 clearFind();	
+			 }else{
+				   alertJquery(response,'Inconsistencia Duplicando');
+			   }
+			   
+			 removeDivLoading();
+             $("#divAnulacion").dialog('close');
+			 
+	       }
+	   
+	     });
+	   
+	   }
+	
+    }else{
+		
+		var id_datos 		= $("#id_datos").val();
+		if(parseInt(id_datos) > 0){	
+			
+	
+	 /* var estado   = $("#estado").val();
+	 
+
+	 var QueryString = "ACTIONCONTROLER=onclickDuplicar&factura_id="+factura_id;
+	 
+	 $.ajax({
+       url        : "BasesClass.php",
+	   data       : QueryString,
+	   beforeSend : function(){
+		 showDivLoading();
+	   },
+	   success : function(response){
+		   	   
+		   var estado = response;
+		   
+		   if($.trim(estado) == 'A' || $.trim(estado) == 'C'){ */
+			   
+		    $("#divAnulacion").dialog({
+			  title: 'Duplicar Parametros',
+			  width: 450,
+			  height: 280,
+			  closeOnEscape:true
+             });
+			
+		  /*  }else{
+		      alertJquery('Solo se permite anular Facturas en estado : <b>ACTIVO/CONTABILIZADO</b>','Anulacion');			   
+		   }   */
+			 
+	     removeDivLoading();			 
+	    //  }
+		 
+	//  });
+	 
+		
+		}else{
+		alertJquery('Debe Seleccionar primero un Parametro','Duplicar');
+	  	}	
+		
+	}  
+}
+
 function BasesOnReset(formulario){
 	return true;
 	//  Reset(formulario);

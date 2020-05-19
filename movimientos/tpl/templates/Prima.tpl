@@ -100,35 +100,40 @@
             <td>{$PERIODO}</td>
             
           </tr> 
+            <tr>
+            <td ><label>Tipo Liquidacion :</label></td>
+            <td >{$TIPOLIQUIDACION}</td>
+           
+           	{* <td><label>Valor Liquidacion : </label></td>
+            <td>{$VALORLIQUIDACION}{$VALORLIQUIDACIONPARCIAL}</td> *}
+            
+            
+          </tr>
           </table> 
           </fieldset> 
           </tr>       
-          <tr>
+          <tr id="divConta">
           <td colspan="6">
            	<fieldset class="section">
             <legend>CONTABILIZACIÓN</legend>
             	<table align="center">  
               <tr>
-                <td align="center">&nbsp;</td>
-                <td align="center">&nbsp;</td>
-                <td align="center">&nbsp;</td>
-                <td align="center">&nbsp;</td>
-                <td align="center">&nbsp;</td>
-                <td align="center">&nbsp;</td>
+              
+                <td><label>Valor Liquidacion : </label></td>
+                <td>{$VALORLIQUIDACION}{$VALORLIQUIDACIONPARCIAL}</td>
+                
+                <td><label>Valor Acumulado  : </label></td>
+                <td>{$VALORACUMULADO}</td>
+
+                <td ><label>valor diferencia :</label></td>
+                <td >{$VALORDIFERENCIA}</td>
+                
+                
               </tr>
               </table>
             </fieldset>
           </td>
-          </tr>        
-          <tr>
-            <td align="center">&nbsp;</td>
-            <td align="center">&nbsp;</td>
-            <td align="center">&nbsp;</td>
-            <td align="center">&nbsp;</td>
-            <td align="center">&nbsp;</td>
-            <td align="center">&nbsp;</td>
           </tr>
-      </table>
       <table width="100%">
           <tr>
              <td colspan="8" align="center">{$GUARDAR}&nbsp;{$IMPRIMIR}&nbsp;{$BORRAR}&nbsp;{$LIMPIAR}&nbsp;{$CONTABILIZAR}</td></tr>

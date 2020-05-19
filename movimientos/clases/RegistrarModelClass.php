@@ -92,6 +92,7 @@ final class RegistrarModel extends Db{
 	$val_hr_ext_festiva_diurna  = $result_per[0]['val_hr_ext_festiva_diurna'];	
 	$val_hr_ext_festiva_nocturna= $result_per[0]['val_hr_ext_festiva_nocturna'];	
 	$val_recargo_nocturna       = $result_per[0]['val_recargo_nocturna'];
+	
 
 	$select = "SELECT  c.*, t.prestaciones_sociales, t.salud,
 			IF(c.fecha_inicio BETWEEN '$fecha_inicial'  AND '$fecha_final',DATEDIFF(CONCAT_WS(' ',c.fecha_inicio,'23:59:59'),'$fecha_inicial'),0) AS dias_desc,
@@ -135,7 +136,8 @@ final class RegistrarModel extends Db{
 			$puc_extranoc= $result_per[0]['puc_admon_extranoc_id'];			
 			$puc_fesdiu  = $result_per[0]['puc_admon_fesdiu_id'];			
 			$puc_fesnoc  = $result_per[0]['puc_admon_fesnoc_id'];
-			$puc_recnoc  = $result_per[0]['puc_admon_recnoc_id'];			
+			$puc_recnoc  = $result_per[0]['puc_admon_recnoc_id'];	
+			$puc_contra_retencion_id       = $result_per[0]['puc_contra_retencion_id'];		
 			
 		}elseif($result[$i]['area_laboral']=='O'){
 			
@@ -150,7 +152,8 @@ final class RegistrarModel extends Db{
 			$puc_extranoc= $result_per[0]['puc_produ_extranoc_id'];			
 			$puc_fesdiu  = $result_per[0]['puc_produ_fesdiu_id'];			
 			$puc_fesnoc  = $result_per[0]['puc_produ_fesnoc_id'];						
-			$puc_recnoc  = $result_per[0]['puc_produ_recnoc_id'];			
+			$puc_recnoc  = $result_per[0]['puc_produ_recnoc_id'];	
+			$puc_contra_retencion_id       = $result_per[0]['puc_contra_retencion_id'];		
 			
 		}elseif($result[$i]['area_laboral']=='C'){
 
@@ -165,7 +168,8 @@ final class RegistrarModel extends Db{
 			$puc_extranoc= $result_per[0]['puc_ventas_extranoc_id'];			
 			$puc_fesdiu  = $result_per[0]['puc_ventas_fesdiu_id'];			
 			$puc_fesnoc  = $result_per[0]['puc_ventas_fesnoc_id'];						
-			$puc_recnoc  = $result_per[0]['puc_ventas_recnoc_id'];			
+			$puc_recnoc  = $result_per[0]['puc_ventas_recnoc_id'];
+			$puc_contra_retencion_id       = $result_per[0]['puc_contra_retencion_id'];			
 			
 
 		}else{
@@ -181,6 +185,7 @@ final class RegistrarModel extends Db{
 			$puc_fesdiu  ='';			
 			$puc_fesnoc  ='';						
 			$puc_recnoc  ='';		
+			$puc_contra_retencion_id  ='';		
 
 			exit('No Ha parametrizado Area para el contrato No '.$result[$i]['numero_contrato']);
 		}
@@ -350,6 +355,21 @@ final class RegistrarModel extends Db{
 			
 			$total_base=$valor_deven+$valor_diurnas+$valor_nocturnas+$valor_diurnas_fes+$valor_nocturnas_fes+$valor_recargo_noc-$des_val_inc;		
 			
+			//Liquidacion Retenciones
+			$selectext = "SELECT  
+					lr.ingreso_gravado,
+					lr.uvt
+					
+					FROM 	liquidacion_retencion lr
+					WHERE lr.contrato_id=$contrato_id AND lr.estado='L' AND lr.fecha_inicial>='$fecha_inicial' AND lr.fecha_final<='$fecha_final' ";	
+
+			$resultext           = $this -> DbFetchAll($selectext,$Conex,true); 
+			$ingreso_gravado     = $resultext[0]['ingreso_gravado']>0 ? $resultext[0]['ingreso_gravado'] : 0;
+			$uvt     			 = $resultext[0]['uvt']>0 ? $resultext[0]['uvt'] : 0;			
+			$valor_retencion = ($ingreso_gravado*$uvt);		
+			
+			$total_base=$total_base+$valor_retencion;		
+			
 			//salud
 
 			$debito    = 0;
@@ -507,6 +527,31 @@ final class RegistrarModel extends Db{
 			$this -> query($update,$Conex,true);
 			
 		}
+
+		//ingreso liquidacion retencion
+		
+		$select_rete = "SELECT  
+						lr.ingreso_gravado,
+						lr.uvt
+						
+						FROM 	liquidacion_retencion lr
+						WHERE lr.contrato_id=$contrato_id AND lr.estado='L' AND lr.fecha_inicial>='$fecha_inicial' AND lr.fecha_final<='$fecha_final' ";
+					
+		$result_rete = $this -> DbFetchAll($select_rete,$Conex,true);
+			
+			$ingreso_gravado        = $result_rete[$j]['ingreso_gravado'];
+			$uvt       				= $result_rete[$j]['uvt'];
+
+				$debito    = ($ingreso_gravado*$uvt);
+				$credito   = 0;
+				$deb_total = $deb_total+$debito;
+				$cre_total = $cre_total+$credito;
+				
+				$detalle_liquidacion_novedad_id = $this -> DbgetMaxConsecutive("detalle_liquidacion_novedad","detalle_liquidacion_novedad_id",$Conex,false,1);
+				$insert = "INSERT INTO 	detalle_liquidacion_novedad (detalle_liquidacion_novedad_id,puc_id,liquidacion_novedad_id,debito,credito,fecha_inicial,fecha_final,dias,concepto,tercero_id,numero_identificacion,digito_verificacion) 
+				VALUES ($detalle_liquidacion_novedad_id,$puc_contra_retencion_id,$liquidacion_novedad_id,$debito,$credito,'$fecha_inicial','$fecha_final',$dias,'LIQUIDACION RETENCION',$tercero_id,$numero_identificacion,$digito_verificacion)";
+			 
+				$this -> query($insert,$Conex,true);
 
 		//novedades
 		
@@ -812,7 +857,8 @@ final class RegistrarModel extends Db{
 			$puc_extranoc=$result_per[0]['puc_admon_extranoc_id'];			
 			$puc_fesdiu=$result_per[0]['puc_admon_fesdiu_id'];			
 			$puc_fesnoc=$result_per[0]['puc_admon_fesnoc_id'];
-			$puc_recnoc=$result_per[0]['puc_admon_recnoc_id'];			
+			$puc_recnoc=$result_per[0]['puc_admon_recnoc_id'];	
+			$puc_contra_retencion_id       = $result_per[0]['puc_contra_retencion_id'];		
 			
 		}elseif($result[$i]['area_laboral']=='O'){
 			$puc_sal=$result_per[0]['puc_produ_sal_id'];
@@ -826,7 +872,8 @@ final class RegistrarModel extends Db{
 			$puc_extranoc=$result_per[0]['puc_produ_extranoc_id'];			
 			$puc_fesdiu=$result_per[0]['puc_produ_fesdiu_id'];			
 			$puc_fesnoc=$result_per[0]['puc_produ_fesnoc_id'];						
-			$puc_recnoc=$result_per[0]['puc_produ_recnoc_id'];			
+			$puc_recnoc=$result_per[0]['puc_produ_recnoc_id'];	
+			$puc_contra_retencion_id       = $result_per[0]['puc_contra_retencion_id'];		
 			
 		}elseif($result[$i]['area_laboral']=='C'){
 			$puc_sal=$result_per[0]['puc_ventas_sal_id'];
@@ -840,7 +887,8 @@ final class RegistrarModel extends Db{
 			$puc_extranoc=$result_per[0]['puc_ventas_extranoc_id'];			
 			$puc_fesdiu=$result_per[0]['puc_ventas_fesdiu_id'];			
 			$puc_fesnoc=$result_per[0]['puc_ventas_fesnoc_id'];						
-			$puc_recnoc=$result_per[0]['puc_ventas_recnoc_id'];			
+			$puc_recnoc=$result_per[0]['puc_ventas_recnoc_id'];		
+			$puc_contra_retencion_id       = $result_per[0]['puc_contra_retencion_id'];	
 			
 
 		}else{
@@ -855,6 +903,7 @@ final class RegistrarModel extends Db{
 			$puc_fesdiu='';			
 			$puc_fesnoc='';						
 			$puc_recnoc='';			
+			$puc_contra_retencion_id='';			
 			exit('No Ha parametrizado Area para el contrato No '.$result[$i]['numero_contrato']);
 		}
 		
@@ -1043,6 +1092,22 @@ final class RegistrarModel extends Db{
 			$valor_recargo_noc = $resultext[0]['valor_recargo_noc']>0 ? $resultext[0]['valor_recargo_noc'] : 0;			
 			
 			$total_base=$valor_deven+$valor_diurnas+$valor_nocturnas+$valor_diurnas_fes+$valor_nocturnas_fes+$valor_recargo_noc-$des_val_inc;
+
+			//sumatoria  retencion 
+			$selectext = "SELECT  
+					lr.ingreso_gravado,
+					lr.uvt
+					
+					FROM 	liquidacion_retencion lr
+					WHERE lr.contrato_id=$contrato_id AND lr.estado='L' AND lr.fecha_inicial>='$fecha_inicial' AND lr.fecha_final<='$fecha_final' ";	
+
+			$resultext           = $this -> DbFetchAll($selectext,$Conex,true); 
+			$ingreso_gravado     = $resultext[0]['ingreso_gravado']>0 ? $resultext[0]['ingreso_gravado'] : 0;
+			$uvt     			 = $resultext[0]['uvt']>0 ? $resultext[0]['uvt'] : 0;			
+			$valor_retencion = ($ingreso_gravado*$uvt);		
+			
+			$total_base=$total_base+$valor_retencion;	
+
 			//salud
 			$debito=0;
 			$credito=intval((intval(((($sueldo_base)/30)*$dias)+$total_base)*$result_per[0]['desc_emple_salud'])/100);
@@ -1200,6 +1265,32 @@ final class RegistrarModel extends Db{
 			$this -> query($update,$Conex,true);
 			
 		}
+
+
+		//ingreso liquidacion retencion
+		
+		$select_rete = "SELECT  
+						lr.ingreso_gravado,
+						lr.uvt
+						
+						FROM 	liquidacion_retencion lr
+						WHERE lr.contrato_id=$contrato_id AND lr.estado='L' AND lr.fecha_inicial>='$fecha_inicial' AND lr.fecha_final<='$fecha_final' ";
+					
+		$result_rete = $this -> DbFetchAll($select_rete,$Conex,true);
+			
+			$ingreso_gravado        = $result_rete[$j]['ingreso_gravado'];
+			$uvt       				= $result_rete[$j]['uvt'];
+
+				$debito    = ($ingreso_gravado*$uvt);
+				$credito   = 0;
+				$deb_total = $deb_total+$debito;
+				$cre_total = $cre_total+$credito;
+				
+				$detalle_liquidacion_novedad_id = $this -> DbgetMaxConsecutive("detalle_liquidacion_novedad","detalle_liquidacion_novedad_id",$Conex,false,1);
+				$insert = "INSERT INTO 	detalle_liquidacion_novedad (detalle_liquidacion_novedad_id,puc_id,liquidacion_novedad_id,debito,credito,fecha_inicial,fecha_final,dias,concepto,tercero_id,numero_identificacion,digito_verificacion) 
+				VALUES ($detalle_liquidacion_novedad_id,$puc_contra_retencion_id,$liquidacion_novedad_id,$debito,$credito,'$fecha_inicial','$fecha_final',$dias,'LIQUIDACION RETENCION',$tercero_id,$numero_identificacion,$digito_verificacion)";
+			 
+				$this -> query($insert,$Conex,true);
 
 		//novedades
 		$select2 = "SELECT  n.*, c.*,
