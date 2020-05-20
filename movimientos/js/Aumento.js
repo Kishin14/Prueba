@@ -216,10 +216,7 @@ function setDataActualizar(contrato_id){
 }
 
 function setDataContrato(contrato_id){
-
-	
-
-		   		   		   
+   	   
 	var QueryString = "ACTIONCONTROLER=getDataContrato&contrato_id="+contrato_id;
 	
    $.ajax({
@@ -229,10 +226,10 @@ function setDataContrato(contrato_id){
 		 showDivLoading();
 	 },
 	 success    : function(resp){
-	 		 
+		
 		 try{
 			 var dataResp = $.parseJSON(resp);	 
-
+			 
 			 $("#contrato_id").val(dataResp[0]['contrato_id']);				 
 			 $("#consecutivo_renueva").val(dataResp[0]['numero_contrato']);		 			 
 			 $("#fecha_inicio2").val(dataResp[0]['fecha_inicio']);				 				 

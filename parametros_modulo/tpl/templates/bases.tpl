@@ -150,13 +150,8 @@
         </table>
     </fieldset>
     <fieldset class="section">
-<<<<<<< HEAD
-     <legend>Seguridad Social</legend>
-             <table width="99%">   
-=======
     <legend>Seguridad Social</legend>
         <table width="99%">   
->>>>>>> Oscar
             <tr>
                 <td align="center"><label>Concepto</label></td>
                 <td align="center"><label>% Empleado</label></td>
@@ -193,20 +188,7 @@
                 <td>{$PUCPRODUCCARL}{$PUCPRODUCCARLID}</td>
                 <td>{$PUCCONTRAARL}{$PUCCONTRAARLID}</td>
             </tr>
-<<<<<<< HEAD
-             <tr>
-                <td><label>Fondo Pensi&oacute;n</label></td>
-                <td>{$DESC_FONDO}</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>{$PUCCONTRAFONDPEN}{$PUCCONTRAFONDPENID}</td>
-            </tr>
-            </table>
-=======
         </table>
->>>>>>> Oscar
     </fieldset>
     <fieldset class="section">
     <legend>Prestaciones Sociales</legend>
@@ -256,8 +238,6 @@
                 <td>{$PUCPRODUCCPRIMA}{$PUCPRODUCCPRIMAID}</td>
                 <td>{$PUCCONTRAPRIMA}{$PUCCONTRAPRIMAID}</td>
             </tr>
-<<<<<<< HEAD
-=======
             <tr>
                 <td><label>Fondo Pensi&oacute;n</label></td>
                 <td>{$DESC_FONDO}</td>
@@ -276,7 +256,6 @@
                 <td>&nbsp;</td>
                 <td>{$PUCRETENCION}{$PUCRETENCIONID}</td>
             </tr>
->>>>>>> Oscar
             
         </table>
     </fieldset>

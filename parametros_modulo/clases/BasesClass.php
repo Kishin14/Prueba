@@ -798,7 +798,7 @@ final class Bases extends Controler{
 			datatype=>array(type=>'text'),
 			suggest=>array(
 				name	=>'cuentas_movimiento',
-				setId	=>'puc_contra_trans_id')
+				setId	=>'puc_contra_retencion_id')
 		);	  
 		
 		$this -> Campos[puc_contra_retencion_id] = array(

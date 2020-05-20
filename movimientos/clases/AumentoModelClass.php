@@ -14,6 +14,7 @@
 		}
 
 		public function getPermiso($ActividadId,$Permiso,$Conex){
+			
 			return $this -> Permisos -> getPermiso($ActividadId,$Permiso,$Conex);
 		}
 
@@ -41,7 +42,7 @@
 				 }else if($fecha_inicio !='' && $fecha_final !=''){
 							 $consulta=$fechas;
 							 }else if(strlen($contrato)>0){
-									 $consulta=$contrato;
+									 $consulta=$contraato;
 									 }
 		 
 			
@@ -237,23 +238,6 @@
 
 	public function selectDataContrato($contrato_id,$Conex){
 		
-		//$fecha_inicio   			= $this -> requestDataForQuery('fecha_inicio','date');
-		
-		/*$select1 = "SELECT cuotas_canon,fecha_final, fecha_inicio, 
-				(SELECT  ADDDATE(fecha_inicio, INTERVAL + (SELECT numero_meses FROM solicitud WHERE solicitud_id=$solicitud_id) MONTH)) AS fecha_inicio_renovacion,
-				(SELECT  ADDDATE(fecha_final, INTERVAL + (SELECT numero_meses FROM solicitud WHERE solicitud_id=$solicitud_id) MONTH)) AS fecha_final_renovacion
-		FROM fianza_canon WHERE solicitud_id=$solicitud_id ORDER BY fecha_inicio DESC LIMIT 1 ";	
-		$resultado1 = $this -> DbFetchAll($select1,$Conex,true);	
-		$numero_meses = $resultado1[0]["cuotas_canon"];
-		$fecha_final = $resultado1[0]["fecha_final"];
-		$fecha_inicio = $resultado1[0]["fecha_inicio"];
-		$fecha_inicio_renovacion = $resultado1[0]["fecha_inicio_renovacion"];
-		$fecha_final_renovacion = $resultado1[0]["fecha_final_renovacion"];
-		if(substr($fecha_final_renovacion,0,4)<date('Y')){
-			$fecha_inicio_renovacion = date('Y').substr($fecha_inicio_renovacion,4,7);
-			$fecha_final_renovacion = (date('Y')+1).substr($fecha_final_renovacion,4,7);
-		}*/
-  
     $select = "SELECT
 							s.contrato_id,CONCAT(s.prefijo,' - ',s.numero_contrato)AS numero_contrato,
 							s.fecha_inicio,

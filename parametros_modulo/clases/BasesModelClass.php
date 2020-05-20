@@ -125,6 +125,7 @@ final class BasesModel extends Db{
 		(SELECT CONCAT_WS('',codigo_puc,'-',nombre) FROM puc WHERE puc_id=d.puc_ventas_indem_id) AS puc_ventas_indem,
 		(SELECT CONCAT_WS('',codigo_puc,'-',nombre) FROM puc WHERE puc_id=d.puc_produ_indem_id) AS puc_produ_indem,
 		(SELECT CONCAT_WS('',codigo_puc,'-',nombre) FROM puc WHERE puc_id=d.puc_contra_indem_id) AS puc_contra_indem,
+		(SELECT CONCAT_WS('',codigo_puc,'-',nombre) FROM puc WHERE puc_id=d.puc_contra_retencion_id) AS puc_contra_retencion,
 		
 		(SELECT CONCAT_WS('',codigo_puc,'-',nombre) FROM puc WHERE puc_id=d.puc_contra_fonpension_id) AS puc_contra_fonpension,
 		
