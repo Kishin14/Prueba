@@ -18,10 +18,10 @@ final class DetallePrimas extends Controler{
 	require_once("DetallePrimasLayoutClass.php");
     require_once("DetallePrimasModelClass.php");
 		
-	$Layout         = new DetallePrimasLayout();
+	  $Layout         = new DetallePrimasLayout();
     $Model          = new DetallePrimasModel();	
-    $liquidacion_prima_id 				= $_REQUEST['liquidacion_prima_id'];
-	$rango 				= $_REQUEST['rango'];
+    $liquidacion_prima_id 	= $_REQUEST['liquidacion_prima_id'];
+	  $rango 				= $_REQUEST['rango'];
 	
 	$empresa_id		= $this -> getEmpresaId();
 	$oficina_id		= $this -> getOficinaId();	

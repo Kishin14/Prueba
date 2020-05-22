@@ -19,7 +19,7 @@
           <div class="row">
               <div class="col-sm-6">
                   <tr>
-                    <td><label>Busqueda liquidacion : </label></td>
+                    <td><label>Busqueda liquidacion por documento: </label></td>
                   </tr>
                   <tr>
                     <td>{$BUSQUEDA}</td>
@@ -27,7 +27,7 @@
               </div>
               <div class="col-sm-6">
                   <tr>
-                    <td><label>Busqueda liquidacion: </label></td>
+                    <td><label>Busqueda liquidacion por fecha: </label></td>
                   </tr>
                   <tr>
                     <td>{$BUSQUEDA1}</td>
@@ -47,7 +47,7 @@
              <td><label>Empleados ?  : </label></td>
             <td>{$SIEMPLEADO}</td>
             <td><label>Fecha  : </label></td>
-            <td>{$FECHALIQ}</td>
+            <td>{$FECHALIQ}<a href="javascript:void(0);" title="Presiona aqui para saber acerca de este campo."  name="myBtn"><img src="../../../framework/media/images/modulos/manual.png" width="16" height="18" onclick="alert_unico(this,'Informaci&oacute;n','En este campos indicaremos al sistema la fecha en que se pagará la prima teniendo en cuenta que si la prima tiene un tipo de liquidación TOTAL SEMESTRE, segun el articulo 306 del codigo sustantivo del trabajo la prima se debe pagar para el primer semestre el 30 de junio, y para el segundo semestre se debe pagar en los primeros 20 dias del mes de diciembre.')"/></a></td>
           	 <td ><label>Liquidacion N°  : </label></td>
             <td >{$CONSECUTIVO}{$LIQUIDACIONPRIMAID}</td>
           </tr>
@@ -77,9 +77,6 @@
             <tr>
             <td ><label>Tipo Liquidacion :</label></td>
             <td >{$TIPOLIQUIDACION}&nbsp;<a href="javascript:void(0);" title="Presiona aqui para saber acerca de este campo."  name="myBtn"><img src="../../../framework/media/images/modulos/manual.png" width="16" height="18" onclick="alert_unico(this,'Informaci&oacute;n','TOTAL SEMESTRE: cuando seleccionamos este tipo de liquidación, estamos indicandole al sistema que debe liquidar la prima por los 6 meses que le corresponden al empleado.  PARCIAL SEMESTRE: Cuando seleccionamos este tipo de liquidación le estamos indicando al sistema que debe liquidar la prima con un rango de tiempo menor a los 6 meses, segun se necesite.')"/></a></td>
-           
-           	<td><label>Valor Liquidacion : </label></td>
-            <td>{$VALORLIQUIDACION}</td>
             
             
           </tr>
@@ -99,16 +96,6 @@
             <td><label>Periodo  : </label></td>
             <td>{$PERIODO}</td>
             
-          </tr> 
-            <tr>
-            <td ><label>Tipo Liquidacion :</label></td>
-            <td >{$TIPOLIQUIDACION}</td>
-           
-           	{* <td><label>Valor Liquidacion : </label></td>
-            <td>{$VALORLIQUIDACION}{$VALORLIQUIDACIONPARCIAL}</td> *}
-            
-            
-          </tr>
           </table> 
           </fieldset> 
           </tr>       
@@ -123,10 +110,10 @@
                 <td>{$VALORLIQUIDACION}{$VALORLIQUIDACIONPARCIAL}</td>
                 
                 <td><label>Valor Acumulado  : </label></td>
-                <td>{$VALORACUMULADO}</td>
+                <td>{$VALORACUMULADO}<a href="javascript:void(0);" title="Presiona aqui para saber acerca de este campo."  name="myBtn"><img src="../../../framework/media/images/modulos/manual.png" width="16" height="18" onclick="alert_unico(this,'Informaci&oacute;n','Este campo es informativo, indicandonos el valor de la prima que ya le han pagado en el respectivo periodo al empleado.')"/></a></td>
 
-                <td ><label>valor diferencia :</label></td>
-                <td >{$VALORDIFERENCIA}</td>
+                <td><label>Valor Diferencia :</label></td>
+                <td>{$VALORDIFERENCIA}<a href="javascript:void(0);" title="Presiona aqui para saber acerca de este campo."  name="myBtn"><img src="../../../framework/media/images/modulos/manual.png" width="16" height="18" onclick="alert_unico(this,'Informaci&oacute;n','Este campo es informativo, indicandonos el valor de la prima que hace falta para completar el pago completo de la prima en el respetivo periodo.')"/></a></td>
                 
                 
               </tr>

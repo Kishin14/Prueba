@@ -132,6 +132,7 @@ final class Prima extends Controler{
     $Model = new PrimaModel();
 	$liquidacion_prima_id 	= $_REQUEST['liquidacion_prima_id'];
 	$fecha 			= $_REQUEST['fecha_liquidacion'];
+	$si_empleado 	= $_REQUEST['si_empleado'];
 	$empresa_id = $this -> getEmpresaId(); 
 	$oficina_id = $this -> getOficinaId();	
 	$usuario_id = $this -> getUsuarioId();		
@@ -141,7 +142,7 @@ final class Prima extends Controler{
     $periodoContable = $Model -> PeriodoContableEstaHabilitado($this -> getConex());
 	
     if($mesContable && $periodoContable){
-		$return=$Model -> getContabilizarReg($liquidacion_prima_id,$empresa_id,$oficina_id,$usuario_id,$mesContable,$periodoContable,$this -> getConex());
+		$return=$Model -> getContabilizarReg($liquidacion_prima_id,$empresa_id,$oficina_id,$usuario_id,$mesContable,$periodoContable,$si_empleado,$this -> getConex());
 		if($return==true){
 			exit("true");
 		}else{
@@ -195,7 +196,7 @@ final class Prima extends Controler{
 	  
 	}
   
-   protected function setVencimiento(){
+   protected function setVencimiento($Conex){
 	  
   	$dias 	 = $_REQUEST['dias'];
 	$fecha 	 = $_REQUEST['fecha'];
@@ -345,49 +346,45 @@ final class Prima extends Controler{
 		
 	);
 	
-	$this -> Campos[valor] = array(
-		name	=>'valor',
-		id		=>'valor',
+	$this -> Campos[total] = array(
+		name	=>'total',
+		id		=>'total',
 		type	=>'text',
 		Boostrap =>'si',
 		required=>'yes',
+		readonly=>'yes',
 	 	datatype=>array(
-			type	=>'integer',
+			type	=>'numeric',
 			length	=>'250'),
 		transaction=>array(
 			table	=>array('liquidacion_prima'),
 			type	=>array('column'))
 		
 	);
-	
-	$this -> Campos[valor_parcial] = array(
-		name	=>'valor_parcial',
-		id		=>'valor_parcial',
-		type	=>'hidden',
-		datatype=>array(
-			type	=>'integer',
-			length	=>'11')
-	);
 
 	$this -> Campos[acumulado] = array(
 		name	=>'acumulado',
 		id		=>'acumulado',
 		type	=>'text',
-		disabled=>'yes',
-		datatype=>array(
-			type	=>'integer',
-			length	=>'11')
+		Boostrap =>'si',	
+		readonly=>'yes',
+	 	datatype=>array(
+			type	=>'numeric',
+			length	=>'250',
+		)
 	);
 
 	$this -> Campos[diferencia] = array(
 		name	=>'diferencia',
 		id		=>'diferencia',
 		type	=>'text',
-		disabled=>'yes',
-		datatype=>array(
-			type	=>'integer',
-			length	=>'11')
+		Boostrap =>'si',
+		readonly=>'yes',
+	 	datatype=>array(
+			type	=>'numeric',
+			length	=>'250'),	
 	);
+	
 
 		
 	
@@ -491,7 +488,6 @@ final class Prima extends Controler{
 		Boostrap =>'si',
 		options => array(array(value => 'C', text => 'PLANILLA LIQUIDACION'),array(value => 'CL', text => 'DESPRENDIBLES LIQUIDACION'), array(value => 'DP', text => 'DESPRENDIBLE DE PAGO'), array(value => 'DC', text => 'DOCUMENTO CONTABLE')),
 		selected=>'C',
-		required=>'yes',
 		datatype=>array(type=>'text')
 	);	
 
@@ -502,7 +498,6 @@ final class Prima extends Controler{
 		Boostrap =>'si',
 		options => array(array(value => '1', text => '1'), array(value => '2', text => '2'), array(value => '3', text => '3'), array(value => '4', text => '4'), array(value => '5', text => '5')),
 		selected=>'1',
-		required=>'yes',
 		datatype=>array(type=>'text')
 	);	
 
@@ -569,7 +564,7 @@ final class Prima extends Controler{
 	);	
 
 	
-		$this -> Campos[contabilizar] = array(
+	$this -> Campos[contabilizar] = array(
 		name	=>'contabilizar',
 		id		=>'contabilizar',
 		type	=>'button',
@@ -596,7 +591,7 @@ final class Prima extends Controler{
 		id		=>'busqueda_fecha',
 		type	=>'text',
 		Boostrap =>'si',
-		placeholder =>'Por favor digite el numero de identificación o fecha	',
+		placeholder =>'Por favor digite el numero de liquidacion o fecha	',
 		size	=>'55',
 		suggest=>array(
 			name	=>'liquidacion_prima_todos',
