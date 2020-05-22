@@ -446,7 +446,7 @@ final class LiquidacionFinal extends Controler
                 $per_disfru = $data_vaca[0]['dias_va'] / 15;
                 $dias_deb_vac = ($dias - ($per_disfru * 360));
             }
-
+            //die("ESTOPS SON LOS DIAS : ".$dias_deb_vac."eSTE ES EL SUALDO BASE:".$data[0]['sueldo_base']);
             $valor_vacas = intval((($data[0]['sueldo_base']) * $dias_deb_vac) / 720);
             $desde_vacas = $data_vaca[0]['fecha_ultima'] != '' ? $data_vaca[0]['fecha_ultima'] : $_REQUEST['fecha_inicio'];
             $datos[$x]['concepto'] = 'PRIMA VACACIONES';
