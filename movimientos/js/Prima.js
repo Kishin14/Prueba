@@ -85,19 +85,29 @@ function setDataFormWithResponse(){
 
 function setDataFormWithResponse1(){
 	
-    var liquidacion_prima_id = $('#liquidacion_prima_id').val();
+    var consecutivo = $('#consecutivo').val();
     RequiredRemove();
 
-    var liquidacion  = new Array({campos:"liquidacion_prima_id",valores:$('#liquidacion_prima_id').val()});
+    var liquidacion  = new Array({campos:"consecutivo",valores:$('#consecutivo').val()});
 	var forma       = document.forms[0];
 	var controlador = 'PrimaClass.php';
 
 	FindRow(liquidacion,forma,controlador,null,function(resp){
 														
 		 var data   = $.parseJSON(resp);													   
+		 
+		 for(i=0; i<data.length; i++){
+			var liquidacion_prima_id = data[i]['liquidacion_prima_id'];
+			var liquidacion_prima = liquidacion_prima+','+liquidacion_prima_id;
+		 }
+        
+		let indice = liquidacion_prima.lastIndexOf("");
+		liquidacion_prima_id = liquidacion_prima.substring(10,indice);
 		
-		  var estado = data[0]['estado'];
-		  var consecutivo = data[0]['consecutivo'];
+		$("#liquidacion_prima_id").val(liquidacion_prima_id);
+		 
+		 var estado = data[0]['estado'];
+		  //var consecutivo = data[0]['consecutivo'];
 			
 		
 		  
@@ -141,7 +151,7 @@ function setDataFormWithResponse1(){
 		  $('#total').val('');
  		  $("#total").removeClass("obligatorio");
 		  $('#total').attr("disabled","true");
-     	 var url    = "DetallePrimasClass.php?liquidacion_prima_id="+liquidacion_prima_id+"&rango=T&rand="+Math.random();
+     	 var url    = "DetallePrimasClass.php?consecutivo="+consecutivo+"&rango=T&rand="+Math.random();
 	 
 	 $("#detallePrima").attr("src",url);
 	 

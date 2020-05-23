@@ -21,13 +21,14 @@ final class DetallePrimas extends Controler{
 	  $Layout         = new DetallePrimasLayout();
     $Model          = new DetallePrimasModel();	
     $liquidacion_prima_id 	= $_REQUEST['liquidacion_prima_id'];
-	  $rango 				= $_REQUEST['rango'];
+    $rango 				= $_REQUEST['rango'];
+    $consecutivo  = $_REQUEST['consecutivo'];
 	
 	$empresa_id		= $this -> getEmpresaId();
 	$oficina_id		= $this -> getOficinaId();	
 
     $Layout -> setIncludes();
-    $Layout -> setImputacionesContables($Model -> getImputacionesContables($liquidacion_prima_id,$rango,$empresa_id,$oficina_id,$this -> getConex()));	
+    $Layout -> setImputacionesContables($Model -> getImputacionesContables($consecutivo,$liquidacion_prima_id,$rango,$empresa_id,$oficina_id,$this -> getConex()));	
 		
 	$Layout -> RenderMain();
     

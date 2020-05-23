@@ -86,17 +86,17 @@ final class Prima extends Controler{
 
   protected function onclickSave(){
 
-  	require_once("PrimaModelClass.php");
-    $Model = new PrimaModel();
-	
-	$return = $Model -> Save($this -> Campos,$this -> getOficinaId(),$this -> getConex());
-	
-	if($Model -> GetNumError() > 0){
-	  exit('Ocurrio una inconsistencia');
-	}else{
-	    exit($return);
-	}
-	
+		require_once("PrimaModelClass.php");
+		$Model = new PrimaModel();
+
+		$return = $Model -> Save($this -> Campos,$this -> getOficinaId(),$this -> getConex());
+		
+		if($Model -> GetNumError() > 0){
+		exit('Ocurrio una inconsistencia');
+		}else{
+			exit($return);
+		}
+	 	
   }
 	
 	 protected function getTotalDebitoCredito(){
@@ -230,10 +230,11 @@ final class Prima extends Controler{
 	
     $Data          		= array();
 	$liquidacion_prima_id 	= $_REQUEST['liquidacion_prima_id'];
+	$consecutivo 	= $_REQUEST['consecutivo'];
 	 
-	if(is_numeric($liquidacion_prima_id)){
+	if(is_numeric($liquidacion_prima_id) || is_numeric($consecutivo)){
 	  
-	  $Data  = $Model -> selectDatosLiquidacionId($liquidacion_prima_id,$this -> getConex());
+	  $Data  = $Model -> selectDatosLiquidacionId($liquidacion_prima_id,$consecutivo,$this -> getConex());
 	  
 	} 
     echo json_encode($Data);
@@ -595,7 +596,7 @@ final class Prima extends Controler{
 		size	=>'55',
 		suggest=>array(
 			name	=>'liquidacion_prima_todos',
-			setId	=>'liquidacion_prima_id',
+			setId	=>'consecutivo',
 			onclick	=>'setDataFormWithResponse1')
 	);
 	 

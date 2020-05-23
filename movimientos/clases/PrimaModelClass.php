@@ -3,6 +3,7 @@
 require_once("../../../framework/clases/DbClass.php");
 require_once("../../../framework/clases/PermisosFormClass.php");
 
+
 final class PrimaModel extends Db{
 		
   private $UserId;
@@ -16,9 +17,10 @@ final class PrimaModel extends Db{
   public function getPermiso($ActividadId,$Permiso,$Conex){
 	  return $this -> Permisos -> getPermiso($ActividadId,$Permiso,$Conex);
   }
-    
- public function Save($Campos,$oficina_id,$Conex){	
 
+
+ public function Save($Campos,$oficina_id,$Conex){
+        
 		$empleado_id				= $this -> requestDataForQuery('empleado_id','integer');
 		$observaciones   			= $this -> requestDataForQuery('observaciones','text');
 		$periodo   	   				= $this -> requestDataForQuery('periodo','integer');
@@ -242,32 +244,7 @@ final class PrimaModel extends Db{
 					$periodo_anterior    = $liq_anterior[0]['periodo'];
 					$total    = $liq_anterior[0]['total'];
 
-					
-					
-/* 						if($fecha_ult_prima != ''){
-
-							$select="SELECT TIMESTAMPDIFF(DAY, '$fecha_ult_prima', $fecha_liquidacion) AS dias_laborados";
-							$result_fecha = $this -> DbFetchAll($select,$Conex,true);
-							$dias_laborados = $result_fecha[0]['dias_laborados']-1;
-
-						}else if($fecha_anterior_valida != ''){
-
-							$select="SELECT TIMESTAMPDIFF(DAY, '$fecha_anterior_valida', $fecha_liquidacion) AS dias_laborados";
-							$result_fecha = $this -> DbFetchAll($select,$Conex,true);
-							$dias_laborados = $result_fecha[0]['dias_laborados']-1;
-
-						}else{
-
-							$select="SELECT TIMESTAMPDIFF(DAY, '$fecha_inicio_cont', $fecha_liquidacion) AS dias_laborados";
-							$result_fecha = $this -> DbFetchAll($select,$Conex,true);
-							$dias_laborados = $result_fecha[0]['dias_laborados']-1;
-
-						}
-						
-						$valor = intval(($dias_laborados*($sueldo_base/2))/180);  */
-
-					
-
+				
 						//exit("fech_ant ".$fecha_anterior." fecha_liq_valida ".$fecha_liquidacion_valida." periodo_ant ".$periodo_anterior." periodo ".$periodo);
 						if($fecha_anterior == $fecha_liquidacion_valida && $periodo_anterior==$periodo) {
 							$prima = (($sueldo_base/2)-$total);
@@ -397,7 +374,7 @@ final class PrimaModel extends Db{
 
 		   }else{
 
-			  $this -> Begin($Conex);
+			   $this -> Begin($Conex);
 			
 
 			$select="SELECT c.contrato_id,c.sueldo_base FROM contrato c, tipo_contrato t WHERE c.estado='A' AND t.tipo_contrato_id=c.tipo_contrato_id AND t.prestaciones_sociales=1";
@@ -415,12 +392,13 @@ final class PrimaModel extends Db{
 											   c.area_laboral,
 											   (c.sueldo_base+c.subsidio_transporte) as sueldo_base,
 											   c.fecha_inicio, 
-											   c.fecha_ult_prima
+											   c.fecha_ult_prima,
+											   (SELECT LAST_DAY(c.fecha_ult_prima)) AS ultimo_dia_mes
 
 										FROM contrato c WHERE c.contrato_id=$contrato_id AND estado='A' ";
 					
 					
-					$result_contrato = $this -> DbFetchAll($select_contrato,$Conex); 
+					$result_contrato = $this -> DbFetchAll($select_contrato,$Conex,true); 
 					$empleado_id	 = $result_contrato[0]['empleado_id'];
 					$tercero_id	 = $result_contrato[0]['tercero_id'];
 					$area_laboral	 = $result_contrato[0]['area_laboral'];
@@ -429,6 +407,7 @@ final class PrimaModel extends Db{
 					$centro_de_costo_id = $result_contrato[0]['centro_de_costo_id'];
 					$fecha_inicio_cont	 = $result_contrato[0]['fecha_inicio'];
 					$fecha_ult_prima	 = $result_contrato[0]['fecha_ult_prima'];
+					$ultimo_dia_mes	 = $result_contrato[0]['ultimo_dia_mes'];
 					
 					$fecha_liquidacion_val=str_replace("'","",$fecha_liquidacion);
 					if($fecha_ult_prima != $fecha_liquidacion_val){//esta validacion aplica para que si al empleaod ya le hicieron una liquidacion individual, no se repita cuando la hagan para todos
@@ -441,40 +420,36 @@ final class PrimaModel extends Db{
 					
 					$periodo_anterior    = $liq_anterior[0]['periodo'];
 					$total    = $liq_anterior[0]['total'];
-			
+
 					
- 						if($fecha_ult_prima != ''){
-                           
-							$select="SELECT TIMESTAMPDIFF(DAY, '$fecha_ult_prima', $fecha_liquidacion) AS dias_laborados";
-							$result_fecha = $this -> DbFetchAll($select,$Conex,true);
-							$dias_laborados = $result_fecha[0]['dias_laborados']-2;
+
+					    if($fecha_ult_prima != ''){
+
+							    if($fecha_anterior == $fecha_liquidacion_valida && $periodo_anterior==$periodo) {
+								    $dias_laborados = $this->restaFechasCont($fecha_ult_prima,$fecha_liquidacion_val);
+								}else{
+									$dias_laborados = $this->restaFechasCont($ultimo_dia_mes,$fecha_liquidacion_val);
+								}  
+								
 
 						}else if($fecha_anterior_valida != ''){
 
-							$select="SELECT TIMESTAMPDIFF(DAY, '$fecha_anterior_valida', $fecha_liquidacion) AS dias_laborados";
-							$result_fecha = $this -> DbFetchAll($select,$Conex,true);
-							$dias_laborados = $result_fecha[0]['dias_laborados']-2;
+							if($fecha_anterior == $fecha_liquidacion_valida && $periodo_anterior==$periodo) {
+							   $dias_laborados = $this -> restaFechasCont($fecha_anterior_valida,$fecha_liquidacion_val);
+						    }else{
+								$dias_laborados = $this -> restaFechasCont($ultimo_dia_mes,$fecha_liquidacion_val);
+						    }
 
 						}else{
 
-							$select="SELECT TIMESTAMPDIFF(DAY, '$fecha_inicio_cont', $fecha_liquidacion) AS dias_laborados";
-							$result_fecha = $this -> DbFetchAll($select,$Conex,true);
-							$dias_laborados = $result_fecha[0]['dias_laborados']-2;
-
-						}
+                            if($fecha_anterior == $fecha_liquidacion_valida && $periodo_anterior==$periodo) {
+							   $dias_laborados = $this -> restaFechasCont($fecha_inicio_cont,$fecha_liquidacion_val);
+						    }else{
+								$dias_laborados = $this -> restaFechasCont($ultimo_dia_mes,$fecha_liquidacion_val);
+						    }
+						} 
 						
-						$valor = intval(($dias_laborados*($sueldo_base/2))/180);  
-                        
-					
-
-						//exit("fech_ant ".$fecha_anterior." fecha_liq_valida ".$fecha_liquidacion_valida." periodo_ant ".$periodo_anterior." periodo ".$periodo);
-					/* 	if($fecha_anterior == $fecha_liquidacion_valida && $periodo_anterior==$periodo) {
-							$prima = (($sueldo_base/2)-$total);
-							$valor=$prima;
-						}else{
-							$prima = (($sueldo_base/2));
-							$valor=$prima;
-						}   */
+					$valor = intval(($dias_laborados*($sueldo_base/2))/180);  
 					
 				
 				$estado = "'A'";
@@ -590,13 +565,11 @@ final class PrimaModel extends Db{
 		    } 
 			$liquidacion_prima_id=substr($liquidacion_prima,1);
 			
-			
 			$this -> Commit($Conex); 
 			print($liquidacion_prima_id);
 
 		   }
 		}
-		
 	
   }
 	
@@ -923,12 +896,25 @@ final class PrimaModel extends Db{
 	}
   }
 
-    public function selectDatosLiquidacionId($liquidacion_prima_id,$Conex){
-  
- 	$select = "SELECT lv.*,(SELECT e.empleado_id FROM empleado e,contrato c WHERE e.empleado_id= c.empleado_id AND c.contrato_id=lv.contrato_id)as empleado_id
-	FROM liquidacion_prima lv WHERE lv.liquidacion_prima_id = $liquidacion_prima_id"; 
-	$result = $this -> DbFetchAll($select,$Conex,$ErrDb = false);
-	return $result;
+    public function selectDatosLiquidacionId($liquidacion_prima_id,$consecutivo,$Conex){
+	 
+		if($liquidacion_prima_id>0){
+
+           $select = "SELECT lv.*,(SELECT e.empleado_id FROM empleado e,contrato c WHERE e.empleado_id= c.empleado_id AND c.contrato_id=lv.contrato_id)as empleado_id
+			FROM liquidacion_prima lv WHERE lv.liquidacion_prima_id = $liquidacion_prima_id"; 
+			$result = $this -> DbFetchAll($select,$Conex,$ErrDb = false);
+
+			return $result;
+			
+		}else if($consecutivo>0){
+
+            $select = "SELECT lv.* FROM liquidacion_prima lv WHERE lv.consecutivo = $consecutivo"; 
+			$result = $this -> DbFetchAll($select,$Conex,$ErrDb = false);
+         
+			return $result;
+
+		}
+ 	
 	
    }
     public function getTotalDebitoCredito($liquidacion_prima_id,$rango,$Conex){
