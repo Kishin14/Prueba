@@ -535,10 +535,10 @@ $(document).ready(function(){
 
 	
 	$("#tipo_liquidacion").change(function(){										
-		if($("#si_empleado").val()=='ALL' && $("#tipo_liquidacion").val()=='P'){
+		/* if($("#si_empleado").val()=='ALL' && $("#tipo_liquidacion").val()=='P'){
 				alertJquery("No es posible hacer una liquidacion parcial para todos los empleados!!","Validacion Liquidacion Cesantias");
 				$("#tipo_liquidacion").val('T');
-		}
+		} */
 		
 		if($("#si_empleado").val()=='1' && $("#tipo_liquidacion").val()=='T'){
 			salario = removeFormatCurrency($("#salario").val());
@@ -552,13 +552,13 @@ $(document).ready(function(){
 	
   	});
 	
-	$("#si_empleado").change(function(){										
+	/* $("#si_empleado").change(function(){										
 		if($("#si_empleado").val()=='ALL' && $("#tipo_liquidacion").val()=='P'){
 				alertJquery("No es posible hacer una liquidacion parcial para todos los empleados!!","Validacion Liquidacion Cesantias");
 				$("#tipo_liquidacion").val('T');
 		}
 	
-	});
+	}); */
 	
   	$("#guardar,#actualizar").click(function(){
 		if(this.id == 'guardar'){

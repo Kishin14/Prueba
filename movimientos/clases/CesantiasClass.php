@@ -84,16 +84,20 @@ final class Cesantias extends Controler{
   }
   
   protected function restaFechasContables(){
+
 	$fecha_corte = $_REQUEST['fecha_corte'];
 	$fecha_ultimo_corte = $_REQUEST['fecha_ultimo_corte'];
-	$dias_corte = $this -> restaFechasCont($_REQUEST['fecha_ultimo_corte'],$_REQUEST['fecha_corte'],1);
+	$dias_corte = $this -> restaFechasCont($_REQUEST['fecha_ultimo_corte'],$_REQUEST['fecha_corte']);
 	echo  $dias_corte;	  
+
   }
 
   protected function onclickSave(){
 
-  	require_once("CesantiasModelClass.php");
-    $Model = new CesantiasModel();
+	require_once("CesantiasModelClass.php");
+	  
+	$Model = new CesantiasModel();
+	
 	$beneficiario = $_REQUEST['beneficiario']; 
 	$si_empleado = $_REQUEST['si_empleado'];
 	$contrato_id = $_REQUEST['contrato_id'];	
@@ -104,7 +108,7 @@ final class Cesantias extends Controler{
 	$observaciones = $_REQUEST['observaciones'];	
 	$previsual          =	$_REQUEST['previsual'];
 	
-	$dias_corte = $this -> restaFechasCont($_REQUEST['fecha_ultimo_corte'],$_REQUEST['fecha_corte'],1);
+	$dias_corte = $this -> restaFechasCont($_REQUEST['fecha_ultimo_corte'],$_REQUEST['fecha_corte']);
 
 	
 	if($si_empleado==1){
@@ -116,9 +120,6 @@ final class Cesantias extends Controler{
 		
 		if($comprobar_cesantias[0]['validacion_posterior']=='SI' ) exit('Ya Existe una Liquidaci&oacute;n Posterior o igual a la fecha de Corte Contabilizada'); 
 		if($comprobar_cesantias_edi[0]['validacion_posterior']=='SI' ) exit('Ya Existe una Liquidaci&oacute;n Posterior o igual a la fecha de Corte En Edici&oacute;n'); 
-		
-		//if($comprobar_nomina['validacion']!='SI') exit('No se ha liquidado las Nominas del Contrato a la fecha de Corte de cesantias'); 
-		//if($comprobar_provision['validacion']!='SI') exit('No se ha liquidado las Provisiones del Contrato a la fecha de Corte de cesantias'); 
 		
 		
 		$return = $Model -> Save($this -> Campos,$this -> getOficinaId(),$this -> getUsuarioId(),$this -> getConex());
@@ -137,11 +138,14 @@ final class Cesantias extends Controler{
 		$no_liquidados='';
 		$total_contratos = count($contratos_activos);
 		$total_contratos_liq = 0;		
+
 		for($i=0;$i<count($contratos_activos);$i++){ 
+
 			$contrato_id = $contratos_activos[$i]['contrato_id'];
 			$empleado_id = $contratos_activos[$i]['empleado_id'];	
 			$tercero_id = $contratos_activos[$i]['tercero_id'];	
 			$numero_identificacion = $contratos_activos[$i]['numero_identificacion'];	
+
 			$tercero_id_cesan	 = $beneficiario==1 ?  $contratos_activos[$i]['tercero_id_cesan'] : $contratos_activos[$i]['tercero_id'];
 			$numero_identificacion_cesan = $beneficiario==1 ? $contratos_activos[$i]['numero_identificacion_cesan'] :  $contratos_activos[$i]['numero_identificacion'];
 
@@ -149,7 +153,8 @@ final class Cesantias extends Controler{
 			$centro_de_costo_id = $contratos_activos[$i]['centro_de_costo_id'];	
 			$salario = $contratos_activos[$i]['base_liquidacion'];	
 			$fecha_inicio = $contratos_activos[$i]['fecha_inicio'];				
-			$nombre = $contratos_activos[$i]['primer_nombre'].' '.$contratos_activos[$i]['primer_apellido'];									
+			$nombre = $contratos_activos[$i]['primer_nombre'].' '.$contratos_activos[$i]['primer_apellido'];
+
 			$comprobar_nomina = $Model -> comprobar_liquidaciones($contrato_id,$fecha_corte,$this -> getConex());
 			$comprobar_provision = $Model -> comprobar_liquidaciones_pro($contrato_id,$fecha_corte,$this -> getConex());
 			$comprobar_cesantias = $Model -> comprobar_liquidaciones_cesan($contrato_id,$fecha_corte,$this -> getConex());			
@@ -158,25 +163,29 @@ final class Cesantias extends Controler{
 			//if($comprobar_provision['validacion']!='SI') exit('No se ha liquidado las Provisiones del Contrato de '. $contratos_activos[$i]['primer_nombre'].' '.$contratos_activos[$i]['primer_apellido'].' a la fecha de Corte de cesantias'); 
 			
 			if($comprobar_cesantias[0]['validacion_posterior']=='NO' || $comprobar_cesantias[0]['validacion_posterior']==''){
+
 				if($fecha_inicio<$fecha_ultimo_corte){
 					$fecha_ultimo_corte1 = $comprobar_cesantias[0]['fecha_corte']!='' ? $comprobar_cesantias[0]['fecha_corte'] : $fecha_ultimo_corte;
-					$dias_corte = $this -> restaFechasCont($fecha_ultimo_corte1,$_REQUEST['fecha_corte'],1);
+					$dias_corte = $this -> restaFechasCont($fecha_ultimo_corte1,$_REQUEST['fecha_corte']);
 						
 				}else{
 					$fecha_ultimo_corte1 = $fecha_inicio;
-					$dias_corte = $this -> restaFechasCont($fecha_ultimo_corte1,$_REQUEST['fecha_corte'],0);
+					$dias_corte = $this -> restaFechasCont($fecha_ultimo_corte1,$_REQUEST['fecha_corte']);
 			
 				}
+
 				$Data = $Model -> getValor($empleado_id,$fecha_ultimo_corte1,$fecha_corte,$dias_corte,$this -> getOficinaId(),$this -> getConex());
 				$valor_diferencia = intval($Data[0]['valor_liquidacion']-$Data[0]['valor_consolidado']);
 				
 				if($Data[0]['validacion_posterior']=='SI'){
-					$no_liquidados.='El Empleado '.$numero_identificacion.' -  '.$nombre.' no se Liquido, ya tiene una liquidaci&oacute;n Reciente!!<br>';
+					$no_liquidados.='El Empleado '.$numero_identificacion.' -  '.$nombre.' No se Liquid&oacute;, ya tiene una liquidaci&oacute;n Reciente!!<br>';
 				}else{
+
 					$return = $Model -> saveTodos($si_empleado,$area_laboral,$centro_de_costo_id,$tercero_id,$numero_identificacion,$tercero_id_cesan,$numero_identificacion_cesan,$fecha_liquidacion,$fecha_corte,$fecha_ultimo_corte1,$beneficiario,$contrato_id,$empleado_id,$salario,$dias_corte,$Data[0]['valor_liquidacion'],$Data[0]['dias_no_remu'],$Data[0]['dias_liquidacion'],$Data[0]['valor_consolidado'],$valor_diferencia,$fecha_inicio,$tipo_liquidacion,$observaciones,$this -> getOficinaId(),$this -> getUsuarioId(),$this -> getConex());
 					if(!$Model -> GetNumError() > 0){
 						$total_contratos_liq++;
 					}
+
 				}
 			}
 		}
@@ -680,7 +689,7 @@ final class Cesantias extends Controler{
 		id  =>'tipo_liquidacion',
 		type =>'select',
 		Boostrap =>'si',
-		options => array(array(value=>'T',text=>'TOTAL',selected=>'T'),array(value=>'P',text=>'PARCIAL',selected=>'T')),
+		options => array(array(value=>'T',text=>'TOTAL PERIODO',selected=>'T'),array(value=>'P',text=>'PARCIAL PERIODO',selected=>'T')),
 		required=>'yes',
 		datatype=>array(
 			type =>'text',
