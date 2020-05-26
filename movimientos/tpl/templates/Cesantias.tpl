@@ -35,7 +35,7 @@
             <td><label>Estado: </label></td>
             <td>{$ESTADO}</td>
              <td ><label>Tipo Liquidaci&oacute;n:</label></td>
-            <td >{$TIPOLIQUIDACION}</td>
+            <td >{$TIPOLIQUIDACION}&nbsp;<a href="javascript:void(0);" title="Presiona aqui para saber acerca de este campo."  name="myBtn"><img src="../../../framework/media/images/modulos/manual.png" width="16" height="18" onclick="alert_unico(this,'Informaci&oacute;n','El auxilio de cesantías es una prestación social en favor de los trabajadores que periódicamente se debe liquidar,por tal motivo cuando selecionamos la opcion TOTAL PERIODO le estamos indicando al sistema que este trabajador no laborará mas, por tanto las cesantias deben ser consignadas directamente al empleado, por el contrario cuando se selecciona la opcion PARCIAL PERIODO le indicaremos al sistema que este contrato continuará vigente y por tanto se deben consignar las cesantias al fondo.')"/></a></td>
            
           </tr>
           
@@ -187,6 +187,20 @@
         </table>
       </form>
     </div>	
+
+    <!--INICIO Cuadro de informacion-->
+    <div id="MyModal" class="modal">
+    
+        <!-- Modal content -->
+        <div class="modal-content" style="width:70%;">
+            <span class="close">&times;</span>
+            <h3 id="h5" align="center"> </h3>
+            <h4 align="center"><img src="../../../framework/media/images/alerts/info.png" /></h4>
+            <p id="p" align="center"></p>
+        </div>
+    
+    </div>
+    <!--FIN Cuadro de informacion-->
     
   </body>
 </html>

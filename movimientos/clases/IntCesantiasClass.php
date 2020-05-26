@@ -86,14 +86,15 @@ final class IntCesantias extends Controler{
   protected function restaFechasContables(){
 	$fecha_corte = $_REQUEST['fecha_corte'];
 	$fecha_ultimo_corte = $_REQUEST['fecha_ultimo_corte'];
-	$dias_corte = $this -> restaFechasCont($_REQUEST['fecha_ultimo_corte'],$_REQUEST['fecha_corte'],1);
+	$dias_corte = $this -> restaFechasCont($_REQUEST['fecha_ultimo_corte'],$_REQUEST['fecha_corte']);
 	echo  $dias_corte;	  
   }
 
   protected function onclickSave(){
 
   	require_once("IntCesantiasModelClass.php");
-    $Model = new IntCesantiasModel();
+	$Model = new IntCesantiasModel();
+	
 	$beneficiario = $_REQUEST['beneficiario']; 
 	$si_empleado = $_REQUEST['si_empleado'];
 	$contrato_id = $_REQUEST['contrato_id'];	
@@ -104,7 +105,7 @@ final class IntCesantias extends Controler{
 	$observaciones = $_REQUEST['observaciones'];	
 	$previsual          =	$_REQUEST['previsual'];
 	
-	$dias_corte = $this -> restaFechasCont($_REQUEST['fecha_ultimo_corte'],$_REQUEST['fecha_corte'],1);
+	$dias_corte = $this -> restaFechasCont($_REQUEST['fecha_ultimo_corte'],$_REQUEST['fecha_corte']);
 
 	
 	if($si_empleado==1){
@@ -154,17 +155,15 @@ final class IntCesantias extends Controler{
 			$comprobar_provision = $Model -> comprobar_liquidaciones_pro($contrato_id,$fecha_corte,$this -> getConex());
 			$comprobar_cesantias = $Model -> comprobar_liquidaciones_cesan($contrato_id,$fecha_corte,$this -> getConex());			
 	
-			//if($comprobar_nomina['validacion']!='SI') exit('No se ha liquidado las Nominas del Contrato de '. $contratos_activos[$i]['primer_nombre'].' '.$contratos_activos[$i]['primer_apellido'].' a la fecha de Corte de cesantias'); 
-			//if($comprobar_provision['validacion']!='SI') exit('No se ha liquidado las Provisiones del Contrato de '. $contratos_activos[$i]['primer_nombre'].' '.$contratos_activos[$i]['primer_apellido'].' a la fecha de Corte de cesantias'); 
 			
 			if($comprobar_cesantias[0]['validacion_posterior']=='NO' || $comprobar_cesantias[0]['validacion_posterior']==''){
 				if($fecha_inicio<$fecha_ultimo_corte){
 					$fecha_ultimo_corte1 = $comprobar_cesantias[0]['fecha_corte']!='' ? $comprobar_cesantias[0]['fecha_corte'] : $fecha_ultimo_corte;
-					$dias_corte = $this -> restaFechasCont($fecha_ultimo_corte1,$_REQUEST['fecha_corte'],1);
+					$dias_corte = $this -> restaFechasCont($fecha_ultimo_corte1,$_REQUEST['fecha_corte']);
 						
 				}else{
 					$fecha_ultimo_corte1 = $fecha_inicio;
-					$dias_corte = $this -> restaFechasCont($fecha_ultimo_corte1,$_REQUEST['fecha_corte'],0);
+					$dias_corte = $this -> restaFechasCont($fecha_ultimo_corte1,$_REQUEST['fecha_corte']);
 			
 				}
 				$Data = $Model -> getValor($empleado_id,$fecha_ultimo_corte1,$fecha_corte,$dias_corte,$this -> getOficinaId(),$this -> getConex());
@@ -680,7 +679,7 @@ final class IntCesantias extends Controler{
 		id  =>'tipo_liquidacion',
 		type =>'select',
 		Boostrap =>'si',
-		options => array(array(value=>'T',text=>'TOTAL',selected=>'T'),array(value=>'P',text=>'PARCIAL',selected=>'T')),
+		options => array(array(value=>'T',text=>'TOTAL PERIODO',selected=>'T'),array(value=>'P',text=>'PARCIAL PERIODO',selected=>'T')),
 		required=>'yes',
 		datatype=>array(
 			type =>'text',

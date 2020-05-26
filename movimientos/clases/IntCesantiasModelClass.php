@@ -477,9 +477,7 @@ final class IntCesantiasModel extends Db{
 		}
 
 		$select 	= "SELECT f.*,
-					(SELECT tipo_documento_id FROM datos_periodo WHERE periodo_contable_id =(SELECT periodo_contable_id FROM periodo_contable WHERE anio=YEAR(DATE(f.fecha_liquidacion)) ) ) AS tipo_documento_id,
-					(SELECT SUM(debito) FROM detalle_liquidacion_novedad WHERE liquidacion_int_cesantias_id=f.liquidacion_int_cesantias_id) AS valor,
-					
+					(SELECT tipo_documento_id FROM datos_periodo WHERE periodo_contable_id =(SELECT periodo_contable_id FROM periodo_contable WHERE anio=YEAR(DATE(f.fecha_liquidacion)) ) ) AS tipo_documento_id,		
 					(SELECT t.numero_identificacion FROM contrato c, empleado e, tercero t WHERE c.contrato_id=f.contrato_id AND e.empleado_id=c.empleado_id AND t.tercero_id=e.tercero_id) AS numero_identificacion,
 					(SELECT t.digito_verificacion FROM contrato c, empleado e, tercero t WHERE c.contrato_id=f.contrato_id AND e.empleado_id=c.empleado_id AND t.tercero_id=e.tercero_id) AS digito_verificacion,					
 					(SELECT e.tercero_id FROM contrato c, empleado e WHERE c.contrato_id=f.contrato_id AND e.empleado_id=c.empleado_id ) AS tercero_id,
@@ -495,9 +493,12 @@ final class IntCesantiasModel extends Db{
 
 		$encabezado_registro_id	= $this -> DbgetMaxConsecutive("encabezado_de_registro","encabezado_registro_id",$Conex,true,1);	
 		$tipo_documento_id		= $result[0]['tipo_documento_id'];	
-		$valor					= $result[0]['valor'];
 		$numero_soporte			= $result[0]['consecutivo'];	
 		
+		$select 	= "SELECT SUM(valor_liquidacion)AS valor FROM liquidacion_int_cesantias f WHERE fecha_liquidacion='$fecha_liquidacion' AND estado='A'";	
+		$result_valor 	= $this -> DbFetchAll($select,$Conex,true);  
+
+		$valor	= $result_valor[0]['valor'];
 		
 	    $fechaMes               = substr($result[0]['fecha_liquidacion'],0,10);		
 	    $periodo_contable_id    = $utilidadesContables -> getPeriodoContableId($fechaMes,$Conex);
