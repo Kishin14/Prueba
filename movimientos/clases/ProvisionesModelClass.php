@@ -384,12 +384,12 @@ final class ProvisionesModel extends Db{
 		encabezado_de_registro_anulado_id,encabezado_registro_id,empresa_id,oficina_id,tipo_documento_id,
 		forma_pago_id,valor,numero_soporte,tercero_id,periodo_contable_id,mes_contable_id,consecutivo,
 		fecha,concepto,puc_id,estado,fecha_registro,modifica,usuario_id,$causal_anulacion_id AS causal_anulacion_id,
-		$observacion_anulacion AS observaciones FROM encabezado_de_registro WHERE encabezado_registro_id = $encabezado_registro_id";
+		$observacion_anulacion AS observaciones, $usuario_anulo_id AS usuario_anula, NOW() AS fecha_anulacion, usuario_actualiza, fecha_actualiza FROM encabezado_de_registro WHERE encabezado_registro_id = $encabezado_registro_id";
 		$this -> query($insert,$Conex,true);
 	
 		$insert = "INSERT INTO imputacion_contable_anulada SELECT  imputacion_contable_id AS  
 		imputacion_contable_anulada_id,tercero_id,numero_identificacion,digito_verificacion,puc_id,descripcion,encabezado_registro_id AS 
-		encabezado_registro_anulado_id,centro_de_costo_id,codigo_centro_costo,numero,valor,amortiza,deprecia,base,porcentaje,formula,debito,credito FROM 
+		encabezado_registro_anulado_id,centro_de_costo_id,codigo_centro_costo,numero,valor,amortiza,deprecia,base,porcentaje,formula,debito,credito,area_id,departamento_id,unidad_negocio_id,sucursal_id FROM 
 		imputacion_contable WHERE encabezado_registro_id = $encabezado_registro_id";
 		
 		$update = "UPDATE encabezado_de_registro SET estado = 'A',anulado = 1 WHERE encabezado_registro_id = $encabezado_registro_id";	  
