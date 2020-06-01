@@ -1023,7 +1023,6 @@ final class RegistrarModel extends Db{
 		$deb_total=$deb_total+$debito;	
 		$credito=0;
 		
-		if($contrato_id == 24)die(' '.$debito.' '.$dias_inca_sub);
 		
 		
 		if($dias_inca_sub>0){
