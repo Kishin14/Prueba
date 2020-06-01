@@ -772,7 +772,7 @@ final class RegistrarModel extends Db{
 	$limite_subsidio=$result_per[0]['limite_subsidio'];
 	$limite_fondo=$result_per[0]['limite_fondo'];
 	$salrio=$result_per[0]['salrio'];
-	$salrio_diario=intval($result_per[0]['salrio']/30);
+	$salrio_diario=$result_per[0]['salrio']/30;
 	$limite_sal = $salrio*$limite_subsidio;
 	$limite_fondopen = $salrio*$limite_fondo;
 	$horas_dia=$result_per[0]['horas_dia'];
@@ -843,7 +843,6 @@ final class RegistrarModel extends Db{
 	$this -> Begin($Conex);
 
 	for($i=0;$i<count($result);$i++){	
-	
 		if($result[$i]['area_laboral']=='A'){
 			
 			$puc_sal=$result_per[0]['puc_admon_sal_id'];
@@ -973,7 +972,6 @@ final class RegistrarModel extends Db{
 				
 		//revisar dias incapacidad
 		
-		
 		$select_inca = "SELECT (DATEDIFF(IF(l.fecha_final>'$fecha_final','$fecha_final',l.fecha_final),IF(l.fecha_inicial>'$fecha_inicial',l.fecha_inicial,'$fecha_inicial'))+1) AS dias_inca, ti.dia, ti.porcentaje,ti.descuento  
 					FROM licencia l, tipo_incapacidad ti WHERE  l.contrato_id=$contrato_id AND l.estado!='I' AND ti.tipo_incapacidad_id=l.tipo_incapacidad_id AND ti.tipo='I'  AND ('$fecha_inicial' BETWEEN  l.fecha_inicial AND l.fecha_final OR '$fecha_final'  BETWEEN  l.fecha_inicial AND l.fecha_final OR l.fecha_inicial BETWEEN '$fecha_inicial' AND '$fecha_final') ";
 
@@ -994,7 +992,7 @@ final class RegistrarModel extends Db{
 				if($pago_desc>$salrio_diario){
 					$des_val_inc = ($des_val_inc + intval((($sal_dia_cont*$dia_difinc)*$por_desc)/100));
 				}else{
-					$des_val_inc = ($des_val_inc + intval(($sal_dia_cont-$salrio_diario)*$dia_difinc));
+					//$des_val_inc = ($des_val_inc + intval(($sal_dia_cont-$salrio_diario)*$dia_difinc));
 				}
 			}
 			$dias_inca_sub=$dias_inca_sub+$result_inca[$l]['dias_inca'];	
@@ -1014,7 +1012,7 @@ final class RegistrarModel extends Db{
 		$dias_sal = $dias_r;
 		
 		$detalle_liquidacion_novedad_id = $this -> DbgetMaxConsecutive("detalle_liquidacion_novedad","detalle_liquidacion_novedad_id",$Conex,false,1);
-		//exit("***".$puc_sal."***"."JDFC26");
+		
 		$insert = "INSERT INTO 	detalle_liquidacion_novedad (detalle_liquidacion_novedad_id,puc_id,liquidacion_novedad_id,debito,credito,fecha_inicial,fecha_final,dias,observacion,concepto,tercero_id,numero_identificacion,digito_verificacion) 
 		VALUES ($detalle_liquidacion_novedad_id,$puc_sal,$liquidacion_novedad_id, $debito,$credito,'$fecha_inicial','$fecha_final',$dias_sal,'$observacion','SALARIO',$tercero_id,$numero_identificacion,$digito_verificacion)";
 		$this -> query($insert,$Conex,true);
@@ -1024,8 +1022,8 @@ final class RegistrarModel extends Db{
 		$debito=intval(($dias_inca_sub*$sal_dia_cont)-$des_val_inc);
 		$deb_total=$deb_total+$debito;	
 		$credito=0;
-		// $dias_sub=$dias_sub-$dias_inca_sub;//resta los dias incapacidad
-
+		
+		if($contrato_id == 24)die(' '.$debito.' '.$dias_inca_sub);
 		
 		
 		if($dias_inca_sub>0){
@@ -1124,7 +1122,7 @@ final class RegistrarModel extends Db{
 			$credito=intval((intval(((($sueldo_base)/30)*$dias)+$total_base)*$result_per[0]['desc_emple_pension'])/100);
 			$deb_total=$deb_total+$debito;
 			$cre_total=$cre_total+$credito;
-			//exit("JDFC22");
+		
 			$detalle_liquidacion_novedad_id = $this -> DbgetMaxConsecutive("detalle_liquidacion_novedad","detalle_liquidacion_novedad_id",$Conex,false,1);
 			$insert = "INSERT INTO 	detalle_liquidacion_novedad (detalle_liquidacion_novedad_id,puc_id,liquidacion_novedad_id,debito,credito,fecha_inicial,fecha_final,dias,observacion,concepto,tercero_id,numero_identificacion,digito_verificacion) 
 			VALUES ($detalle_liquidacion_novedad_id,$puc_pens,$liquidacion_novedad_id,$debito,$credito,'$fecha_inicial','$fecha_final',$dias,'$observacion','PENSION',$tercero_pension_id,$numero_identificacion_pension,$digito_verificacion_pension)";
@@ -1298,6 +1296,7 @@ final class RegistrarModel extends Db{
 				(SELECT t.digito_verificacion FROM tercero t WHERE t.tercero_id=n.tercero_id  ) AS digito_verificacion
 				FROM novedad_fija n, concepto_area c
 				WHERE n.contrato_id=$contrato_id AND n.estado='A' AND '$fecha_final' BETWEEN  n.fecha_inicial AND n.fecha_final AND c.concepto_area_id=n.concepto_area_id";
+				//die($select2);
 
 			
 		$result2 = $this -> DbFetchAll($select2,$Conex,true); 
@@ -1357,8 +1356,7 @@ final class RegistrarModel extends Db{
 			
 			
 	if($previsual == 'true'){
-		
-	
+
 	 # Muestro la ultima liquidacion creada	
 	 $selectLiquidacion      = "SELECT l.liquidacion_novedad_id, l.consecutivo, l.empleados, l.fecha_inicial, l.fecha_final, 		                              l.periodicidad, l.area_laboral, l.estado, l.contrato_id, l.encabezado_registro_id, l.usuario_id,                                  l.fecha_registro, l.con_usuario_id, l.con_fecha, 
 	                            (SELECT c.nombre FROM centro_de_costo c WHERE c.centro_de_costo_id=l.centro_de_costo_id) AS centro_de_costo
