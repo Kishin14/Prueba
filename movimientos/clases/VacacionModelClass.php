@@ -68,8 +68,17 @@ final class VacacionModel extends Db{
 		 
 		 $liquidacion_vacaciones_id 	= $this -> DbgetMaxConsecutive("liquidacion_vacaciones","liquidacion_vacaciones_id",$Conex,false,1);
 		
-		$select_contrato = "SELECT c.contrato_id,(SELECT centro_de_costo_id FROM centro_de_costo WHERE oficina_id = $oficina_id)as centro_de_costo_id,(SELECT e.tercero_id FROM empleado e WHERE e.empleado_id=c.empleado_id)as tercero_id,c.area_laboral,c.sueldo_base,c.fecha_inicio, DATEDIFF(CURDATE(),c.fecha_inicio) as dias_trabajados FROM contrato c WHERE c.empleado_id=$empleado_id AND estado='A' ";
-		$result_contrato = $this -> DbFetchAll($select_contrato,$Conex); 
+		$select_contrato = "SELECT c.contrato_id,
+		                   (SELECT centro_de_costo_id FROM centro_de_costo WHERE oficina_id = $oficina_id AND estado ='A')AS centro_de_costo_id,
+						   (SELECT e.tercero_id FROM empleado e WHERE e.empleado_id=c.empleado_id)AS tercero_id,
+						   c.area_laboral,
+						   c.sueldo_base,
+						   c.fecha_inicio,
+						    DATEDIFF(CURDATE(),c.fecha_inicio) AS dias_trabajados 
+							
+							FROM contrato c WHERE c.empleado_id=$empleado_id AND c.estado='A'";
+		$result_contrato = $this -> DbFetchAll($select_contrato,$Conex,true);
+
 		$contrato_id	 = $result_contrato[0]['contrato_id'];
 		$tercero_id	 = $result_contrato[0]['tercero_id'];
 		$area_laboral	 = $result_contrato[0]['area_laboral'];
@@ -80,7 +89,7 @@ final class VacacionModel extends Db{
 				 OR l.fecha_dis_final BETWEEN $fecha_dis_inicio AND $fecha_dis_final)
 				 AND l.contrato_id = $contrato_id AND l.estado != 'I'";
 				 
-		$result = $this -> DbFetchAll($select,$Conex); 
+		$result = $this -> DbFetchAll($select,$Conex,true); 
 
 		if($result > 0){
             exit("¡Existe una liquidacion de vacaciones con las mismas fechas para este contrato, por favor revise nuevamente.!");
