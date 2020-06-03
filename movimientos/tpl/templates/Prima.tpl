@@ -46,8 +46,8 @@
             
              <td><label>Empleados ?  : </label></td>
             <td>{$SIEMPLEADO}</td>
-            <td><label>Fecha  : </label></td>
-            <td>{$FECHALIQ}<a href="javascript:void(0);" title="Presiona aqui para saber acerca de este campo."  name="myBtn"><img src="../../../framework/media/images/modulos/manual.png" width="16" height="18" onclick="alert_unico(this,'Informaci&oacute;n','En este campos indicaremos al sistema la fecha en que se pagará la prima teniendo en cuenta que si la prima tiene un tipo de liquidación TOTAL SEMESTRE, segun el articulo 306 del codigo sustantivo del trabajo la prima se debe pagar para el primer semestre el 30 de junio, y para el segundo semestre se debe pagar en los primeros 20 dias del mes de diciembre.')"/></a></td>
+            <td><label>Fecha Ultimo Periodo  : </label></td>
+            <td>{$FECHAINICONT}</td>
           	 <td ><label>Liquidacion N°  : </label></td>
             <td >{$CONSECUTIVO}{$LIQUIDACIONPRIMAID}</td>
           </tr>
@@ -63,8 +63,8 @@
           <tr>
             <td><label>Salario Base  : </label></td>
             <td>{$SALARIO}</td>
-            <td><label>Fecha Inicio Contrato  : </label></td>
-            <td>{$FECHAINICONT}</td>
+            <td><label>Fecha a Liquidar : </label></td>
+            <td>{$FECHALIQ}<a href="javascript:void(0);" title="Presiona aqui para saber acerca de este campo."  name="myBtn"><img src="../../../framework/media/images/modulos/manual.png" width="16" height="18" onclick="alert_unico(this,'Informaci&oacute;n','En este campos indicaremos al sistema la fecha en que se pagará la prima teniendo en cuenta que si la prima tiene un tipo de liquidación TOTAL SEMESTRE, segun el articulo 306 del codigo sustantivo del trabajo la prima se debe pagar para el primer semestre el 30 de junio, y para el segundo semestre se debe pagar en los primeros 20 dias del mes de diciembre.')"/></a></td>
             <td><label>Estado  : </label></td>
             <td>{$ESTADO}</td>
           </tr>

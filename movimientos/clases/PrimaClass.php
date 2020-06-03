@@ -167,9 +167,9 @@ final class Prima extends Controler{
 	$Model = new PrimaModel();
 	$Model -> Delete($this -> Campos,$this -> getConex());
 	if($Model -> GetNumError() > 0){
-		exit('No se puede borrar el Prima');
+		exit('No se puede borrar la Prima');
 	}else{
-		exit('Se borro exitosamente el Prima');
+		exit('Se borro exitosamente la Prima');
 	}
   }
   
@@ -180,8 +180,6 @@ final class Prima extends Controler{
 	$fecha_liquidacion 	= $_REQUEST['fecha_liquidacion'];
 	
 	$Data = $Model -> getDataEmpleado($empleado_id,$fecha_liquidacion,$this -> getConex());
-	
-	
 	
 	echo json_encode($Data);
 	 
@@ -395,10 +393,6 @@ final class Prima extends Controler{
 		type 	=>'text',
 		required=>'yes',
 		readonly=>'yes',
-		datatype=>array(
-			type =>'date',
-			length =>'11')
-		
 	);	
 	
 
@@ -518,7 +512,7 @@ final class Prima extends Controler{
 		name	=>'guardar',
 		id		=>'guardar',
 		type	=>'button',
-		value	=>'Guardar',
+		value	=>'Liquidar',
 	);
 	 
  	$this -> Campos[actualizar] = array(

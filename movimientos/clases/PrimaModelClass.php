@@ -54,10 +54,12 @@ final class PrimaModel extends Db{
 				$centro_de_costo_id = $result_contrato[0]['centro_de_costo_id'];
 				$area_laboral	 = $result_contrato[0]['area_laboral'];
 				$fecha_ult_prima	 = $result_contrato[0]['fecha_ult_prima'];
+				$fecha_ini	 = $result_contrato[0]['fecha_inicio'];
 				$valor_prima	 = $result_contrato[0]['valor_prima'];
 
 				$fecha_liquidacion_val=str_replace("'","",$fecha_liquidacion);
-					if($fecha_ult_prima != $fecha_liquidacion_val){
+
+				if($fecha_ult_prima != $fecha_liquidacion_val){
 
 				$liq_anterior = $this -> Liq_Anterior($empleado_id,$fecha_liquidacion,$periodo,$oficina_id,$Conex);
 
@@ -108,7 +110,7 @@ final class PrimaModel extends Db{
 				
 				$tipo_doc				= $result_parametros[0]['tipo_documento_id'];
 
-				$consulta_periodo = " AND fecha BETWEEN COALESCE('$fecha_ult_prima','$fecha_anterior_valida') AND $fecha_liquidacion";
+				$consulta_periodo = " AND fecha BETWEEN '$fecha_ini' AND $fecha_liquidacion";
 				
 				$select_consolidado = "SELECT SUM(credito-debito)as neto,
 				                             centro_de_costo_id 
@@ -294,7 +296,7 @@ final class PrimaModel extends Db{
 				
 				$tipo_doc				= $result_parametros[0]['tipo_documento_id'];
 				
-				$consulta_periodo = " AND fecha BETWEEN COALESCE('$fecha_ult_prima','$fecha_anterior_valida') AND $fecha_liquidacion";
+				$consulta_periodo = " AND fecha BETWEEN '$fecha_inicio_cont' AND $fecha_liquidacion";
 				
 				$select_consolidado = "SELECT SUM(credito-debito)as neto,centro_de_costo_id FROM imputacion_contable WHERE puc_id=$puc_consolidado_prima AND tercero_id=$tercero_id AND encabezado_registro_id IN (SELECT encabezado_registro_id FROM encabezado_de_registro WHERE estado='C' $consulta_periodo)";
 		
@@ -449,7 +451,7 @@ final class PrimaModel extends Db{
 						    }
 						} 
 						
-					$valor = intval(($dias_laborados*($sueldo_base/2))/180);  
+					$valor = intval((($dias_laborados-1)*($sueldo_base/2))/180);  
 					
 				
 				$estado = "'A'";
@@ -491,7 +493,7 @@ final class PrimaModel extends Db{
 				
 				$tipo_doc				= $result_parametros[0]['tipo_documento_id'];
 				
-				$consulta_periodo = " AND fecha BETWEEN COALESCE('$fecha_ult_prima','$fecha_anterior_valida') AND $fecha_liquidacion";
+				$consulta_periodo = " AND fecha BETWEEN '$fecha_inicio_cont' AND $fecha_liquidacion";
 				
 				$select_consolidado = "SELECT SUM(credito-debito)as neto,centro_de_costo_id FROM imputacion_contable WHERE puc_id=$puc_consolidado_prima AND tercero_id=$tercero_id AND encabezado_registro_id IN (SELECT encabezado_registro_id FROM encabezado_de_registro WHERE estado='C' $consulta_periodo)";
 		
@@ -584,7 +586,7 @@ final class PrimaModel extends Db{
   }
 
   public function Delete($Campos,$Conex){
-      $this -> DbDeleteTable("novedad_fija",$Campos,$Conex,true,false);
+      $this -> DbDeleteTable("liquidacion_prima",$Campos,$Conex,true,false);
 	}
 	
 	public function Liq_Anterior($empleado_id,$fecha_liquidacion,$periodo,$oficina_id,$Conex){
@@ -596,16 +598,20 @@ final class PrimaModel extends Db{
 			                     (SELECT e.tercero_id FROM empleado e WHERE e.empleado_id=c.empleado_id)as tercero_id,
 								 c.area_laboral,
 								 (c.sueldo_base+c.subsidio_transporte) as sueldo_base,
-								 c.fecha_inicio, 
-								 DATEDIFF($fecha_liquidacion ,c.fecha_inicio) as dias_trabajados 
+								 c.fecha_inicio,
+								 IF(c.fecha_ult_prima IS NOT NULL,c.fecha_ult_prima,c.fecha_inicio)AS fecha,
+								 DATEDIFF($fecha_liquidacion ,c.fecha_inicio) as dias_trabajados
 								 FROM contrato c WHERE c.empleado_id=$empleado_id AND estado='A' ";
 				
 		$result_contrato = $this -> DbFetchAll($select_contrato,$Conex); 
+		$fecha_inicio = $result_contrato[0]['fecha_inicio'];
+		$fecha = $result_contrato[0]['fecha'];
 		$contrato_id	 = $result_contrato[0]['contrato_id'];
 		$tercero_id	 = $result_contrato[0]['tercero_id'];
 		$area_laboral	 = $result_contrato[0]['area_laboral'];
 		$salario	 = $result_contrato[0]['sueldo_base'];
-
+	
+        
 
 		$select_parametros="SELECT 
 		puc_prima_prov_id,puc_prima_cons_id,puc_prima_contra_id,puc_admon_prima_id,puc_ventas_prima_id,puc_produ_prima_id,tipo_documento_id
@@ -621,45 +627,60 @@ final class PrimaModel extends Db{
 
 		/* $consulta_periodo = $periodo == 1 ? " AND fecha BETWEEN CONCAT_WS('-',DATE_FORMAT('$fecha_liquidacion', '%Y'),'01','01') AND CONCAT_WS('-',DATE_FORMAT('$fecha_liquidacion', '%Y'),'06','30')" : " AND fecha BETWEEN CONCAT_WS('-',DATE_FORMAT('$fecha_liquidacion', '%Y'),'07','01') AND CONCAT_WS('-',DATE_FORMAT('$fecha_liquidacion', '%Y'),'12','31')" ; */
 		
-		$select_cont ="SELECT contrato_id,fecha_ult_prima FROM contrato WHERE empleado_id = $empleado_id";
+		$select_cont ="SELECT contrato_id,
+		                      IF(fecha_ult_prima IS NOT NULL,fecha_ult_prima,fecha_inicio)AS fecha_ult_prima 
+					  FROM contrato WHERE empleado_id = $empleado_id";
 	
 		$result_cont = $this -> DbFetchAll($select_cont,$Conex,true);
 		$contrato_id = $result_cont[0]['contrato_id'];
 		$fecha_ult_prima = $result_cont[0]['fecha_ult_prima'];
-	 
-		$select = "SELECT *	FROM liquidacion_prima WHERE contrato_id=$contrato_id AND estado!='I' ORDER BY fecha_liquidacion DESC LIMIT 1"; 
+       
+		$dias_laborados = $this->restaFechasCont($fecha_ult_prima,$fecha_liquidacion);
+		$valor_liquidacion = $salario*($dias_laborados-1)/360;
+	    
+		$select = "SELECT *	FROM liquidacion_prima WHERE contrato_id=$contrato_id AND estado!='I' ORDER BY fecha_liquidacion DESC"; 
 		$result = $this -> DbFetchAll($select,$Conex,$ErrDb = false);
 
-		$fecha_liquidacion_anterior = $result[0]['fecha_liquidacion'];
-
-		$consulta_periodo = " AND fecha BETWEEN COALESCE('$fecha_liquidacion_anterior','$fecha_ult_prima') AND '$fecha_liquidacion'"; 
+		if($result[0]['liquidacion_prima_id']>0){
+			
+			$fecha_liquidacion_anterior = $result[1]['fecha_liquidacion'];	
+			
+			$select = "SELECT SUM(total)AS total FROM liquidacion_prima WHERE contrato_id=$contrato_id AND periodo=$periodo";
+		    $result_total = $this -> DbFetchAll($select,$Conex,true);
+	
+		    if($result_total[0]['total']>0){
+			  $total = $result_total[0]['total'];
+			  $result['total'] = $total;
+		    }
+		}else{
+			 $fecha_liquidacion_anterior = '';
+			 $result[0]['fecha_liquidacion']=$fecha;
+			 $result['total'] = 0;
+		}
 		
-		$select_consolidado = "SELECT SUM(credito-debito)as neto,
-		                              centro_de_costo_id 
-							  FROM imputacion_contable WHERE puc_id=$puc_contrapartida AND tercero_id=$tercero_id AND encabezado_registro_id IN (SELECT encabezado_registro_id FROM encabezado_de_registro WHERE estado='C' $consulta_periodo)";
+		    $consulta_periodo = " AND fecha BETWEEN '$fecha_inicio' AND '$fecha_liquidacion'"; 
 		
-		$result_consolidado = $this -> DbFetchAll($select_consolidado,$Conex,true); 
+		    $select_consolidado = "SELECT SUM(credito-debito)as neto,
+		                           centro_de_costo_id 
+							       FROM imputacion_contable WHERE puc_id=$puc_consolidado_prima AND tercero_id=$tercero_id AND encabezado_registro_id IN (SELECT encabezado_registro_id FROM encabezado_de_registro WHERE estado='C' $consulta_periodo)";
+			
+			$result_consolidado = $this -> DbFetchAll($select_consolidado,$Conex,true);
+			
+			$valor_consolidado = $result_consolidado[0]['neto']>0 ? intval($result_consolidado[0]['neto']) : 0 ;
+		    $centro_costo_consolidado = $result_consolidado[0]['centro_de_costo_id']>0 ? $result_consolidado[0]['centro_de_costo_id'] : 'NULL';
 		
-		$valor_consolidado = $result_consolidado[0]['neto']>0 ? intval($result_consolidado[0]['neto']) : 0 ;
-		$centro_costo_consolidado = $result_consolidado[0]['centro_de_costo_id']>0 ? $result_consolidado[0]['centro_de_costo_id'] : 'NULL';
-		
-		$valor_guardado = intval($valor_consolidado);
+		    $valor_guardado = intval($valor_consolidado);
         
-		$result['valor_guardado'] = $valor_guardado;
-
-		$select = "SELECT SUM(total)AS total FROM liquidacion_prima WHERE contrato_id=$contrato_id AND periodo=$periodo";
-		$result_total = $this -> DbFetchAll($select,$Conex,true);
-		
-		$total = $result_total[0]['total'];
-
-		$result['salario'] = $salario;
-		$result['total'] = $total;
-
+		    $result['valor_guardado'] = $valor_guardado;
+			$result['salario'] = $salario;
+			$result['valor_liquidacion'] = $valor_liquidacion;
+			
 			if(count($result)>0){
 				return $result;
 			}else {
 				exit("No se encontr&oacute; un contrato activo para el empleado!!");
 			}
+		  
 		}
    }
   
@@ -936,7 +957,7 @@ final class PrimaModel extends Db{
 	(SELECT CONCAT_WS(' ', t.primer_nombre,t.segundo_nombre,t.primer_apellido,t.segundo_apellido) FROM tercero t, empleado e WHERE t.tercero_id=e.tercero_id AND e.empleado_id=c.empleado_id) as empleado,
 	(SELECT DATEDIFF($fecha_liquidacion,c.fecha_inicio))as dias_laborados
 	FROM contrato c WHERE c.empleado_id=$empleado_id AND estado='A'  "; 
-	//echo $select;
+	
 	$result = $this -> DbFetchAll($select,$Conex,$ErrDb = false);
 	if(count($result)>0){
 		return $result;
