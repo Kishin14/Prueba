@@ -725,7 +725,7 @@ function deleteLiquidacion(){
 				if(data!=null){
 
 					if(data==1){
-						alertJquery("¡Se elimino la liquidacion exitosamente!, Por favor asegurese de actualizar la fecha de la prima en el formulario contrato");
+						alertJquery("¡Se elimino la liquidación exitosamente!, Por favor asegúrese de actualizar la fecha de la prima en el formulario contrato.");
 						PrimaOnReset();
 					}else{
 						alertJquery("¡No se puede borrar la prima ya que esta contabilizada o tiene un registro contable asociado!");
