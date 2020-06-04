@@ -299,6 +299,7 @@ function setDataEmpleado(empleado_id){
 function onclickCancellation(formulario){
 	
 	if($("#divAnulacion").is(":visible")){
+		
 
 	   var causal_anulacion_id 		= $("#causal_anulacion_id").val();
 	   var desc_anul_abono_nomina  = $("#desc_anul_abono_nomina").val();

@@ -28,9 +28,12 @@ final class Prima extends Controler{
     $Layout -> SetLimpiar   ($Model -> getPermiso($this -> getActividadId(),CLEAR,$this -> getConex()));
 	$Layout -> setImprimir	($Model -> getPermiso($this -> getActividadId(),'PRINT',$this -> getConex()));
 	
-    $Layout -> SetCampos($this -> Campos);
+	$Layout -> SetCampos($this -> Campos);
+	
 	
 	//// LISTAS MENU ////
+	 $Layout -> setUsuarioId($this -> getUsuarioId(),$this -> getOficinaId());
+	 $Layout -> setCausalesAnulacion($Model -> getCausalesAnulacion($this -> getConex()));
 	 $liquidacion_prima_id = $_REQUEST['liquidacion_prima_id'];
 
 		if($liquidacion_prima_id>0){
@@ -165,13 +168,46 @@ final class Prima extends Controler{
 
 	require_once("PrimaModelClass.php");
 	$Model = new PrimaModel();
-	$Model -> Delete($this -> Campos,$this -> getConex());
+
+	$liquidacion_prima_id = $_REQUEST['liquidacion_prima_id'];
+
+	$Data = $Model -> Delete($liquidacion_prima_id,$this -> getConex());
+
 	if($Model -> GetNumError() > 0){
 		exit('No se puede borrar la Prima');
 	}else{
-		exit('Se borro exitosamente la Prima');
+		echo json_encode($Data);
 	}
   }
+
+
+  protected function onclickCancellation(){
+  
+  	require_once("PrimaModelClass.php");
+	$Model = new PrimaModel();
+	
+	$empresa_id = $this -> getEmpresaId(); 
+	$oficina_id = $this -> getOficinaId();
+
+	$Model -> cancellation($empresa_id,$oficina_id,$this -> getConex());
+
+	if(strlen($Model -> GetError()) > 0){
+	  exit('false');
+	}else{
+	    exit('true');
+	}
+	
+  }
+
+  protected function getEstadoEncabezadoRegistro($Conex){
+	  
+  	require_once("PrimaModelClass.php");
+    $Model           = new PrimaModel();
+	$liquidacion_prima_id = $_REQUEST['liquidacion_prima_id'];	
+	$Estado = $Model -> selectEstadoEncabezadoRegistro($liquidacion_prima_id,$this -> getConex());
+	exit("$Estado");
+	  
+  } 
   
   protected function setDataEmpleado(){
 	 require_once("PrimaModelClass.php");
@@ -465,6 +501,46 @@ final class Prima extends Controler{
 		required=>'yes'
 		
 	);
+
+		$this -> Campos[anul_usuario_id] = array(
+		name	=>'anul_usuario_id',
+		id		=>'anul_usuario_id',
+		type	=>'hidden',
+		datatype=>array(
+			type	=>'integer')
+	);		
+
+	$this -> Campos[anul_abono_nomina] = array(
+		name	=>'anul_abono_nomina',
+		id		=>'anul_abono_nomina',
+		type	=>'text',
+		size    =>'17',
+        value   =>date("Y-m-d H:m"),
+		readonly=>'yes',
+		datatype=>array(
+			type	=>'text')
+	);	
+	
+	$this -> Campos[causal_anulacion_id] = array(
+		name	=>'causal_anulacion_id',
+		id		=>'causal_anulacion_id',
+		type	=>'select',
+		required=>'yes',
+		options	=>array(),
+		datatype=>array(
+			type	=>'integer')
+	);		
+	
+	
+	$this -> Campos[desc_anul_abono_nomina] = array(
+		name	=>'desc_anul_abono_nomina',
+		id		=>'desc_anul_abono_nomina',
+		type	=>'textarea',
+		value	=>'',
+		required=>'yes',
+    	datatype=>array(
+			type	=>'text')
+	);
 	
 	
 	
@@ -523,16 +599,21 @@ final class Prima extends Controler{
 		disabled=>'disabled',
 	);
 
+	$this -> Campos[anular] = array(
+		name	=>'anular',
+		id		=>'anular',
+		type	=>'button',
+		value	=>'Anular',
+		tabindex=>'14',
+		onclick =>'onclickCancellation(this.form)'
+	);	
+
 	$this -> Campos[borrar] = array(
 		name	=>'borrar',
 		id		=>'borrar',
 		type	=>'button',
 		value	=>'Borrar',
 		disabled=>'disabled',
-		// tabindex=>'21',
-		property=>array(
-			name	=>'delete_ajax',
-			onsuccess=>'PrimaOnSaveOnUpdate')
 	);
 	 
    	$this -> Campos[limpiar] = array(

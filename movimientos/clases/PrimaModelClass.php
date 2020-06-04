@@ -18,6 +18,14 @@ final class PrimaModel extends Db{
 	  return $this -> Permisos -> getPermiso($ActividadId,$Permiso,$Conex);
   }
 
+  public function getCausalesAnulacion($Conex){
+		
+	$select = "SELECT causal_anulacion_id AS value,nombre AS text FROM causal_anulacion ORDER BY nombre";
+	$result = $this -> DbFetchAll($select,$Conex,true);
+	
+	return $result;		
+  }
+
 
  public function Save($Campos,$oficina_id,$Conex){
         
@@ -585,9 +593,147 @@ final class PrimaModel extends Db{
 	$this -> Commit($Conex);
   }
 
-  public function Delete($Campos,$Conex){
-      $this -> DbDeleteTable("liquidacion_prima",$Campos,$Conex,true,false);
+    public function Delete($liquidacion_prima_id,$Conex){
+	   
+		$select="SELECT liquidacion_prima_id, encabezado_registro_id, estado, fecha_liquidacion FROM liquidacion_prima WHERE liquidacion_prima_id IN($liquidacion_prima_id)";
+		$result = $this -> DbFetchAll($select,$Conex,true);
+         
+		if($result[0]['liquidacion_prima_id']>0){
+			
+			for($i=0; $i<count($result); $i++){
+
+				$liquidacion_prima_id = $result[$i]['liquidacion_prima_id'];
+				$encabezado_registro_id = $result[$i]['encabezado_registro_id'];
+				$estado = $result[$i]['estado'];
+				$fecha_liquidacion = $result[$i]['fecha_liquidacion'];
+
+				if($estado != 'C' && $encabezado_registro_id == ''){
+
+                   $delete="DELETE FROM detalle_prima_puc WHERE liquidacion_prima_id = $liquidacion_prima_id";
+				   $this -> query($delete,$Conex,true);
+
+					$delete="DELETE FROM liquidacion_prima WHERE liquidacion_prima_id = $liquidacion_prima_id AND estado != 'C'";
+					$this -> query($delete,$Conex,true);
+
+
+		    	}else{
+					return 0;
+				}
+		    }
+		    return 1;
+	    }else{
+			return 0;
+		}
+
+
 	}
+
+	public function selectEstadoEncabezadoRegistro($liquidacion_prima_id,$Conex){
+	  
+	$select = "SELECT estado FROM liquidacion_prima WHERE liquidacion_prima_id = $liquidacion_prima_id";  
+	$result = $this -> DbFetchAll($select,$Conex,true); 
+	$estado = $result[0]['estado'];
+	
+	return $estado;	  
+	  
+  }
+
+	public function cancellation($empresa_id,$oficina_id,$Conex){
+	 
+    include_once("UtilidadesContablesModelClass.php");
+	$utilidadesContables = new UtilidadesContablesModel(); 	 	 
+
+	$this -> Begin($Conex);
+
+	$liquidacion_prima_id			= $this -> requestDataForQuery('liquidacion_prima_id','integer');
+	$causal_anulacion_id  		= $this -> requestDataForQuery('causal_anulacion_id','integer');
+	$anul_abono_nomina   		= $this -> requestDataForQuery('anul_abono_nomina','text');
+	$desc_anul_abono_nomina  	= $this -> requestDataForQuery('desc_anul_abono_nomina','text');
+	$anul_usuario_id          	= $this -> requestDataForQuery('anul_usuario_id','integer');	
+	  
+	
+	$select = "SELECT a.encabezado_registro_id,
+	                  a.fecha_liquidacion
+			  FROM liquidacion_prima a WHERE a.liquidacion_prima_id=$liquidacion_prima_id";	
+	$result = $this -> DbFetchAll($select,$Conex,true); 
+
+	$encabezado_registro_id = $result[0]['encabezado_registro_id'];
+	$fechaMes = $result[0]['fecha'];
+	
+
+	if($encabezado_registro_id>0 && $encabezado_registro_id!='' && $encabezado_registro_id!=NULL){	 
+
+	    if(!$utilidadesContables -> periodoContableEstaHabilitado($empresa_id,$fechaMes,$Conex))exit('Periodo Contable Cerrado<br> No es posible Anular');
+		if(!$utilidadesContables -> mesContableEstaHabilitado($oficina_id,$fechaMes,$Conex)) exit('Mes Contable Cerrado<br> No es posible Anular');
+
+		$insert = "INSERT INTO encabezado_de_registro_anulado (`encabezado_de_registro_anulado_id`, `encabezado_registro_id`, `empresa_id`, `oficina_id`, `tipo_documento_id`, `forma_pago_id`, `valor`, `numero_soporte`, `tercero_id`, `periodo_contable_id`, `mes_contable_id`, `consecutivo`, `fecha`, `concepto`, `puc_id`, `estado`, `fecha_registro`, `modifica`, `usuario_id`, `causal_anulacion_id`, `observaciones`)
+		 SELECT $encabezado_registro_id AS 
+		encabezado_de_registro_anulado_id,encabezado_registro_id,empresa_id,oficina_id,tipo_documento_id,
+		forma_pago_id,valor,numero_soporte,tercero_id,periodo_contable_id,mes_contable_id,consecutivo,
+		fecha,concepto,puc_id,estado,fecha_registro,modifica,usuario_id,$causal_anulacion_id AS causal_anulacion_id,
+		$desc_anul_abono_nomina AS observaciones FROM encabezado_de_registro WHERE encabezado_registro_id = $encabezado_registro_id";
+		$this -> query($insert,$Conex,true);
+
+		if(strlen($this -> GetError()) > 0){
+			$this -> Rollback($Conex);
+		}else{
+			$insert = "INSERT INTO imputacion_contable_anulada SELECT  imputacion_contable_id AS  
+			imputacion_contable_anulada_id,tercero_id,numero_identificacion,digito_verificacion,puc_id,descripcion,encabezado_registro_id AS 
+			encabezado_registro_anulado_id,centro_de_costo_id,codigo_centro_costo,numero,valor,amortiza,deprecia,base,porcentaje,formula,debito,credito,
+			area_id,departamento_id,unidad_negocio_id,sucursal_id
+			 FROM 
+			imputacion_contable WHERE encabezado_registro_id = $encabezado_registro_id";
+
+			   
+			$this -> query($insert,$Conex,true);
+
+			if(strlen($this -> GetError()) > 0){
+				$this -> Rollback($Conex);
+			}else{	
+
+				$update = "UPDATE encabezado_de_registro SET estado = 'A',anulado = 1 WHERE encabezado_registro_id = $encabezado_registro_id";	  
+				$this -> query($update,$Conex,true);	
+
+				if(strlen($this -> GetError()) > 0){
+					$this -> Rollback($Conex);
+				}else{	
+					$update = "UPDATE imputacion_contable SET debito = 0,credito = 0 WHERE encabezado_registro_id=$encabezado_registro_id";
+					$this -> query($update,$Conex,true);			  
+
+					if(strlen($this -> GetError()) > 0){
+  						$this -> Rollback($Conex);
+					}else{	
+				
+					
+						$update = "UPDATE liquidacion_prima  SET estado = 'I',
+									causal_anulacion_id = $causal_anulacion_id,
+									anul_prima_nomina=$anul_abono_nomina,
+									desc_anul_prima_nomina =$desc_anul_abono_nomina,
+									anul_usuario_id=$anul_usuario_id
+								WHERE liquidacion_prima_id=$liquidacion_prima_id";	
+						$this -> query($update,$Conex,true);		
+					   $this -> Commit($Conex);			
+					}
+
+				}
+
+			}
+
+		}
+	}else{
+
+		$update = "UPDATE liquidacion_prima  SET estado= 'I',
+					causal_anulacion_id = $causal_anulacion_id,
+					anul_prima_nomina=$anul_abono_nomina,
+					desc_anul_prima_nomina =$desc_anul_abono_nomina,
+					anul_usuario_id=$anul_usuario_id
+				WHERE liquidacion_prima_id=$liquidacion_prima_id";	
+		$this -> query($update,$Conex,true);		
+	    $this -> Commit($Conex);			
+		
+	}
+
+  }
 	
 	public function Liq_Anterior($empleado_id,$fecha_liquidacion,$periodo,$oficina_id,$Conex){
 

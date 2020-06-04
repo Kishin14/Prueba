@@ -90,13 +90,17 @@ final class PrimaLayout extends View{
 	 
 	  $this -> assign("SIEMPLEADO",    		$this -> objectsHtml -> GetobjectHtml($this -> fields[si_empleado]));
      
-	 $this -> assign("ESTADO",    		$this -> objectsHtml -> GetobjectHtml($this -> fields[estado]));
+   $this -> assign("ESTADO",    		$this -> objectsHtml -> GetobjectHtml($this -> fields[estado]));
+   
+   $this -> assign("FECHALOG",$this -> objectsHtml -> GetobjectHtml($this -> fields[anul_abono_nomina]));	   
+	 $this -> assign("OBSERVACIONES",$this -> objectsHtml -> GetobjectHtml($this -> fields[desc_anul_abono_nomina]));
      
      if($this -> Guardar)
 	   $this -> assign("GUARDAR",	$this -> objectsHtml -> GetobjectHtml($this -> fields[guardar]));
 	  
 	 if($this -> Actualizar){
-	   $this -> assign("ACTUALIZAR",$this -> objectsHtml -> GetobjectHtml($this -> fields[actualizar]));
+     $this -> assign("ACTUALIZAR",$this -> objectsHtml -> GetobjectHtml($this -> fields[actualizar]));
+     $this -> assign("ANULAR",$this -> objectsHtml -> GetobjectHtml($this -> fields[anular]));
 	   $this -> assign("CONTABILIZAR",$this -> objectsHtml -> GetobjectHtml($this -> fields[contabilizar]));
 	 }
 	 if($this -> Imprimir){
@@ -119,6 +123,19 @@ final class PrimaLayout extends View{
       $this -> fields[concepto_area_id]['options'] = $TiposConcepto;
       $this -> assign("CONCEPTOAREA",$this -> objectsHtml -> GetobjectHtml($this -> fields[concepto_area_id]));
     }
+
+   public function setCausalesAnulacion($causales){
+	 $this -> fields[causal_anulacion_id]['options'] = $causales;
+     $this -> assign("CAUSALESID",$this -> objectsHtml -> GetobjectHtml($this -> fields[causal_anulacion_id]));	  	   
+   }
+
+
+   public function setUsuarioId($usuario,$oficina){	  
+	  
+	   $this -> fields[anul_usuario_id]['value'] = $usuario;
+     $this -> assign("ANULUSUARIOID",$this -> objectsHtml -> GetobjectHtml($this -> fields[anul_usuario_id]));	  
+	 
+   }   
 	
     public function SetGridPrima($Attributes,$Titles,$Cols,$Query){
       require_once("../../../framework/clases/grid/JqGridClass.php");

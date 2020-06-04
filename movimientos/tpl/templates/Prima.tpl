@@ -110,10 +110,10 @@
                 <td>{$VALORLIQUIDACION}{$VALORLIQUIDACIONPARCIAL}</td>
                 
                 <td><label>Valor Acumulado  : </label></td>
-                <td>{$VALORACUMULADO}<a href="javascript:void(0);" title="Presiona aqui para saber acerca de este campo."  name="myBtn"><img src="../../../framework/media/images/modulos/manual.png" width="16" height="18" onclick="alert_unico(this,'Informaci&oacute;n','Este campo es informativo, indicandonos el valor de la prima que ya le han pagado en el respectivo periodo al empleado.')"/></a></td>
+                <td>{$VALORACUMULADO}<a href="javascript:void(0);" title="Presiona aqui para saber acerca de este campo."  name="myBtn"><img src="../../../framework/media/images/modulos/manual.png" width="16" height="18" onclick="alert_unico(this,'Informaci&oacute;n','Este campo es informativo, indicandonos el valor que le han provisionado al empleado hasta la fecha.')"/></a></td>
 
                 <td><label>Valor Diferencia :</label></td>
-                <td>{$VALORDIFERENCIA}<a href="javascript:void(0);" title="Presiona aqui para saber acerca de este campo."  name="myBtn"><img src="../../../framework/media/images/modulos/manual.png" width="16" height="18" onclick="alert_unico(this,'Informaci&oacute;n','Este campo es informativo, indicandonos el valor de la prima que hace falta para completar el pago completo de la prima en el respetivo periodo.')"/></a></td>
+                <td>{$VALORDIFERENCIA}<a href="javascript:void(0);" title="Presiona aqui para saber acerca de este campo."  name="myBtn"><img src="../../../framework/media/images/modulos/manual.png" width="16" height="18" onclick="alert_unico(this,'Informaci&oacute;n','Este campo es informativo, indicandonos la diferencia entre el valor liquidado y el valor acomulado.')"/></a></td>
                 
                 
               </tr>
@@ -123,7 +123,7 @@
           </tr>
       <table width="100%">
           <tr>
-             <td colspan="8" align="center">{$GUARDAR}&nbsp;{$IMPRIMIR}&nbsp;{$BORRAR}&nbsp;{$LIMPIAR}&nbsp;{$CONTABILIZAR}</td></tr>
+             <td colspan="8" align="center">{$GUARDAR}&nbsp;{$ANULAR}&nbsp;{$IMPRIMIR}&nbsp;{$BORRAR}&nbsp;{$LIMPIAR}&nbsp;{$CONTABILIZAR}</td></tr>
      
          <tr><td colspan="8"><iframe id="detallePrima" frameborder="0" marginheight="0" marginwidth="0"></iframe></td></tr>
          <tr>
@@ -188,10 +188,31 @@
         </div>
     
     </div>
+      <div id="divAnulacion">
+      <form>
+        <table>       
+          <tr>
+            <td><label>Fecha / Hora :</label></td>
+            <td>{$FECHALOG}{$ANULUSUARIOID}</td>
+          </tr>          
+          <tr>
+            <td><label>Causal :</label></td>
+            <td>{$CAUSALESID}</td>
+          </tr>
+          <tr>
+            <td><label>Descripcion :</label></td>
+            <td>{$OBSERVACIONES}</td>
+          </tr> 
+          <tr>
+            <td colspan="2" align="center">{$ANULAR}</td>
+          </tr>                    
+        </table>
+      </form>
+    </div>
     <!--FIN Cuadro de informacion-->
 </fieldset>
     
     <fieldset>{$GRIDPARAMETROS}</fieldset>
     
-  </body>
+</body>
 </html>

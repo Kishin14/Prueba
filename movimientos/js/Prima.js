@@ -52,11 +52,21 @@ function setDataFormWithResponse(){
 		  if($('#anular')) 			$('#anular').attr("disabled","");  
 	   	  if($('#saveDetallepuc'))  $('#saveDetallepuc').attr("style","display:inherit");
 	  }else if($('#estado').val()=='C' ){
+		  if ($('#guardar'))        $('#guardar').attr("disabled", "true");
 		  if($('#actualizar')) 		$('#actualizar').attr("disabled","true");
 		  if($('#contabilizar')) 	$('#contabilizar').attr("disabled","true");			  
 		  if($('#anular')) 			$('#anular').attr("disabled","");  
 		  if($('#saveDetallepuc'))  $('#saveDetallepuc').attr("style","display:none");		  
 		  
+	  } else if ($('#estado').val() == 'I') {
+		  if ($('#guardar')) $('#guardar').attr("disabled", "true");
+		  if ($('#actualizar')) $('#actualizar').attr("disabled", "true");
+		  if ($('#contabilizar')) $('#contabilizar').attr("disabled", "true");
+		  if ($('#anular')) $('#anular').attr("disabled", "");
+		  if ($('#borrar')) $('#borrar').attr("disabled", "");
+		  if ($('#limpiar')) $('#limpiar').attr("disabled", "");
+		  if ($('#saveDetallepuc')) $('#saveDetallepuc').attr("style", "display:none");
+
 	  }	  
 
 		if ($("#si_empleado").val() == '1' && $("#tipo_liquidacion").val() == 'P') {
@@ -75,7 +85,6 @@ function setDataFormWithResponse(){
 			Liq_AnteriorTotal(1);
            
 			var total = data[0]['total'];
-			console.log(total);
 			$('#total').val(setFormatCurrency(total));
 
 			if ($('#guardar')) $('#guardar').attr("disabled", "true");
@@ -172,7 +181,16 @@ function setDataFormWithResponse1(){
 		  if($('#anular')) 			$('#anular').attr("disabled","");  
 		  if($('#saveDetallepuc'))  $('#saveDetallepuc').attr("style","display:none");		  
 		  
-	  }	  
+		} else if ($('#estado').val() == 'I') {
+			if ($('#guardar')) $('#guardar').attr("disabled", "true");
+			if ($('#actualizar')) $('#actualizar').attr("disabled", "true");
+			if ($('#contabilizar')) $('#contabilizar').attr("disabled", "true");
+			if ($('#anular')) $('#anular').attr("disabled", "");
+			if ($('#borrar')) $('#borrar').attr("disabled", "");
+			if ($('#limpiar')) $('#limpiar').attr("disabled", "");
+			if ($('#saveDetallepuc')) $('#saveDetallepuc').attr("style", "display:none");
+
+		}	  
     });
 
 	$("#divConta").css("display", "none");
@@ -534,6 +552,11 @@ function PrimaOnReset(formulario){
 	 $('#total').attr("disabled","yes");
 	 $('#total').attr("readonly","yes");
 
+	var forma = document.forms[0];
+	$(forma).find("input,select,textarea").each(function () {
+		this.disabled = false;
+	});
+
 }
 
 function cargardiv(){
@@ -593,7 +616,7 @@ function Liq_AnteriorTotal(find){
 					} else {
 						var diferencia = valor_liquidacion - valor_guardado;
 					}
-
+                  
 				    if (fecha_anterior ==fecha_liquidacion && periodo_anterior==periodo) {
 						
 						var prima = ((salario/2)-total);
@@ -663,8 +686,6 @@ function Liq_AnteriorParcial(find){
                        
 					   var prima = ((salario/2)-total);
 					   
-					  
-						
 						if (prima == 0 || prima >= 0 && prima <= 2) {
 							alertJquery('Este empleado ya cuenta con una liquidación realizada por el valor completo para este semestre.<br> VALOR TOTAL: ' + setFormatCurrency(total));
 							if($('#guardar'))    $('#guardar').attr("disabled","true");
@@ -689,7 +710,118 @@ function Liq_AnteriorParcial(find){
 	}});
 }
 
+function deleteLiquidacion(){
+	var liquidacion_prima_id = $("#liquidacion_prima_id").val();
+
+	if(liquidacion_prima_id != ''){
+		var QueryString = "ACTIONCONTROLER=onclickDelete&liquidacion_prima_id=" + liquidacion_prima_id;
+		$.ajax({
+			url: "PrimaClass.php",
+			data: QueryString,
+			success: function (resp) {
+
+				var data = $.parseJSON(resp);
+			    
+				if(data!=null){
+
+					if(data==1){
+						alertJquery("¡Se elimino la liquidacion exitosamente!, Por favor asegurese de actualizar la fecha de la prima en el formulario contrato");
+						PrimaOnReset();
+					}else{
+						alertJquery("¡No se puede borrar la prima ya que esta contabilizada o tiene un registro contable asociado!");
+					}
+				}
+			}
+		});
+	}
+}
+
+function onclickCancellation(formulario) {
+
+	if ($("#divAnulacion").is(":visible")) {
+        
+		var causal_anulacion_id = $("#causal_anulacion_id").val();
+		var desc_anul_abono_nomina = $("#desc_anul_abono_nomina").val();
+		var anul_abono_nomina = $("#anul_abono_nomina").val();
+
+		if (ValidaRequeridos(formulario)) {
+
+			var QueryString = "ACTIONCONTROLER=onclickCancellation&" + FormSerialize(formulario) + "&liquidacion_prima_id=" + $("#liquidacion_prima_id").val();
+
+			$.ajax({
+				url: "PrimaClass.php",
+				data: QueryString,
+				beforeSend: function () {
+					showDivLoading();
+				},
+				success: function (response) {
+
+					if ($.trim(response) == 'true') {
+						alertJquery('Prima Anulada', 'Anulada Exitosamente');
+						$("#refresh_QUERYGRID_pago").click();
+						setDataFormWithResponse();
+					} else {
+						alertJquery(response, 'Inconsistencia Anulando');
+					}
+
+					removeDivLoading();
+					$("#divAnulacion").dialog('close');
+
+				}
+
+			});
+
+		}
+
+	} else {
+
+		var liquidacion_prima_id = $("#liquidacion_prima_id").val();
+		var estado = $("#estado").val();
+
+		if (parseInt(liquidacion_prima_id) > 0) {
+
+			var QueryString = "ACTIONCONTROLER=getEstadoEncabezadoRegistro&liquidacion_prima_id=" + liquidacion_prima_id;
+
+			$.ajax({
+				url: "PrimaClass.php",
+				data: QueryString,
+				beforeSend: function () {
+					showDivLoading();
+				},
+				success: function (response) {
+
+					var estado = response;
+
+					if ($.trim(estado) == 'A' || $.trim(estado) == 'C') {
+
+						$("#divAnulacion").dialog({
+							title: 'Anulacion Prima',
+							width: 450,
+							height: 280,
+							closeOnEscape: true
+						});
+
+					} else {
+						alertJquery('Solo se permite anular Primas en estado : <b>ACTIVO/CONTABILIZADO</b>', 'Anulacion');
+					}
+
+					removeDivLoading();
+				}
+
+			});
+
+
+		} else {
+			alertJquery('Debe Seleccionar primero un Registro', 'Anulacion Prima');
+		}
+
+	}  
+}
+
 $(document).ready(function(){
+
+	$("#divAnulacion").css("display", "none");
+
 
 	Empleado_si();
 	$("#si_empleado").change(function(){										
@@ -750,6 +882,11 @@ $(document).ready(function(){
 		cargardiv();
 	
 	  });
+
+	$("#borrar").click(function () {
+		deleteLiquidacion();
+	});
+
 
 	$("#fecha_liquidacion").change(function () {
 
