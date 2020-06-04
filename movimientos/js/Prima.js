@@ -711,29 +711,37 @@ function Liq_AnteriorParcial(find){
 }
 
 function deleteLiquidacion(){
-	var liquidacion_prima_id = $("#liquidacion_prima_id").val();
 
-	if(liquidacion_prima_id != ''){
-		var QueryString = "ACTIONCONTROLER=onclickDelete&liquidacion_prima_id=" + liquidacion_prima_id;
-		$.ajax({
-			url: "PrimaClass.php",
-			data: QueryString,
-			success: function (resp) {
+	jConfirm("¿Esta seguro que desea Borrar la liquidacion?", "Validacion",
 
-				var data = $.parseJSON(resp);
-			    
-				if(data!=null){
+	function (r) {
+	
+	if (r) {
+		var liquidacion_prima_id = $("#liquidacion_prima_id").val();
 
-					if(data==1){
-						alertJquery("¡Se elimino la liquidación exitosamente!, Por favor asegúrese de actualizar la fecha de la prima en el formulario contrato.");
-						PrimaOnReset();
-					}else{
-						alertJquery("¡No se puede borrar la prima ya que esta contabilizada o tiene un registro contable asociado!");
+		if(liquidacion_prima_id != ''){
+			var QueryString = "ACTIONCONTROLER=onclickDelete&liquidacion_prima_id=" + liquidacion_prima_id;
+			$.ajax({
+				url: "PrimaClass.php",
+				data: QueryString,
+				success: function (resp) {
+
+					var data = $.parseJSON(resp);
+					
+					if(data!=null){
+
+						if(data==1){
+							alertJquery("¡Se elimino la liquidación exitosamente!, Por favor asegúrese de actualizar la fecha de la prima en el formulario contrato.");
+						}else{
+							alertJquery("¡No se puede borrar la prima ya que esta contabilizada o tiene un registro contable asociado!");
+						}
 					}
 				}
-			}
-		});
+			});
+		}
+		PrimaOnReset();
 	}
+    });
 }
 
 function onclickCancellation(formulario) {

@@ -525,7 +525,6 @@ final class Prima extends Controler{
 		name	=>'causal_anulacion_id',
 		id		=>'causal_anulacion_id',
 		type	=>'select',
-		required=>'yes',
 		options	=>array(),
 		datatype=>array(
 			type	=>'integer')
@@ -537,7 +536,6 @@ final class Prima extends Controler{
 		id		=>'desc_anul_abono_nomina',
 		type	=>'textarea',
 		value	=>'',
-		required=>'yes',
     	datatype=>array(
 			type	=>'text')
 	);
