@@ -1082,7 +1082,7 @@ exit("No puede liquidar la nomina hasta que actualice la periodicidad del siguie
         if ($Liquidacion > 0) {
             $Data = $Model->selectLiquidacion($Liquidacion, $this->getConex());
         } else {
-            $Data = $Model->selectLiquidacion($Liquidacion1, $this->getConex());
+            $Data = $Model->selectLiquidacion1($Liquidacion1, $this->getConex());
         }
         
        
