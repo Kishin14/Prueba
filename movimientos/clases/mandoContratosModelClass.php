@@ -103,7 +103,7 @@ final class mandoContratosModel extends Db
 
     public function Actualizar($contrato_id, $observacion_ren, $fecha_fin_ren, $usuario_id, $Conex)
     {
-
+            
         $this->Begin($Conex);
 
         $update = "UPDATE contrato SET
@@ -117,7 +117,7 @@ final class mandoContratosModel extends Db
         } else {
             $fecha = date("Y-m-d H:i:s");
             $update1 = "UPDATE historial_contrato SET
-					  observacion_ren='$observacion_ren',fecha_actualizacion='$fecha' 
+					  observacion_ren='$observacion_ren',fecha_actualizacion='$fecha',usuario_actualiza_id=$usuario_id 
 				    WHERE contrato_id = $contrato_id";
 
             $this->query($update1, $Conex, true);

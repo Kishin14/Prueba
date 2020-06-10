@@ -100,8 +100,9 @@
                     </tr>
                     <tr>
                         <td><label>Fecha Vencimiento Dotaci&oacute;n: </label></td>
-                        <td>{$DOTACION}</td>
-                         
+                        <td>{$DOTACION}</td>                
+                        <td><label>Observacion Actualizacion :</label></td>
+                        <td>{$OBSERVACIONES}</td>
                     </tr>
                 </table>
             </fieldset>
@@ -271,7 +272,7 @@
                 </table>
             </fieldset>                        
         	</td>
-        </tr>                            
+        </tr>                           
         <tr>
         	<td colspan="4" align="center">{$GUARDAR}&nbsp;{$ACTUALIZAR}&nbsp;{$IMPRIMIR}&nbsp;{$ANULAR}&nbsp;{$LIMPIAR}</td>
         </tr>
@@ -289,8 +290,8 @@
     
     </div>
     <!--FIN Cuadro de informacion-->
-    
     {$FORM1END}
+    
     </fieldset>
     <fieldset>{$GRIDPARAMETROS}</fieldset>
 </body>

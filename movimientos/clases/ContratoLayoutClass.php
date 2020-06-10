@@ -132,6 +132,9 @@ final class ContratoLayout extends View{
 		$this	->	assign("LUGAREXP",					$this	->	objectsHtml	->	GetobjectHtml($this	->	fields[lugar_expedicion_doc]));	
 		$this	->	assign("LUGARTRAB",					$this	->	objectsHtml	->	GetobjectHtml($this	->	fields[lugar_trabajo]));	
 
+		$this->assign("OBSERVACIONES", $this->objectsHtml->GetobjectHtml($this->fields[desc_actualizacion]));
+
+
 		if($this -> Guardar)
 			$this -> assign("GUARDAR",	$this -> objectsHtml -> GetobjectHtml($this -> fields[guardar]));
 
