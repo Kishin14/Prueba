@@ -1421,6 +1421,16 @@ final class RegistrarModel extends Db{
 	return $result;
   }
 
+  public function selectLiquidacion1($liquidacion_novedad_id,$Conex){
+		$select = "SELECT l.fecha_inicial,l.fecha_final,l.liquidacion_novedad_id,l.empleados,l.estado,l.consecutivo,l.periodicidad,l.area_laboral
+							FROM liquidacion_novedad l
+							WHERE l.liquidacion_novedad_id=$liquidacion_novedad_id";
+		$result = $this -> DbFetchAll($select,$Conex,$ErrDb = false);
+	
+		return $result;
+	}
+	
+
   public function comprobar_estado($liquidacion_novedad_id,$Conex){
     				
    $select = "SELECT l.estado, l.empleados,l.encabezado_registro_id,l.consecutivo, l.encabezado_registro_id,l.fecha_inicial,l.fecha_final,
