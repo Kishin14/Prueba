@@ -129,6 +129,7 @@ final class LiquidacionFinal extends Controler
         $devengados = 0;
         
         $fecha_final = $_REQUEST['fecha_final'];
+        $fecha_inicio = $_REQUEST['fecha_inicio'];
         $periodo = substr($fecha_final, 0, 4);
         $datos_periodo = $Model->getDatosperiodo($periodo, $this->getConex());
         
@@ -150,11 +151,12 @@ final class LiquidacionFinal extends Controler
         if ($data[0]['prestaciones'] != 0) {
             //cesantias
             $data_ces = $Model->getDetallesCesantias($contrato_id, $_REQUEST['fecha_final'], $this->getConex());
-            $dias_ces = $data_ces[0]['dias_dif'] > 0 ? $data_ces[0]['dias_dif'] : $dias;
+            $fecha_ultima = $data_ces[0]['fecha_corte'];
+            $dias_ces = $this -> restaFechasCont($fecha_ultima,$_REQUEST['fecha_final']);
             $valor_cesan = intval((($data[0]['sueldo_base'] + $data[0]['subsidio_transporte']) * $dias_ces) / 360);
             $desde_cesan = $data_ces[0]['fecha_corte'] != '' ? $data_ces[0]['fecha_corte'] : $_REQUEST['fecha_inicio'];
             $datos[$x]['concepto'] = 'CESANTIAS';
-            $datos[$x]['dias'] = $data_ces[0]['dias_dif'] > 0 ? $data_ces[0]['dias_dif'] : $dias;
+            $datos[$x]['dias'] = $dias_ces > 0 ? $dias_ces : $dias;
             $datos[$x]['periodo'] = 'De: ' . $desde_cesan . ' Hasta: ' . $_REQUEST['fecha_final'];
             $datos[$x]['valor'] = $valor_cesan;
             $datos[$x]['tipo'] = 'P';
@@ -246,12 +248,13 @@ final class LiquidacionFinal extends Controler
 
             //int cesantias
             $data_ices = $Model->getDetallesIntCesantias($contrato_id, $_REQUEST['fecha_final'], $this->getConex());
-            $dias_ices = $data_ices[0]['dias_dif'] > 0 ? $data_ices[0]['dias_dif'] : $dias;
+            $fecha_ultima = $data_ices[0]['fecha_corte'];
+            $dias_ices = $this->restaFechasCont($fecha_ultima,$_REQUEST['fecha_final']);
             //$valor_icesan = intval(((($data[0]['sueldo_base']+$data[0]['subsidio_transporte'])*0.12)* $dias_ices) / 360);
             $valor_icesan = intval((($valor_cesan * 0.12) * $dias_ices) / 360);
             $desde_icesan = $data_ices[0]['fecha_corte'] != '' ? $data_ices[0]['fecha_corte'] : $_REQUEST['fecha_inicio'];
             $datos[$x]['concepto'] = 'INT. CESANTIAS';
-            $datos[$x]['dias'] = $data_ices[0]['dias_dif'] > 0 ? $data_ices[0]['dias_dif'] : $dias;
+            $datos[$x]['dias'] = $dias_ices > 0 ? $dias_ices : $dias;
             $datos[$x]['periodo'] = 'De: ' . $desde_icesan . ' Hasta: ' . $_REQUEST['fecha_final'];
             $datos[$x]['valor'] = $valor_icesan;
             $datos[$x]['tipo'] = 'P';
@@ -342,9 +345,9 @@ final class LiquidacionFinal extends Controler
             // prima
             $data_prima = $Model->getDetallesPrima($contrato_id, $_REQUEST['fecha_final'], $this->getConex());
             $fecha_ultima = $data_prima[0]['fecha_liquidacion'];
-            if ($data_prima[0]['periodo'] == 2 && $data_prima[0]['inicial'] == 0) {
+            if ($data_prima[0]['periodo'] == 2){
                 $dias_prima = $this->restaFechasCont($fecha_ultima, $_REQUEST['fecha_final']);
-            } elseif ($data_prima[0]['periodo'] == 1 && $data_prima[0]['inicial'] == 0) {
+            } elseif ($data_prima[0]['periodo'] == 1) {
                 $dias_prima = $this->restaFechasCont($fecha_ultima, $_REQUEST['fecha_final']);
             } else {
                 $dias_prima = $dias;
@@ -696,7 +699,7 @@ final class LiquidacionFinal extends Controler
         if (count($data_ded) > 0) {
 
             for ($i = 0; $i < count($data_ded); $i++) {
-                $deta_ded = $Model->getDetallesDeduccionesDetalle($contrato_id, $data_ded[$i]['concepto_area_id'], $fecha_final, $this->getConex());
+                $deta_ded = $Model->getDetallesDeduccionesDetalle($contrato_id, $data_ded[$i]['concepto_area_id'], $data_ded[$i]['fecha_novedad'], $fecha_inicio, $fecha_final, $this->getConex());
 
                 if ($data_ded[$i]['valor'] == $deta_ded[$i]['valor']) {
                     $valor_debe = $data_ded[$i]['valor'] - $deta_ded[$i]['valor'];
@@ -779,7 +782,7 @@ final class LiquidacionFinal extends Controler
         if (count($data_dev) > 0) {
 
             for ($i = 0; $i < count($data_dev); $i++) {
-                $deta_dev = $Model->getDetallesDevengadoDetalle($contrato_id, $data_dev[$i]['concepto_area_id'], $fecha_final, $this->getConex());
+                $deta_dev = $Model->getDetallesDevengadoDetalle($contrato_id, $data_dev[$i]['concepto_area_id'], $data_dev[$i]['fecha_novedad'], $fecha_inicio, $fecha_final, $this->getConex());
 
                 if ($data_dev[$i]['valor'] == $deta_dev[$i]['valor']) {
                     $valor_debe = $data_dev[$i]['valor'] - $deta_dev[$i]['valor'];
