@@ -221,7 +221,7 @@ final class LiquidacionFinalModel extends Db
 
         if ($contrato_id > 0) {
 
-            $select = "SELECT DATEDIFF(CONCAT_WS(' ','$fecha_final','23:59:59'), ADDDATE(l.fecha_corte, INTERVAL 1 DAY)) AS dias_dif,  ADDDATE(l.fecha_corte, INTERVAL 1 DAY) AS fecha_corte
+            $select = "SELECT ADDDATE(l.fecha_corte, INTERVAL 1 DAY) AS fecha_corte
 		FROM liquidacion_cesantias l
         WHERE l.contrato_id = $contrato_id AND l.estado!='I' ORDER BY l.fecha_ultimo_corte DESC LIMIT 1";
         //die($select);
@@ -239,10 +239,10 @@ final class LiquidacionFinalModel extends Db
 
         if ($contrato_id > 0) {
 
-            $select = "SELECT DATEDIFF(CONCAT_WS(' ','$fecha_final','23:59:59'),ADDDATE(l.fecha_corte, INTERVAL 1 DAY)) AS dias_dif, ADDDATE(l.fecha_corte, INTERVAL 1 DAY) AS fecha_corte
-		FROM liquidacion_int_cesantias l
-		WHERE l.contrato_id = $contrato_id AND l.estado!='I' ORDER BY l.fecha_ultimo_corte DESC LIMIT 1";
-
+            $select = "SELECT ADDDATE(l.fecha_corte, INTERVAL 1 DAY) AS fecha_corte
+                FROM liquidacion_int_cesantias l
+                WHERE l.contrato_id = $contrato_id AND l.estado!='I' ORDER BY l.fecha_ultimo_corte DESC LIMIT 1";
+        
             $result = $this->DbFetchAll($select, $Conex, true);
 
         } else {
@@ -294,7 +294,7 @@ final class LiquidacionFinalModel extends Db
 		FROM liquidacion_prima l
         WHERE l.contrato_id = $contrato_id AND l.estado!='I' ORDER BY l.fecha_liquidacion DESC LIMIT 1";
             $result = $this->DbFetchAll($select, $Conex, true);
-
+        //die($select);
         } else {
             $result = array();
         }
@@ -308,8 +308,8 @@ final class LiquidacionFinalModel extends Db
 
             $select = "SELECT c.*
 		FROM novedad_fija c
-		WHERE c.contrato_id = $contrato_id AND c.estado='A' AND tipo_novedad='D'";
-
+		WHERE c.contrato_id = $contrato_id AND c.estado='A' AND tipo_novedad='D' ORDER BY valor DESC";
+        //die($select);
             $result = $this->DbFetchAll($select, $Conex, true);
 
         } else {
@@ -325,7 +325,7 @@ final class LiquidacionFinalModel extends Db
 
             $select = "SELECT c.*
 		FROM novedad_fija c
-		WHERE c.contrato_id = $contrato_id AND c.estado='A' AND tipo_novedad='V'";
+		WHERE c.contrato_id = $contrato_id AND c.estado='A' AND tipo_novedad='V' ORDER BY valor DESC";
 //echo $select;
             $result = $this->DbFetchAll($select, $Conex, true);
 
@@ -335,15 +335,15 @@ final class LiquidacionFinalModel extends Db
         return $result;
     }
 
-    public function getDetallesDeduccionesDetalle($contrato_id, $concepto_area_id, $fecha_final, $Conex)
+    public function getDetallesDeduccionesDetalle($contrato_id, $concepto_area_id, $fecha_novedad, $fecha_inicio, $fecha_final, $Conex)
     {
 
         if ($contrato_id > 0) {
 
-            $select = "SELECT SUM(dl.credito) AS valor
+            $select = "SELECT dl.credito AS valor
 		FROM liquidacion_novedad l, detalle_liquidacion_novedad dl
-		WHERE l.contrato_id = $contrato_id AND l.estado!='A' AND dl.liquidacion_novedad_id=l.liquidacion_novedad_id AND l.fecha_final='$fecha_final'  AND dl.concepto_area_id IS NOT NULL";
-//echo $select;
+		WHERE l.contrato_id = $contrato_id AND l.estado!='A' AND dl.liquidacion_novedad_id=l.liquidacion_novedad_id AND '$fecha_novedad' BETWEEN '$fecha_inicio' AND '$fecha_final'  AND dl.concepto_area_id IS NOT NULL ORDER BY valor DESC";
+        //die($select);
             $result = $this->DbFetchAll($select, $Conex, true);
 
         } else {
@@ -352,13 +352,13 @@ final class LiquidacionFinalModel extends Db
         return $result;
     }
 
-    public function getDetallesDevengadoDetalle($contrato_id, $concepto_area_id, $fecha_final, $Conex)
+    public function getDetallesDevengadoDetalle($contrato_id, $concepto_area_id, $fecha_novedad, $fecha_inicio, $fecha_final, $Conex)
     {
         if ($contrato_id > 0) {
 
             $select = "SELECT dl.debito AS valor
 		FROM liquidacion_novedad l, detalle_liquidacion_novedad dl
-		WHERE l.contrato_id = $contrato_id AND l.estado!='A' AND dl.liquidacion_novedad_id=l.liquidacion_novedad_id AND l.fecha_final='$fecha_final'  AND dl.concepto_area_id IS NOT NULL";
+        WHERE l.contrato_id = $contrato_id AND l.estado!='A' AND dl.liquidacion_novedad_id=l.liquidacion_novedad_id AND '$fecha_novedad' BETWEEN '$fecha_inicio' AND '$fecha_final' AND dl.concepto_area_id IS NOT NULL ORDER BY valor DESC";
         
             $result = $this->DbFetchAll($select, $Conex, true);
 
@@ -480,13 +480,15 @@ final class LiquidacionFinalModel extends Db
 	        fecha_anulacion = NOW(),usuario_anulo_id = $usuario_anulo_id WHERE liquidacion_definitiva_id = $liquidacion_definitiva_id";
         $this->query($update, $Conex, true);
 
+        $update_contrato = "UPDATE contrato SET estado = 'A' WHERE contrato_id = (SELECT contrato_id FROM liquidacion_definitiva WHERE liquidacion_definitiva_id = $liquidacion_definitiva_id)";
+        $this->query($update_contrato, $Conex, true);
         if ($encabezado_registro_id > 0) {
 
             $insert = "INSERT INTO encabezado_de_registro_anulado SELECT $encabezado_registro_id AS
                 encabezado_de_registro_anulado_id,encabezado_registro_id,empresa_id,oficina_id,tipo_documento_id,
                 forma_pago_id,valor,numero_soporte,tercero_id,periodo_contable_id,mes_contable_id,consecutivo,
                 fecha,concepto,puc_id,estado,fecha_registro,modifica,usuario_id,$causal_anulacion_id AS causal_anulacion_id,
-                $observacion_anulacion AS observaciones,$usuario_anulo_id AS usuario_anula,fecha_anulacion,usuario_actualiza,fecha_actualiza FROM encabezado_de_registro WHERE encabezado_registro_id = $encabezado_registro_id";
+                $observacion_anulacion AS observaciones,$usuario_anulo_id AS usuario_anula,NOW() AS fecha_anulacion,usuario_actualiza,fecha_actualiza FROM encabezado_de_registro WHERE encabezado_registro_id = $encabezado_registro_id";
 
             $this->query($insert, $Conex, true);
 
