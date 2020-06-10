@@ -789,6 +789,42 @@
           </tbody>
         </table>
         <!--Tabla de Liquidacion Vacaciones fin-->
+        <!--Tabla de Historial Contrato inicio-->
+        <table class="table table-striped table-hover table-sm table-bordered" style="width: 100%;">
+          <thead class="thead">
+            <th style="text-align: center;" colspan="4"><b>HISTORIAL ACTUALIZACIONES CONTRATO</b></th>
+          </thead>
+          {if $i.historia eq ''}
+          <tr>
+            <td colspan="4">
+              <div class="animated bounceIn" style="text-align: center; font-size: 1.0rem;">¡No se han realizado actualizaciones para este contrato!</div>
+            </td>
+          </tr>
+          {else}
+          <tbody>
+            {assign var="historial_count" value="0"}
+            {foreach name=detalle from=$i.historia item=hc}
+            {* <tr>
+              <td colspan="4">&nbsp;</td>
+            </tr> *}
+            <tr style="background-color: #e6eee3;">
+              <td width="25%"><b>Fecha Inicio </b>&nbsp;{$hc.fecha_inicio}</td>
+              <td width="25%"><b>Fecha Final </b>&nbsp;{$hc.fecha_terminacion}</td>
+              <td width="25%"><b>Sueldo Base </b>&nbsp; ${$hc.sueldo_base|number_format:0:',':'.'}</td>
+              <td width="25%"><b>Subsidio Transporte </b>&nbsp; ${$hc.subsidio_transporte|number_format:0:',':'.'}</td>
+            </tr>
+            <tr>
+              <td width="25%"><b>Estado </b>&nbsp;{$hc.estado}</td>
+              <td width="25%"><b>Observaci&oacute;n Actualizaci&oacute;n </b><br>{$hc.observacion_ren}</td>
+              <td width="25%"><b>Fecha Actualizaci&oacute;n </b><br>{$hc.fecha_actualizacion}</td>
+              <td width="25%"><b>Usuario Actualiza </b><br>{$hc.usuario_actualizo}</td>
+            </tr>
+            {math assign="historial_count" equation="x + y" x=$historial_count y=1}
+            {/foreach}
+            {/if}
+          </tbody>
+        </table>
+        <!--Tabla de Historial Contrato fin-->
       </div>
       <div class="col-sm"></div>
     </div>

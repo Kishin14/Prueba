@@ -111,6 +111,11 @@ final class reporteHojaVida extends Controler{
  		$data_liq_vacacion  = $Model -> getliquida_vacacion($data[$i]['contrato_id'],$this -> getConex());
  		$data[$i]['liq_vacacion'] = $data_liq_vacacion;
  	}
+	 
+	 for ($i=0; $i < count($data) ; $i++) { 
+ 		$data_historia  = $Model -> gethistoria($data[$i]['contrato_id'],$this -> getConex());
+ 		$data[$i]['historia'] = $data_historia;
+ 	}
  	
 
     if($_REQUEST['download'] == 'true'){
