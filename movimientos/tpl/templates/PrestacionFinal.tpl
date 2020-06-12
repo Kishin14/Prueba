@@ -20,10 +20,6 @@
         <th>PERIODO</th>
         <th>DIAS</th>
         <th>VALOR</th>
-
-        <th>OBSERVACION</th>
-        <th>&nbsp;</th>
-        <th><input type="checkbox" id="checkedAll"></th>
       </tr>
     </thead>
 
@@ -36,7 +32,6 @@
         <th colspan="3" align="left">{$d.titulo}</th>
         <th align="right"><input type="text" autocomplete="off" name="{$d.campo}" id="{$d.campo}"
             style="text-align:right; background:#DAEAF6;" value="{$d.valor}" class="required numeric" /></th>
-        <th colspan="3" align="right">&nbsp;</th>
       </tr>
     </thead>
     {else}
@@ -63,10 +58,6 @@
         <td><input type="text" autocomplete="off" name="dias" id="dias" value="{$d.dias}" class="required" /></td>
         <td align="right"><input type="text" autocomplete="off" name="valor" id="valor" style="text-align:right;"
             value="{$d.valor}" class="required numeric" /> </td>
-        <td><input type="text" autocomplete="off" name="observacion" id="observacion" value="{$d.observacion}"
-            class="required" /></td>
-        <td><a name="saveDetalleSoliServi"><img src="../../../framework/media/images/grid/save.png" /></a></td>
-        <td><input type="checkbox" name="procesar" /></td>
       </tr>
     </tbody>
     {/if}
@@ -86,10 +77,6 @@
         <th>PERIODO</th>
         <th>DIAS</th>
         <th>VALOR</th>
-
-        <th>OBSERVACION</th>
-        <th>&nbsp;</th>
-        <th><input type="checkbox" id="checkedAll"></th>
       </tr>
     </thead>
 
@@ -102,7 +89,6 @@
         <th colspan="3" align="left">{$d.titulo}</th>
         <th align="right"><input type="text" autocomplete="off" name="{$d.campo}" id="{$d.campo}"
             style="text-align:right; background:#DAEAF6;" value="{$d.valor}" class="required numeric" /></th>
-        <th colspan="3" align="right">&nbsp;</th>
       </tr>
     </thead>
     {else}
@@ -129,10 +115,6 @@
         <td><input type="text" autocomplete="off" name="dias" id="dias" value="{$d.dias}" class="required" /></td>
         <td align="right"><input type="text" autocomplete="off" name="valor" id="valor" style="text-align:right;"
             value="{$d.valor}" class="required numeric" /> </td>
-        <td><input type="text" autocomplete="off" name="observacion" id="observacion" value="{$d.observacion}"
-            class="required" /></td>
-        <td><a name="saveDetalleSoliServi"><img src="../../../framework/media/images/grid/save.png" /></a></td>
-        <td><input type="checkbox" name="procesar" /></td>
       </tr>
     </tbody>
     {/if}
