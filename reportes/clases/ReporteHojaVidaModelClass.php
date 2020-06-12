@@ -208,7 +208,7 @@ final class reporteHojaVidaModel extends Db{
 	 ACTIVO</span>' WHEN 'R' THEN 'RETIRADO'  WHEN 'F' THEN 
 	'<span style=\'color:#FF0000;\'>
 	 FINALIZADO</span>' ELSE 'ANULADO' END AS estado,(SELECT
-	 CONCAT_WS(' ',t.razon_social,t.primer_nombre,t.segundo_nombre,t.primer_apellido,t.segundo_apellido) AS usuario_actualizo FROM tercero t,usuario u WHERE t.tercero_id=u.tercero_id AND u.usuario_id=hc.usuario_id)AS usuario_actualizo
+	 CONCAT_WS(' ',t.razon_social,t.primer_nombre,t.segundo_nombre,t.primer_apellido,t.segundo_apellido) AS usuario_actualizo FROM tercero t,usuario u WHERE t.tercero_id=u.tercero_id AND u.usuario_id=hc.usuario_actualiza_id)AS usuario_actualizo
 	   	FROM historial_contrato hc 
 	   	WHERE hc.contrato_id = $contrato_id ORDER BY hc.fecha_actualizacion ASC";
 
