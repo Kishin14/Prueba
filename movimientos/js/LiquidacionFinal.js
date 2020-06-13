@@ -95,7 +95,7 @@ function setDataContrato(contrato_id){
 function LiquidacionFinalOnSave(formulario,resp){
 
    if(isInteger(resp)){
-	   $('#liquidacion_definitiva_id').val(liquidacion_definitiva_id);
+	   $('#liquidacion_definitiva_id').val(resp);
 	   document.getElementById('prestacion').src = 'LiquidacionFinalClass.php?ACTIONCONTROLER=onclickSave&liquidacion_definitiva_id='+resp+"&rand="+Math.random();
 	   
 	
@@ -138,6 +138,7 @@ function LiquidacionFinalOnReset(formulario){
 	
     if($('#limpiar'))    $('#limpiar').attr("disabled","");	
 	$('#estado').val("E");	
+	$("#prestacion").attr("src","/rural/framework/tpl/blank.html");
 }
 
 function restaFechas(f1,f2){
