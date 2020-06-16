@@ -137,7 +137,7 @@ final class PrimaModel extends Db{
 					
 					$insert_det_puc_cons ="INSERT INTO detalle_prima_puc (liquidacion_prima_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_prima,porcentaje_prima,formula_prima,desc_prima,deb_item_prima,cre_item_prima,valor_liquida,contrapartida)
 					VALUES
-					($liquidacion_prima_id,$puc_consolidado_prima,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF($centro_costo_consolidado>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,$valor_consolidado,0,0,0)";
+					($liquidacion_prima_id,$puc_consolidado_prima,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF($centro_costo_consolidado>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,$valor_consolidado,0,$valor_consolidado,0)";
 					$this -> query($insert_det_puc_cons,$Conex,true); 
 					
 				}
@@ -158,14 +158,14 @@ final class PrimaModel extends Db{
 						
 						$insert_det_puc_gas ="INSERT INTO detalle_prima_puc (liquidacion_prima_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_prima,porcentaje_prima,formula_prima,desc_prima,deb_item_prima,cre_item_prima,valor_liquida,contrapartida)
 						VALUES
-						($liquidacion_prima_id,$puc_diferencia,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF(COALESCE($centro_costo_consolidado,0)>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,$diferencia,0,0,0)";
+						($liquidacion_prima_id,$puc_diferencia,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF(COALESCE($centro_costo_consolidado,0)>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,$diferencia,0,$diferencia,0)";
 						$this -> query($insert_det_puc_gas,$Conex,true);
 						
 					}else{
 					
 						$insert_det_puc_gas ="INSERT INTO detalle_prima_puc (liquidacion_prima_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_prima,porcentaje_prima,formula_prima,desc_prima,deb_item_prima,cre_item_prima,valor_liquida,contrapartida)
 						VALUES
-						($liquidacion_prima_id,$puc_diferencia,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF(COALESCE($centro_costo_consolidado,0)>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,0,ABS($diferencia),0,0)";
+						($liquidacion_prima_id,$puc_diferencia,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF(COALESCE($centro_costo_consolidado,0)>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,0,ABS($diferencia),ABS($diferencia),0)";
 						$this -> query($insert_det_puc_gas,$Conex,true);
 						
 					} 
@@ -179,14 +179,14 @@ final class PrimaModel extends Db{
 					
 					$insert_det_puc_gas ="INSERT INTO detalle_prima_puc (liquidacion_prima_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_prima,porcentaje_prima,formula_prima,desc_prima,deb_item_prima,cre_item_prima,valor_liquida,contrapartida)
 					VALUES
-					($liquidacion_prima_id,$puc_reintegro,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF(COALESCE($centro_costo_consolidado,0)>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,0,$diferencia,0,0)";
+					($liquidacion_prima_id,$puc_reintegro,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF(COALESCE($centro_costo_consolidado,0)>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,0,$diferencia,$diferencia,0)";
 					$this -> query($insert_det_puc_gas,$Conex,true);
 					
 				}else{
                    
 					$insert_det_puc_gas ="INSERT INTO detalle_prima_puc (liquidacion_prima_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_prima,porcentaje_prima,formula_prima,desc_prima,deb_item_prima,cre_item_prima,valor_liquida,contrapartida)
 					VALUES
-					($liquidacion_prima_id,$puc_diferencia,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF(COALESCE($centro_costo_consolidado,0)>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,ABS($diferencia),0,0,0)";
+					($liquidacion_prima_id,$puc_diferencia,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF(COALESCE($centro_costo_consolidado,0)>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,ABS($diferencia),0,$diferencia,0)";
 					$this -> query($insert_det_puc_gas,$Conex,true);
 					
 				} 
@@ -196,7 +196,7 @@ final class PrimaModel extends Db{
 				
 				$insert_det_puc_contra ="INSERT INTO detalle_prima_puc (liquidacion_prima_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_prima,porcentaje_prima,formula_prima,desc_prima,deb_item_prima,cre_item_prima,valor_liquida,contrapartida)
 				VALUES
-				($liquidacion_prima_id,$puc_contrapartida,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF($centro_costo_consolidado>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,0,$valor,0,1)";
+				($liquidacion_prima_id,$puc_contrapartida,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF($centro_costo_consolidado>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,0,$valor,$valor,1)";
 				$this -> query($insert_det_puc_contra,$Conex,true);
 				
 		    }else{
@@ -321,7 +321,7 @@ final class PrimaModel extends Db{
 					
 					$insert_det_puc_cons ="INSERT INTO detalle_prima_puc (liquidacion_prima_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_prima,porcentaje_prima,formula_prima,desc_prima,deb_item_prima,cre_item_prima,valor_liquida,contrapartida)
 					VALUES
-					($liquidacion_prima_id,$puc_consolidado_prima,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF($centro_costo_consolidado>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,$valor_consolidado,0,0,0)";
+					($liquidacion_prima_id,$puc_consolidado_prima,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF($centro_costo_consolidado>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,$valor_consolidado,0,$valor_consolidado,0)";
 					$this -> query($insert_det_puc_cons,$Conex,true); 
 					
 				}
@@ -340,14 +340,14 @@ final class PrimaModel extends Db{
 				if($diferencia>0){
 					$insert_det_puc_gas ="INSERT INTO detalle_prima_puc (liquidacion_prima_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_prima,porcentaje_prima,formula_prima,desc_prima,deb_item_prima,cre_item_prima,valor_liquida,contrapartida)
 					VALUES
-					($liquidacion_prima_id,$puc_diferencia,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF(COALESCE($centro_costo_consolidado,0)>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,$diferencia,0,0,0)";
+					($liquidacion_prima_id,$puc_diferencia,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF(COALESCE($centro_costo_consolidado,0)>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,$diferencia,0,$diferencia,0)";
 					$this -> query($insert_det_puc_gas,$Conex,true);
 					
 				}else{
 
 					$insert_det_puc_gas ="INSERT INTO detalle_prima_puc (liquidacion_prima_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_prima,porcentaje_prima,formula_prima,desc_prima,deb_item_prima,cre_item_prima,valor_liquida,contrapartida)
 					VALUES
-					($liquidacion_prima_id,$puc_diferencia,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF(COALESCE($centro_costo_consolidado,0)>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,0,ABS($diferencia),0,0)";
+					($liquidacion_prima_id,$puc_diferencia,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF(COALESCE($centro_costo_consolidado,0)>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,0,ABS($diferencia),ABS($diferencia),0)";
 					$this -> query($insert_det_puc_gas,$Conex,true);
 					
 				}
@@ -360,7 +360,7 @@ final class PrimaModel extends Db{
 					
 					$insert_det_puc_gas ="INSERT INTO detalle_prima_puc (liquidacion_prima_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_prima,porcentaje_prima,formula_prima,desc_prima,deb_item_prima,cre_item_prima,valor_liquida,contrapartida)
 					VALUES
-					($liquidacion_prima_id,$puc_reintegro,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF(COALESCE($centro_costo_consolidado,0)>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,0,$diferencia,0,0)";
+					($liquidacion_prima_id,$puc_reintegro,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF(COALESCE($centro_costo_consolidado,0)>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,0,$diferencia,$diferencia,0)";
 					$this -> query($insert_det_puc_gas,$Conex,true);
 					
 				}
@@ -369,7 +369,7 @@ final class PrimaModel extends Db{
 							
 				$insert_det_puc_contra ="INSERT INTO detalle_prima_puc (liquidacion_prima_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_prima,porcentaje_prima,formula_prima,desc_prima,deb_item_prima,cre_item_prima,valor_liquida,contrapartida)
 				VALUES
-				($liquidacion_prima_id,$puc_contrapartida,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF($centro_costo_consolidado>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,0,$valor,0,1)";
+				($liquidacion_prima_id,$puc_contrapartida,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF($centro_costo_consolidado>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,0,$valor,$valor,1)";
 				$this -> query($insert_det_puc_contra,$Conex,true);
 				
 				$liquidacion_prima .= ','.$liquidacion_prima_id;
@@ -518,7 +518,7 @@ final class PrimaModel extends Db{
 					
 					$insert_det_puc_cons ="INSERT INTO detalle_prima_puc (liquidacion_prima_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_prima,porcentaje_prima,formula_prima,desc_prima,deb_item_prima,cre_item_prima,valor_liquida,contrapartida)
 					VALUES
-					($liquidacion_prima_id,$puc_consolidado_prima,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF($centro_costo_consolidado>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,$valor_consolidado,0,0,0)";
+					($liquidacion_prima_id,$puc_consolidado_prima,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF($centro_costo_consolidado>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,$valor_consolidado,0,$valor_consolidado,0)";
 					$this -> query($insert_det_puc_cons,$Conex,true); 
 					
 				}
@@ -537,14 +537,14 @@ final class PrimaModel extends Db{
 				if($diferencia>0){
 					$insert_det_puc_gas ="INSERT INTO detalle_prima_puc (liquidacion_prima_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_prima,porcentaje_prima,formula_prima,desc_prima,deb_item_prima,cre_item_prima,valor_liquida,contrapartida)
 					VALUES
-					($liquidacion_prima_id,$puc_diferencia,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF(COALESCE($centro_costo_consolidado,0)>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,$diferencia,0,0,0)";
+					($liquidacion_prima_id,$puc_diferencia,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF(COALESCE($centro_costo_consolidado,0)>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,$diferencia,0,$diferencia,0)";
 					$this -> query($insert_det_puc_gas,$Conex,true);
 					
 				}else{
 
 					$insert_det_puc_gas ="INSERT INTO detalle_prima_puc (liquidacion_prima_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_prima,porcentaje_prima,formula_prima,desc_prima,deb_item_prima,cre_item_prima,valor_liquida,contrapartida)
 					VALUES
-					($liquidacion_prima_id,$puc_diferencia,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF(COALESCE($centro_costo_consolidado,0)>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,0,ABS($diferencia),0,0)";
+					($liquidacion_prima_id,$puc_diferencia,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF(COALESCE($centro_costo_consolidado,0)>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,0,ABS($diferencia),ABS($diferencia),0)";
 					$this -> query($insert_det_puc_gas,$Conex,true);
 					
 				}
@@ -557,7 +557,7 @@ final class PrimaModel extends Db{
 					
 					$insert_det_puc_gas ="INSERT INTO detalle_prima_puc (liquidacion_prima_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_prima,porcentaje_prima,formula_prima,desc_prima,deb_item_prima,cre_item_prima,valor_liquida,contrapartida)
 					VALUES
-					($liquidacion_prima_id,$puc_reintegro,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF(COALESCE($centro_costo_consolidado,0)>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,0,$diferencia,0,0)";
+					($liquidacion_prima_id,$puc_reintegro,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF(COALESCE($centro_costo_consolidado,0)>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,0,$diferencia,$diferencia,0)";
 					$this -> query($insert_det_puc_gas,$Conex,true);
 					
 				}
@@ -566,7 +566,7 @@ final class PrimaModel extends Db{
 							
 				$insert_det_puc_contra ="INSERT INTO detalle_prima_puc (liquidacion_prima_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_prima,porcentaje_prima,formula_prima,desc_prima,deb_item_prima,cre_item_prima,valor_liquida,contrapartida)
 				VALUES
-				($liquidacion_prima_id,$puc_contrapartida,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF($centro_costo_consolidado>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,0,$valor,0,1)";
+				($liquidacion_prima_id,$puc_contrapartida,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF($centro_costo_consolidado>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,0,$valor,$valor,1)";
 				$this -> query($insert_det_puc_contra,$Conex,true);
 				
 				$liquidacion_prima .= ','.$liquidacion_prima_id;
