@@ -630,7 +630,7 @@ final class PrimaModel extends Db{
 
 	public function selectEstadoEncabezadoRegistro($liquidacion_prima_id,$Conex){
 	  
-	$select = "SELECT estado FROM liquidacion_prima WHERE liquidacion_prima_id = $liquidacion_prima_id";  
+	$select = "SELECT estado FROM liquidacion_prima WHERE liquidacion_prima_id IN ($liquidacion_prima_id)";  
 	$result = $this -> DbFetchAll($select,$Conex,true); 
 	$estado = $result[0]['estado'];
 	
@@ -652,85 +652,88 @@ final class PrimaModel extends Db{
 	$anul_usuario_id          	= $this -> requestDataForQuery('anul_usuario_id','integer');	
 	  
 	
-	$select = "SELECT a.encabezado_registro_id,
+	$select = "SELECT a.liquidacion_prima_id,a.encabezado_registro_id,
 	                  a.fecha_liquidacion
-			  FROM liquidacion_prima a WHERE a.liquidacion_prima_id=$liquidacion_prima_id";	
+			  FROM liquidacion_prima a WHERE a.liquidacion_prima_id IN($liquidacion_prima_id)";	
 	$result = $this -> DbFetchAll($select,$Conex,true); 
 
-	$encabezado_registro_id = $result[0]['encabezado_registro_id'];
-	$fechaMes = $result[0]['fecha'];
+	for ($i=0; $i < count($result); $i++) { 
 	
+		$encabezado_registro_id = $result[$i]['encabezado_registro_id'];
+		$fechaMes = $result[$i]['fecha_liquidacion'];
+		$prima_id = $result[$i]['liquidacion_prima_id'];
+		
+		if($encabezado_registro_id>0 && $encabezado_registro_id!='' && $encabezado_registro_id!=NULL){	 
 
-	if($encabezado_registro_id>0 && $encabezado_registro_id!='' && $encabezado_registro_id!=NULL){	 
+			if(!$utilidadesContables -> periodoContableEstaHabilitado($empresa_id,$fechaMes,$Conex))exit('Periodo Contable Cerrado<br> No es posible Anular');
+			if(!$utilidadesContables -> mesContableEstaHabilitado($oficina_id,$fechaMes,$Conex)) exit('Mes Contable Cerrado<br> No es posible Anular');
 
-	    if(!$utilidadesContables -> periodoContableEstaHabilitado($empresa_id,$fechaMes,$Conex))exit('Periodo Contable Cerrado<br> No es posible Anular');
-		if(!$utilidadesContables -> mesContableEstaHabilitado($oficina_id,$fechaMes,$Conex)) exit('Mes Contable Cerrado<br> No es posible Anular');
-
-		$insert = "INSERT INTO encabezado_de_registro_anulado (`encabezado_de_registro_anulado_id`, `encabezado_registro_id`, `empresa_id`, `oficina_id`, `tipo_documento_id`, `forma_pago_id`, `valor`, `numero_soporte`, `tercero_id`, `periodo_contable_id`, `mes_contable_id`, `consecutivo`, `fecha`, `concepto`, `puc_id`, `estado`, `fecha_registro`, `modifica`, `usuario_id`, `causal_anulacion_id`, `observaciones`)
-		 SELECT $encabezado_registro_id AS 
-		encabezado_de_registro_anulado_id,encabezado_registro_id,empresa_id,oficina_id,tipo_documento_id,
-		forma_pago_id,valor,numero_soporte,tercero_id,periodo_contable_id,mes_contable_id,consecutivo,
-		fecha,concepto,puc_id,estado,fecha_registro,modifica,usuario_id,$causal_anulacion_id AS causal_anulacion_id,
-		$desc_anul_abono_nomina AS observaciones FROM encabezado_de_registro WHERE encabezado_registro_id = $encabezado_registro_id";
-		$this -> query($insert,$Conex,true);
-
-		if(strlen($this -> GetError()) > 0){
-			$this -> Rollback($Conex);
-		}else{
-			$insert = "INSERT INTO imputacion_contable_anulada SELECT  imputacion_contable_id AS  
-			imputacion_contable_anulada_id,tercero_id,numero_identificacion,digito_verificacion,puc_id,descripcion,encabezado_registro_id AS 
-			encabezado_registro_anulado_id,centro_de_costo_id,codigo_centro_costo,numero,valor,amortiza,deprecia,base,porcentaje,formula,debito,credito,
-			area_id,departamento_id,unidad_negocio_id,sucursal_id
-			 FROM 
-			imputacion_contable WHERE encabezado_registro_id = $encabezado_registro_id";
-
-			   
+			$insert = "INSERT INTO encabezado_de_registro_anulado (`encabezado_de_registro_anulado_id`, `encabezado_registro_id`, `empresa_id`, `oficina_id`, `tipo_documento_id`, `forma_pago_id`, `valor`, `numero_soporte`, `tercero_id`, `periodo_contable_id`, `mes_contable_id`, `consecutivo`, `fecha`, `concepto`, `puc_id`, `estado`, `fecha_registro`, `modifica`, `usuario_id`, `causal_anulacion_id`, `observaciones`)
+			SELECT $encabezado_registro_id AS 
+			encabezado_de_registro_anulado_id,encabezado_registro_id,empresa_id,oficina_id,tipo_documento_id,
+			forma_pago_id,valor,numero_soporte,tercero_id,periodo_contable_id,mes_contable_id,consecutivo,
+			fecha,concepto,puc_id,estado,fecha_registro,modifica,usuario_id,$causal_anulacion_id AS causal_anulacion_id,
+			$desc_anul_abono_nomina AS observaciones FROM encabezado_de_registro WHERE encabezado_registro_id = $encabezado_registro_id";
 			$this -> query($insert,$Conex,true);
 
 			if(strlen($this -> GetError()) > 0){
 				$this -> Rollback($Conex);
-			}else{	
+			}else{
+				$insert = "INSERT INTO imputacion_contable_anulada SELECT  imputacion_contable_id AS  
+				imputacion_contable_anulada_id,tercero_id,numero_identificacion,digito_verificacion,puc_id,descripcion,encabezado_registro_id AS 
+				encabezado_registro_anulado_id,centro_de_costo_id,codigo_centro_costo,numero,valor,amortiza,deprecia,base,porcentaje,formula,debito,credito,
+				area_id,departamento_id,unidad_negocio_id,sucursal_id
+				FROM 
+				imputacion_contable WHERE encabezado_registro_id = $encabezado_registro_id";
 
-				$update = "UPDATE encabezado_de_registro SET estado = 'A',anulado = 1 WHERE encabezado_registro_id = $encabezado_registro_id";	  
-				$this -> query($update,$Conex,true);	
+				
+				$this -> query($insert,$Conex,true);
 
 				if(strlen($this -> GetError()) > 0){
 					$this -> Rollback($Conex);
 				}else{	
-					$update = "UPDATE imputacion_contable SET debito = 0,credito = 0 WHERE encabezado_registro_id=$encabezado_registro_id";
-					$this -> query($update,$Conex,true);			  
+
+					$update = "UPDATE encabezado_de_registro SET estado = 'A',anulado = 1 WHERE encabezado_registro_id = $encabezado_registro_id";	  
+					$this -> query($update,$Conex,true);	
 
 					if(strlen($this -> GetError()) > 0){
-  						$this -> Rollback($Conex);
+						$this -> Rollback($Conex);
 					}else{	
-				
+						$update = "UPDATE imputacion_contable SET debito = 0,credito = 0 WHERE encabezado_registro_id=$encabezado_registro_id";
+						$this -> query($update,$Conex,true);			  
+
+						if(strlen($this -> GetError()) > 0){
+							$this -> Rollback($Conex);
+						}else{	
 					
-						$update = "UPDATE liquidacion_prima  SET estado = 'I',
-									causal_anulacion_id = $causal_anulacion_id,
-									anul_prima_nomina=$anul_abono_nomina,
-									desc_anul_prima_nomina =$desc_anul_abono_nomina,
-									anul_usuario_id=$anul_usuario_id
-								WHERE liquidacion_prima_id=$liquidacion_prima_id";	
-						$this -> query($update,$Conex,true);		
-					   $this -> Commit($Conex);			
+						
+							$update = "UPDATE liquidacion_prima  SET estado = 'I',
+										causal_anulacion_id = $causal_anulacion_id,
+										anul_prima_nomina=$anul_abono_nomina,
+										desc_anul_prima_nomina =$desc_anul_abono_nomina,
+										anul_usuario_id=$anul_usuario_id
+									WHERE liquidacion_prima_id=$prima_id";	
+							$this -> query($update,$Conex,true);		
+						$this -> Commit($Conex);			
+						}
+
 					}
 
 				}
 
 			}
+		}else{
 
+			$update = "UPDATE liquidacion_prima  SET estado= 'I',
+						causal_anulacion_id = $causal_anulacion_id,
+						anul_prima_nomina=$anul_abono_nomina,
+						desc_anul_prima_nomina =$desc_anul_abono_nomina,
+						anul_usuario_id=$anul_usuario_id
+					WHERE liquidacion_prima_id=$prima_id";	
+			$this -> query($update,$Conex,true);		
+			$this -> Commit($Conex);			
+			
 		}
-	}else{
-
-		$update = "UPDATE liquidacion_prima  SET estado= 'I',
-					causal_anulacion_id = $causal_anulacion_id,
-					anul_prima_nomina=$anul_abono_nomina,
-					desc_anul_prima_nomina =$desc_anul_abono_nomina,
-					anul_usuario_id=$anul_usuario_id
-				WHERE liquidacion_prima_id=$liquidacion_prima_id";	
-		$this -> query($update,$Conex,true);		
-	    $this -> Commit($Conex);			
-		
 	}
 
   }
