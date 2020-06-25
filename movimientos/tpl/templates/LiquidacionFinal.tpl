@@ -47,6 +47,18 @@
                 <td>{$JUSTIFICADO}</td>
             </tr>
             <tr>
+              <td><label>Novedades : </label></td>
+              <td>{$DEVEN}{$BASE_DEVEN}</td>
+            </tr>
+            <tr>
+              <td><label>Horas Extra : </label></td>
+              <td>{$EXTRAS}{$BASE_EXTRAS}</td>
+            </tr>
+            <tr>
+              <td><label>Total Liquidaci&oacute;n : </label></td>
+              <td>{$VALOR_LIQ}{$TOTAL_LIQ}</td>
+            </tr>
+            <tr>
                 <td><label>Dias : </label></td>
                 <td>{$DIAS}</td>
                 <td><label>Estado : </label></td>

@@ -137,18 +137,57 @@ final class LiquidacionFinalModel extends Db
     {
 
         $select = "SELECT l.*,
-	(SELECT CONCAT_WS(' ',c.numero_contrato, '-', t.primer_nombre,t.segundo_nombre,t.primer_apellido,t.segundo_apellido ) FROM contrato c, empleado e, tercero t
-	WHERE c.contrato_id=l.contrato_id AND e.empleado_id=c.empleado_id AND t.tercero_id=e.tercero_id) AS contrato
-	FROM liquidacion_definitiva l  WHERE l.liquidacion_definitiva_id = $liquidacion_definitiva_id";
+        (SELECT CONCAT_WS(' ',c.numero_contrato, '-', t.primer_nombre,t.segundo_nombre,t.primer_apellido,t.segundo_apellido ) FROM contrato c, empleado e, tercero t
+        WHERE c.contrato_id=l.contrato_id AND e.empleado_id=c.empleado_id AND t.tercero_id=e.tercero_id) AS contrato
+        FROM liquidacion_definitiva l  WHERE l.liquidacion_definitiva_id = $liquidacion_definitiva_id";
         $result = $this->DbFetchAll($select, $Conex, $ErrDb = false);
         return $result;
 
     }
 
-    public function selectContrato($contrato_id, $Conex)
+    public function selectContrato($contrato_id, $fecha_inicio, $fecha_final,$Conex)
     {
-
-        $select = "SELECT * FROM contrato  WHERE contrato_id = $contrato_id";
+        if($fecha_inicio == '' && $fecha_final == ''){
+            $fechas = "c.fecha_inicio, c.fecha_terminacion";
+            $fechas_deven = "lno.fecha_inicial >= c.fecha_inicio AND lno.fecha_final <= c.fecha_terminacion";
+            $fechas_horas = "h.fecha_inicial >= c.fecha_inicio AND h.fecha_final <= c.fecha_terminacion";
+            $meses = "(SELECT TIMESTAMPDIFF(MONTH, c.fecha_inicio, c.fecha_terminacion)+1)";
+            //die('testa');
+        }else{
+            $fechas = "'$fecha_inicio' AS fecha_inicio, '$fecha_final' AS fecha_terminacion";
+            $fechas_deven = "lno.fecha_inicial >= '$fecha_inicio' AND lno.fecha_final <= '$fecha_final'";
+            $fechas_horas = "h.fecha_inicial >= '$fecha_inicio' AND h.fecha_final <= '$fecha_final'";
+            $meses = "(SELECT TIMESTAMPDIFF(MONTH, '$fecha_inicio', '$fecha_final')+1)";
+        }
+        $select = "SELECT 
+        $fechas,
+        c.sueldo_base,
+        c.subsidio_transporte,
+        c.estado,
+        (SUM(dln.debito-dln.credito)) AS base_salarial_deven,
+        (SELECT 
+             (SUM(
+                h.vr_horas_diurnas + 
+                h.vr_horas_nocturnas + 
+                h.vr_horas_diurnas_fes + 
+                h.vr_horas_nocturnas_fes + 
+                h.vr_horas_recargo_noc + 
+                h.vr_horas_recargo_doc
+            ))
+         FROM 
+             hora_extra h 
+         WHERE 
+             h.contrato_id = c.contrato_id AND 
+             h.estado = 'L' AND 
+             $fechas_horas
+        ) AS base_horas_extra
+        FROM 
+            contrato c,
+            concepto_area ca,
+            detalle_liquidacion_novedad dln,
+            liquidacion_novedad lno
+        WHERE 
+            c.contrato_id = $contrato_id AND c.contrato_id = lno.contrato_id AND lno.liquidacion_novedad_id = dln.liquidacion_novedad_id AND  ca.concepto_area_id = dln.concepto_area_id AND ca.base_salarial = 'SI' AND $fechas_deven AND lno.estado = 'C'";
         $result = $this->DbFetchAll($select, $Conex, $ErrDb = false);
         return $result;
 
@@ -323,12 +362,78 @@ final class LiquidacionFinalModel extends Db
 
         if ($contrato_id > 0) {
 
-            $select = "SELECT c.*
-		FROM novedad_fija c
-		WHERE c.contrato_id = $contrato_id AND c.estado='A' AND tipo_novedad='V' ORDER BY valor DESC";
+            $select = "SELECT nf.*
+		FROM novedad_fija nf, concepto_area ca
+		WHERE nf.contrato_id = $contrato_id AND nf.estado='A' AND nf.tipo_novedad='V' AND nf.concepto_area_id=ca.concepto_area_id AND ca.base_salarial='NO' ORDER BY valor DESC";
 //echo $select;
             $result = $this->DbFetchAll($select, $Conex, true);
 
+        } else {
+            $result = array();
+        }
+        return $result;
+    }
+
+    public function getDevBaseSalarial($contrato_id, $fecha_final, $fecha_inicio, $Conex)
+    {
+
+        if ($contrato_id > 0) {
+
+            //sumatoria devengados al Salario cuando apliquen novedades con base salarial.
+            $selectdeve = "SELECT 
+                SUM(dln.debito-dln.credito) AS base_salarial_deven
+            FROM 
+                contrato c,
+                concepto_area ca,
+                detalle_liquidacion_novedad dln,
+                liquidacion_novedad lno
+            WHERE 
+                c.contrato_id = $contrato_id AND c.contrato_id = lno.contrato_id AND lno.liquidacion_novedad_id = dln.liquidacion_novedad_id AND  ca.concepto_area_id = dln.concepto_area_id AND ca.base_salarial = 'SI' AND lno.fecha_inicial >= '$fecha_inicio' AND lno.fecha_final <= '$fecha_final' AND lno.estado = 'C'";
+            $resultdeve = $this -> DbFetchAll($selectdeve,$Conex,true);
+
+            $valor_deven = $resultdeve[0]['base_salarial_deven']>0 ? $resultdeve[0]['base_salarial_deven'] : 0;
+            $valor_deven = round($valor_deven);
+            
+            $result = $valor_deven;
+        } else {
+            $result = array();
+        }
+        return $result;
+    }
+
+    public function getHorasExtra($contrato_id, $fecha_final, $fecha_inicio, $Conex)
+    {
+
+        if ($contrato_id > 0) {
+
+            $selectext = "SELECT
+                (SELECT 
+                    SUM(
+                        h.vr_horas_diurnas + 
+                        h.vr_horas_nocturnas + 
+                        h.vr_horas_diurnas_fes + 
+                        h.vr_horas_nocturnas_fes + 
+                        h.vr_horas_recargo_noc + 
+                        h.vr_horas_recargo_doc
+                    )
+                FROM 
+                    hora_extra h 
+                WHERE 
+                    h.contrato_id = c.contrato_id AND 
+                    h.estado = 'L' AND 
+                    h.fecha_inicial >= '$fecha_inicio' AND 
+                    h.fecha_final <= '$fecha_final' 
+                ) AS base_horas_extra
+            FROM 
+                contrato c
+            WHERE 
+                c.contrato_id = $contrato_id";
+                    
+            $resultext = $this -> DbFetchAll($selectext,$Conex,true); 
+            
+            $total_base=$resultext[0]['base_horas_extra'];
+            
+            $result = $total_base;
         } else {
             $result = array();
         }
