@@ -601,7 +601,7 @@ final class PrimaModel extends Db{
 
     public function Delete($liquidacion_prima_id,$Conex){
 	   
-		$select="SELECT liquidacion_prima_id, encabezado_registro_id, estado, fecha_liquidacion FROM liquidacion_prima WHERE liquidacion_prima_id IN($liquidacion_prima_id)";
+		$select="SELECT liquidacion_prima_id, encabezado_registro_id, estado, contrato_id FROM liquidacion_prima WHERE liquidacion_prima_id IN($liquidacion_prima_id)";
 		$result = $this -> DbFetchAll($select,$Conex,true);
          
 		if($result[0]['liquidacion_prima_id']>0){
@@ -611,7 +611,7 @@ final class PrimaModel extends Db{
 				$liquidacion_prima_id = $result[$i]['liquidacion_prima_id'];
 				$encabezado_registro_id = $result[$i]['encabezado_registro_id'];
 				$estado = $result[$i]['estado'];
-				$fecha_liquidacion = $result[$i]['fecha_liquidacion'];
+				$contrato_id = $result[$i]['contrato_id'];
 
 				if($estado != 'C' && $encabezado_registro_id == ''){
 
@@ -621,7 +621,15 @@ final class PrimaModel extends Db{
 					$delete="DELETE FROM liquidacion_prima WHERE liquidacion_prima_id = $liquidacion_prima_id AND estado != 'C'";
 					$this -> query($delete,$Conex,true);
 
-
+					$select="SELECT fecha_liquidacion,total FROM liquidacion_prima WHERE contrato_id=$contrato_id AND estado != 'I' ORDER BY liquidacion_prima_id DESC LIMIT 1";
+					$result = $this -> DbFetchAll($select,$Conex,true);
+					
+					$fecha_liquidacion = $result[0]['fecha_liquidacion'];
+					$total = $result[0]['total'];
+					
+					$update="UPDATE contrato SET fecha_ult_prima='$fecha_liquidacion',valor_prima=$total WHERE contrato_id = $contrato_id";
+					$this -> query($update,$Conex,true);
+					
 		    	}else{
 					return 0;
 				}
@@ -744,7 +752,7 @@ final class PrimaModel extends Db{
 
   }
 	
-	public function Liq_Anterior($empleado_id,$fecha_liquidacion,$periodo,$oficina_id,$Conex){
+	public function Liq_Anterior($empleado_id,$fecha_liquidacion,$periodo,$oficina_id,$liquidacion_prima_id,$Conex){
 
 		$fecha_liquidacion = str_replace("'","",$fecha_liquidacion);
 		
@@ -792,13 +800,11 @@ final class PrimaModel extends Db{
 		$valor_liquidacion = $salario*($dias_laborados-1)/360;
 	    
 		$select = "SELECT *	FROM liquidacion_prima WHERE contrato_id=$contrato_id AND estado!='I' ORDER BY fecha_liquidacion DESC"; 
-		
 		$result = $this -> DbFetchAll($select,$Conex,$ErrDb = false);
 
 		if($result[0]['liquidacion_prima_id']>0){
 			
 			$result['periodo'] = $result[0]['periodo'];
-			$result['acumulado'] = $result[0]['acumulado'];
 			$result['estado'] = $result[0]['estado'];
 			
 			$select = "SELECT SUM(total)AS total FROM liquidacion_prima WHERE contrato_id=$contrato_id AND periodo=$periodo";
@@ -813,7 +819,6 @@ final class PrimaModel extends Db{
 			 $result[0]['fecha_liquidacion']=$fecha;
 			 $result['total'] = 0;
 			 $result['periodo'] = 0;
-			 $result['acumulado'] = 0;
 			 $result['estado'] = '';
 			 $valor_real = $salario/2;
 			 $valor_liquidacion = $salario*($dias_laborados)/360;
@@ -822,7 +827,20 @@ final class PrimaModel extends Db{
 				 $valor_liquidacion = $valor_real;
 			 }
 		}
-		
+
+		if($liquidacion_prima_id>0){
+
+			$select = "SELECT acumulado	FROM liquidacion_prima WHERE contrato_id=$contrato_id AND liquidacion_prima_id = $liquidacion_prima_id AND estado!='I'"; 
+			$result_acumulado = $this -> DbFetchAll($select,$Conex,$ErrDb = false);
+			$result['acumulado'] = $result_acumulado[0]['acumulado'];
+
+		}else{
+
+			$result['acumulado'] = 0;
+			
+		}
+
+
 		    $consulta_periodo = " AND fecha BETWEEN '$fecha_inicio' AND '$fecha_liquidacion'"; 
 		
 		    $select_consolidado = "SELECT SUM(credito-debito)as neto,

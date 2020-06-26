@@ -251,9 +251,10 @@ final class Prima extends Controler{
 	$empleado_id 	= $_REQUEST['empleado_id'];
 	$periodo 	= $_REQUEST['periodo'];
 	$fecha_liquidacion 	= $_REQUEST['fecha_liquidacion'];
+	$liquidacion_prima_id 	= $_REQUEST['liquidacion_prima_id'];
 	$oficina_id = $this -> getOficinaId();
 	
-	$Data = $Model -> Liq_Anterior($empleado_id,$fecha_liquidacion,$periodo,$oficina_id,$this -> getConex());
+	$Data = $Model -> Liq_Anterior($empleado_id,$fecha_liquidacion,$periodo,$oficina_id,$liquidacion_prima_id,$this -> getConex());
 	
 	echo json_encode($Data);
    }
