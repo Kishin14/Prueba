@@ -165,9 +165,9 @@ final class PagoModel extends Db{
 					WHERE i.puc_id=c.puc_id AND i.empresa_id=$empresa_id AND i.estado='A' AND pc.anio=Year(CURDATE()) AND pc.empresa_id=$empresa_id 
 					AND ipc.periodo_contable_id=pc.periodo_contable_id 	AND ipc.impuesto_id=i.impuesto_id AND io.impuesto_id=ipc.impuesto_id AND io.empresa_id=$empresa_id AND io.oficina_id=$oficina_id ) AS for_emp,
 
-					(SELECT tercero_id FROM empleado WHERE empleado_id=$empleado_id) AS tercero_id,
-					(SELECT t.numero_identificacion FROM empleado e, tercero t WHERE e.empleado_id=$empleado_id AND t.tercero_id=e.tercero_id) AS numero_identificacion,
-					(SELECT t.digito_verificacion FROM empleado e, tercero t WHERE e.empleado_id=$empleado_id AND t.tercero_id=e.tercero_id) AS digito_verificacion,
+					(SELECT tercero_id FROM empresa WHERE empresa_id=$empresa_id) AS tercero_id,
+					(SELECT t.numero_identificacion FROM empresa e, tercero t WHERE e.empresa_id=$empresa_id AND t.tercero_id=e.tercero_id) AS numero_identificacion,
+					(SELECT t.digito_verificacion FROM empresa e, tercero t WHERE e.empresa_id=$empresa_id AND t.tercero_id=e.tercero_id) AS digito_verificacion,
 
 					(SELECT centro_de_costo_id FROM centro_de_costo WHERE oficina_id=$oficina_id LIMIT 1) AS centro_de_costo_id,
 					(SELECT codigo FROM centro_de_costo WHERE oficina_id=$oficina_id LIMIT 1) AS codigo_centro_costo
