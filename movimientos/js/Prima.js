@@ -836,6 +836,7 @@ function onclickCancellation(formulario) {
 						});
 
 					} else {
+						console.log('estado: '+estado);
 						alertJquery('Solo se permite anular Primas en estado : <b>ACTIVO/CONTABILIZADO</b>', 'Anulacion');
 					}
 
