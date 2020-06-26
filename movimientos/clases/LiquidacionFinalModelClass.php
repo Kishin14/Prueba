@@ -148,16 +148,13 @@ final class LiquidacionFinalModel extends Db
     public function selectContrato($contrato_id, $fecha_inicio, $fecha_final,$Conex)
     {
         if($fecha_inicio == '' && $fecha_final == ''){
-            $fechas = "c.fecha_inicio, c.fecha_terminacion";
-            $fechas_deven = "lno.fecha_inicial >= c.fecha_inicio AND lno.fecha_final <= c.fecha_terminacion";
-            $fechas_horas = "h.fecha_inicial >= c.fecha_inicio AND h.fecha_final <= c.fecha_terminacion";
-            $meses = "(SELECT TIMESTAMPDIFF(MONTH, c.fecha_inicio, c.fecha_terminacion)+1)";
-            //die('testa');
+            $fechas = "c.fecha_inicio, IF(c.fecha_terminacion IS NULL,CURRENT_DATE(),c.fecha_terminacion) AS fecha_terminacion";
+            $fechas_deven = "lno.fecha_inicial >= c.fecha_inicio AND lno.fecha_final <= IF(c.fecha_terminacion IS NULL,CURRENT_DATE(),c.fecha_terminacion)";
+            $fechas_horas = "h.fecha_inicial >= c.fecha_inicio AND h.fecha_final <= IF(c.fecha_terminacion IS NULL,CURRENT_DATE(),c.fecha_terminacion)";
         }else{
             $fechas = "'$fecha_inicio' AS fecha_inicio, '$fecha_final' AS fecha_terminacion";
             $fechas_deven = "lno.fecha_inicial >= '$fecha_inicio' AND lno.fecha_final <= '$fecha_final'";
             $fechas_horas = "h.fecha_inicial >= '$fecha_inicio' AND h.fecha_final <= '$fecha_final'";
-            $meses = "(SELECT TIMESTAMPDIFF(MONTH, '$fecha_inicio', '$fecha_final')+1)";
         }
         $select = "SELECT 
         $fechas,
@@ -189,6 +186,7 @@ final class LiquidacionFinalModel extends Db
         WHERE 
             c.contrato_id = $contrato_id AND c.contrato_id = lno.contrato_id AND lno.liquidacion_novedad_id = dln.liquidacion_novedad_id AND  ca.concepto_area_id = dln.concepto_area_id AND ca.base_salarial = 'SI' AND $fechas_deven AND lno.estado = 'C'";
         $result = $this->DbFetchAll($select, $Conex, $ErrDb = false);
+        //die($select);
         return $result;
 
     }
