@@ -81,11 +81,9 @@ function setDataFormWithResponse(){
 			if ($('#guardar')) $('#guardar').attr("disabled", "true");
 			
 		} else if ($("#si_empleado").val() == '1' && $("#tipo_liquidacion").val() == 'T') {
-
-			Liq_AnteriorTotal(1);
            
 			var total = data[0]['total'];
-			$('#total').val(setFormatCurrency(total));
+			$('#total').val(total);
 
 			if ($('#guardar')) $('#guardar').attr("disabled", "true");
 		}
@@ -306,13 +304,6 @@ function setDataEmpleado(empleado_id,find){
 		  $("#fecha_inicio_contrato").val(fecha_inicio);
 		  
 		  if($("#tipo_liquidacion").val()=='T'){
-			  if(dias_laborados>180){
-				  dias_laborados=180
-			  }	
-
-			  var salario = removeFormatCurrency($("#salario").val());
-
-			  var prima = (dias_laborados*(salario/2))/180;
              
 			  if(find==1){
 				  Liq_AnteriorTotal(1);
@@ -454,7 +445,8 @@ function OnclickContabilizar(){
 	var liquidacion_prima_id = $("#liquidacion_prima_id").val();
 	var fecha 				 = $("#fecha_liquidacion").val();
 	var si_empleado 		 = $("#si_empleado").val();	
-	var valor 				 = removeFormatCurrency($("#total").val());		
+	var valor 				 = removeFormatCurrency($("#total").val());	
+	var acumulado            = removeFormatCurrency($("#acumulado").val());
 	
 	var QueryString 		 = "ACTIONCONTROLER=getTotalDebitoCredito&liquidacion_prima_id="+liquidacion_prima_id+"&rango="+si_empleado;	
 	
@@ -475,7 +467,7 @@ function OnclickContabilizar(){
 					 $("#totalCredito").html(totalCredito);	
 					 
 					 if(parseFloat(totalDebito)==parseFloat(totalCredito) ){
-						var QueryString = "ACTIONCONTROLER=getContabilizar&liquidacion_prima_id="+liquidacion_prima_id+"&fecha_liquidacion="+fecha+"&si_empleado="+si_empleado;	
+						var QueryString = "ACTIONCONTROLER=getContabilizar&liquidacion_prima_id="+liquidacion_prima_id+"&fecha_liquidacion="+fecha+"&si_empleado="+si_empleado+"&acumulado="+acumulado;	
 	
 						$.ajax({
 							url     : "PrimaClass.php",
@@ -604,42 +596,60 @@ function Liq_AnteriorTotal(find){
 
 					var fecha_anterior = data[0]['fecha_liquidacion'].substr(0, 4);
 					var fecha_liquidacion = $("#fecha_liquidacion").val().substr(0, 4);
-					var periodo_anterior    = data[0]['periodo'];
+					var periodo_anterior    = data['periodo'];
+					var estado              = data['estado'];
+					var acumulado           = data['acumulado'];
+
 					var salario = data['salario'];
 					var total = data['total'];
 					var valor_liquidacion = Math.trunc(data['valor_liquidacion']);
-
+                    
 				    var valor_guardado    = parseFloat(data['valor_guardado']) > 0 ? data['valor_guardado'] : 0;
 
 					if (find == 1) {
 						var diferencia = total - valor_guardado;
+						var valor_liquidacion = total;
 					} else {
 						var diferencia = valor_liquidacion - valor_guardado;
 					}
                   
-				    if (fecha_anterior ==fecha_liquidacion && periodo_anterior==periodo) {
+					//console.log("fecha_anterior "+fecha_anterior+" fecha liquidacion "+fecha_liquidacion+" periodo anterior "+periodo_anterior+" periodo "+periodo);
+				    if (fecha_anterior == fecha_liquidacion && periodo_anterior==periodo) {
 						
-						var prima = ((salario/2)-total);
-			            
-						if (prima == 0 || prima >= 0 && prima <= 2) {
-							alertJquery('Este empleado ya cuenta con una liquidación realizada por el valor completo para este semestre.<br> VALOR TOTAL: '+setFormatCurrency(total));
-							if($('#guardar'))    $('#guardar').attr("disabled","true");
-						}
+							if (find != 1) {
+							  $("#total").val(setFormatCurrency(total));
+							  alertJquery('Este empleado ya cuenta con una liquidación realizada por el valor completo para este semestre.<br> VALOR TOTAL: ' + setFormatCurrency(total));
+							}
 
-						if (find != 1) {
-							$("#total").val(setFormatCurrency(prima));
-						}
+							
+							if ($('#guardar')) $('#guardar').attr("disabled", "true");
 
 						$("#fecha_inicio_contrato").val(data[0]['fecha_liquidacion']);
-						$("#acumulado").val(setFormatCurrency(valor_guardado));
-						$("#diferencia").val(setFormatCurrency(diferencia));
+
+						if(estado == 'C'){
+							$("#acumulado").val(setFormatCurrency(acumulado));
+							 diferencia = total - acumulado;	
+							$("#diferencia").val(setFormatCurrency(diferencia));
+						}else{
+							$("#acumulado").val(setFormatCurrency(valor_guardado));
+							$("#diferencia").val(setFormatCurrency(diferencia));
+						}
+
 
 				    }else{
-						var prima = ((salario / 2));
+						
 						$("#fecha_inicio_contrato").val(data[0]['fecha_liquidacion']);
-						$("#total").val(setFormatCurrency(prima));
-						$("#acumulado").val(setFormatCurrency(valor_guardado));
-						$("#diferencia").val(setFormatCurrency(diferencia));
+						$("#total").val(setFormatCurrency(valor_liquidacion));
+                       
+						if (estado == 'C') {
+							$("#acumulado").val(setFormatCurrency(acumulado));
+							diferencia = total - acumulado;
+							$("#diferencia").val(setFormatCurrency(diferencia));
+						} else {
+							$("#acumulado").val(setFormatCurrency(valor_guardado));
+							$("#diferencia").val(setFormatCurrency(diferencia));
+						}
+
 					}
 			    }
 				
@@ -668,7 +678,9 @@ function Liq_AnteriorParcial(find){
 
 					var fecha_anterior = data[0]['fecha_liquidacion'].substr(0, 4);
 					var fecha_liquidacion = $("#fecha_liquidacion").val().substr(0, 4);
-					var periodo_anterior    = data[0]['periodo'];
+					var periodo_anterior = data['periodo'];
+					var estado = data['estado'];
+					var acumulado =  data['acumulado'];
 					var salario    = data['salario'];
 					var valor_liquidacion = Math.trunc(data['valor_liquidacion']);
 					
@@ -697,14 +709,28 @@ function Liq_AnteriorParcial(find){
 							$("#total").val(setFormatCurrency(valor_liquidacion));
 						}
 						
-						$("#acumulado").val(setFormatCurrency(valor_guardado));
-						$("#diferencia").val(setFormatCurrency(diferencia));
+						if (estado == 'C') {
+							$("#acumulado").val(setFormatCurrency(acumulado));
+							diferencia = total - acumulado;
+							$("#diferencia").val(setFormatCurrency(diferencia));
+						} else {
+							$("#acumulado").val(setFormatCurrency(valor_guardado));
+							$("#diferencia").val(setFormatCurrency(diferencia));
+						}
+
 
 					}else{
 						$("#fecha_inicio_contrato").val(data[0]['fecha_liquidacion']);
 						$("#total").val(setFormatCurrency(valor_liquidacion));
-						$("#acumulado").val(setFormatCurrency(valor_guardado));
-						$("#diferencia").val(setFormatCurrency(diferencia));
+
+						if (estado == 'C') {
+							$("#acumulado").val(setFormatCurrency(acumulado));
+							diferencia = total - acumulado;
+							$("#diferencia").val(setFormatCurrency(diferencia));
+						} else {
+							$("#acumulado").val(setFormatCurrency(valor_guardado));
+							$("#diferencia").val(setFormatCurrency(diferencia));
+						}
 					}
 				}
 	}});
@@ -924,7 +950,7 @@ $(document).ready(function(){
 
 	});
 	
-	$("#tipo_liquidacion,#fecha_liquidacion,#periodo").change(function(){
+	$("#tipo_liquidacion,#periodo").change(function(){
 		
 		
 		if($("#si_empleado").val()=='ALL' && $("#tipo_liquidacion").val()=='P'){
@@ -933,7 +959,7 @@ $(document).ready(function(){
 		
 		if($("#si_empleado").val()=='1' && $("#tipo_liquidacion").val()=='T'){
 			Liq_AnteriorTotal();
-			$("#total").val('');
+			//$("#total").val('');
 		}
 		if($("#si_empleado").val()=='1' && $("#tipo_liquidacion").val()=='P'){
 			Liq_AnteriorParcial();
@@ -944,7 +970,7 @@ $(document).ready(function(){
 	
 	$("#si_empleado").change(function(){										
 		if($("#si_empleado").val()=='ALL' && $("#tipo_liquidacion").val()=='P'){
-			$("#valor").val('');
+			$("#total").val('');
 		}
 	
 	});

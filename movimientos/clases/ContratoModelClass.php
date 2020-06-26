@@ -183,13 +183,13 @@ final class ContratoModel extends Db
             $this->query($insert, $Conex, true);
         }
         //REGISTRO PRIMA HISTORIAL
-        if ($fecha_ult_prima != '') {
+        /* if ($fecha_ult_prima != '') {
             $periodo = intval(substr($fecha_ult_prima, 5, 2)) >= 7 ? 2 : 1;
             $liquidacion_prima_id = $this->DbgetMaxConsecutive("liquidacion_prima", "liquidacion_prima_id", $Conex, true, 1);
             $insert = "INSERT INTO liquidacion_prima (liquidacion_prima_id,fecha_liquidacion,estado,contrato_id,total,tipo_liquidacion,periodo,observaciones,inicial)
 								VALUES ($liquidacion_prima_id,'$fecha_ult_prima','C',$contrato_id,0,'T',$periodo,'REGISTRO INICIAL CONTRATO',1)";
             $this->query($insert, $Conex, true);
-        }
+        } */
 
         //REGISTRO VACACIONES HISTORIAL
         if ($fecha_ult_vaca != '') {
@@ -312,7 +312,7 @@ final class ContratoModel extends Db
             }
         }
         //REGISTRO PRIMA HISTORIAL
-        if ($fecha_ult_prima != '') {
+       /*  if ($fecha_ult_prima != '') {
             $select = "SELECT liquidacion_prima_id	FROM liquidacion_prima	WHERE	contrato_id = $contrato_id AND inicial=1 AND estado='C'";
             $result = $this->DbFetchAll($select, $Conex, true);
             if (count($result) == 0) {
@@ -323,7 +323,7 @@ final class ContratoModel extends Db
 									VALUES ($liquidacion_prima_id,'$fecha_ult_prima','C',$contrato_id,0,'T',$periodo,'REGISTRO INICIAL CONTRATO',1)";
                 $this->query($insert, $Conex, true);
             }
-        }
+        } */
 
         //REGISTRO VACACIONES HISTORIAL
         if ($fecha_ult_vaca != '') {
