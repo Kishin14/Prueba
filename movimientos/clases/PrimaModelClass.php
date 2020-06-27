@@ -621,7 +621,7 @@ final class PrimaModel extends Db{
 					$delete="DELETE FROM liquidacion_prima WHERE liquidacion_prima_id = $liquidacion_prima_id AND estado != 'C'";
 					$this -> query($delete,$Conex,true);
 
-/* 				    $select="SELECT fecha_liquidacion,total FROM liquidacion_prima WHERE contrato_id=$contrato_id AND estado != 'I' ORDER BY liquidacion_prima_id DESC LIMIT 1";
+    			    $select="SELECT fecha_liquidacion,total FROM liquidacion_prima WHERE contrato_id=$contrato_id AND estado != 'I' ORDER BY liquidacion_prima_id DESC LIMIT 1";
 					$result = $this -> DbFetchAll($select,$Conex,true);
 				
 					if(count($result)>0){
@@ -633,7 +633,7 @@ final class PrimaModel extends Db{
 					}
 					
 					$update="UPDATE contrato SET fecha_ult_prima='$fecha_liquidacion',valor_prima=$total WHERE contrato_id = $contrato_id";
-					$this -> query($update,$Conex,true);  */
+					$this -> query($update,$Conex,true);  
 					
 		    	}else{
 					return 0;

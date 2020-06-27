@@ -365,14 +365,14 @@ function beforePrint(formulario,url,title,width,height){
 	  if(document.getElementById("si_empleado").value=='1'){
 
 	  	document.getElementById('tipo_impresion').value = 'DP';
-    	document.getElementById('tipo_impresion').disabled=true;
+    	document.getElementById('tipo_impresion').disabled=false;
 		document.getElementById('desprendibles').disabled=false;
 		
 	  }else if(document.getElementById("si_empleado").value=='ALL' && document.getElementById("empleado_id").value!=''){
 
 		document.getElementById("tipo_impresion").options[3].disabled = false;
 	  	document.getElementById('tipo_impresion').value = 'DP';
-    	document.getElementById('tipo_impresion').disabled=false;
+    	document.getElementById('tipo_impresion').disabled=true;
 		document.getElementById('desprendibles').disabled=false;
 
 	  }else if(document.getElementById("si_empleado").value=='ALL' && document.getElementById("empleado_id").value==''){
@@ -380,7 +380,7 @@ function beforePrint(formulario,url,title,width,height){
 		
 		document.getElementById("tipo_impresion").options[3].disabled = true;
 	  	document.getElementById('tipo_impresion').value = 'C';
-    	document.getElementById('tipo_impresion').disabled=false;
+    	document.getElementById('tipo_impresion').disabled=true;
 		document.getElementById('desprendibles').disabled=true;
 		document.getElementById('desprendibles').value='NULL';
 		  
