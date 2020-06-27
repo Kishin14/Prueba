@@ -633,7 +633,7 @@ function Liq_AnteriorTotal(find){
 							
 							if ($('#guardar')) $('#guardar').attr("disabled", "true");
 
-						$("#fecha_inicio_contrato").val(data[0]['fecha_liquidacion']);
+						$("#fecha_inicio_contrato").val(data['fecha_liquidacion']);
 
 						if(estado == 'C'){
 							$("#acumulado").val(setFormatCurrency(acumulado));
@@ -647,7 +647,7 @@ function Liq_AnteriorTotal(find){
 
 				    }else{
 						
-						$("#fecha_inicio_contrato").val(data[0]['fecha_liquidacion']);
+						$("#fecha_inicio_contrato").val(data['fecha_liquidacion']);
 						$("#total").val(setFormatCurrency(valor_liquidacion));
                        
 						if (estado == 'C') {
@@ -720,7 +720,7 @@ function Liq_AnteriorParcial(find){
 							if($('#guardar'))    $('#guardar').attr("disabled","true");
 						}
 
-						$("#fecha_inicio_contrato").val(data[0]['fecha_liquidacion']);
+						$("#fecha_inicio_contrato").val(data['fecha_liquidacion']);
 
 						if(find!=1){
 							$("#total").val(setFormatCurrency(valor_liquidacion));
@@ -737,7 +737,7 @@ function Liq_AnteriorParcial(find){
 
 
 					}else{
-						$("#fecha_inicio_contrato").val(data[0]['fecha_liquidacion']);
+						$("#fecha_inicio_contrato").val(data['fecha_liquidacion']);
 						$("#total").val(setFormatCurrency(valor_liquidacion));
 
 						if (estado == 'C') {
