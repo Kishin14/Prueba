@@ -601,7 +601,7 @@ function Liq_AnteriorTotal(find){
 				
 				if(data != null){
 
-					var fecha_anterior = data[0]['fecha_liquidacion'].substr(0, 4);
+					var fecha_anterior = data['fecha_liquidacion'].substr(0, 4);
 					var fecha_liquidacion = $("#fecha_liquidacion").val().substr(0, 4);
 					var periodo_anterior    = data['periodo'];
 					
@@ -693,7 +693,7 @@ function Liq_AnteriorParcial(find){
 				
 				if (data != null) {
 
-					var fecha_anterior = data[0]['fecha_liquidacion'].substr(0, 4);
+					var fecha_anterior = data['fecha_liquidacion'].substr(0, 4);
 					var fecha_liquidacion = $("#fecha_liquidacion").val().substr(0, 4);
 					var periodo_anterior = data['periodo'];
 					

@@ -628,7 +628,7 @@ final class PrimaModel extends Db{
 						$fecha_liquidacion = $result[0]['fecha_liquidacion'];
 						$total = $result[0]['total'];
 					}else{
-						$fecha_liquidacion ='';
+						$fecha_liquidacion = '';
 						$total = 0;
 					}
 					
