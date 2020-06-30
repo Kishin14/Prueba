@@ -151,8 +151,8 @@ final class LiquidacionFinal extends Controler
             //cesantias
             $data_ces = $Model->getDetallesCesantias($contrato_id, $fecha_final, $this->getConex());
             $fecha_ultima = $data_ces[0]['fecha_corte'] > 0 ? $data_ces[0]['fecha_corte'] : $fecha_inicio;
-            $base_deven_cesan = $Model->getDevBaseSalarial($contrato_id, $fecha_final, $fecha_ultima, $this->getConex());
-            $horas_extra_cesan = $Model->getHorasExtra($contrato_id, $fecha_final, $fecha_ultima, $this->getConex());
+            $base_deven_cesan = $Model->getDevBaseSalarial($contrato_id, $fecha_ultima, $fecha_final, $this->getConex());
+            $horas_extra_cesan = $Model->getHorasExtra($contrato_id, $fecha_ultima, $fecha_final, $this->getConex());
             $dias_ces = $this -> restaFechasCont($fecha_ultima,$_REQUEST['fecha_final']);
             $meses_ces = ($dias_ces/30);
             $valor_cesan = intval((($sueldo_base + ($base_deven_cesan/$meses_ces) + ($horas_extra_cesan/$meses_ces) + $subsidio_transporte) * $dias_ces) / 360);
@@ -252,7 +252,6 @@ final class LiquidacionFinal extends Controler
             $data_ices = $Model->getDetallesIntCesantias($contrato_id, $_REQUEST['fecha_final'], $this->getConex());
             $fecha_ultima = $data_ices[0]['fecha_corte'] > 0 ? $data_ices[0]['fecha_corte'] : $fecha_inicio;
             $dias_ices = $this->restaFechasCont($fecha_ultima,$_REQUEST['fecha_final']);
-            //$valor_icesan = intval(((($data[0]['sueldo_base']+$data[0]['subsidio_transporte'])*0.12)* $dias_ices) / 360);
             $valor_icesan = intval((($valor_cesan * 0.12) * $dias_ices) / 360);
             $desde_icesan = $data_ices[0]['fecha_corte'] != '' ? $data_ices[0]['fecha_corte'] : $_REQUEST['fecha_inicio'];
             $datos[$x]['concepto'] = 'INT. CESANTIAS';
@@ -355,7 +354,10 @@ final class LiquidacionFinal extends Controler
                 $dias_prima = $dias;
                 $fecha_ultima = $_REQUEST['fecha_inicio'];
             }
-            $valor_prima = intval(((($sueldo_base + $subsidio_transporte)) * $dias_prima) / 360);
+            $base_deven_prima = $Model->getDevBaseSalarial($contrato_id, $fecha_ultima, $fecha_final, $this->getConex());
+            $horas_extra_prima = $Model->getHorasExtra($contrato_id, $fecha_ultima, $fecha_final, $this->getConex());
+            $meses_prima = ($dias_prima/30);
+            $valor_prima = intval(((($sueldo_base + ($base_deven_prima/$meses_prima) + ($horas_extra_prima/$meses_prima) + $subsidio_transporte)) * $dias_prima) / 360);
             $datos[$x]['concepto'] = 'PRIMA SERVICIOS';
             $datos[$x]['dias'] = $dias_prima;
             $datos[$x]['periodo'] = 'De: ' . $fecha_ultima . ' Hasta: ' . $_REQUEST['fecha_final'];

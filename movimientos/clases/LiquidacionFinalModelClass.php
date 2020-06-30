@@ -372,7 +372,7 @@ final class LiquidacionFinalModel extends Db
         return $result;
     }
 
-    public function getDevBaseSalarial($contrato_id, $fecha_final, $fecha_inicio, $Conex)
+    public function getDevBaseSalarial($contrato_id, $fecha_inicio, $fecha_final, $Conex)
     {
 
         if ($contrato_id > 0) {
@@ -398,7 +398,7 @@ final class LiquidacionFinalModel extends Db
         return $result;
     }
 
-    public function getHorasExtra($contrato_id, $fecha_final, $fecha_inicio, $Conex)
+    public function getHorasExtra($contrato_id, $fecha_inicio, $fecha_final, $Conex)
     {
 
         if ($contrato_id > 0) {
@@ -428,7 +428,7 @@ final class LiquidacionFinalModel extends Db
                     
             $resultext = $this -> DbFetchAll($selectext,$Conex,true); 
             
-            $total_base=$resultext[0]['base_horas_extra'];
+            $total_base=$resultext[0]['base_horas_extra'] > 0 ? $resultext[0]['base_horas_extra']:0;
             
             $result = $total_base;
         } else {
