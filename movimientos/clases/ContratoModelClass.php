@@ -183,13 +183,13 @@ final class ContratoModel extends Db
             $this->query($insert, $Conex, true);
         }
         //REGISTRO PRIMA HISTORIAL
-        if ($fecha_ult_prima != '') {
+        /* if ($fecha_ult_prima != '') {
             $periodo = intval(substr($fecha_ult_prima, 5, 2)) >= 7 ? 2 : 1;
             $liquidacion_prima_id = $this->DbgetMaxConsecutive("liquidacion_prima", "liquidacion_prima_id", $Conex, true, 1);
             $insert = "INSERT INTO liquidacion_prima (liquidacion_prima_id,fecha_liquidacion,estado,contrato_id,total,tipo_liquidacion,periodo,observaciones,inicial)
 								VALUES ($liquidacion_prima_id,'$fecha_ult_prima','C',$contrato_id,0,'T',$periodo,'REGISTRO INICIAL CONTRATO',1)";
             $this->query($insert, $Conex, true);
-        }
+        } */
 
         //REGISTRO VACACIONES HISTORIAL
         if ($fecha_ult_vaca != '') {
@@ -312,7 +312,7 @@ final class ContratoModel extends Db
             }
         }
         //REGISTRO PRIMA HISTORIAL
-        if ($fecha_ult_prima != '') {
+       /*  if ($fecha_ult_prima != '') {
             $select = "SELECT liquidacion_prima_id	FROM liquidacion_prima	WHERE	contrato_id = $contrato_id AND inicial=1 AND estado='C'";
             $result = $this->DbFetchAll($select, $Conex, true);
             if (count($result) == 0) {
@@ -323,44 +323,46 @@ final class ContratoModel extends Db
 									VALUES ($liquidacion_prima_id,'$fecha_ult_prima','C',$contrato_id,0,'T',$periodo,'REGISTRO INICIAL CONTRATO',1)";
                 $this->query($insert, $Conex, true);
             }
-        }
+        } */
 
         //REGISTRO VACACIONES HISTORIAL
         if ($fecha_ult_vaca != '') {
-            $select = "SELECT liquidacion_vacaciones_id	FROM liquidacion_vacaciones	WHERE	contrato_id = $contrato_id AND inicial=1 AND estado='C'";
-            $result = $this->DbFetchAll($select, $Conex, true);
-            if (count($result) == 0) {
 
-                $liquidacion_vacaciones_id = $this->DbgetMaxConsecutive("liquidacion_vacaciones", "liquidacion_vacaciones_id", $Conex, true, 1);
-                $insert = "INSERT INTO liquidacion_vacaciones (liquidacion_vacaciones_id,contrato_id,fecha_liquidacion,fecha_reintegro,dias,concepto,observaciones,estado,inicial)
-                                        VALUES ($liquidacion_vacaciones_id,$contrato_id,'$fecha_ult_vaca','$fecha_ult_vaca',0,'REGISTRO INICIAL CONTRATO','REGISTRO INICIAL CONTRATO','C',1)";
-                $this->query($insert, $Conex, true);
-
-                $select_contrato = "SELECT DATEDIFF(CURDATE(),$fecha_inicio) as dias_trabajados
+            $select_contrato = "SELECT DATEDIFF(CURDATE(),$fecha_inicio) as dias_trabajados
                                 FROM contrato WHERE contrato_id = $contrato_id AND estado='A'";
-                $result_contrato = $this->DbFetchAll($select_contrato, $Conex);
+            $result_contrato = $this->DbFetchAll($select_contrato, $Conex);
+            $dias_trabajados = $result_contrato[0]['dias_trabajados'];
+            $anios = intval(intval($dias_trabajados) / 360);
+            
+            if($anios > 0){
+                $select = "SELECT liquidacion_vacaciones_id	FROM liquidacion_vacaciones	WHERE	contrato_id = $contrato_id AND inicial=1 AND estado='C'";
+                $result = $this->DbFetchAll($select, $Conex, true);
+                if (count($result) == 0) {
 
-                $dias_trabajados = $result_contrato[0]['dias_trabajados'];
+                    $liquidacion_vacaciones_id = $this->DbgetMaxConsecutive("liquidacion_vacaciones", "liquidacion_vacaciones_id", $Conex, true, 1);
+                    $insert = "INSERT INTO liquidacion_vacaciones (liquidacion_vacaciones_id,contrato_id,fecha_liquidacion,fecha_reintegro,dias,concepto,observaciones,estado,inicial)
+                                            VALUES ($liquidacion_vacaciones_id,$contrato_id,'$fecha_ult_vaca','$fecha_ult_vaca',0,'REGISTRO INICIAL CONTRATO','REGISTRO INICIAL CONTRATO','C',1)";
+                    $this->query($insert, $Conex, true);
 
-                $anios = intval(intval($dias_trabajados) / 360);
-                $fecha_aux = $_REQUEST['fecha_inicio'];
+                    $fecha_aux = $_REQUEST['fecha_inicio'];
 
-                $i = 0;
-                for ($i = 0; $i < $anios; $i++) {
+                    $i = 0;
+                    for ($i = 0; $i < $anios; $i++) {
 
-                    $select_periodo = "SELECT DATE_ADD('$fecha_aux',INTERVAL 1 YEAR) as fecha_fin";
-                    $result_periodo = $this->DbFetchAll($select_periodo, $Conex);
+                        $select_periodo = "SELECT DATE_ADD('$fecha_aux',INTERVAL 1 YEAR) as fecha_fin";
+                        $result_periodo = $this->DbFetchAll($select_periodo, $Conex);
 
-                    $periodo[$i]['fecha_inicial'] = $fecha_aux;
-                    $periodo[$i]['fecha_final'] = $result_periodo[0]['fecha_fin'];
-                    $periodo[$i]['dias_ganados'] = 15;
-                    $fecha_aux = $result_periodo[0]['fecha_fin'];
+                        $periodo[$i]['fecha_inicial'] = $fecha_aux;
+                        $periodo[$i]['fecha_final'] = $result_periodo[0]['fecha_fin'];
+                        $periodo[$i]['dias_ganados'] = 15;
+                        $fecha_aux = $result_periodo[0]['fecha_fin'];
 
-                    if ($fecha_ult_vaca >= $periodo[$i]['fecha_inicial'] && $fecha_ult_vaca <= $periodo[$i]['fecha_final']) {
-                        $detalle_liquidacion_vacaciones_id = $this->DbgetMaxConsecutive("detalle_liquidacion_vacaciones", "detalle_liquidacion_vacaciones_id", $Conex, true, 1);
-                        $insert_detalle = "INSERT INTO detalle_liquidacion_vacaciones (detalle_liquidacion_vacaciones_id,liquidacion_vacaciones_id,periodo_inicio,periodo_fin,dias_ganados,dias_disfrutados,dias_pagados) VALUES ($detalle_liquidacion_vacaciones_id,$liquidacion_vacaciones_id," . "'" . $periodo[$i]['fecha_inicial'] . "'" . "," . "'" . $periodo[$i]['fecha_final'] . "'" . "," . $periodo[$i]['dias_ganados'] . "," . $periodo[$i]['dias_ganados'] . ",0)";
-                        $this->query($insert_detalle, $Conex, true);
-                        break;
+                        if ($fecha_ult_vaca >= $periodo[$i]['fecha_inicial'] && $fecha_ult_vaca <= $periodo[$i]['fecha_final']) {
+                            $detalle_liquidacion_vacaciones_id = $this->DbgetMaxConsecutive("detalle_liquidacion_vacaciones", "detalle_liquidacion_vacaciones_id", $Conex, true, 1);
+                            $insert_detalle = "INSERT INTO detalle_liquidacion_vacaciones (detalle_liquidacion_vacaciones_id,liquidacion_vacaciones_id,periodo_inicio,periodo_fin,dias_ganados,dias_disfrutados,dias_pagados) VALUES ($detalle_liquidacion_vacaciones_id,$liquidacion_vacaciones_id," . "'" . $periodo[$i]['fecha_inicial'] . "'" . "," . "'" . $periodo[$i]['fecha_final'] . "'" . "," . $periodo[$i]['dias_ganados'] . "," . $periodo[$i]['dias_ganados'] . ",0)";
+                            $this->query($insert_detalle, $Conex, true);
+                            break;
+                        }
                     }
                 }
             }
