@@ -134,17 +134,11 @@ final class LiquidacionFinal extends Controler
         $datos_periodo = $Model->getDatosperiodo($periodo, $this->getConex());
         
         $dias = $this->restaFechasCont($_REQUEST['fecha_inicio'], $_REQUEST['fecha_final']);
-        $meses = ($dias/30);
-
         $data = $Model->getDetallesContrato($contrato_id, $dias, $this->getConex());
 
         $tercero_id = $data[0]['tercero_id'];
         $sueldo_base = $data[0]['sueldo_base'];
         $subsidio_transporte = $data[0]['subsidio_transporte'];
-
-        $base_salarial_deven = $Model->getDevBaseSalarial($contrato_id, $fecha_final, $fecha_inicio, $this->getConex());
-        $horas_extra = $Model->getHorasExtra($contrato_id, $fecha_final, $fecha_inicio, $this->getConex());
-        $sueldo_total = $sueldo_base + (($base_salarial_deven/$meses) + ($horas_extra/$meses));
         
         $x = 0;
         $c = 0;
@@ -155,10 +149,13 @@ final class LiquidacionFinal extends Controler
         //validación si se pagan prestaciones:
         if ($data[0]['prestaciones'] != 0) {
             //cesantias
-            $data_ces = $Model->getDetallesCesantias($contrato_id, $_REQUEST['fecha_final'], $this->getConex());
+            $data_ces = $Model->getDetallesCesantias($contrato_id, $fecha_final, $this->getConex());
             $fecha_ultima = $data_ces[0]['fecha_corte'] > 0 ? $data_ces[0]['fecha_corte'] : $fecha_inicio;
+            $base_deven_cesan = $Model->getDevBaseSalarial($contrato_id, $fecha_final, $fecha_ultima, $this->getConex());
+            $horas_extra_cesan = $Model->getHorasExtra($contrato_id, $fecha_final, $fecha_ultima, $this->getConex());
             $dias_ces = $this -> restaFechasCont($fecha_ultima,$_REQUEST['fecha_final']);
-            $valor_cesan = intval((($sueldo_total + $subsidio_transporte) * $dias_ces) / 360);
+            $meses_ces = ($dias_ces/30);
+            $valor_cesan = intval((($sueldo_base + ($base_deven_cesan/$meses_ces) + ($horas_extra_cesan/$meses_ces) + $subsidio_transporte) * $dias_ces) / 360);
             $desde_cesan = $data_ces[0]['fecha_corte'] != '' ? $data_ces[0]['fecha_corte'] : $_REQUEST['fecha_inicio'];
             $datos[$x]['concepto'] = 'CESANTIAS';
             $datos[$x]['dias'] = $dias_ces > 0 ? $dias_ces : $dias;
@@ -358,7 +355,7 @@ final class LiquidacionFinal extends Controler
                 $dias_prima = $dias;
                 $fecha_ultima = $_REQUEST['fecha_inicio'];
             }
-            $valor_prima = intval(((($sueldo_total + $subsidio_transporte)) * $dias_prima) / 360);
+            $valor_prima = intval(((($sueldo_base + $subsidio_transporte)) * $dias_prima) / 360);
             $datos[$x]['concepto'] = 'PRIMA SERVICIOS';
             $datos[$x]['dias'] = $dias_prima;
             $datos[$x]['periodo'] = 'De: ' . $fecha_ultima . ' Hasta: ' . $_REQUEST['fecha_final'];
@@ -540,11 +537,11 @@ final class LiquidacionFinal extends Controler
 
             if ($periodos > 1) {
                 $periodo_otros = ($periodos - 1);
-                $valor_otros = ((($sueldo_total / 30) * $datos_periodo[0]['dias_2anio_indem']) * $periodo_otros);
-                $valor_indem = intval((($sueldo_total / 30) * $datos_periodo[0]['dias_anio_indem']) + $valor_otros);
+                $valor_otros = ((($sueldo_base / 30) * $datos_periodo[0]['dias_2anio_indem']) * $periodo_otros);
+                $valor_indem = intval((($sueldo_base / 30) * $datos_periodo[0]['dias_anio_indem']) + $valor_otros);
 
             } elseif ($periodos <= 1) {
-                $valor_indem = intval(($sueldo_total / 30) * $datos_periodo[0]['dias_anio_indem']);
+                $valor_indem = intval(($sueldo_base / 30) * $datos_periodo[0]['dias_anio_indem']);
             }
 
             $datos[$x]['concepto'] = 'INDEMNIZACION';
@@ -577,7 +574,7 @@ final class LiquidacionFinal extends Controler
         $data_sal = $Model->getDetallesSalario($contrato_id, $_REQUEST['fecha_final'], $this->getConex());
         if ($data_sal[0]['dias_dif'] > 0) {
 
-            $valor_salario = intval(($sueldo_total / 30) * $data_sal[0]['dias_dif']);
+            $valor_salario = intval(($sueldo_base / 30) * $data_sal[0]['dias_dif']);
             $datos[$x]['concepto'] = 'SALARIO';
             $datos[$x]['dias'] = $data_sal[0]['dias_dif'];
             $datos[$x]['periodo'] = 'De: ' . $data_sal[0]['fecha_final'] . ' Hasta: ' . $_REQUEST['fecha_final'];
@@ -653,7 +650,7 @@ final class LiquidacionFinal extends Controler
         //deducciones parafiscales
         if ($data_sal[0]['dias_dif'] > 0) {
 
-            $valor_salud = intval(((($sueldo_total / 30) * $data_sal[0]['dias_dif']) * $datos_periodo[0]['desc_emple_salud']) / 100);
+            $valor_salud = intval(((($sueldo_base / 30) * $data_sal[0]['dias_dif']) * $datos_periodo[0]['desc_emple_salud']) / 100);
             $datos[$x]['concepto'] = 'APORTE SALUD';
             $datos[$x]['dias'] = $data_sal[0]['dias_dif'];
             $datos[$x]['periodo'] = 'De: ' . $data_sal[0]['fecha_final'] . ' Hasta: ' . $_REQUEST['fecha_final'];
@@ -675,7 +672,7 @@ final class LiquidacionFinal extends Controler
             $datos_con[$c]['credito'] = abs($valor_salud);
             $c++;
 
-            $valor_pension = intval(((($sueldo_total / 30) * $data_sal[0]['dias_dif']) * $datos_periodo[0]['desc_emple_pension']) / 100);
+            $valor_pension = intval(((($sueldo_base / 30) * $data_sal[0]['dias_dif']) * $datos_periodo[0]['desc_emple_pension']) / 100);
             $datos[$x]['concepto'] = 'APORTE PENSION';
             $datos[$x]['dias'] = $data_sal[0]['dias_dif'];
             $datos[$x]['periodo'] = 'De: ' . $data_sal[0]['fecha_final'] . ' Hasta: ' . $_REQUEST['fecha_final'];

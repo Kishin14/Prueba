@@ -388,7 +388,6 @@ final class LiquidacionFinalModel extends Db
             WHERE 
                 c.contrato_id = $contrato_id AND c.contrato_id = lno.contrato_id AND lno.liquidacion_novedad_id = dln.liquidacion_novedad_id AND  ca.concepto_area_id = dln.concepto_area_id AND ca.base_salarial = 'SI' AND lno.fecha_inicial >= '$fecha_inicio' AND lno.fecha_final <= '$fecha_final' AND lno.estado = 'C'";
             $resultdeve = $this -> DbFetchAll($selectdeve,$Conex,true);
-
             $valor_deven = $resultdeve[0]['base_salarial_deven']>0 ? $resultdeve[0]['base_salarial_deven'] : 0;
             $valor_deven = round($valor_deven);
             
