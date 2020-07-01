@@ -51,12 +51,16 @@
             value="{$d.porcentaje}" class="required" /></td>
         <td style="display:none;"><input type="text" autocomplete="off" name="debito" id="debito" value="{$d.debito}"
             class="required numeric" /></td>
+
+        <td style="display:none;"> <input type="text" autocomplete="off" name="valor_base_salarial" id="valor_base_salarial" value="{$d.valor_base_salarial}"
+          class="required" size="10" /></td>
+        
         <td><input type="text" autocomplete="off" name="periodo" id="periodo" value="{$d.periodo}" size="30"
             class="required" /></td>
         <td style="display:none;"><input type="text" autocomplete="off" name="credito" id="credito" value="{$d.credito}"
             class="required numeric" /> </td>
         <td><input type="text" autocomplete="off" name="dias" id="dias" value="{$d.dias}" class="required" /></td>
-        <td align="right"><input type="text" autocomplete="off" name="valor" id="valor" style="text-align:right;"
+        <td align="right" name="detalleValor"><input type="text" autocomplete="off" name="valor" id="valor" style="text-align:right;"
             value="{$d.valor}" class="required numeric" /> </td>
       </tr>
     </tbody>

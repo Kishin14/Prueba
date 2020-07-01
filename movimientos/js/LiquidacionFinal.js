@@ -34,7 +34,6 @@ function setDataFormWithResponse() {
 		if ($('#limpiar')) $('#limpiar').attr("disabled", "");
 	});
 
-
 }
 
 function setDataContrato(contrato_id) {
@@ -56,14 +55,11 @@ function setDataContrato(contrato_id) {
 				var responseArray = $.parseJSON(response);
 				var fecha_inicio = responseArray[0]['fecha_inicio'];
 				var fecha_terminacion = responseArray[0]['fecha_terminacion'];
-				var dias = restaFechas(fecha_inicio,fecha_terminacion);
-				var meses = (dias/30);
 				var sueldo_base = responseArray[0]['sueldo_base'];
 				var subsidio_transporte = responseArray[0]['subsidio_transporte'];
-				var base_salarial_deven = responseArray[0]['base_salarial_deven'] > 0 ? Math.ceil((responseArray[0]['base_salarial_deven']/meses)) : 0;
-				var base_horas_extra = responseArray[0]['base_horas_extra'] > 0 ? Math.ceil((responseArray[0]['base_horas_extra']/meses)) : 0;
+				var base_salarial_deven = responseArray[0]['base_salarial_deven'] > 0 ? Math.ceil((responseArray[0]['base_salarial_deven'])) : 0;
+				var base_horas_extra = responseArray[0]['base_horas_extra'] > 0 ? Math.ceil((responseArray[0]['base_horas_extra'])) : 0;
 				var base_liquidacion = parseFloat(sueldo_base) + parseFloat(subsidio_transporte);
-				var total_liquidacion = parseFloat(base_liquidacion) + parseFloat(base_salarial_deven) + parseFloat(base_horas_extra);
 				var estado = responseArray[0]['estado'];
 				var justificado = $("#justificado").val();
 				var liquidacion_definitiva_id = $("#liquidacion_definitiva_id").val();
@@ -76,10 +72,6 @@ function setDataContrato(contrato_id) {
 					$("#base_liquidacion").val(setFormatCurrency(base_liquidacion, 2));
 					$("#base_salarial_deven").val(setFormatCurrency(base_salarial_deven, 2));
 					$("#base_horas_extra").val(setFormatCurrency(base_horas_extra, 2));
-					$("#total_liquidacion").val(setFormatCurrency(total_liquidacion, 2));
-					$("#base_deven").val(setFormatCurrency(base_salarial_deven, 2));
-					$("#base_horas").val(setFormatCurrency(base_horas_extra, 2));
-					$("#liq_total").val(setFormatCurrency(total_liquidacion, 2));
 
 					if (fecha_terminacion != '') {
 						var fecha_inicial = $('#fecha_inicio').val();
@@ -92,9 +84,14 @@ function setDataContrato(contrato_id) {
 							if (fecha_inicial != '' && fecha_final != '') {
 								var dias1 = restaFechas(fecha_inicial, fecha_final);
 								$('#dias').val(dias1);
+								console.log('testa');
+								//window.frames[0].obtenerDetalles();
+								console.log('testb');
 							}
 						}
 
+					}else{
+						console.log('testc');
 					}
 				} else {
 					alertJquery('El contrato seleccionado No esta Activo, no se puede Liquidar', 'Validacion');
@@ -107,6 +104,11 @@ function setDataContrato(contrato_id) {
 
 	});
 
+}
+
+function getPromedioPrest(valor_base_salarial, tipo){
+	
+	$("#"+tipo).val(setFormatCurrency(parseInt(valor_base_salarial)));
 }
 
 function LiquidacionFinalOnSave(formulario, resp) {

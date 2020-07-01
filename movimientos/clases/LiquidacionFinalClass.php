@@ -155,12 +155,14 @@ final class LiquidacionFinal extends Controler
             $horas_extra_cesan = $Model->getHorasExtra($contrato_id, $fecha_ultima, $fecha_final, $this->getConex());
             $dias_ces = $this -> restaFechasCont($fecha_ultima,$_REQUEST['fecha_final']);
             $meses_ces = ($dias_ces/30);
-            $valor_cesan = intval((($sueldo_base + ($base_deven_cesan/$meses_ces) + ($horas_extra_cesan/$meses_ces) + $subsidio_transporte) * $dias_ces) / 360);
+            $valor_base_salarial = ($base_deven_cesan/$meses_ces) + ($horas_extra_cesan/$meses_ces);
+            $valor_cesan = intval((($sueldo_base + $valor_base_salarial + $subsidio_transporte) * $dias_ces) / 360);
             $desde_cesan = $data_ces[0]['fecha_corte'] != '' ? $data_ces[0]['fecha_corte'] : $_REQUEST['fecha_inicio'];
             $datos[$x]['concepto'] = 'CESANTIAS';
             $datos[$x]['dias'] = $dias_ces > 0 ? $dias_ces : $dias;
             $datos[$x]['periodo'] = 'De: ' . $desde_cesan . ' Hasta: ' . $_REQUEST['fecha_final'];
             $datos[$x]['valor'] = $valor_cesan;
+            $datos[$x]['valor_base_salarial'] = $valor_base_salarial;
             $datos[$x]['tipo'] = 'P';
             $datos[$x]['fecha_inicio'] = $desde_cesan;
             $datos[$x]['fecha_fin'] = $_REQUEST['fecha_final'];
@@ -357,11 +359,13 @@ final class LiquidacionFinal extends Controler
             $base_deven_prima = $Model->getDevBaseSalarial($contrato_id, $fecha_ultima, $fecha_final, $this->getConex());
             $horas_extra_prima = $Model->getHorasExtra($contrato_id, $fecha_ultima, $fecha_final, $this->getConex());
             $meses_prima = ($dias_prima/30);
-            $valor_prima = intval(((($sueldo_base + ($base_deven_prima/$meses_prima) + ($horas_extra_prima/$meses_prima) + $subsidio_transporte)) * $dias_prima) / 360);
+            $valor_base_salarial = ($base_deven_prima/$meses_prima) + ($horas_extra_prima/$meses_prima);
+            $valor_prima = intval(((($sueldo_base + $valor_base_salarial + $subsidio_transporte)) * $dias_prima) / 360);
             $datos[$x]['concepto'] = 'PRIMA SERVICIOS';
             $datos[$x]['dias'] = $dias_prima;
             $datos[$x]['periodo'] = 'De: ' . $fecha_ultima . ' Hasta: ' . $_REQUEST['fecha_final'];
             $datos[$x]['valor'] = $valor_prima;
+            $datos[$x]['valor_base_salarial'] = $valor_base_salarial;
             $datos[$x]['tipo'] = 'P';
             $datos[$x]['fecha_inicio'] = $fecha_ultima;
             $datos[$x]['fecha_fin'] = $_REQUEST['fecha_final'];
@@ -1235,9 +1239,9 @@ final class LiquidacionFinal extends Controler
                 table => array('liquidacion_definitiva'),
                 type => array('column'))
         );
-        $this->Campos[total_liquidacion] = array(
-            name => 'total_liquidacion',
-            id => 'total_liquidacion',
+        $this->Campos[prom_ces] = array(
+            name => 'prom_ces',
+            id => 'prom_ces',
             type => 'text',
             disabled => 'yes',
             Boostrap => 'si',
@@ -1248,29 +1252,18 @@ final class LiquidacionFinal extends Controler
                 table => array('liquidacion_definitiva'),
                 type => array('column'))
         );
-        $this->Campos[base_deven] = array(
-            name => 'base_deven',
-            id => 'base_deven',
-            type => 'hidden',
+        $this->Campos[prom_pri] = array(
+            name => 'prom_pri',
+            id => 'prom_pri',
+            type => 'text',
+            disabled => 'yes',
+            Boostrap => 'si',
             datatype => array(
                 type => 'numeric',
-                length => '20')
-        );
-        $this->Campos[base_horas] = array(
-            name => 'base_horas',
-            id => 'base_horas',
-            type => 'hidden',
-            datatype => array(
-                type => 'numeric',
-                length => '20')
-        );
-        $this->Campos[liq_total] = array(
-            name => 'liq_total',
-            id => 'liq_total',
-            type => 'hidden',
-            datatype => array(
-                type => 'numeric',
-                length => '20')
+                length => '20'),
+            transaction => array(
+                table => array('liquidacion_definitiva'),
+                type => array('column'))
         );
         $this->Campos[justificado] = array(
             name => 'justificado',

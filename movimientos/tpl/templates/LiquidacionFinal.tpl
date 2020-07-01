@@ -45,18 +45,19 @@
                 <td>{$BASE_LIQ}</td>
                 <td><label>Indemnizaci&oacute;n: </label></td>
                 <td>{$JUSTIFICADO}</td>
+
             </tr>
             <tr>
               <td><label>Novedades : </label></td>
-              <td>{$DEVEN}{$BASE_DEVEN}</td>
+              <td>{$BASE_DEVEN}</td>
+              <td><label>Promedio Cesantias : </label></td>
+              <td>{$PROMCES}</td>
             </tr>
             <tr>
               <td><label>Horas Extra : </label></td>
-              <td>{$EXTRAS}{$BASE_EXTRAS}</td>
-            </tr>
-            <tr>
-              <td><label>Total Liquidaci&oacute;n : </label></td>
-              <td>{$VALOR_LIQ}{$TOTAL_LIQ}</td>
+              <td>{$BASE_EXTRAS}</td>
+              <td><label>Promedio Primas : </label></td>
+              <td>{$PROMPRI}</td>
             </tr>
             <tr>
                 <td><label>Dias : </label></td>

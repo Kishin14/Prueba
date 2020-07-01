@@ -106,10 +106,8 @@ final class LiquidacionFinalLayout extends View
         $this->assign("BASE_LIQ", $this->objectsHtml->GetobjectHtml($this->fields[base_liquidacion]));
         $this->assign("BASE_DEVEN", $this->objectsHtml->GetobjectHtml($this->fields[base_salarial_deven]));
         $this->assign("BASE_EXTRAS", $this->objectsHtml->GetobjectHtml($this->fields[base_horas_extra]));
-        $this->assign("TOTAL_LIQ", $this->objectsHtml->GetobjectHtml($this->fields[total_liquidacion]));
-        $this->assign("DEVEN", $this->objectsHtml->GetobjectHtml($this->fields[base_deven]));
-        $this->assign("EXTRAS", $this->objectsHtml->GetobjectHtml($this->fields[base_horas]));
-        $this->assign("VALOR_LIQ", $this->objectsHtml->GetobjectHtml($this->fields[liq_total]));
+        $this->assign("PROMCES", $this->objectsHtml->GetobjectHtml($this->fields[prom_ces]));
+        $this->assign("PROMPRI", $this->objectsHtml->GetobjectHtml($this->fields[prom_pri]));
         $this->assign("JUSTIFICADO", $this->objectsHtml->GetobjectHtml($this->fields[justificado]));
         $this->assign("DIAS", $this->objectsHtml->GetobjectHtml($this->fields[dias]));
         $this->assign("ENCABEZADOID", $this->objectsHtml->GetobjectHtml($this->fields[encabezado_registro_id]));
