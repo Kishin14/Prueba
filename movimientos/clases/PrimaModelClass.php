@@ -207,7 +207,7 @@ final class PrimaModel extends Db{
 			print($liquidacion_prima_id);
 		}else{
 
-			if($tipo_liquidacion=='T'){
+			if($tipo_liquidacion=="'T'"){
 
 			$this -> Begin($Conex);
 			
@@ -227,7 +227,7 @@ final class PrimaModel extends Db{
 											   c.area_laboral,
 											   (c.sueldo_base+c.subsidio_transporte) as sueldo_base,
 											   c.fecha_inicio, 
-											   c.fecha_ult_prima
+											   IF(c.fecha_ult_prima IS NOT NULL,c.fecha_ult_prima,c.fecha_inicio)AS fecha_ult_prima
 
 										FROM contrato c WHERE c.contrato_id=$contrato_id AND estado='A' ";
 					
@@ -257,11 +257,33 @@ final class PrimaModel extends Db{
 				
 						//exit("fech_ant ".$fecha_anterior." fecha_liq_valida ".$fecha_liquidacion_valida." periodo_ant ".$periodo_anterior." periodo ".$periodo);
 						if($fecha_anterior == $fecha_liquidacion_valida && $periodo_anterior==$periodo) {
-							$prima = (($sueldo_base/2)-$total);
-							$valor=$prima;
+							if($fecha_ult_prima != ''){
+							  $dias_laborados = $this->restaFechasCont($fecha_ult_prima,$fecha_liquidacion_val);
+							}
+							
+							$select = "SELECT *	FROM liquidacion_prima WHERE contrato_id=$contrato_id AND estado!='I' ORDER BY fecha_liquidacion DESC"; 
+		                    $result = $this -> DbFetchAll($select,$Conex,$ErrDb = false);
+
+		                    if($result[0]['liquidacion_prima_id']>0){
+							   $prima = intval((($dias_laborados-1)*($sueldo_base/2))/180); 
+							}else{
+								$prima = intval((($dias_laborados)*($sueldo_base/2))/180); 
+							}
+							$valor=$prima-$total;
 						}else{
-							$prima = (($sueldo_base/2));
-							$valor=$prima;
+
+							if($fecha_ult_prima != ''){
+							  $dias_laborados = $this->restaFechasCont($fecha_ult_prima,$fecha_liquidacion_val);
+							}
+							
+							$select = "SELECT *	FROM liquidacion_prima WHERE contrato_id=$contrato_id AND estado!='I' ORDER BY fecha_liquidacion DESC"; 
+		                    $result = $this -> DbFetchAll($select,$Conex,$ErrDb = false);
+
+		                    if($result[0]['liquidacion_prima_id']>0){
+							   $valor = intval((($dias_laborados-1)*($sueldo_base/2))/180); 
+							}else{
+								$valor = intval((($dias_laborados)*($sueldo_base/2))/180); 
+							}
 						}  
 					
 				
@@ -385,7 +407,7 @@ final class PrimaModel extends Db{
 			$this -> Commit($Conex); 
 			print($liquidacion_prima_id);
 
-		   }else{
+		   }else if($tipo_liquidacion=="'P'"){
 
 			   $this -> Begin($Conex);
 			
@@ -814,8 +836,8 @@ final class PrimaModel extends Db{
 			$result['estado'] = $result[0]['estado'];
 			$result['fecha_liquidacion']=$fecha;
 			
-			$select = "SELECT SUM(total)AS total FROM liquidacion_prima WHERE contrato_id=$contrato_id AND periodo=$periodo";
-		    $result_total = $this -> DbFetchAll($select,$Conex,true);
+			$select = "SELECT total FROM liquidacion_prima WHERE contrato_id=$contrato_id AND periodo=$periodo ORDER BY liquidacion_prima_id DESC";
+			$result_total = $this -> DbFetchAll($select,$Conex,true);
 	
 		    if($result_total[0]['total']>0){
 			  $total = $result_total[0]['total'];

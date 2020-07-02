@@ -613,7 +613,7 @@ function Liq_AnteriorTotal(find){
                     
 				    var valor_guardado    = parseFloat(data['valor_guardado']) > 0 ? data['valor_guardado'] : 0;
 
-					//console.log("valor_guardado: "+valor_guardado+" valor liquidacion "+valor_liquidacion);
+					//console.log("valor_guardado: "+valor_guardado+" valor liquidacion "+valor_liquidacion+ "total: "+total);
 
 					if (find == 1) {
 						var diferencia = total - valor_guardado;
@@ -629,7 +629,7 @@ function Liq_AnteriorTotal(find){
 							  $("#total").val(setFormatCurrency(total));
 							  alertJquery('Este empleado ya cuenta con una liquidación realizada por el valor completo para este semestre.<br> VALOR TOTAL: ' + setFormatCurrency(total));
 							}
-
+                          
 							
 							if ($('#guardar')) $('#guardar').attr("disabled", "true");
 
