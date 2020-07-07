@@ -132,20 +132,21 @@ final class VacacionModel extends Db{
 		FROM parametros_liquidacion_nomina WHERE oficina_id=$oficina_id";
 		$result_parametros = $this -> DbFetchAll($select_parametros,$Conex); 
 		
-		$puc_provision_vacaciones = $result_parametros[0]['puc_vac_prov_id'];
-		$puc_consolidado_vacaciones = $result_parametros[0]['puc_vac_cons_id'];
-		$puc_contrapartida		  = $result_parametros[0]['puc_vac_contra_id'];
-		$puc_admin				= $result_parametros[0]['puc_admon_vac_id'];
-		$puc_venta				= $result_parametros[0]['puc_ventas_vac_id'];
-		$puc_operativo			= $result_parametros[0]['puc_produ_vac_id'];
-		$puc_salud				= $result_parametros[0]['puc_salud_vac_id'];
-		$puc_pension			= $result_parametros[0]['puc_pension_vac_id'];
+		$puc_provision_vacaciones = $result_parametros[0]['puc_vac_prov_id'];//26101505
+		$puc_consolidado_vacaciones = $result_parametros[0]['puc_vac_cons_id'];//25250505
+		$puc_contrapartida		  = $result_parametros[0]['puc_vac_contra_id'];//25250505
+		$puc_admin				= $result_parametros[0]['puc_admon_vac_id'];//51053905
+		$puc_venta				= $result_parametros[0]['puc_ventas_vac_id'];//52053905
+		$puc_operativo			= $result_parametros[0]['puc_produ_vac_id'];//100000151
+		$puc_salud				= $result_parametros[0]['puc_salud_vac_id'];//23700505
+		$puc_pension			= $result_parametros[0]['puc_pension_vac_id'];//23803005
 		
-		$tipo_doc				= $result_parametros[0]['tipo_documento_id'];
+		$tipo_doc				= $result_parametros[0]['tipo_documento_id'];//13
 		
 		
 		
-		$select_consolidado = "SELECT SUM(credito-debito)as neto,centro_de_costo_id FROM imputacion_contable WHERE puc_id=$puc_consolidado_vacaciones AND tercero_id=$tercero_id AND encabezado_registro_id IN (SELECT encabezado_registro_id FROM encabezado_de_registro WHERE fecha<$fecha_dis_inicio)";
+		$select_consolidado = "SELECT SUM(debito-credito)as neto,centro_de_costo_id FROM imputacion_contable WHERE puc_id=$puc_consolidado_vacaciones AND tercero_id=$tercero_id AND encabezado_registro_id IN (SELECT encabezado_registro_id FROM encabezado_de_registro WHERE fecha<$fecha_dis_inicio)";
+		//die($select_consolidado);
 		$result_consolidado = $this -> DbFetchAll($select_consolidado,$Conex); 
 		
 		$valor_consolidado = $result_consolidado[0]['neto'];

@@ -133,14 +133,13 @@ final class LiquidacionFinal extends Controler
         $periodo = substr($fecha_final, 0, 4);
         $datos_periodo = $Model->getDatosperiodo($periodo, $this->getConex());
         
-        //$dias = $Model -> getDias($_REQUEST['fecha_inicio'],$_REQUEST['fecha_final'],$this -> getConex());
         $dias = $this->restaFechasCont($_REQUEST['fecha_inicio'], $_REQUEST['fecha_final']);
-        
-        //prestaciones
         $data = $Model->getDetallesContrato($contrato_id, $dias, $this->getConex());
-        //die(print_r($data));
 
         $tercero_id = $data[0]['tercero_id'];
+        $sueldo_base = $data[0]['sueldo_base'];
+        $subsidio_transporte = $data[0]['subsidio_transporte'];
+        
         $x = 0;
         $c = 0;
         $datos = array();
@@ -150,15 +149,20 @@ final class LiquidacionFinal extends Controler
         //validación si se pagan prestaciones:
         if ($data[0]['prestaciones'] != 0) {
             //cesantias
-            $data_ces = $Model->getDetallesCesantias($contrato_id, $_REQUEST['fecha_final'], $this->getConex());
+            $data_ces = $Model->getDetallesCesantias($contrato_id, $fecha_final, $this->getConex());
             $fecha_ultima = $data_ces[0]['fecha_corte'] > 0 ? $data_ces[0]['fecha_corte'] : $fecha_inicio;
+            $base_deven_cesan = $Model->getDevBaseSalarial($contrato_id, $fecha_ultima, $fecha_final, $this->getConex());
+            $horas_extra_cesan = $Model->getHorasExtra($contrato_id, $fecha_ultima, $fecha_final, $this->getConex());
             $dias_ces = $this -> restaFechasCont($fecha_ultima,$_REQUEST['fecha_final']);
-            $valor_cesan = intval((($data[0]['sueldo_base'] + $data[0]['subsidio_transporte']) * $dias_ces) / 360);
+            $meses_ces = ($dias_ces/30);
+            $valor_base_salarial = ($base_deven_cesan/$meses_ces) + ($horas_extra_cesan/$meses_ces);
+            $valor_cesan = intval((($sueldo_base + $valor_base_salarial + $subsidio_transporte) * $dias_ces) / 360);
             $desde_cesan = $data_ces[0]['fecha_corte'] != '' ? $data_ces[0]['fecha_corte'] : $_REQUEST['fecha_inicio'];
             $datos[$x]['concepto'] = 'CESANTIAS';
             $datos[$x]['dias'] = $dias_ces > 0 ? $dias_ces : $dias;
             $datos[$x]['periodo'] = 'De: ' . $desde_cesan . ' Hasta: ' . $_REQUEST['fecha_final'];
             $datos[$x]['valor'] = $valor_cesan;
+            $datos[$x]['valor_base_salarial'] = $valor_base_salarial;
             $datos[$x]['tipo'] = 'P';
             $datos[$x]['fecha_inicio'] = $desde_cesan;
             $datos[$x]['fecha_fin'] = $_REQUEST['fecha_final'];
@@ -250,7 +254,6 @@ final class LiquidacionFinal extends Controler
             $data_ices = $Model->getDetallesIntCesantias($contrato_id, $_REQUEST['fecha_final'], $this->getConex());
             $fecha_ultima = $data_ices[0]['fecha_corte'] > 0 ? $data_ices[0]['fecha_corte'] : $fecha_inicio;
             $dias_ices = $this->restaFechasCont($fecha_ultima,$_REQUEST['fecha_final']);
-            //$valor_icesan = intval(((($data[0]['sueldo_base']+$data[0]['subsidio_transporte'])*0.12)* $dias_ices) / 360);
             $valor_icesan = intval((($valor_cesan * 0.12) * $dias_ices) / 360);
             $desde_icesan = $data_ices[0]['fecha_corte'] != '' ? $data_ices[0]['fecha_corte'] : $_REQUEST['fecha_inicio'];
             $datos[$x]['concepto'] = 'INT. CESANTIAS';
@@ -353,11 +356,16 @@ final class LiquidacionFinal extends Controler
                 $dias_prima = $dias;
                 $fecha_ultima = $_REQUEST['fecha_inicio'];
             }
-            $valor_prima = intval(((($data[0]['sueldo_base'] + $data[0]['subsidio_transporte'])) * $dias_prima) / 360);
+            $base_deven_prima = $Model->getDevBaseSalarial($contrato_id, $fecha_ultima, $fecha_final, $this->getConex());
+            $horas_extra_prima = $Model->getHorasExtra($contrato_id, $fecha_ultima, $fecha_final, $this->getConex());
+            $meses_prima = ($dias_prima/30);
+            $valor_base_salarial = ($base_deven_prima/$meses_prima) + ($horas_extra_prima/$meses_prima);
+            $valor_prima = intval(((($sueldo_base + $valor_base_salarial + $subsidio_transporte)) * $dias_prima) / 360);
             $datos[$x]['concepto'] = 'PRIMA SERVICIOS';
             $datos[$x]['dias'] = $dias_prima;
             $datos[$x]['periodo'] = 'De: ' . $fecha_ultima . ' Hasta: ' . $_REQUEST['fecha_final'];
             $datos[$x]['valor'] = $valor_prima;
+            $datos[$x]['valor_base_salarial'] = $valor_base_salarial;
             $datos[$x]['tipo'] = 'P';
             $datos[$x]['fecha_inicio'] = $fecha_ultima;
             $datos[$x]['fecha_fin'] = $_REQUEST['fecha_final'];
@@ -450,7 +458,7 @@ final class LiquidacionFinal extends Controler
                 $dias_deb_vac = ($dias - ($per_disfru * 360));
             }
             //die("ESTOPS SON LOS DIAS : ".$dias_deb_vac."eSTE ES EL SUALDO BASE:".$data[0]['sueldo_base']);
-            $valor_vacas = intval((($data[0]['sueldo_base']) * $dias_deb_vac) / 720);
+            $valor_vacas = intval((($sueldo_base) * $dias_deb_vac) / 720);
             $desde_vacas = $data_vaca[0]['fecha_ultima'] != '' ? $data_vaca[0]['fecha_ultima'] : $_REQUEST['fecha_inicio'];
             $datos[$x]['concepto'] = 'PRIMA VACACIONES';
             $datos[$x]['dias'] = $dias_deb_vac > 0 ? $dias_deb_vac : $dias;
@@ -535,11 +543,11 @@ final class LiquidacionFinal extends Controler
 
             if ($periodos > 1) {
                 $periodo_otros = ($periodos - 1);
-                $valor_otros = ((($data[0]['sueldo_base'] / 30) * $datos_periodo[0]['dias_2anio_indem']) * $periodo_otros);
-                $valor_indem = intval((($data[0]['sueldo_base'] / 30) * $datos_periodo[0]['dias_anio_indem']) + $valor_otros);
+                $valor_otros = ((($sueldo_base / 30) * $datos_periodo[0]['dias_2anio_indem']) * $periodo_otros);
+                $valor_indem = intval((($sueldo_base / 30) * $datos_periodo[0]['dias_anio_indem']) + $valor_otros);
 
             } elseif ($periodos <= 1) {
-                $valor_indem = intval(($data[0]['sueldo_base'] / 30) * $datos_periodo[0]['dias_anio_indem']);
+                $valor_indem = intval(($sueldo_base / 30) * $datos_periodo[0]['dias_anio_indem']);
             }
 
             $datos[$x]['concepto'] = 'INDEMNIZACION';
@@ -572,7 +580,7 @@ final class LiquidacionFinal extends Controler
         $data_sal = $Model->getDetallesSalario($contrato_id, $_REQUEST['fecha_final'], $this->getConex());
         if ($data_sal[0]['dias_dif'] > 0) {
 
-            $valor_salario = intval(($data[0]['sueldo_base'] / 30) * $data_sal[0]['dias_dif']);
+            $valor_salario = intval(($sueldo_base / 30) * $data_sal[0]['dias_dif']);
             $datos[$x]['concepto'] = 'SALARIO';
             $datos[$x]['dias'] = $data_sal[0]['dias_dif'];
             $datos[$x]['periodo'] = 'De: ' . $data_sal[0]['fecha_final'] . ' Hasta: ' . $_REQUEST['fecha_final'];
@@ -606,7 +614,7 @@ final class LiquidacionFinal extends Controler
         $data_sal = $Model->getDetallesSalario($contrato_id, $_REQUEST['fecha_final'], $this->getConex());
         if ($data_sal[0]['dias_dif'] > 0) {
 
-            $valor_subsidio = intval(($data[0]['subsidio_transporte'] / 30) * $data_sal[0]['dias_dif']);
+            $valor_subsidio = intval(($subsidio_transporte / 30) * $data_sal[0]['dias_dif']);
             $datos[$x]['concepto'] = 'SUBSIDIO';
             $datos[$x]['dias'] = $data_sal[0]['dias_dif'];
             $datos[$x]['periodo'] = 'De: ' . $data_sal[0]['fecha_final'] . ' Hasta: ' . $_REQUEST['fecha_final'];
@@ -648,7 +656,7 @@ final class LiquidacionFinal extends Controler
         //deducciones parafiscales
         if ($data_sal[0]['dias_dif'] > 0) {
 
-            $valor_salud = intval(((($data[0]['sueldo_base'] / 30) * $data_sal[0]['dias_dif']) * $datos_periodo[0]['desc_emple_salud']) / 100);
+            $valor_salud = intval(((($sueldo_base / 30) * $data_sal[0]['dias_dif']) * $datos_periodo[0]['desc_emple_salud']) / 100);
             $datos[$x]['concepto'] = 'APORTE SALUD';
             $datos[$x]['dias'] = $data_sal[0]['dias_dif'];
             $datos[$x]['periodo'] = 'De: ' . $data_sal[0]['fecha_final'] . ' Hasta: ' . $_REQUEST['fecha_final'];
@@ -670,7 +678,7 @@ final class LiquidacionFinal extends Controler
             $datos_con[$c]['credito'] = abs($valor_salud);
             $c++;
 
-            $valor_pension = intval(((($data[0]['sueldo_base'] / 30) * $data_sal[0]['dias_dif']) * $datos_periodo[0]['desc_emple_pension']) / 100);
+            $valor_pension = intval(((($sueldo_base / 30) * $data_sal[0]['dias_dif']) * $datos_periodo[0]['desc_emple_pension']) / 100);
             $datos[$x]['concepto'] = 'APORTE PENSION';
             $datos[$x]['dias'] = $data_sal[0]['dias_dif'];
             $datos[$x]['periodo'] = 'De: ' . $data_sal[0]['fecha_final'] . ' Hasta: ' . $_REQUEST['fecha_final'];
@@ -959,10 +967,12 @@ final class LiquidacionFinal extends Controler
 
         $Data = array();
         $contrato_id = $_REQUEST['contrato_id'];
+        $fecha_inicio = $_REQUEST['fecha_inicio'];
+        $fecha_final = $_REQUEST['fecha_final'];
 
         if (is_numeric($contrato_id)) {
 
-            $Data = $Model->selectContrato($contrato_id, $this->getConex());
+            $Data = $Model->selectContrato($contrato_id, $fecha_inicio, $fecha_final,$this->getConex());
 
         }
         print json_encode($Data);
@@ -1194,6 +1204,7 @@ final class LiquidacionFinal extends Controler
             name => 'base_liquidacion',
             id => 'base_liquidacion',
             type => 'text',
+            disabled => 'yes',
             Boostrap => 'si',
             datatype => array(
                 type => 'numeric',
@@ -1202,13 +1213,65 @@ final class LiquidacionFinal extends Controler
                 table => array('liquidacion_definitiva'),
                 type => array('column')),
         );
-
+        $this->Campos[base_salarial_deven] = array(
+            name => 'base_salarial_deven',
+            id => 'base_salarial_deven',
+            type => 'text',
+            disabled => 'yes',
+            Boostrap => 'si',
+            datatype => array(
+                type => 'numeric',
+                length => '20'),
+            transaction => array(
+                table => array('liquidacion_definitiva'),
+                type => array('column'))
+        );
+        $this->Campos[base_horas_extra] = array(
+            name => 'base_horas_extra',
+            id => 'base_horas_extra',
+            type => 'text',
+            disabled => 'yes',
+            Boostrap => 'si',
+            datatype => array(
+                type => 'numeric',
+                length => '20'),
+            transaction => array(
+                table => array('liquidacion_definitiva'),
+                type => array('column'))
+        );
+        $this->Campos[prom_ces] = array(
+            name => 'prom_ces',
+            id => 'prom_ces',
+            type => 'text',
+            disabled => 'yes',
+            Boostrap => 'si',
+            datatype => array(
+                type => 'numeric',
+                length => '20'),
+            transaction => array(
+                table => array('liquidacion_definitiva'),
+                type => array('column'))
+        );
+        $this->Campos[prom_pri] = array(
+            name => 'prom_pri',
+            id => 'prom_pri',
+            type => 'text',
+            disabled => 'yes',
+            Boostrap => 'si',
+            datatype => array(
+                type => 'numeric',
+                length => '20'),
+            transaction => array(
+                table => array('liquidacion_definitiva'),
+                type => array('column'))
+        );
         $this->Campos[justificado] = array(
             name => 'justificado',
             id => 'justificado',
             type => 'select',
             Boostrap => 'si',
             options => array(array(value => 'S', text => 'SI'), array(value => 'N', text => 'NO')),
+            selected => 'N',
             required => 'yes',
             datatype => array(
                 type => 'text',
@@ -1240,6 +1303,7 @@ final class LiquidacionFinal extends Controler
             name => 'dias',
             id => 'dias',
             type => 'text',
+            disabled => 'yes',
             Boostrap => 'si',
             datatype => array(
                 type => 'numeric',

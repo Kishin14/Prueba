@@ -81,11 +81,9 @@ function setDataFormWithResponse(){
 			if ($('#guardar')) $('#guardar').attr("disabled", "true");
 			
 		} else if ($("#si_empleado").val() == '1' && $("#tipo_liquidacion").val() == 'T') {
-
-			Liq_AnteriorTotal(1);
            
 			var total = data[0]['total'];
-			$('#total').val(setFormatCurrency(total));
+			$('#total').val(total);
 
 			if ($('#guardar')) $('#guardar').attr("disabled", "true");
 		}
@@ -306,13 +304,6 @@ function setDataEmpleado(empleado_id,find){
 		  $("#fecha_inicio_contrato").val(fecha_inicio);
 		  
 		  if($("#tipo_liquidacion").val()=='T'){
-			  if(dias_laborados>180){
-				  dias_laborados=180
-			  }	
-
-			  var salario = removeFormatCurrency($("#salario").val());
-
-			  var prima = (dias_laborados*(salario/2))/180;
              
 			  if(find==1){
 				  Liq_AnteriorTotal(1);
@@ -374,14 +365,14 @@ function beforePrint(formulario,url,title,width,height){
 	  if(document.getElementById("si_empleado").value=='1'){
 
 	  	document.getElementById('tipo_impresion').value = 'DP';
-    	document.getElementById('tipo_impresion').disabled=true;
+    	document.getElementById('tipo_impresion').disabled=false;
 		document.getElementById('desprendibles').disabled=false;
 		
 	  }else if(document.getElementById("si_empleado").value=='ALL' && document.getElementById("empleado_id").value!=''){
 
 		document.getElementById("tipo_impresion").options[3].disabled = false;
 	  	document.getElementById('tipo_impresion').value = 'DP';
-    	document.getElementById('tipo_impresion').disabled=false;
+    	document.getElementById('tipo_impresion').disabled=true;
 		document.getElementById('desprendibles').disabled=false;
 
 	  }else if(document.getElementById("si_empleado").value=='ALL' && document.getElementById("empleado_id").value==''){
@@ -389,7 +380,7 @@ function beforePrint(formulario,url,title,width,height){
 		
 		document.getElementById("tipo_impresion").options[3].disabled = true;
 	  	document.getElementById('tipo_impresion').value = 'C';
-    	document.getElementById('tipo_impresion').disabled=false;
+    	document.getElementById('tipo_impresion').disabled=true;
 		document.getElementById('desprendibles').disabled=true;
 		document.getElementById('desprendibles').value='NULL';
 		  
@@ -454,7 +445,8 @@ function OnclickContabilizar(){
 	var liquidacion_prima_id = $("#liquidacion_prima_id").val();
 	var fecha 				 = $("#fecha_liquidacion").val();
 	var si_empleado 		 = $("#si_empleado").val();	
-	var valor 				 = removeFormatCurrency($("#total").val());		
+	var valor 				 = removeFormatCurrency($("#total").val());	
+	var acumulado            = removeFormatCurrency($("#acumulado").val());
 	
 	var QueryString 		 = "ACTIONCONTROLER=getTotalDebitoCredito&liquidacion_prima_id="+liquidacion_prima_id+"&rango="+si_empleado;	
 	
@@ -475,7 +467,7 @@ function OnclickContabilizar(){
 					 $("#totalCredito").html(totalCredito);	
 					 
 					 if(parseFloat(totalDebito)==parseFloat(totalCredito) ){
-						var QueryString = "ACTIONCONTROLER=getContabilizar&liquidacion_prima_id="+liquidacion_prima_id+"&fecha_liquidacion="+fecha+"&si_empleado="+si_empleado;	
+						var QueryString = "ACTIONCONTROLER=getContabilizar&liquidacion_prima_id="+liquidacion_prima_id+"&fecha_liquidacion="+fecha+"&si_empleado="+si_empleado+"&acumulado="+acumulado;	
 	
 						$.ajax({
 							url     : "PrimaClass.php",
@@ -591,9 +583,16 @@ function Liq_AnteriorTotal(find){
 
 	var empleado_id = $("#empleado_id").val();
 	var periodo = $("#periodo").val();
+	var estado = $("#estado").val();
 	var fecha_liquidacion = $("#fecha_liquidacion").val();
 
-	var QueryString = "ACTIONCONTROLER=Liq_Anterior&empleado_id="+empleado_id+"&periodo="+periodo+"&fecha_liquidacion="+fecha_liquidacion;
+	if(find==1){
+	   var liquidacion_prima_id = $("#liquidacion_prima_id").val();
+	}else{
+       var liquidacion_prima_id = '';
+	}
+
+	var QueryString = "ACTIONCONTROLER=Liq_Anterior&empleado_id="+empleado_id+"&periodo="+periodo+"&fecha_liquidacion="+fecha_liquidacion+"&liquidacion_prima_id="+liquidacion_prima_id;
 		$.ajax({
 			url     : "PrimaClass.php",
 			data    : QueryString,
@@ -602,44 +601,65 @@ function Liq_AnteriorTotal(find){
 				
 				if(data != null){
 
-					var fecha_anterior = data[0]['fecha_liquidacion'].substr(0, 4);
+					var fecha_anterior = data['fecha_liquidacion'].substr(0, 4);
 					var fecha_liquidacion = $("#fecha_liquidacion").val().substr(0, 4);
-					var periodo_anterior    = data[0]['periodo'];
+					var periodo_anterior    = data['periodo'];
+					
+					var acumulado           = data['acumulado'];
+                   
 					var salario = data['salario'];
 					var total = data['total'];
 					var valor_liquidacion = Math.trunc(data['valor_liquidacion']);
-
+                    
 				    var valor_guardado    = parseFloat(data['valor_guardado']) > 0 ? data['valor_guardado'] : 0;
+
+					//console.log("valor_guardado: "+valor_guardado+" valor liquidacion "+valor_liquidacion+ "total: "+total);
 
 					if (find == 1) {
 						var diferencia = total - valor_guardado;
+						var valor_liquidacion = total;
 					} else {
 						var diferencia = valor_liquidacion - valor_guardado;
 					}
                   
-				    if (fecha_anterior ==fecha_liquidacion && periodo_anterior==periodo) {
+					//console.log("fecha_anterior "+fecha_anterior+" fecha liquidacion "+fecha_liquidacion+" periodo anterior "+periodo_anterior+" periodo "+periodo);
+				    if (fecha_anterior == fecha_liquidacion && periodo_anterior==periodo) {
 						
-						var prima = ((salario/2)-total);
-			            
-						if (prima == 0 || prima >= 0 && prima <= 2) {
-							alertJquery('Este empleado ya cuenta con una liquidación realizada por el valor completo para este semestre.<br> VALOR TOTAL: '+setFormatCurrency(total));
-							if($('#guardar'))    $('#guardar').attr("disabled","true");
+							if (find != 1) {
+							  $("#total").val(setFormatCurrency(total));
+							  alertJquery('Este empleado ya cuenta con una liquidación realizada por el valor completo para este semestre.<br> VALOR TOTAL: ' + setFormatCurrency(total));
+							}
+                          
+							
+							if ($('#guardar')) $('#guardar').attr("disabled", "true");
+
+						$("#fecha_inicio_contrato").val(data['fecha_liquidacion']);
+
+						if(estado == 'C'){
+							$("#acumulado").val(setFormatCurrency(acumulado));
+							 diferencia = total - acumulado;	
+							$("#diferencia").val(setFormatCurrency(diferencia));
+						}else{
+							$("#acumulado").val(setFormatCurrency(valor_guardado));
+							$("#diferencia").val(setFormatCurrency(diferencia));
 						}
 
-						if (find != 1) {
-							$("#total").val(setFormatCurrency(prima));
-						}
-
-						$("#fecha_inicio_contrato").val(data[0]['fecha_liquidacion']);
-						$("#acumulado").val(setFormatCurrency(valor_guardado));
-						$("#diferencia").val(setFormatCurrency(diferencia));
 
 				    }else{
-						var prima = ((salario / 2));
-						$("#fecha_inicio_contrato").val(data[0]['fecha_liquidacion']);
-						$("#total").val(setFormatCurrency(prima));
-						$("#acumulado").val(setFormatCurrency(valor_guardado));
-						$("#diferencia").val(setFormatCurrency(diferencia));
+						
+						$("#fecha_inicio_contrato").val(data['fecha_liquidacion']);
+						$("#total").val(setFormatCurrency(valor_liquidacion));
+                       
+						if (estado == 'C') {
+							
+							$("#acumulado").val(setFormatCurrency(acumulado));
+							diferencia = total - acumulado;
+							$("#diferencia").val(setFormatCurrency(diferencia));
+						} else {
+							$("#acumulado").val(setFormatCurrency(valor_guardado));
+							$("#diferencia").val(setFormatCurrency(diferencia));
+						}
+
 					}
 			    }
 				
@@ -654,9 +674,16 @@ function Liq_AnteriorParcial(find){
 
 	var empleado_id = $("#empleado_id").val();
 	var periodo = $("#periodo").val();
+	var estado = $("#estado").val();
 	var fecha_liquidacion = $("#fecha_liquidacion").val();
 
-	var QueryString = "ACTIONCONTROLER=Liq_Anterior&empleado_id="+empleado_id+"&periodo="+periodo+"&fecha_liquidacion="+fecha_liquidacion;
+	if (find == 1) {
+		var liquidacion_prima_id = $("#liquidacion_prima_id").val();
+	} else {
+		var liquidacion_prima_id = '';
+	}
+
+	var QueryString = "ACTIONCONTROLER=Liq_Anterior&empleado_id=" + empleado_id + "&periodo=" + periodo + "&fecha_liquidacion=" + fecha_liquidacion + "&liquidacion_prima_id=" + liquidacion_prima_id;
 		$.ajax({
 			url     : "PrimaClass.php",
 			data    : QueryString,
@@ -666,9 +693,11 @@ function Liq_AnteriorParcial(find){
 				
 				if (data != null) {
 
-					var fecha_anterior = data[0]['fecha_liquidacion'].substr(0, 4);
+					var fecha_anterior = data['fecha_liquidacion'].substr(0, 4);
 					var fecha_liquidacion = $("#fecha_liquidacion").val().substr(0, 4);
-					var periodo_anterior    = data[0]['periodo'];
+					var periodo_anterior = data['periodo'];
+					
+					var acumulado =  data['acumulado'];
 					var salario    = data['salario'];
 					var valor_liquidacion = Math.trunc(data['valor_liquidacion']);
 					
@@ -691,20 +720,34 @@ function Liq_AnteriorParcial(find){
 							if($('#guardar'))    $('#guardar').attr("disabled","true");
 						}
 
-						$("#fecha_inicio_contrato").val(data[0]['fecha_liquidacion']);
+						$("#fecha_inicio_contrato").val(data['fecha_liquidacion']);
 
 						if(find!=1){
 							$("#total").val(setFormatCurrency(valor_liquidacion));
 						}
 						
-						$("#acumulado").val(setFormatCurrency(valor_guardado));
-						$("#diferencia").val(setFormatCurrency(diferencia));
+						if (estado == 'C') {
+							$("#acumulado").val(setFormatCurrency(acumulado));
+							diferencia = total - acumulado;
+							$("#diferencia").val(setFormatCurrency(diferencia));
+						} else {
+							$("#acumulado").val(setFormatCurrency(valor_guardado));
+							$("#diferencia").val(setFormatCurrency(diferencia));
+						}
+
 
 					}else{
-						$("#fecha_inicio_contrato").val(data[0]['fecha_liquidacion']);
+						$("#fecha_inicio_contrato").val(data['fecha_liquidacion']);
 						$("#total").val(setFormatCurrency(valor_liquidacion));
-						$("#acumulado").val(setFormatCurrency(valor_guardado));
-						$("#diferencia").val(setFormatCurrency(diferencia));
+
+						if (estado == 'C') {
+							$("#acumulado").val(setFormatCurrency(acumulado));
+							diferencia = total - acumulado;
+							$("#diferencia").val(setFormatCurrency(diferencia));
+						} else {
+							$("#acumulado").val(setFormatCurrency(valor_guardado));
+							$("#diferencia").val(setFormatCurrency(diferencia));
+						}
 					}
 				}
 	}});
@@ -731,7 +774,7 @@ function deleteLiquidacion(){
 					if(data!=null){
 
 						if(data==1){
-							alertJquery("¡Se elimino la liquidación exitosamente!, Por favor asegúrese de actualizar la fecha de la prima en el formulario contrato.");
+							alertJquery("¡Se elimino la liquidación exitosamente!, Por favor verifique la fecha de la ultima prima en el formulario elaborar contrato.");
 						}else{
 							alertJquery("¡No se puede borrar la prima ya que esta contabilizada o tiene un registro contable asociado!");
 						}
@@ -902,10 +945,21 @@ $(document).ready(function(){
 		var fecha_liquidacion = $("#fecha_liquidacion").val();
 		var fecha = fecha_liquidacion.substr(5, 10);
 
+		fecha_liquidacion = fecha_liquidacion.replace(/-/g,',');
+		var miFecha = new Date(fecha_liquidacion);
+		var mes = miFecha.getMonth();
+		mes = (parseInt(mes) + parseInt(1));
+
 		if (fecha == '06-30' || fecha == '12-31') {
 			$("#tipo_liquidacion option[value='T']").attr("selected", true);
 		} else {
 			$("#tipo_liquidacion option[value='P']").attr("selected", true);
+		}
+		
+		if(mes > 6){
+			$("#periodo option[value='2']").attr("selected", true);
+		}else{
+			$("#periodo option[value='1']").attr("selected", true);
 		}
 
 		if ($("#si_empleado").val() == 'ALL' && $("#tipo_liquidacion").val() == 'P') {
@@ -924,7 +978,7 @@ $(document).ready(function(){
 
 	});
 	
-	$("#tipo_liquidacion,#fecha_liquidacion,#periodo").change(function(){
+/* 	$("#tipo_liquidacion,#periodo").change(function(){
 		
 		
 		if($("#si_empleado").val()=='ALL' && $("#tipo_liquidacion").val()=='P'){
@@ -933,18 +987,18 @@ $(document).ready(function(){
 		
 		if($("#si_empleado").val()=='1' && $("#tipo_liquidacion").val()=='T'){
 			Liq_AnteriorTotal();
-			$("#total").val('');
+			//$("#total").val('');
 		}
 		if($("#si_empleado").val()=='1' && $("#tipo_liquidacion").val()=='P'){
 			Liq_AnteriorParcial();
 		}
 								
 	
-	});
+	}); */
 	
 	$("#si_empleado").change(function(){										
 		if($("#si_empleado").val()=='ALL' && $("#tipo_liquidacion").val()=='P'){
-			$("#valor").val('');
+			$("#total").val('');
 		}
 	
 	});

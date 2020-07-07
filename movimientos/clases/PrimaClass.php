@@ -136,6 +136,8 @@ final class Prima extends Controler{
 	$liquidacion_prima_id 	= $_REQUEST['liquidacion_prima_id'];
 	$fecha 			= $_REQUEST['fecha_liquidacion'];
 	$si_empleado 	= $_REQUEST['si_empleado'];
+	$acumulado 	= $_REQUEST['acumulado'];
+
 	$empresa_id = $this -> getEmpresaId(); 
 	$oficina_id = $this -> getOficinaId();	
 	$usuario_id = $this -> getUsuarioId();		
@@ -145,7 +147,7 @@ final class Prima extends Controler{
     $periodoContable = $Model -> PeriodoContableEstaHabilitado($this -> getConex());
 	
     if($mesContable && $periodoContable){
-		$return=$Model -> getContabilizarReg($liquidacion_prima_id,$empresa_id,$oficina_id,$usuario_id,$mesContable,$periodoContable,$si_empleado,$this -> getConex());
+		$return=$Model -> getContabilizarReg($liquidacion_prima_id,$empresa_id,$oficina_id,$usuario_id,$mesContable,$periodoContable,$si_empleado,$acumulado,$this -> getConex());
 		if($return==true){
 			exit("true");
 		}else{
@@ -249,9 +251,10 @@ final class Prima extends Controler{
 	$empleado_id 	= $_REQUEST['empleado_id'];
 	$periodo 	= $_REQUEST['periodo'];
 	$fecha_liquidacion 	= $_REQUEST['fecha_liquidacion'];
+	$liquidacion_prima_id 	= $_REQUEST['liquidacion_prima_id'];
 	$oficina_id = $this -> getOficinaId();
 	
-	$Data = $Model -> Liq_Anterior($empleado_id,$fecha_liquidacion,$periodo,$oficina_id,$this -> getConex());
+	$Data = $Model -> Liq_Anterior($empleado_id,$fecha_liquidacion,$periodo,$oficina_id,$liquidacion_prima_id,$this -> getConex());
 	
 	echo json_encode($Data);
    }
@@ -311,6 +314,7 @@ final class Prima extends Controler{
 		name	=>'consecutivo',
 		id		=>'consecutivo',
 		type	=>'text',
+		readonly => 'yes',
 		Boostrap =>'si',
 		datatype=>array(
 			type	=>'integer'),

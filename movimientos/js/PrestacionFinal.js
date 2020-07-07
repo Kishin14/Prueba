@@ -1,91 +1,23 @@
-// JavaScript Document
 $(document).ready(function(){
-	linkDetallesSolicitud();	
+	obtenerDetalles();
 });
 
-
-
-function saveDetalleSolicitud(obj){
-	
-	var row = obj.parentNode.parentNode;
-	
-	if(validaRequeridosDetalle(obj,row)){
-	  
-	  var  Celda                    		= obj.parentNode;
-	  var  Fila                     		= Celda.parentNode;
-	  var  Tabla                    		= Fila.parentNode;
-
-	  var  detalle_liquidacion_novedad_id	= $(Fila).find("input[name=detalle_liquidacion_novedad_id]").val();
-	  
-	  var  observacion                = $(Fila).find("input[name=observacion]").val();	  
-	  var checkProcesar            = $(Fila).find("input[name=procesar]");
-	
-       
-	if( $('#actualizar',parent.document).length > 0 ){
-	  
-		var QueryString = "ACTIONCONTROLER=onclickUpdate&detalle_liquidacion_novedad_id="+detalle_liquidacion_novedad_id+"&observacion="+observacion;
-		
-		$.ajax({
-			url        : "PrestacionFinalClass.php",
-			data       : QueryString,
-			beforeSend : function(){
-			  setMessageWaiting();
-			},
-			success    : function(response){
-			  
-			    if( $.trim(response) == 'true'){
-				    
-			      checkProcesar.attr("checked","");
-			      $(Celda).removeClass("focusSaveRow");
-			      updateGrid();
-			      setMessage('Se Actualizo exitosamente.');				    
-			    }else{
-				    alert(response);
-			    }
-			   
-		       
-		       }
+function obtenerDetalles(){
+	console.log('test');
+	var contador = 0;
+	var valor_base_salarial = [];
+	$("#tableRegistrar").find("td[name=detalleValor]").each(function(){
+		var fila = this.parentNode;
+		$(fila).find("input[name=valor_base_salarial]").each(function(){
+			var detalle = [];
+			detalle.valores = this.value;
+			detalle.concepto = $(fila).find("input[name=concepto]").val();
+			valor_base_salarial[contador] = detalle;
+			//fechas[contador]['concepto'] = $(fila).find("input[name=concepto]").val();
 		});
-		
-	}//find el permiso de actalizar
-	
-     
-  }//fin de validaRequeridosDetalle	
-  
-}
-
-
-
-
-function saveDetallesSoliServi(){
-	
-	$("input[name=procesar]:checked").each(function(){
-	
-		saveDetalleSolicitud(this);
-	
+		contador++;
 	});
-
-}
-
-/***************************************************************
-  Funciones para el objeto de guardado en los edtalles de ruta
-***************************************************************/
-function linkDetallesSolicitud(){
-
-	$("a[name=saveDetalleSoliServi]").attr("href","javascript:void(0)");
-	
-	$("a[name=saveDetalleSoliServi]").focus(function(){
-		var celda = this.parentNode;
-		$(celda).addClass("focusSaveRow");
-    });
-	
-	$("a[name=saveDetalleSoliServi]").blur(function(){
-		var celda = this.parentNode;
-		$(celda).removeClass("focusSaveRow");
-    });
-	
-	$("a[name=saveDetalleSoliServi]").click(function(){
-		saveDetalleSolicitud(this);
-    });
-	
+	parent.getPromedioPrest(valor_base_salarial[0].valores, "prom_ces");
+	parent.getPromedioPrest(valor_base_salarial[2].valores, "prom_pri");
+	console.log(valor_base_salarial);
 }
