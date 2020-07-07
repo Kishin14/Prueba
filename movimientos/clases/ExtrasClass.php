@@ -164,6 +164,8 @@
 		$vr_horas_festivo = $_REQUEST['vr_horas_festivo'];		
 		
 		$fecha_inicial = $_REQUEST['fecha_inicial'];
+
+		$salario = ($sueldo_base/240);
 		
 		$data = $Model -> getExtras($fecha_inicial,$this -> getConex());
 		$valor = 0;
@@ -241,12 +243,12 @@
 		
 		if($fecha_inicial!=''){
 
-			$valor_festivo = number_format((($salario*$val_recargo_dominical)/100)+$salario, 0, ',', ' ');
-			$valor_recargo_noct = number_format((($salario*$val_recargo_nocturna)/100)+$salario, 0, ',', ' ');
-			$valor_noct_fest = number_format((($salario*$val_hr_ext_festiva_nocturna)/100)+$salario, 0, ',', ' ');
-			$valor_diur_fest = number_format((($salario*$val_hr_ext_festiva_diurna)/100)+$salario, 0, ',', ' ');
-			$valor_nocturnas = number_format((($salario*$val_hr_ext_nocturna)/100)+$salario, 0, ',', ' ');
-			$valor_diurnas = number_format((($salario*$val_hr_ext_diurna)/100)+$salario, 0, ',', ' ');
+			$valor_festivo = number_format((($salario*$val_recargo_dominical)/100), 0, ',', ' ');
+			$valor_recargo_noct = number_format((($salario*$val_recargo_nocturna)/100), 0, ',', ' ');
+			$valor_noct_fest = number_format((($salario*$val_hr_ext_festiva_nocturna)/100), 0, ',', ' ');
+			$valor_diur_fest = number_format((($salario*$val_hr_ext_festiva_diurna)/100), 0, ',', ' ');
+			$valor_nocturnas = number_format((($salario*$val_hr_ext_nocturna)/100), 0, ',', ' ');
+			$valor_diurnas = number_format((($salario*$val_hr_ext_diurna)/100), 0, ',', ' ');
 
 			
 		}else{
@@ -437,7 +439,7 @@
 				Boostrap =>'si',
 				size	=>'10',				
 				datatype=>array(
-					type	=>'integer',
+					type	=>'text',
 					length	=>'5'),
 				transaction=>array(
 					table	=>array('hora_extra'),
@@ -471,7 +473,7 @@
 				required=>'yes',
 				size	=>'10',				
 				datatype=>array(
-					type	=>'integer',
+					type	=>'text',
 					length	=>'5'),
 				transaction=>array(
 					table	=>array('hora_extra'),
@@ -505,7 +507,7 @@
 				required=>'yes',
 				size	=>'10',				
 				datatype=>array(
-					type	=>'integer',
+					type	=>'text',
 					length	=>'5'),
 				transaction=>array(
 					table	=>array('hora_extra'),
@@ -539,7 +541,7 @@
 				required=>'yes',
 				size	=>'10',
 				datatype=>array(
-					type	=>'integer',
+					type	=>'text',
 					length	=>'5'),
 				transaction=>array(
 					table	=>array('hora_extra'),
@@ -573,7 +575,7 @@
 				required=>'yes',
 				size	=>'10',
 				datatype=>array(
-					type	=>'integer',
+					type	=>'text',
 					length	=>'5'),
 				transaction=>array(
 					table	=>array('hora_extra'),
@@ -608,7 +610,7 @@
 				required=>'yes',
 				size	=>'10',
 				datatype=>array(
-					type	=>'integer',
+					type	=>'text',
 					length	=>'5'),
 				transaction=>array(
 					table	=>array('hora_extra'),
