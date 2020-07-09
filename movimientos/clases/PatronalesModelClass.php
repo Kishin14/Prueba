@@ -30,6 +30,7 @@ final class PatronalesModel extends Db{
 
 	$deb_total=0;
 	$cre_total=0;
+	
 	$dias_total = $dias;
 
 	$select_per = "SELECT d.*, 
@@ -106,7 +107,10 @@ final class PatronalesModel extends Db{
 			(SELECT SUM((DATEDIFF(IF(l.fecha_final > '$fecha_final','$fecha_final',l.fecha_final),IF(l.fecha_inicial>'$fecha_inicial',l.fecha_inicial,'$fecha_inicial')))) 
 			FROM licencia l WHERE l.remunerado=0 AND  l.contrato_id=c.contrato_id AND ('$fecha_inicial' BETWEEN  l.fecha_inicial AND l.fecha_final OR '$fecha_final'  BETWEEN  l.fecha_inicial AND l.fecha_final OR l.fecha_inicial BETWEEN '$fecha_inicial' AND '$fecha_final') )  AS dias_lice_nore,
 			
-			
+
+			(SELECT SUM((DATEDIFF(IF(l.fecha_final > '$fecha_final','$fecha_final',l.fecha_final),IF(l.fecha_inicial>'$fecha_inicial',l.fecha_inicial,'$fecha_inicial')))) 
+			FROM licencia l WHERE l.remunerado=1 AND  l.contrato_id=c.contrato_id AND ('$fecha_inicial' BETWEEN  l.fecha_inicial AND l.fecha_final OR '$fecha_final'  BETWEEN  l.fecha_inicial AND l.fecha_final OR l.fecha_inicial BETWEEN '$fecha_inicial' AND '$fecha_final') )  AS dias_lice_remu,
+
 			(SELECT CONCAT_WS(' ',t.primer_nombre,t.primer_apellido) FROM empleado e, tercero t WHERE e.empleado_id=c.empleado_id AND t.tercero_id=e.tercero_id) AS empleado,
 			c.centro_de_costo_id,(SELECT cc.codigo FROM  centro_de_costo cc WHERE  cc.centro_de_costo_id=c.centro_de_costo_id ) AS codigo_centro,
 			
@@ -197,18 +201,25 @@ final class PatronalesModel extends Db{
 
 
 		//tomamos los dias a pagar
+		$dias_laborados = 0;
 		$select="SELECT dias_pagados FROM liquidacion_vacaciones WHERE estado = 'C' AND contrato_id = $contrato_id AND (fecha_dis_inicio BETWEEN '$fecha_inicial' AND '$fecha_final') OR (fecha_dis_final BETWEEN '$fecha_inicial' AND '$fecha_final')";
-		
 		$result_pag = $this -> DbFetchAll($select,$Conex,true);
 
 		$dias_laborados = $result_pag[0]['dias_pagados'];
 
-        if($dias_laborados > 0){
-		/* $dias_real = $result[$i]['dias'] > $result[$i]['dias_real'] ? $result[$i]['dias']: $result[$i]['dias_real']; */
+        /*if($dias_laborados > 0){
+			// $dias_real = $result[$i]['dias'] > $result[$i]['dias_real'] ? $result[$i]['dias']: $result[$i]['dias_real']; 
 		    $dias = $dias+$dias_laborados;
-		}
+		}*/
 		
 		//$dias = $dias_real-$result[$i]['dias_lice_nore'];
+
+		$select_vac = "SELECT  SUM(DATEDIFF(IF(fecha_reintegro>'$fecha_final','$fecha_final',fecha_reintegro),IF(fecha_dis_inicio>'$fecha_inicial',fecha_dis_inicio,'$fecha_inicial'))) AS diferencia
+				FROM 	liquidacion_vacaciones c
+				WHERE c.estado = 'C' AND c.contrato_id=$contrato_id AND (('$fecha_inicial' BETWEEN  fecha_dis_inicio AND fecha_reintegro OR '$fecha_final' BETWEEN  fecha_dis_inicio AND fecha_reintegro) OR ('$fecha_inicial' < fecha_dis_inicio AND fecha_reintegro < '$fecha_final'))";
+		$result_vac = $this -> DbFetchAll($select_vac,$Conex,true);
+		
+		$dife_vacas= $result_vac[0]['diferencia']>0 ? ($result_vac[0]['diferencia']) : 0;
 
 
 		$liquidacion_novedad_id=$result[$i]['liquidacion_novedad_id'];
@@ -272,7 +283,7 @@ final class PatronalesModel extends Db{
 		//$total_base=$valor_deven+$valor_diurnas+$valor_nocturnas+$valor_diurnas_fes+$valor_nocturnas_fes+$valor_recargo_noc-$des_val_inc;
 		$total_base=($subsidio_base+$valor_deven+$valor_diurnas+$valor_nocturnas+$valor_diurnas_fes+$valor_nocturnas_fes+$valor_recargo_noc+$valor_recargo_doc)-$des_val_inc;
 		
-        $dias_pat = ($dias-$dias_laborados);
+        $dias_pat = ($dias+$dias_laborados);
 		if($result[$i]['prestaciones_sociales']==1 || ($result[$i]['prestaciones_sociales']==0 && $result[$i]['salud']==1)){
 
 			//salud
@@ -318,9 +329,11 @@ final class PatronalesModel extends Db{
 			}
 		}
 		if($result[$i]['prestaciones_sociales']==1 || ($result[$i]['prestaciones_sociales']==0 && $result[$i]['arl']==1)){
+
+			$dias_arl = ($dias-$result[$i]['dias_lice_nore']-$result[$i]['dias_lice_remu']-$dife_vacas+$dias_laborados);
 			//arl
 			$por_arl = $result[$i]['desc_empre_arl'];
-			$valor_arl=intval(intval(((($sueldo_base)/30)*$dias_pat)+$total_base)*($por_arl/100));
+			$valor_arl=intval(intval(((($sueldo_base)/30)*$dias_arl)+$total_base)*($por_arl/100));
 		   
 			$valor_arl=round($valor_arl);
 			$debito=$valor_arl;
