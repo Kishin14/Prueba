@@ -338,38 +338,58 @@ final class LiquidacionFinalModel extends Db
         return $result;
     }
 
-    public function getDetallesDeducciones($contrato_id, $dias, $Conex)
+    public function getDetallesDeducciones($contrato_id, $fecha_inicio, $fecha_final, $Conex)
     {
 
         if ($contrato_id > 0) {
 
-            $select = "SELECT c.*
-		FROM novedad_fija c
-		WHERE c.contrato_id = $contrato_id AND c.estado='A' AND tipo_novedad='D' ORDER BY valor DESC";
-        //die($select);
+            $select = "SELECT 
+                nf.* 
+            FROM 
+                novedad_fija nf, 
+                concepto_area ca 
+            WHERE 
+                nf.contrato_id = $contrato_id AND 
+                nf.estado='A' AND 
+                nf.tipo_novedad='D' AND 
+                nf.fecha_inicial >= '$fecha_inicio' AND
+                nf.fecha_final <= '$fecha_final' AND
+                nf.concepto_area_id=ca.concepto_area_id AND 
+                ca.base_salarial='NO' AND 
+                nf.liquidacion_final = 1";
             $result = $this->DbFetchAll($select, $Conex, true);
-
         } else {
             $result = array();
         }
         return $result;
+
     }
 
-    public function getDetallesDevengado($contrato_id, $dias, $Conex)
+    public function getDetallesDevengado($contrato_id, $fecha_inicio, $fecha_final, $Conex)
     {
 
         if ($contrato_id > 0) {
 
-            $select = "SELECT nf.*
-		FROM novedad_fija nf, concepto_area ca
-		WHERE nf.contrato_id = $contrato_id AND nf.estado='A' AND nf.tipo_novedad='V' AND nf.concepto_area_id=ca.concepto_area_id AND ca.base_salarial='NO' ORDER BY valor DESC";
-//echo $select;
+            $select = "SELECT 
+                nf.* 
+            FROM 
+                novedad_fija nf, 
+                concepto_area ca 
+            WHERE 
+                nf.contrato_id = $contrato_id AND 
+                nf.estado='A' AND 
+                nf.tipo_novedad='V' AND 
+                nf.fecha_inicial >= '$fecha_inicio' AND
+                nf.fecha_final <= '$fecha_final' AND
+                nf.concepto_area_id=ca.concepto_area_id AND 
+                ca.base_salarial='NO' AND 
+                nf.liquidacion_final = 1";
             $result = $this->DbFetchAll($select, $Conex, true);
-
         } else {
             $result = array();
         }
         return $result;
+
     }
 
     public function getDevBaseSalarial($contrato_id, $fecha_inicio, $fecha_final, $Conex)
@@ -377,7 +397,7 @@ final class LiquidacionFinalModel extends Db
 
         if ($contrato_id > 0) {
 
-            //sumatoria devengados al Salario cuando apliquen novedades con base salarial.
+            //Sumatoria devengados al Salario cuando apliquen novedades con base salarial.
             $selectdeve = "SELECT 
                 SUM(dln.debito-dln.credito) AS base_salarial_deven
             FROM 
@@ -400,7 +420,7 @@ final class LiquidacionFinalModel extends Db
 
     public function getHorasExtra($contrato_id, $fecha_inicio, $fecha_final, $Conex)
     {
-
+        //Sumatoria de todo el valor de Horas Extras Liquidadas desde un rango de fechas definido.
         if ($contrato_id > 0) {
 
             $selectext = "SELECT
@@ -431,6 +451,62 @@ final class LiquidacionFinalModel extends Db
             $total_base=$resultext[0]['base_horas_extra'] > 0 ? $resultext[0]['base_horas_extra']:0;
             
             $result = $total_base;
+        } else {
+            $result = array();
+        }
+        return $result;
+    }
+
+    public function getPromedioSalario($contrato_id, $fecha_inicio, $fecha_final, $Conex){
+
+        if ($contrato_id > 0) {
+
+            //Sumatoria de todo el valor devengado desde un rango de fechas definido para Aux. de Transporte y Salario.
+            $select = "SELECT
+                SUM(debito) AS valor_devengado
+            FROM
+                detalle_liquidacion_novedad dln,
+                liquidacion_novedad lno
+            WHERE
+                dln.liquidacion_novedad_id = lno.liquidacion_novedad_id AND 
+                dln.concepto IN('SALARIO', 'AUX TRANSPORTE') AND 
+                lno.fecha_inicial >= '$fecha_inicio' AND 
+                lno.fecha_final <= '$fecha_final' AND 
+                lno.contrato_id = $contrato_id AND 
+                lno.estado = 'C'";
+            $result = $this -> DbFetchAll($select,$Conex,true);
+            $sum_salario = $result[0]['valor_devengado']>0 ? $result[0]['valor_devengado'] : 0;
+            $sum_salario = round($sum_salario);
+            
+            $result = $sum_salario;
+        } else {
+            $result = array();
+        }
+        return $result;
+    }
+
+    public function getDiferenciaSalario($contrato_id, $fecha_inicio, $fecha_final, $Conex){
+
+        if ($contrato_id > 0) {
+
+            //Sumatoria de todo el valor devengado desde un rango de fechas definido para Aux. de Transporte y Salario.
+            $select = "SELECT
+                IF(SUM(dln.debito/3)=SUM(c.sueldo_base+c.subsidio_transporte),0,1) AS variacion_salario
+            FROM
+                detalle_liquidacion_novedad dln,
+                liquidacion_novedad lno,
+                contrato c
+            WHERE
+                dln.liquidacion_novedad_id = lno.liquidacion_novedad_id AND 
+                c.contrato_id = lno.contrato_id AND
+                dln.concepto IN('SALARIO', 'AUX TRANSPORTE') AND 
+                lno.fecha_inicial >= '$fecha_inicio' AND 
+                lno.fecha_final <= '$fecha_final' AND 
+                lno.contrato_id = $contrato_id AND 
+                lno.estado = 'C'
+                ORDER BY lno.fecha_inicial DESC LIMIT 6";
+            $result = $this -> DbFetchAll($select,$Conex,true);
+            $result = $result[0]['variacion_salario'];
         } else {
             $result = array();
         }
@@ -470,15 +546,14 @@ final class LiquidacionFinalModel extends Db
         return $result;
     }
 
-    public function getDetallesSalario($contrato_id, $fecha_final, $Conex)
+    public function getDetallesSalario($contrato_id, $Conex)
     {
 
         if ($contrato_id > 0) {
 
-            $select = "SELECT DATEDIFF(CONCAT_WS(' ','$fecha_final','23:59:59'),l.fecha_final) AS dias_dif, l.fecha_final
-		FROM liquidacion_novedad l
-		WHERE l.contrato_id = $contrato_id AND l.estado!='A' ORDER BY l.fecha_final DESC LIMIT 1";
-
+            $select = "SELECT ADDDATE(l.fecha_final, INTERVAL 1 DAY) AS fecha_liquidacion 
+            FROM liquidacion_novedad l
+            WHERE l.contrato_id = $contrato_id AND l.estado='C' ORDER BY l.fecha_final DESC LIMIT 1";
             $result = $this->DbFetchAll($select, $Conex, true);
 
         } else {
@@ -493,9 +568,8 @@ final class LiquidacionFinalModel extends Db
         if ($periodo > 0) {
 
             $select = "SELECT *
-		FROM datos_periodo
-		WHERE 	periodo_contable_id = (SELECT 	periodo_contable_id FROM periodo_contable WHERE anio=$periodo)";
-
+            FROM datos_periodo
+            WHERE 	periodo_contable_id = (SELECT 	periodo_contable_id FROM periodo_contable WHERE anio=$periodo)";
             $result = $this->DbFetchAll($select, $Conex, true);
 
         } else {
