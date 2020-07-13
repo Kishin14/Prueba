@@ -114,7 +114,6 @@ final class RegistrarModel extends Db{
    			FROM contrato c, tipo_contrato t 
 			WHERE c.estado='A' AND t.tipo_contrato_id=c.tipo_contrato_id AND (t.prestaciones_sociales=1 OR (t.salud=1 AND t.prestaciones_sociales=0)) AND c.fecha_inicio <= '$fecha_final'
 			AND c.contrato_id =$contrato_id";
-
 	$result = $this -> DbFetchAll($select,$Conex,true);
 
 	$this -> Begin($Conex);

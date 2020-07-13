@@ -66,11 +66,11 @@ final class Imp_LiquidacionModel extends Db{
 	
 	return $result;
   }
-  public function getDiasIncapacidad($liquidacion_novedad_id,$Conex){
+  public function getDiasIncapacidad($liquidacion_novedad_id,$fecha_inicial,$fecha_final,$Conex){
 	$select = "SELECT 
 	
-		l.fecha_inicial, 
-		l.fecha_final,
+		IF('$fecha_inicial'>l.fecha_inicial,'$fecha_inicial',l.fecha_inicial) AS fecha_inicial, 
+		IF(l.fecha_final<'$fecha_final',l.fecha_final,'$fecha_final') AS fecha_final,
 		ln.contrato_id,
 		l.licencia_id
 		
@@ -96,7 +96,6 @@ final class Imp_LiquidacionModel extends Db{
 		ln.periodicidad = (SELECT periodicidad FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id)"; 
 		
 		$result = $this -> DbFetchAll($select,$Conex,true);
-
 	return $result;
   }
 
