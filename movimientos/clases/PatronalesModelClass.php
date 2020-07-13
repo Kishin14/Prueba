@@ -104,11 +104,11 @@ final class PatronalesModel extends Db{
 			
 			((SELECT DATEDIFF(IF(l.fecha_final > '$fecha_final','$fecha_final',l.fecha_final),IF(l.fecha_inicial < c.fecha_inicio,c.fecha_inicio,l.fecha_inicial)))+1)as dias_real,
 
-			(SELECT SUM((DATEDIFF(IF(l.fecha_final > '$fecha_final','$fecha_final',l.fecha_final),IF(l.fecha_inicial>'$fecha_inicial',l.fecha_inicial,'$fecha_inicial')))) 
+			(SELECT SUM((DATEDIFF(IF(l.fecha_final > '$fecha_final','$fecha_final',l.fecha_final),IF(l.fecha_inicial>'$fecha_inicial',l.fecha_inicial,'$fecha_inicial'))+1)) 
 			FROM licencia l WHERE l.remunerado=0 AND  l.contrato_id=c.contrato_id AND ('$fecha_inicial' BETWEEN  l.fecha_inicial AND l.fecha_final OR '$fecha_final'  BETWEEN  l.fecha_inicial AND l.fecha_final OR l.fecha_inicial BETWEEN '$fecha_inicial' AND '$fecha_final') )  AS dias_lice_nore,
 			
 
-			(SELECT SUM((DATEDIFF(IF(l.fecha_final > '$fecha_final','$fecha_final',l.fecha_final),IF(l.fecha_inicial>'$fecha_inicial',l.fecha_inicial,'$fecha_inicial')))) 
+			(SELECT SUM((DATEDIFF(IF(l.fecha_final > '$fecha_final','$fecha_final',l.fecha_final),IF(l.fecha_inicial>'$fecha_inicial',l.fecha_inicial,'$fecha_inicial'))+1)) 
 			FROM licencia l WHERE l.remunerado=1 AND  l.contrato_id=c.contrato_id AND ('$fecha_inicial' BETWEEN  l.fecha_inicial AND l.fecha_final OR '$fecha_final'  BETWEEN  l.fecha_inicial AND l.fecha_final OR l.fecha_inicial BETWEEN '$fecha_inicial' AND '$fecha_final') )  AS dias_lice_remu,
 
 			(SELECT CONCAT_WS(' ',t.primer_nombre,t.primer_apellido) FROM empleado e, tercero t WHERE e.empleado_id=c.empleado_id AND t.tercero_id=e.tercero_id) AS empleado,
@@ -118,8 +118,8 @@ final class PatronalesModel extends Db{
 			
    			FROM liquidacion_novedad l, contrato c, tipo_contrato t 
 			WHERE l.estado='C' AND l.fecha_inicial>='$fecha_inicial' AND l.fecha_final<='$fecha_final' AND c.contrato_id=l.contrato_id AND t.tipo_contrato_id=c.tipo_contrato_id AND (t.prestaciones_sociales=1 OR (t.salud=1 AND t.prestaciones_sociales=0)) GROUP BY l.contrato_id";
-	
-	$result = $this -> DbFetchAll($select,$Conex,true);
+
+	$result = $this -> DbFetchAll($select,$Conex,true); 
 	
 
 	$select_cc = "SELECT 	centro_de_costo_id, codigo FROM centro_de_costo	WHERE oficina_id=$oficina_id";
@@ -214,7 +214,7 @@ final class PatronalesModel extends Db{
 		
 		//$dias = $dias_real-$result[$i]['dias_lice_nore'];
 
-		$select_vac = "SELECT  SUM(DATEDIFF(IF(fecha_reintegro>'$fecha_final','$fecha_final',fecha_reintegro),IF(fecha_dis_inicio>'$fecha_inicial',fecha_dis_inicio,'$fecha_inicial'))) AS diferencia
+		$select_vac = "SELECT  SUM(DATEDIFF(IF(fecha_reintegro>'$fecha_final','$fecha_final',fecha_reintegro),IF(fecha_dis_inicio>'$fecha_inicial',fecha_dis_inicio,'$fecha_inicial'))+1) AS diferencia
 				FROM 	liquidacion_vacaciones c
 				WHERE c.estado = 'C' AND c.contrato_id=$contrato_id AND (('$fecha_inicial' BETWEEN  fecha_dis_inicio AND fecha_reintegro OR '$fecha_final' BETWEEN  fecha_dis_inicio AND fecha_reintegro) OR ('$fecha_inicial' < fecha_dis_inicio AND fecha_reintegro < '$fecha_final'))";
 		$result_vac = $this -> DbFetchAll($select_vac,$Conex,true);
@@ -331,6 +331,8 @@ final class PatronalesModel extends Db{
 		if($result[$i]['prestaciones_sociales']==1 || ($result[$i]['prestaciones_sociales']==0 && $result[$i]['arl']==1)){
 
 			$dias_arl = ($dias-$result[$i]['dias_lice_nore']-$result[$i]['dias_lice_remu']-$dife_vacas+$dias_laborados);
+			
+			$dias_arl =  $dias_arl >=0 ? $dias_arl : 0;
 			//arl
 			$por_arl = $result[$i]['desc_empre_arl'];
 			$valor_arl=intval(intval(((($sueldo_base)/30)*$dias_arl)+$total_base)*($por_arl/100));
