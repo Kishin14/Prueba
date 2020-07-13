@@ -136,7 +136,7 @@ final class LiquidacionFinal extends Controler
         
         $dias = $this->restaFechasCont($_REQUEST['fecha_inicio'], $_REQUEST['fecha_final']);
         $data = $Model->getDetallesContrato($contrato_id, $dias, $this->getConex());
-
+        
         $tercero_id = $data[0]['tercero_id'];
         $sueldo_base = $data[0]['sueldo_base'];
         $subsidio_transporte = $data[0]['subsidio_transporte'];
@@ -368,15 +368,23 @@ final class LiquidacionFinal extends Controler
             }
 
             // prima
+            $ultima_prima = $data[0]['ultima_prima'];
             $data_prima = $Model->getDetallesPrima($contrato_id, $_REQUEST['fecha_final'], $this->getConex());
-            $fecha_ultima = $data_prima[0]['fecha_liquidacion'] > 0 ? $data_prima[0]['fecha_liquidacion'] : $fecha_inicio;
+
+            if($data_prima[0]['fecha_liquidacion'] > 0){
+                $fecha_ultima = $data_prima[0]['fecha_liquidacion'];
+            }else if($ultima_prima > 0){
+                $fecha_ultima = $ultima_prima;
+            }else{
+                $fecha_ultima = $fecha_inicio;
+            }
+            
             if ($data_prima[0]['periodo'] == 2){
                 $dias_prima = $this->restaFechasCont($fecha_ultima, $_REQUEST['fecha_final']);
             } elseif ($data_prima[0]['periodo'] == 1) {
                 $dias_prima = $this->restaFechasCont($fecha_ultima, $_REQUEST['fecha_final']);
             } else {
                 $dias_prima = $dias;
-                $fecha_ultima = $_REQUEST['fecha_inicio'];
             }
 
             //Traer todas las Novedades con Base Salarial Si en un Rango de Fechas
@@ -404,12 +412,12 @@ final class LiquidacionFinal extends Controler
 
             $datos[$x]['concepto'] = 'PRIMA SERVICIOS';
             $datos[$x]['dias'] = $dias_prima;
-            $datos[$x]['periodo'] = 'De: ' . $fecha_ultima . ' Hasta: ' . $_REQUEST['fecha_final'];
+            $datos[$x]['periodo'] = 'De: ' . $fecha_ultima . ' Hasta: ' . $fecha_final;
             $datos[$x]['valor'] = $valor_prima;
             $datos[$x]['valor_base_salarial'] = $valor_base_salarial;
             $datos[$x]['tipo'] = 'P';
             $datos[$x]['fecha_inicio'] = $fecha_ultima;
-            $datos[$x]['fecha_fin'] = $_REQUEST['fecha_final'];
+            $datos[$x]['fecha_fin'] = $fecha_final;
             $datos[$x]['empresa_id'] = 'NULL';
             $x++;
 
@@ -498,7 +506,7 @@ final class LiquidacionFinal extends Controler
                 $per_disfru = $data_vaca[0]['dias_va'] / 15;
                 $dias_deb_vac = ($dias - ($per_disfru * 360));
             }
-            //die("ESTOPS SON LOS DIAS : ".$dias_deb_vac."eSTE ES EL SUALDO BASE:".$data[0]['sueldo_base']);
+            
             $valor_vacas = intval((($sueldo_base) * $dias_deb_vac) / 720);
             $desde_vacas = $data_vaca[0]['fecha_ultima'] != '' ? $data_vaca[0]['fecha_ultima'] : $_REQUEST['fecha_inicio'];
             $datos[$x]['concepto'] = 'PRIMA VACACIONES';

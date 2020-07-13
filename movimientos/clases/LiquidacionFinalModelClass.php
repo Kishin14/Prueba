@@ -233,6 +233,7 @@ final class LiquidacionFinalModel extends Db
         if ($contrato_id > 0) {
 
             $select = "SELECT c.*,
+            ADDDATE(c.fecha_ult_prima, INTERVAL 1 DAY) AS ultima_prima,
 		(SELECT t.prestaciones_sociales FROM tipo_contrato t WHERE t.tipo_contrato_id=c.tipo_contrato_id) as prestaciones,
 		(((sueldo_base+subsidio_transporte)*$dias)/360) AS cesantias,
 		((((sueldo_base+subsidio_transporte)*0.12)*$dias)/360) AS int_cesantias,
@@ -241,7 +242,7 @@ final class LiquidacionFinalModel extends Db
 		(SELECT e.tercero_id FROM empleado e WHERE e.empleado_id=c.empleado_id) AS tercero_id,
 		(SELECT ep.tercero_id FROM empresa_prestaciones ep WHERE ep.empresa_id=c.empresa_eps_id) AS tercero_eps_id,
 		(SELECT ep.tercero_id FROM empresa_prestaciones ep WHERE ep.empresa_id=c.empresa_pension_id) AS tercero_pension_id
-
+        
 		FROM contrato c
 		WHERE c.contrato_id = $contrato_id";
 
