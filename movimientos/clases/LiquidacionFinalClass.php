@@ -279,7 +279,7 @@ final class LiquidacionFinal extends Controler
             $valor_icesan = intval((($valor_cesan * 0.12) * $dias_ices) / 360);
             $desde_icesan = $data_ices[0]['fecha_corte'] != '' ? $data_ices[0]['fecha_corte'] : $_REQUEST['fecha_inicio'];
             $datos[$x]['concepto'] = 'INT. CESANTIAS';
-            $datos[$x]['dias'] = $dias_ices > 0 ? $dias_ices : $dias;
+            $datos[$x]['dias'] = $dias_ices;
             $datos[$x]['periodo'] = 'De: ' . $desde_icesan . ' Hasta: ' . $_REQUEST['fecha_final'];
             $datos[$x]['valor'] = $valor_icesan;
             $datos[$x]['tipo'] = 'P';
@@ -502,7 +502,7 @@ final class LiquidacionFinal extends Controler
             $valor_vacas = intval((($sueldo_base) * $dias_deb_vac) / 720);
             $desde_vacas = $data_vaca[0]['fecha_ultima'] != '' ? $data_vaca[0]['fecha_ultima'] : $_REQUEST['fecha_inicio'];
             $datos[$x]['concepto'] = 'PRIMA VACACIONES';
-            $datos[$x]['dias'] = $dias_deb_vac > 0 ? $dias_deb_vac : $dias;
+            $datos[$x]['dias'] = $dias_deb_vac;
             $datos[$x]['periodo'] = 'De: ' . $desde_vacas . ' Hasta: ' . $_REQUEST['fecha_final'];
             $datos[$x]['valor'] = $valor_vacas;
             $datos[$x]['tipo'] = 'P';

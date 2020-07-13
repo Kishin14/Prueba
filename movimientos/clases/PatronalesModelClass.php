@@ -526,7 +526,7 @@ final class PatronalesModel extends Db{
 		encabezado_de_registro_anulado_id,encabezado_registro_id,empresa_id,oficina_id,tipo_documento_id,
 		forma_pago_id,valor,numero_soporte,tercero_id,periodo_contable_id,mes_contable_id,consecutivo,
 		fecha,concepto,puc_id,estado,fecha_registro,modifica,usuario_id,$causal_anulacion_id AS causal_anulacion_id,
-		$observacion_anulacion AS observaciones FROM encabezado_de_registro WHERE encabezado_registro_id = $encabezado_registro_id";
+		$observacion_anulacion AS observaciones, $usuario_anulo_id AS usuario_anula, NOW() AS fecha_anulacion, usuario_actualiza, fecha_actualiza FROM encabezado_de_registro WHERE encabezado_registro_id = $encabezado_registro_id";
 		$this -> query($insert,$Conex,true);
 		
 	 $insert = "INSERT INTO imputacion_contable_anulada SELECT  imputacion_contable_id AS  
