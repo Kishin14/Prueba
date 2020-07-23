@@ -337,9 +337,6 @@ final class ContratoModel extends Db
             if($anios > 0){
                 $select = "SELECT liquidacion_vacaciones_id	FROM liquidacion_vacaciones	WHERE	contrato_id = $contrato_id AND inicial=1 AND estado='C'";
                 $result = $this->DbFetchAll($select, $Conex, true);
-
-                $select_detalle = "SELECT liquidacion_vacaciones_id	FROM detalle_liquidacion_vacaciones	WHERE liquidacion_vacaciones_id = $vac_id";
-                $result_detalle = $this->DbFetchAll($select_detalle, $Conex, true);
                 
                 $liquidacion_vacaciones_id = $this->DbgetMaxConsecutive("liquidacion_vacaciones", "liquidacion_vacaciones_id", $Conex, true, 1);
 
@@ -351,9 +348,13 @@ final class ContratoModel extends Db
 
                 }
 
+                $vac_id = $result[0]['liquidacion_vacaciones_id'] > 0 ? $result[0]['liquidacion_vacaciones_id'] : $liquidacion_vacaciones_id;
+
+                $select_detalle = "SELECT liquidacion_vacaciones_id	FROM detalle_liquidacion_vacaciones	WHERE liquidacion_vacaciones_id = $vac_id";
+                $result_detalle = $this->DbFetchAll($select_detalle, $Conex, true);
+
                 if(count($result_detalle)==0){
-                    
-                    $vac_id = $result[0]['liquidacion_vacaciones_id'] > 0 ? $result[0]['liquidacion_vacaciones_id'] : $liquidacion_vacaciones_id;
+
                     $fecha_aux = $_REQUEST['fecha_inicio'];
                     $i = 0;
                     
