@@ -114,6 +114,7 @@ final class RegistrarModel extends Db{
    			FROM contrato c, tipo_contrato t 
 			WHERE c.estado='A' AND t.tipo_contrato_id=c.tipo_contrato_id AND (t.prestaciones_sociales=1 OR (t.salud=1 AND t.prestaciones_sociales=0)) AND c.fecha_inicio <= '$fecha_final'
 			AND c.contrato_id =$contrato_id";
+		
 	$result = $this -> DbFetchAll($select,$Conex,true);
 
 	$this -> Begin($Conex);
@@ -211,7 +212,7 @@ final class RegistrarModel extends Db{
 
 		$select_vac = "SELECT  c.*, DATEDIFF(IF(fecha_reintegro>'$fecha_final','$fecha_final',fecha_reintegro),IF(fecha_dis_inicio>'$fecha_inicial',fecha_dis_inicio,'$fecha_inicial')) AS diferencia
 				FROM 	liquidacion_vacaciones c
-				WHERE c.estado ='C' AND c.contrato_id=$contrato_id AND ('$fecha_inicial' BETWEEN  fecha_dis_inicio AND fecha_reintegro OR '$fecha_final'  BETWEEN  fecha_dis_inicio AND fecha_reintegro)";
+				WHERE c.estado ='C' AND c.contrato_id=$contrato_id AND c.inicial=0 AND ('$fecha_inicial' BETWEEN  fecha_dis_inicio AND fecha_reintegro OR '$fecha_final'  BETWEEN  fecha_dis_inicio AND fecha_reintegro)";
 		
 		$result_vac = $this -> DbFetchAll($select_vac,$Conex,true);
 		$dife_vacas= $result_vac[0]['diferencia']>0 ? ($result_vac[0]['diferencia']) : 0;
@@ -936,7 +937,7 @@ final class RegistrarModel extends Db{
 
 		$select_vac = "SELECT  SUM(DATEDIFF(IF(fecha_reintegro>'$fecha_final','$fecha_final',fecha_reintegro),IF(fecha_dis_inicio>'$fecha_inicial',fecha_dis_inicio,'$fecha_inicial'))) AS diferencia
 				FROM 	liquidacion_vacaciones c
-				WHERE c.estado = 'C' AND c.contrato_id=$contrato_id AND (('$fecha_inicial' BETWEEN  fecha_dis_inicio AND fecha_reintegro OR '$fecha_final' BETWEEN  fecha_dis_inicio AND fecha_reintegro) OR ('$fecha_inicial' < fecha_dis_inicio AND fecha_reintegro < '$fecha_final'))";
+				WHERE c.estado = 'C' AND c.contrato_id=$contrato_id AND inicial=0 AND (('$fecha_inicial' BETWEEN  fecha_dis_inicio AND fecha_reintegro OR '$fecha_final' BETWEEN  fecha_dis_inicio AND fecha_reintegro) OR ('$fecha_inicial' < fecha_dis_inicio AND fecha_reintegro < '$fecha_final'))";
 		$result_vac = $this -> DbFetchAll($select_vac,$Conex,true);
 		
 		$dife_vacas= $result_vac[0]['diferencia']>0 ? ($result_vac[0]['diferencia']) : 0;
@@ -991,7 +992,7 @@ final class RegistrarModel extends Db{
 				if($pago_desc>$salrio_diario){
 					$des_val_inc = ($des_val_inc + intval((($sal_dia_cont*$dia_difinc)*$por_desc)/100));
 				}else{
-					//$des_val_inc = ($des_val_inc + intval(($sal_dia_cont-$salrio_diario)*$dia_difinc));
+					$des_val_inc = ($des_val_inc + intval(($sal_dia_cont-$salrio_diario)*$dia_difinc));
 				}
 			}
 			$dias_inca_sub=$dias_inca_sub+$result_inca[$l]['dias_inca'];	

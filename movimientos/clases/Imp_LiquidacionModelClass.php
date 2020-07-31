@@ -63,7 +63,7 @@ final class Imp_LiquidacionModel extends Db{
 	}else{
    	    $result = array();
 	}
-	
+	//die(print_r($result));
 	return $result;
   }
   public function getDiasIncapacidad($liquidacion_novedad_id,$fecha_inicial,$fecha_final,$Conex){

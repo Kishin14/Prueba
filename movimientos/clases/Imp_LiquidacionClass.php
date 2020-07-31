@@ -22,6 +22,8 @@ final class Imp_Liquidacion extends Controler{
 	
       $Layout -> setIncludes();
 	   $liquidacion_novedad_id = $_REQUEST['liquidacion_novedad_id'];
+	   $fecha_inicial = $_REQUEST['fecha_inicial'];
+	   $fecha_final = $_REQUEST['fecha_final'];
 	  if($_REQUEST['tipo_impresion']=='C' || $_REQUEST['tipo_impresion']=='PE'){
 		  
 		  $download = $_REQUEST['download'];
@@ -151,10 +153,8 @@ final class Imp_Liquidacion extends Controler{
 				AND d.liquidacion_novedad_id=l.liquidacion_novedad_id AND d.concepto LIKE ('".$con_sal[$i]['concepto']."') ) AS ".str_replace(" ","_",$con_sal[$i]['concepto']).", ";
 			   
 		  }
-		   
-                    
-		  $diasIncapacidad = $Model -> getDiasIncapacidad($liquidacion_novedad_id,$this -> Conex);
 		  
+		  $diasIncapacidad = $Model -> getDiasIncapacidad($liquidacion_novedad_id,$fecha_inicial,$fecha_final,$this -> Conex);
 		  $diasIncapacidad = $this->groupArrayDias($diasIncapacidad, 'contrato_id');
 		   
 

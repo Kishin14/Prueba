@@ -171,7 +171,7 @@ final class LiquidacionFinal extends Controler
             
             if($variacion_sal == 1){
                 if($valor_prom_devengado < $salario_minimo){
-                    $valor_cesan = intval((($salario_minimo + $valor_base_salarial) * $dias_ces) / 360);
+                    $valor_cesan = intval((($salario_minimo + $subsidio_transporte + $valor_base_salarial) * $dias_ces) / 360);
                 }else{
                     $valor_cesan = intval((($valor_prom_devengado + $valor_base_salarial) * $dias_ces) / 360);
                 }
@@ -379,9 +379,7 @@ final class LiquidacionFinal extends Controler
                 $fecha_ultima = $fecha_inicio;
             }
             
-            if ($data_prima[0]['periodo'] == 2){
-                $dias_prima = $this->restaFechasCont($fecha_ultima, $_REQUEST['fecha_final']);
-            } elseif ($data_prima[0]['periodo'] == 1) {
+            if ($data_prima[0]['fecha_liquidacion'] > 0 || $ultima_prima > 0){
                 $dias_prima = $this->restaFechasCont($fecha_ultima, $_REQUEST['fecha_final']);
             } else {
                 $dias_prima = $dias;
@@ -402,7 +400,7 @@ final class LiquidacionFinal extends Controler
 
             if($variacion_sal == 1){
                 if($valor_prom_devengado < $salario_minimo){
-                    $valor_prima = intval((($salario_minimo + $valor_base_salarial) * $dias_prima) / 360);
+                    $valor_prima = intval((($salario_minimo + $subsidio_transporte + $valor_base_salarial) * $dias_prima) / 360);
                 }else{
                     $valor_prima = intval((($valor_prom_devengado + $valor_base_salarial) * $dias_prima) / 360);
                 }

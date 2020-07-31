@@ -625,13 +625,15 @@ function printOut(){
 	var tipo_impresion = document.getElementById("tipo_impresion").value;
 	var desprendibles = document.getElementById("desprendibles").value;
 	var liquidacion_novedad_id = document.getElementById("liquidacion_novedad_id").value;
+	var fecha_final = $("#fecha_final").val();
+	var fecha_inicial = $("#fecha_inicial").val();
 	if(tipo_impresion=='PE'){
 		var download = 'true';
 	}else{
 		var download = 'false';
 	}
 	
-	var url = "RegistrarClass.php?ACTIONCONTROLER=onclickPrint&download="+download+"&tipo_impresion="+tipo_impresion+"&desprendibles="+desprendibles+"&liquidacion_novedad_id="+liquidacion_novedad_id+"&random="+Math.random();
+	var url = "RegistrarClass.php?ACTIONCONTROLER=onclickPrint&download="+download+"&tipo_impresion="+tipo_impresion+"&desprendibles="+desprendibles+"&liquidacion_novedad_id="+liquidacion_novedad_id+"&fecha_inicial="+fecha_inicial+"&fecha_final="+fecha_final+"&random="+Math.random();
 	
 	printCancel();
     onclickPrint(null,url,"Impresion Liquidacion Nomina","950","600");	

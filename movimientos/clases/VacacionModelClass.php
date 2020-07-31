@@ -83,6 +83,7 @@ final class VacacionModel extends Db{
 		$tercero_id	 = $result_contrato[0]['tercero_id'];
 		$area_laboral	 = $result_contrato[0]['area_laboral'];
 		$centro_de_costo_id	 = $result_contrato[0]['centro_de_costo_id'];
+		$fecha_inicio_contrato	 = $result_contrato[0]['fecha_inicio'];
 
 		$select="SELECT l.contrato_id FROM liquidacion_vacaciones l 
 		         WHERE (l.fecha_dis_inicio BETWEEN $fecha_dis_inicio AND $fecha_dis_final 
@@ -145,25 +146,36 @@ final class VacacionModel extends Db{
 		
 		
 		
-		$select_consolidado = "SELECT SUM(debito-credito)as neto,centro_de_costo_id FROM imputacion_contable WHERE puc_id=$puc_consolidado_vacaciones AND tercero_id=$tercero_id AND encabezado_registro_id IN (SELECT encabezado_registro_id FROM encabezado_de_registro WHERE fecha<$fecha_dis_inicio)";
+
+		$concepto_item				= $this -> requestDataForQuery('concepto_item','text');
+		$concepto = explode("-", $concepto_item);
+		$concepto_sub = $concepto[1];
+		$anio_periodo = substr($concepto_sub,0,4);
+		$mes_periodo = (substr($concepto_sub,4,2)+1);
+		$fecha_final_periodo = $anio_periodo.'-'.$mes_periodo.'-'.('01');
+		$fecha_periodo = date("Y-m-d",strtotime($fecha_final_periodo."- 1 days"));
+		
+		$select_consolidado = "SELECT SUM(credito-debito)as neto,centro_de_costo_id FROM imputacion_contable WHERE puc_id=$puc_consolidado_vacaciones AND tercero_id=$tercero_id AND encabezado_registro_id IN (SELECT encabezado_registro_id FROM encabezado_de_registro WHERE fecha < '$fecha_periodo'  AND estado ='C')";
 		//die($select_consolidado);
-		$result_consolidado = $this -> DbFetchAll($select_consolidado,$Conex); 
+		$result_consolidado = $this -> DbFetchAll($select_consolidado,$Conex,true); 
 		
 		$valor_consolidado = $result_consolidado[0]['neto'];
 		$centro_costo_consolidado = $result_consolidado[0]['centro_de_costo_id']> 0 ? $result_consolidado[0]['centro_de_costo_id'] : $centro_de_costo_id;
 		
-		$select_provision = "SELECT SUM(credito-debito)as neto,centro_de_costo_id  FROM imputacion_contable WHERE puc_id=$puc_provision_vacaciones AND tercero_id=$tercero_id AND encabezado_registro_id IN (SELECT encabezado_registro_id FROM encabezado_de_registro WHERE fecha<$fecha_dis_inicio)";
-		$result_provision = $this -> DbFetchAll($select_provision,$Conex); 
+		$select_provision = "SELECT SUM(credito-debito)as neto,centro_de_costo_id  FROM imputacion_contable WHERE puc_id=$puc_provision_vacaciones AND tercero_id=$tercero_id AND encabezado_registro_id IN (SELECT encabezado_registro_id FROM encabezado_de_registro WHERE fecha <'$fecha_periodo'  AND estado ='C')";
+		//die($select_provision);
+		$result_provision = $this -> DbFetchAll($select_provision,$Conex,true); 
 		
 		$valor_provision = $result_provision[0]['neto'];
 		$centro_costo_provision = $result_provision[0]['centro_de_costo_id']> 0 ? $result_provision[0]['centro_de_costo_id'] : $centro_de_costo_id;
 		
 		
 		$valor_ingresado=0;
+		$valor_guardado=0;
 		
-		$valor_guardado = intval($valor_consolidado)+intval($valor_provision);
+		// $valor_guardado = intval($valor_provision);
 		
-		if($valor_consolidado>0){
+		/* if($valor_consolidado>0){
 			
 			if($valor_consolidado>$valor){
 				$valor_consolidado = $valor;
@@ -176,19 +188,21 @@ final class VacacionModel extends Db{
 		VALUES
 		($liquidacion_vacaciones_id,$puc_consolidado_vacaciones,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_consolidado,IF($centro_costo_consolidado>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_consolidado),'NULL'),0,'NULL','NULL',$observaciones,$valor_ingresado,0,$valor_ingresado,0)";
 			$this -> query($insert_det_puc_cons,$Conex,true); 
-		}
+		} */
 		
 		if($valor_provision>0){
 			
 			//registro provisiones
 			
 				if(($valor-$valor_ingresado)>$valor_provision){
+					$valor_guardado = $valor_provision;
 					$insert_det_puc_prov ="INSERT INTO detalle_vacaciones_puc (liquidacion_vacaciones_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_vacaciones,porcentaje_vacaciones,formula_vacaciones,desc_vacaciones,deb_item_vacaciones,cre_item_vacaciones,valor_liquida,contrapartida)
 		VALUES
 		($liquidacion_vacaciones_id,$puc_provision_vacaciones,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_provision,IF($centro_costo_provision>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_provision),'NULL'),0,'NULL','NULL',$observaciones,$valor_provision,0,$valor_provision,0)";
 					
 				}else{
 					$valor_provision = $valor-$valor_ingresado;
+					$valor_guardado = $valor_provision;
 					$insert_det_puc_prov ="INSERT INTO detalle_vacaciones_puc (liquidacion_vacaciones_id,puc_id,tercero_id,numero_identificacion,digito_verificacion,centro_de_costo_id,codigo_centro_costo,base_vacaciones,porcentaje_vacaciones,formula_vacaciones,desc_vacaciones,deb_item_vacaciones,cre_item_vacaciones,valor_liquida,contrapartida)
 		VALUES
 		($liquidacion_vacaciones_id,$puc_provision_vacaciones,$tercero_id,$numero_identificacion,$digito_verificacion,$centro_costo_provision,IF($centro_costo_provision>0,(SELECT codigo FROM centro_de_costo WHERE centro_de_costo_id = $centro_costo_provision),'NULL'),0,'NULL','NULL',$observaciones,$valor_provision,0,$valor_provision,0)";
@@ -198,6 +212,9 @@ final class VacacionModel extends Db{
 				$this -> query($insert_det_puc_prov,$Conex,true); 
 					
 		}
+		
+		/* $diferencia= ($valor - $valor_guardado);
+		exit($valor.'valor '.$valor_guardado.'guardado '.$valor_consolidado.'consolidado '.$valor_provision.'provision '.$diferencia.'diferencia'); */ 
 		if($valor>$valor_guardado){
 			if($area_laboral=='A'){
 				$puc_diferencia = $puc_admin;

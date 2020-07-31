@@ -492,7 +492,8 @@ final class LiquidacionFinalModel extends Db
 
             //Sumatoria de todo el valor devengado desde un rango de fechas definido para Aux. de Transporte y Salario.
             $select = "SELECT
-                IF(SUM(dln.debito/3)=SUM(c.sueldo_base+c.subsidio_transporte),0,1) AS variacion_salario
+                IF((SELECT COUNT(liquidacion_novedad_id) FROM liquidacion_novedad WHERE contrato_id=lno.contrato_id AND estado = 'C')>2,
+                IF(SUM(dln.debito/3)=SUM(c.sueldo_base+c.subsidio_transporte),0,1),0) AS variacion_salario
             FROM
                 detalle_liquidacion_novedad dln,
                 liquidacion_novedad lno,
