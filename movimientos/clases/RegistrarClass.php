@@ -552,7 +552,7 @@ $resultado = '<br><br> N° Contrato: '. $numero_contrato.' '.$empleado;
 exit("No puede liquidar la nomina hasta que actualice la periodicidad del siguiente contrato: ".$resultado."<br><br>El empleado en este momento cuenta con una periodicidad: <b style='color:#ed121a'>".$periodicidad."<b>");
 }  */
 
-            $comprobar = $Model->ComprobarLiquidacion($_REQUEST['contrato_id'], $fecha_inicial, $fecha_final, $periodicidad, $area, $this->getConex());
+            $comprobar = $Model->ComprobarLiquidacion($_REQUEST['contrato_id'], $fecha_inicial, $fecha_final, $periodicidad, $area_laboral, $this->getConex());
             if ($comprobar[0]['consecutivo'] > 0) {
                 exit($comprobar[0]['consecutivo']);
             }
@@ -731,7 +731,7 @@ exit("No puede liquidar la nomina hasta que actualice la periodicidad del siguie
                 exit("No puede liquidar la nomina hasta que actualice la fecha de terminación o realice la liquidación final de los siguientes contratos: " . $resultado);
             }
 
-            $comprobar = $Model->ComprobarLiquidacionT($fecha_inicial, $fecha_final, $periodicidad, $area, $centro_de_costo_id, $this->getConex());
+            $comprobar = $Model->ComprobarLiquidacionT($fecha_inicial, $fecha_final, $periodicidad, $area_laboral, $centro_de_costo_id, $this->getConex());
             if ($comprobar[0]['consecutivo'] > 0) {
                 exit($comprobar[0]['consecutivo']);
             }
