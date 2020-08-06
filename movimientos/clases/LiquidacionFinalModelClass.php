@@ -529,7 +529,7 @@ final class LiquidacionFinalModel extends Db
                 lno.contrato_id = $contrato_id AND 
                 lno.estado = 'C'
                 ORDER BY lno.fecha_inicial DESC LIMIT $limite";
-                die($select);
+                
             $result = $this -> DbFetchAll($select,$Conex,true);
             $result = $result[0]['variacion_salario'];
         } else {
