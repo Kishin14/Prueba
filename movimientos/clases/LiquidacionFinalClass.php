@@ -140,6 +140,7 @@ final class LiquidacionFinal extends Controler
         $tercero_id = $data[0]['tercero_id'];
         $sueldo_base = $data[0]['sueldo_base'];
         $subsidio_transporte = $data[0]['subsidio_transporte'];
+        $periodicidad = $data[0]['periodicidad'];
         
         $x = 0;
         $c = 0;
@@ -161,14 +162,13 @@ final class LiquidacionFinal extends Controler
             //Sumatoria de todo el valor devengado desde un rango de fechas definido para Aux. de Transporte y Salario.
             $sum_devengado = $Model->getPromedioSalario($contrato_id, $fecha_ultima, $fecha_final, $this->getConex());
             //Consulta para saber si ha tenido variación del salario en los ultimos 3 meses
-            $variacion_sal = $Model->getDiferenciaSalario($contrato_id, $fecha_ultima, $fecha_final, $this->getConex());
+            $variacion_sal = $Model->getDiferenciaSalario($contrato_id, $fecha_ultima, $fecha_final, $periodicidad, $this->getConex());
             //Restar rango de fechas para que retorne un numero de dias contables.
             $dias_ces = $this -> restaFechasCont($fecha_ultima,$fecha_final);
             
             $meses_ces = ($dias_ces/30);
             $valor_base_salarial = ($base_deven_cesan/$meses_ces) + ($horas_extra_cesan/$meses_ces);
             $valor_prom_devengado = ($sum_devengado/$meses_ces);
-            //die("base salarial: ".$valor_base_salarial.' prom devengado '.$valor_prom_devengado);
             if($variacion_sal == 1){
                 if($valor_prom_devengado < $salario_minimo){
                     $valor_cesan = intval((($salario_minimo + $subsidio_transporte + $valor_base_salarial) * $dias_ces) / 360);
