@@ -344,7 +344,7 @@ final class RegistrarModel extends Db{
 					h.vr_horas_recargo_noc AS valor_recargo_noc
 					
 					FROM 	hora_extra h
-					WHERE h.contrato_id=$contrato_id AND h.estado='E' AND h.fecha_inicial>='$fecha_inicial' AND h.fecha_final<='$fecha_final' ";	
+					WHERE h.contrato_id=$contrato_id AND h.estado='P' AND h.fecha_inicial>='$fecha_inicial' AND h.fecha_final<='$fecha_final' ";	
 
 			$resultext           = $this -> DbFetchAll($selectext,$Conex,true); 
 			$valor_diurnas       = $resultext[0]['valor_diurnas']>0 ? $resultext[0]['valor_diurnas'] : 0;

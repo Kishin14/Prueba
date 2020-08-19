@@ -168,7 +168,7 @@ final class LiquidacionFinal extends Controler
             $meses_ces = ($dias_ces/30);
             $valor_base_salarial = ($base_deven_cesan/$meses_ces) + ($horas_extra_cesan/$meses_ces);
             $valor_prom_devengado = ($sum_devengado/$meses_ces);
-            
+            //die("base salarial: ".$valor_base_salarial.' prom devengado '.$valor_prom_devengado);
             if($variacion_sal == 1){
                 if($valor_prom_devengado < $salario_minimo){
                     $valor_cesan = intval((($salario_minimo + $subsidio_transporte + $valor_base_salarial) * $dias_ces) / 360);
@@ -496,13 +496,14 @@ final class LiquidacionFinal extends Controler
 
             // vacaciones
             $data_vaca = $Model->getDetallesVacaciones($contrato_id, $_REQUEST['fecha_final'], $this->getConex());
+            $fecha_ultima = $data_vaca[0]['fecha_ultima'];
             //$periodos = $dias / 360;
             //$dias_dis = intval(15 * $periodos);
             if ($data_vaca[0]['dias_va'] <= 0) {
                 $dias_deb_vac = $dias;
             } else {
-                $per_disfru = $data_vaca[0]['dias_va'] / 15;
-                $dias_deb_vac = ($dias - ($per_disfru * 360));
+                //$per_disfru = $data_vaca[0]['dias_va'] / 15;
+                $dias_deb_vac = $this->restaFechasCont($fecha_ultima, $_REQUEST['fecha_final']);
             }
             
             $valor_vacas = intval((($sueldo_base) * $dias_deb_vac) / 720);
