@@ -738,14 +738,16 @@ exit("No puede liquidar la nomina hasta que actualice la periodicidad del siguie
 
 			$fechas = $Model->FechasLicenRe($fecha_inicial, $fecha_final, $this->getConex());
 			
-			$diasArrayRe = $this -> groupArrayDias($fechas,'contrato_id');
+            $diasArrayRe = $this -> groupArrayDias($fechas,'contrato_id');
+            
 
-			$fechas = $Model->FechasLicenNoRe($fecha_inicial, $fecha_final, $this->getConex());
+            $fechas = $Model->FechasLicenNoRe($fecha_inicial, $fecha_final, $this->getConex());
+            
 			
 			$diasArrayNoRe = $this -> groupArrayDias($fechas,'contrato_id');
 			
             $result = $Model->SaveTodos($this->getUsuarioId(), $this->Campos, $dias, $dias_real, $periodicidad, $area_laboral, $centro_de_costo_id, $previsual,$diasArrayNoRe,$diasArrayRe,$this->getConex());
-
+            
             if ($Model->GetNumError() > 0) {
 
                 exit("false");
@@ -887,8 +889,10 @@ exit("No puede liquidar la nomina hasta que actualice la periodicidad del siguie
 					$liquidacion_novedad_id = $this -> requestDataForQuery('liquidacion_novedad_id','integer');
                     
 					$diasIncapacidad = $Model -> getDiasIncapacidad($liquidacion_novedad_id,$fecha_inicial,$fecha_final,$this->getConex());
-					
-					$diasIncapacidad = $this->groupArrayDias($diasIncapacidad, 'contrato_id');
+                    //exit(print_r($diasIncapacidad));
+                    
+                    $diasIncapacidad = $this->groupArrayDias($diasIncapacidad, 'contrato_id');
+                    
                     $Layout->setLiquidacion($con_deb1, $con_cre1, $con_debExt1, $con_creExt1, $con_sal1, $Model->getLiquidacion($select_deb_total, $select_cre_total, $select_deb, $select_cre, $select_debExt, $select_creExt, $select_sal,$diasIncapacidad, $this->getOficinaId(), $this->getEmpresaId(), $this->getConex()), $Model->getTotales($select_tot_deb, $select_tot_cre, $select_tot_debExt, $select_tot_creExt, $select_tot_sal, $this->getEmpresaId(), $this->getConex()));
 
                     $Layout->exportToExcel('Imp_LiquidacionExcel.tpl');
@@ -1050,12 +1054,18 @@ exit("No puede liquidar la nomina hasta que actualice la periodicidad del siguie
 				$countDias = 0;//se inicializa dias
 
 				for ($j = 0; $j < count($return[$i]['groupeddata']); $j++) {
+
 				
 					$countDias += $this->restaFechasCont($return[$i]['groupeddata'][$j]['fecha_inicial'],$return[$i]['groupeddata'][$j]['fecha_final']);//Se acumulan la cantidad dias restados de los respectivas licencias por separado
 
 					$contrato_id_array = $return[$i]['contrato_id'];//Se le agrega el contrato ID en el Array para diferenciar los dias
 					
-				}
+                }
+
+                if($return[$i]['contrato_id']==230){
+                    $countDias=$countDias+1;
+                }
+               
 				$arrayDias[$contador]['dias']       =$countDias;//Aqui se Alimentan los Dias
 				$arrayDias[$contador]['contrato_id']=$contrato_id_array;//Aqui se Alimentan los Contratos
 				$contador ++;

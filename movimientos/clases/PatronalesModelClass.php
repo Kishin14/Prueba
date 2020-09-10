@@ -200,19 +200,13 @@ final class PatronalesModel extends Db{
 		$subsidio_transporte = $result[$i]['subsidio_transporte'];
 
 
-		//tomamos los dias a pagar
+		//Tomamos los dias a pagar
 		$dias_laborados = 0;
-		$select="SELECT dias_pagados FROM liquidacion_vacaciones WHERE estado = 'C' AND contrato_id = $contrato_id AND (fecha_dis_inicio BETWEEN '$fecha_inicial' AND '$fecha_final') OR (fecha_dis_final BETWEEN '$fecha_inicial' AND '$fecha_final')";
+		$select="SELECT dias_pagados FROM liquidacion_vacaciones WHERE estado = 'C' AND contrato_id = $contrato_id AND (fecha_dis_inicio BETWEEN '$fecha_inicial' AND '$fecha_final') OR (fecha_dis_final BETWEEN '$fecha_inicial' AND '$fecha_final' AND estado = 'C')";
+
 		$result_pag = $this -> DbFetchAll($select,$Conex,true);
 
 		$dias_laborados = $result_pag[0]['dias_pagados'];
-
-        /*if($dias_laborados > 0){
-			// $dias_real = $result[$i]['dias'] > $result[$i]['dias_real'] ? $result[$i]['dias']: $result[$i]['dias_real']; 
-		    $dias = $dias+$dias_laborados;
-		}*/
-		
-		//$dias = $dias_real-$result[$i]['dias_lice_nore'];
 
 		$select_vac = "SELECT  SUM(DATEDIFF(IF(fecha_reintegro>'$fecha_final','$fecha_final',fecha_reintegro),IF(fecha_dis_inicio>'$fecha_inicial',fecha_dis_inicio,'$fecha_inicial'))+1) AS diferencia
 				FROM 	liquidacion_vacaciones c
@@ -228,7 +222,7 @@ final class PatronalesModel extends Db{
 		$centro_de_costo_idg =  $result[$i]['centro_de_costo_id'];
 		$codigo_centrog =  $result[$i]['codigo_centro'];
 
-		//revisar dias incapacidad
+		//Revisar dias incapacidad
 		$select_inca = "SELECT (DATEDIFF(IF(l.fecha_final>'$fecha_final','$fecha_final',l.fecha_final),IF(l.fecha_inicial>'$fecha_inicial',l.fecha_inicial,'$fecha_inicial'))) AS dias_inca, ti.dia, ti.porcentaje,ti.descuento  
 					FROM licencia l, tipo_incapacidad ti WHERE  l.contrato_id=$contrato_id AND ti.tipo_incapacidad_id=l.tipo_incapacidad_id AND ti.tipo='I'  AND ('$fecha_inicial' BETWEEN  l.fecha_inicial AND l.fecha_final OR '$fecha_final'  BETWEEN  l.fecha_inicial AND l.fecha_final OR l.fecha_inicial BETWEEN '$fecha_inicial' AND '$fecha_final') ";
 		$result_inca = $this -> DbFetchAll($select_inca,$Conex,true);
@@ -278,12 +272,12 @@ final class PatronalesModel extends Db{
 		$valor_nocturnas_fes = $resultext[0]['valor_nocturnas_fes']>0 ? $resultext[0]['valor_nocturnas_fes'] : 0;			
 		$valor_recargo_noc = $resultext[0]['valor_recargo_noc']>0 ? $resultext[0]['valor_recargo_noc'] : 0;		
 		$valor_recargo_doc = $resultext[0]['valor_recargo_doc']>0 ? $resultext[0]['valor_recargo_doc'] : 0;		
-		
-		
-		//$total_base=$valor_deven+$valor_diurnas+$valor_nocturnas+$valor_diurnas_fes+$valor_nocturnas_fes+$valor_recargo_noc-$des_val_inc;
+	
 		$total_base=($subsidio_base+$valor_deven+$valor_diurnas+$valor_nocturnas+$valor_diurnas_fes+$valor_nocturnas_fes+$valor_recargo_noc+$valor_recargo_doc)-$des_val_inc;
 		
-        $dias_pat = ($dias+$dias_laborados);
+		$dias_pat = ($dias+$dias_laborados);
+		
+		//exit("Dias patronales".$dias_pat."<br>DIAS NORMALES".$dias."<br>DIAS LABORADOS".$dias_laborados."<br>Contrato id= ".$contrato_id);
 		if($result[$i]['prestaciones_sociales']==1 || ($result[$i]['prestaciones_sociales']==0 && $result[$i]['salud']==1)){
 
 			//salud

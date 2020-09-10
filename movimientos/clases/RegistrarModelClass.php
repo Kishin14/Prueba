@@ -59,6 +59,7 @@ final class RegistrarModel extends Db{
 
   public function Save($usuario_id,$Campos,$dias,$dias_real,$previsual,$Conex){
 
+
     $liquidacion_novedad_id = $this -> DbgetMaxConsecutive("liquidacion_novedad","liquidacion_novedad_id",$Conex,false,1);
 	$consecutivo            = $this -> DbgetMaxConsecutive("liquidacion_novedad","consecutivo",$Conex,false,1);
 	$this -> assignValRequest('consecutivo',$consecutivo);
@@ -622,6 +623,7 @@ final class RegistrarModel extends Db{
 
 	if($previsual == 'true'){
 		
+		
 	
 	 # Muestro la ultima liquidacion creada	
 	 $selectLiquidacion      = "SELECT l.liquidacion_novedad_id, l.consecutivo, l.empleados, l.fecha_inicial, l.fecha_final, 		                              l.periodicidad, l.area_laboral, l.estado, l.contrato_id, l.encabezado_registro_id, l.usuario_id,                                  l.fecha_registro, l.con_usuario_id, l.con_fecha, 
@@ -799,7 +801,7 @@ final class RegistrarModel extends Db{
    			FROM contrato c, tipo_contrato t 
 			WHERE c.estado='A' AND t.tipo_contrato_id=c.tipo_contrato_id AND (t.prestaciones_sociales=1 OR (t.salud=1 AND t.prestaciones_sociales=0)) AND c.fecha_inicio <= '$fecha_final' $consulta_period $consulta_area $consulta_centro
 			AND c.contrato_id NOT IN (SELECT contrato_id FROM liquidacion_novedad WHERE fecha_inicial='$fecha_inicial' AND fecha_final='$fecha_final' AND estado!='A')";
-		
+	
 	$result = $this -> DbFetchAll($select,$Conex,true); 
 	
 	//BLOQUE DE CODIGO PARA ANEXAR LOS DIAS A LOS CONTRATOS EN EL ARRAY PARA DIAS NO REMUNERADOS
@@ -938,10 +940,14 @@ final class RegistrarModel extends Db{
 		$select_vac = "SELECT  SUM(DATEDIFF(IF(fecha_reintegro>'$fecha_final','$fecha_final',fecha_reintegro),IF(fecha_dis_inicio>'$fecha_inicial',fecha_dis_inicio,'$fecha_inicial'))) AS diferencia
 				FROM 	liquidacion_vacaciones c
 				WHERE c.estado = 'C' AND c.contrato_id=$contrato_id AND inicial=0 AND (('$fecha_inicial' BETWEEN  fecha_dis_inicio AND fecha_reintegro OR '$fecha_final' BETWEEN  fecha_dis_inicio AND fecha_reintegro) OR ('$fecha_inicial' < fecha_dis_inicio AND fecha_reintegro < '$fecha_final'))";
+	
 		$result_vac = $this -> DbFetchAll($select_vac,$Conex,true);
+		// Se agrega +1 en el sum datediff para que de 30 días mientras reunión 24 de agosto
 		
 		$dife_vacas= $result_vac[0]['diferencia']>0 ? ($result_vac[0]['diferencia']) : 0;
-
+		$dife_vacas = ($dife_vacas==29) ? ($dife_vacas+1) : $dife_vacas ;
+		
+		
 		if($dias_real<=$result[$i]['dias_lice_nore']){
 			$dias = 0;
 			$dias_sub = 0;
@@ -953,7 +959,8 @@ final class RegistrarModel extends Db{
 		}else{
 			$dias = $dias_total-$dife_vacas-$result[$i]['dias_desc']-$result[$i]['dias_lice_nore'];
 			$dias_sub = $dias_total-$dife_vacas-$result[$i]['dias_desc']-$result[$i]['dias_lice_nore']-$result[$i]['dias_lice_re'];
-
+			
+            
 			$select_comp = "SELECT l.fecha_final
 			FROM licencia l, tipo_incapacidad ti WHERE l.remunerado=0 AND l.estado!='I' AND  l.contrato_id=$contrato_id AND ti.tipo_incapacidad_id=l.tipo_incapacidad_id AND ti.tipo='L' AND  l.fecha_final = '$fecha_final'   ORDER BY  l.fecha_final DESC LIMIT 1";
 			$result_comp = $this -> DbFetchAll($select_comp,$Conex,true);
@@ -974,7 +981,7 @@ final class RegistrarModel extends Db{
 		
 		$select_inca = "SELECT (DATEDIFF(IF(l.fecha_final>'$fecha_final','$fecha_final',l.fecha_final),IF(l.fecha_inicial>'$fecha_inicial',l.fecha_inicial,'$fecha_inicial'))+1) AS dias_inca, ti.dia, ti.porcentaje,ti.descuento  
 					FROM licencia l, tipo_incapacidad ti WHERE  l.contrato_id=$contrato_id AND l.estado!='I' AND ti.tipo_incapacidad_id=l.tipo_incapacidad_id AND ti.tipo='I'  AND ('$fecha_inicial' BETWEEN  l.fecha_inicial AND l.fecha_final OR '$fecha_final'  BETWEEN  l.fecha_inicial AND l.fecha_final OR l.fecha_inicial BETWEEN '$fecha_inicial' AND '$fecha_final') ";
-
+    
 		$result_inca = $this -> DbFetchAll($select_inca,$Conex,true);
 		
 		
@@ -996,12 +1003,13 @@ final class RegistrarModel extends Db{
 				}
 			}
 			$dias_inca_sub=$dias_inca_sub+$result_inca[$l]['dias_inca'];	
+			
 		}
 
 		
+		//resta los dias incapacidad al subsidio
 		
-		
-		$dias_sub = $dias_sub - $dias_inca_sub; //resta los dias incapacidad al subsidio
+		$dias_sub = $dias_sub - $dias_inca_sub;
 		$dias_r = $dias - $dias_inca_sub; //resta los dias incapacidad a los dias
 		
 		//salario
@@ -1009,7 +1017,7 @@ final class RegistrarModel extends Db{
 		$credito = 0;
 		$deb_total = $deb_total + $debito;
 		$cre_total = $cre_total + $credito;
-		$dias_sal = $dias_r;
+		$dias_sal = $dias_sub;
 		
 		$detalle_liquidacion_novedad_id = $this -> DbgetMaxConsecutive("detalle_liquidacion_novedad","detalle_liquidacion_novedad_id",$Conex,false,1);
 		
@@ -1022,8 +1030,6 @@ final class RegistrarModel extends Db{
 		$debito=intval(($dias_inca_sub*$sal_dia_cont)-$des_val_inc);
 		$deb_total=$deb_total+$debito;	
 		$credito=0;
-		
-		
 		
 		if($dias_inca_sub>0){
 		
@@ -1361,12 +1367,11 @@ final class RegistrarModel extends Db{
 	                            (SELECT c.nombre FROM centro_de_costo c WHERE c.centro_de_costo_id=l.centro_de_costo_id) AS centro_de_costo
 	                            FROM liquidacion_novedad l
                                 ORDER BY l.liquidacion_novedad_id DESC LIMIT 1"; 
-	
 	 $resultLiquidacion      = $this -> DbFetchAll($selectLiquidacion,$Conex,true);
-
+	 
 	 $liquidacion_novedad_id = $resultLiquidacion[0]['liquidacion_novedad_id'];
-
-
+	 
+	 
 	 $selectDetalle = "SELECT (p.nombre) AS nombre_puc, d.liquidacion_novedad_id, CONCAT_WS(' ',t.primer_nombre, t.segundo_nombre, t.primer_apellido, t.segundo_apellido) AS tercero, d.numero_identificacion, d.digito_verificacion, 
 
 					   (SELECT c.descripcion FROM concepto_area c WHERE c.concepto_area_id=d.concepto_area_id) AS descripcion_concepto, 
@@ -1377,6 +1382,7 @@ final class RegistrarModel extends Db{
 
 					   WHERE d.puc_id=p.puc_id AND d.tercero_id=t.tercero_id AND d.liquidacion_novedad_id = $liquidacion_novedad_id";
 					   
+					
 					   $resultDetalle  = $this -> DbFetchAll($selectDetalle,$Conex,true);
 
 
