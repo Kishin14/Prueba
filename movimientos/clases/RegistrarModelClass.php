@@ -16,8 +16,8 @@ final class RegistrarModel extends Db{
 	return $this -> Permisos -> getPermiso($ActividadId,$Permiso,$Conex);
   }
 
-  public function validarContratos($fecha_inicial,$fecha_final,$contrato_id = 0,$Conex){
-	
+  public function validarContratos($fecha_inicial,$fecha_final,$Conex,$contrato_id=0){
+	  
 	if($contrato_id > 0){
 		$consulta = 'AND c.contrato_id ='.$contrato_id;
 	}else{
