@@ -153,8 +153,24 @@ final class LiquidacionFinal extends Controler
             //cesantias
 
             //Traer la ultima liquidación de cesantías.
+            $ultima_cesan = $data[0]['ultima_cesan'];
+
             $data_ces = $Model->getDetallesCesantias($contrato_id, $fecha_final, $this->getConex());
-            $fecha_ultima = $data_ces[0]['fecha_corte'] > 0 ? $data_ces[0]['fecha_corte'] : $fecha_inicio;
+
+            if($data_ces[0]['fecha_corte'] > 0){
+                $fecha_ultima = $data_ces[0]['fecha_corte'];
+            }else if($ultima_cesan > 0){
+                $fecha_ultima = $ultima_cesan;
+            }else{
+                $fecha_ultima = $fecha_inicio;
+            }
+
+            if ($data_ces[0]['fecha_corte'] > 0 || $ultima_cesan > 0){
+                $dias_ces = $this->restaFechasCont($fecha_ultima, $_REQUEST['fecha_final']);
+            } else {
+                $dias_ces = $dias;
+            }
+
             //Traer todas las Novedades con Base Salarial Si en un Rango de Fechas
             $base_deven_cesan = $Model->getDevBaseSalarial($contrato_id, $fecha_ultima, $fecha_final, $this->getConex());
             //Traer todas las Horas Extras que esten liquidadas en un Rango de Fechas
@@ -163,8 +179,6 @@ final class LiquidacionFinal extends Controler
             $sum_devengado = $Model->getPromedioSalario($contrato_id, $fecha_ultima, $fecha_final, $this->getConex());
             //Consulta para saber si ha tenido variación del salario en los ultimos 3 meses
             $variacion_sal = $Model->getDiferenciaSalario($contrato_id, $fecha_ultima, $fecha_final, $periodicidad, $this->getConex());
-            //Restar rango de fechas para que retorne un numero de dias contables.
-            $dias_ces = $this -> restaFechasCont($fecha_ultima,$fecha_final);
             
             $meses_ces = ($dias_ces/30);
             $valor_base_salarial = ($base_deven_cesan/$meses_ces) + ($horas_extra_cesan/$meses_ces);
@@ -179,14 +193,13 @@ final class LiquidacionFinal extends Controler
                 $valor_cesan = intval((($sueldo_base + $valor_base_salarial + $subsidio_transporte) * $dias_ces) / 360);
             }
 
-            $desde_cesan = $data_ces[0]['fecha_corte'] != '' ? $data_ces[0]['fecha_corte'] : $_REQUEST['fecha_inicio'];
             $datos[$x]['concepto'] = 'CESANTIAS';
             $datos[$x]['dias'] = $dias_ces > 0 ? $dias_ces : $dias;
-            $datos[$x]['periodo'] = 'De: ' . $desde_cesan . ' Hasta: ' . $_REQUEST['fecha_final'];
+            $datos[$x]['periodo'] = 'De: ' . $fecha_ultima . ' Hasta: ' . $_REQUEST['fecha_final'];
             $datos[$x]['valor'] = $valor_cesan;
             $datos[$x]['valor_base_salarial'] = $valor_base_salarial;
             $datos[$x]['tipo'] = 'P';
-            $datos[$x]['fecha_inicio'] = $desde_cesan;
+            $datos[$x]['fecha_inicio'] = $fecha_ultima;
             $datos[$x]['fecha_fin'] = $_REQUEST['fecha_final'];
             $datos[$x]['empresa_id'] = $data[0]['empresa_cesan_id'];
             $x++;
@@ -273,17 +286,32 @@ final class LiquidacionFinal extends Controler
             }
 
             //int cesantias
+            $ultima_intcesan = $data[0]['ultima_intcesan'];
+            
             $data_ices = $Model->getDetallesIntCesantias($contrato_id, $_REQUEST['fecha_final'], $this->getConex());
-            $fecha_ultima = $data_ices[0]['fecha_corte'] > 0 ? $data_ices[0]['fecha_corte'] : $fecha_inicio;
-            $dias_ices = $this->restaFechasCont($fecha_ultima,$_REQUEST['fecha_final']);
+
+            if($data_ices[0]['fecha_corte'] > 0){
+                $fecha_ultima = $data_ices[0]['fecha_corte'];
+            }else if($ultima_intcesan > 0){
+                $fecha_ultima = $ultima_intcesan;
+            }else{
+                $fecha_ultima = $fecha_inicio;
+            }
+            
+            if ($data_ices[0]['fecha_corte'] > 0 || $ultima_intcesan > 0){
+                $dias_ices = $this->restaFechasCont($fecha_ultima, $_REQUEST['fecha_final']);
+            } else {
+                $dias_ices = $dias;
+            }
+
             $valor_icesan = intval((($valor_cesan * 0.12) * $dias_ices) / 360);
-            $desde_icesan = $data_ices[0]['fecha_corte'] != '' ? $data_ices[0]['fecha_corte'] : $_REQUEST['fecha_inicio'];
+            
             $datos[$x]['concepto'] = 'INT. CESANTIAS';
             $datos[$x]['dias'] = $dias_ices;
-            $datos[$x]['periodo'] = 'De: ' . $desde_icesan . ' Hasta: ' . $_REQUEST['fecha_final'];
+            $datos[$x]['periodo'] = 'De: ' . $fecha_ultima . ' Hasta: ' . $_REQUEST['fecha_final'];
             $datos[$x]['valor'] = $valor_icesan;
             $datos[$x]['tipo'] = 'P';
-            $datos[$x]['fecha_inicio'] = $desde_icesan;
+            $datos[$x]['fecha_inicio'] = $fecha_ultima;
             $datos[$x]['fecha_fin'] = $_REQUEST['fecha_final'];
             $datos[$x]['empresa_id'] = $data[0]['empresa_cesan_id'];
             $x++;
