@@ -323,7 +323,7 @@ $(document).ready(function(){
 													if (resp.indexOf('<html>') != -1) {
 														document.location.href = "RegistrarClass.php?" + QueryString;
 													} else {
-														alertJquery(resp, "atencion");
+														alertJquery(resp, "Atencion");
 													}
 
 												}

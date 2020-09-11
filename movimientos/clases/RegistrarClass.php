@@ -539,26 +539,37 @@ final class Registrar extends Controler
                 exit("No se puede liquidar la Nomina, ya que la fecha de <strong>teminación de contrato</strong> del empleado es menor a la fecha final de la nomina que se liquidará" . $resultado);
             }
 
-/*         $result = $Model -> validarPeriodicidad($periodicidad,$this -> getConex());
-
-if($result > 0){
-
-$numero_contrato = $result[0]['numero_contrato'];
-$empleado = $result[0]['empleado'];
-$periodicidad = $result[0]['periodicidad'];
-
-$resultado = '<br><br> N° Contrato: '. $numero_contrato.' '.$empleado;
-
-exit("No puede liquidar la nomina hasta que actualice la periodicidad del siguiente contrato: ".$resultado."<br><br>El empleado en este momento cuenta con una periodicidad: <b style='color:#ed121a'>".$periodicidad."<b>");
-}  */
-
+            
+            //Se valida si ese contrato no esta en una liquidación del mismo periodo
             $comprobar = $Model->ComprobarLiquidacion($_REQUEST['contrato_id'], $fecha_inicial, $fecha_final, $periodicidad, $area_laboral, $this->getConex());
             if ($comprobar[0]['consecutivo'] > 0) {
                 exit($comprobar[0]['consecutivo']);
             }
-//Se valida si ese contrato no esta Finalizado
 
-            $result = $Model->Save($this->getUsuarioId(), $this->Campos, $dias, $dias_real, $previsual, $this->getConex());
+            $fechas = $Model->FechasLicenRe($fecha_inicial, $fecha_final, $this->getConex(),$contrato_id);
+
+            
+            $fecha_inicial = $fechas[0]['fecha_inicial'];
+            $fecha_final = $fechas[0]['fecha_final'];
+
+            if(count($fechas)>0){
+                $diasRe = $this->restaFechasCont($fecha_inicial, $fecha_final);
+            }else{
+                $diasRe = 0;
+            }
+
+            $fechas = $Model->FechasLicenNoRe($fecha_inicial, $fecha_final, $this->getConex(),$contrato_id);
+            
+            $fecha_inicial = $fechas[0]['fecha_inicial'];
+            $fecha_final = $fechas[0]['fecha_final'];
+
+            if(count($fechas)>0){
+                $diasNoRe = $this->restaFechasCont($fecha_inicial, $fecha_final);
+            }else{
+                $diasNoRe = 0;
+            }
+
+            $result = $Model->Save($this->getUsuarioId(),$this->Campos,$dias,$dias_real,$periodicidad,$area_laboral,$centro_de_costo_id,$previsual,$diasNoRe,$diasRe,$this->getConex());
 
             if ($Model->GetNumError() > 0) {
                 exit("false");
@@ -695,6 +706,9 @@ exit("No puede liquidar la nomina hasta que actualice la periodicidad del siguie
                     }
                     
                     $liquidacion_novedad_id = $this -> requestDataForQuery('liquidacion_novedad_id','integer');
+
+                    $fecha_inicial = $_REQUEST['fecha_inicial'];
+                    $fecha_final = $_REQUEST['fecha_final'];
                     
                     $diasIncapacidad = $Model -> getDiasIncapacidad($liquidacion_novedad_id,$fecha_inicial,$fecha_final,$this->getConex());
 					
