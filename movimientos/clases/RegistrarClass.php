@@ -466,7 +466,7 @@ final class Registrar extends Controler
 
             $contrato_id = $_REQUEST['contrato_id'];
 
-            $data = $Model->validarPeriodicidad($periodicidad, $this->getConex());
+            $data = $Model->validarPeriodicidad($periodicidad,$contrato_id, $this->getConex());
 
             if ($Model->GetNumError() > 0) {
                 exit("Error al validar la periodicidad");
@@ -504,7 +504,7 @@ final class Registrar extends Controler
         $periodo = $_REQUEST['periodo'];
         $area_laboral = $_REQUEST['area_laboral'];
         $centro_de_costo_id = $_REQUEST['centro_de_costo_id'];
-
+        
         if ($periodo == 1) {
             $dias = 7;
         } else if ($periodo == 2 || $periodo == 3) {
@@ -513,7 +513,6 @@ final class Registrar extends Controler
             $dias = 30;
         } else {
             $dias = $this->restaFechasCont($fecha_inicial, $fecha_final);
-           
         }
 
         $previsual = $_REQUEST['previsual'];
@@ -527,7 +526,7 @@ final class Registrar extends Controler
         if ($empleados == 'U') {
 
             $contrato_id = $_REQUEST['contrato_id'];
-            $result = $Model->validarContratos($fecha_inicial, $fecha_final, $this->getConex());
+            $result = $Model->validarContratos($fecha_inicial, $fecha_final, $contrato_id, $this->getConex());
 
             if ($result > 0) {
 
@@ -536,7 +535,7 @@ final class Registrar extends Controler
 
                 $resultado = '<br><br> N° Contrato: ' . $numero_contrato . ' ' . $empleado;
 
-                exit("No puede liquidar la nomina hasta que actualice la fecha de terminación o realice la liquidación final del siguiente contrato: " . $resultado);
+                exit("No se puede liquidar la Nomina, ya que la fecha de <strong>teminación de contrato</strong> del empleado es menor a la fecha final de la nomina que se liquidará" . $resultado);
             }
 
 /*         $result = $Model -> validarPeriodicidad($periodicidad,$this -> getConex());
@@ -728,7 +727,7 @@ exit("No puede liquidar la nomina hasta que actualice la periodicidad del siguie
                     $resultado = $resultado . '<br><br>' . 'N° Contrato: ' . $numero_contrato . ' ' . $empleado;
                 }
 
-                exit("No puede liquidar la nomina hasta que actualice la fecha de terminación o realice la liquidación final de los siguientes contratos: " . $resultado);
+                exit("No se puede liquidar la Nomina, ya que la fecha de <strong>teminación de contrato</strong> de uno de los empleados es menor a la fecha final de la nomina que se liquidará" . $resultado);
             }
 
             $comprobar = $Model->ComprobarLiquidacionT($fecha_inicial, $fecha_final, $periodicidad, $area_laboral, $centro_de_costo_id, $this->getConex());
