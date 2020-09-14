@@ -214,7 +214,7 @@ final class RegistrarModel extends Db{
 		$dife_vacas= $result_vac[0]['diferencia']>0 ? ($result_vac[0]['diferencia']) : 0;
 
 		$dife_vacas = ($dife_vacas==29) ? ($dife_vacas+1) : $dife_vacas;
-
+		
 		if($dias_real<=$diasNoRe){
 			$dias     = 0;
 			$dias_sub = 0;
@@ -223,8 +223,7 @@ final class RegistrarModel extends Db{
 			$dias_sub = 0;
 			
 		}else{
-			$dias = $dias_total-$dife_vacas-$result[$i]['dias_desc']-$diasNoRe;
-
+			$dias = $dias_total-$dife_vacas-$result[$i]['dias_desc']-$diasNoRe-$diasRe;
 			$dias_sub = $dias_total-$dife_vacas-$result[$i]['dias_desc']-$diasNoRe-$diasRe;
 
 			/*$select_comp = "SELECT l.fecha_final
@@ -242,8 +241,8 @@ final class RegistrarModel extends Db{
 			}*/
 			
 		}
-		//revisar dias incapacidad
-		
+
+		//revisar dias incapacidad para su posterior calculo en caso de que tenga un descuento y aplique un porcentaje.
 		$select_inca = "SELECT (DATEDIFF(IF(l.fecha_final>'$fecha_final','$fecha_final',l.fecha_final),IF(l.fecha_inicial>'$fecha_inicial',l.fecha_inicial,'$fecha_inicial'))+1) AS dias_inca, ti.dia, ti.porcentaje,ti.descuento  
 					FROM licencia l, tipo_incapacidad ti WHERE  l.contrato_id=$contrato_id AND l.estado!='I' AND ti.tipo_incapacidad_id=l.tipo_incapacidad_id AND ti.tipo='I'  AND ('$fecha_inicial' BETWEEN  l.fecha_inicial AND l.fecha_final OR '$fecha_final'  BETWEEN  l.fecha_inicial AND l.fecha_final OR l.fecha_inicial BETWEEN '$fecha_inicial' AND '$fecha_final') ";
 					
@@ -269,12 +268,12 @@ final class RegistrarModel extends Db{
 					$des_val_inc = ($des_val_inc + intval(($sal_dia_cont-$salrio_diario)*$dia_difinc));
 				} 
 			}
-			$dias_inca_sub=$dias_inca_sub+$result_inca[$l]['dias_inca'];			
+			$dias_inca_sub=$dias_inca_sub+$result_inca[$l]['dias_inca'];//añade los días a restar a el subsidio de transporte.
 		}
 		
 		$dias_sub = $dias_sub - $dias_inca_sub; //resta los dias incapacidad al subsidio
 		$dias_r = $dias - $dias_inca_sub; //resta los dias incapacidad a los dias
-		
+
 		//salario
 		$debito=intval((($sueldo_base/30) * $dias_r));		
 		//$debito=intval((($sueldo_base/30)*$dias_sub));		
@@ -301,6 +300,22 @@ final class RegistrarModel extends Db{
 			$detalle_liquidacion_novedad_id = $this -> DbgetMaxConsecutive("detalle_liquidacion_novedad","detalle_liquidacion_novedad_id",$Conex,false,1);
 			$insert = "INSERT INTO 	detalle_liquidacion_novedad (detalle_liquidacion_novedad_id,puc_id,liquidacion_novedad_id,debito,credito,fecha_inicial,fecha_final,dias,observacion,concepto,tercero_id,numero_identificacion,digito_verificacion) 
 			VALUES ($detalle_liquidacion_novedad_id,$puc_sal,$liquidacion_novedad_id, $debito,$credito,'$fecha_inicial','$fecha_final',$dias_inca_sub,'$observacion','INCAPACIDADES',$tercero_id,$numero_identificacion,$digito_verificacion)";
+
+			$this -> query($insert,$Conex,true);
+		}
+
+		//licencias
+		$debito   = intval($diasRe*$sal_dia_cont);	
+		$credito  = 0;
+		$deb_total= $deb_total+$debito;
+		$cre_total= $cre_total+$credito;
+		
+		
+		if($diasRe>0){
+			
+			$detalle_liquidacion_novedad_id = $this -> DbgetMaxConsecutive("detalle_liquidacion_novedad","detalle_liquidacion_novedad_id",$Conex,false,1);
+			$insert = "INSERT INTO 	detalle_liquidacion_novedad (detalle_liquidacion_novedad_id,puc_id,liquidacion_novedad_id,debito,credito,fecha_inicial,fecha_final,dias,observacion,concepto,tercero_id,numero_identificacion,digito_verificacion) 
+			VALUES ($detalle_liquidacion_novedad_id,$puc_sal,$liquidacion_novedad_id, $debito,$credito,'$fecha_inicial','$fecha_final',$diasRe,'$observacion','LICENCIAS',$tercero_id,$numero_identificacion,$digito_verificacion)";
 
 			$this -> query($insert,$Conex,true);
 		}
@@ -975,7 +990,7 @@ final class RegistrarModel extends Db{
 			$dias_sub = 0;
 
 		}else{
-			$dias = $dias_total-$dife_vacas-$result[$i]['dias_desc']-$result[$i]['dias_lice_nore'];
+			$dias = $dias_total-$dife_vacas-$result[$i]['dias_desc']-$result[$i]['dias_lice_nore']-$result[$i]['dias_lice_re'];
 
 			$dias_sub = $dias_total-$dife_vacas-$result[$i]['dias_desc']-$result[$i]['dias_lice_nore']-$result[$i]['dias_lice_re'];
 			
@@ -1057,6 +1072,22 @@ final class RegistrarModel extends Db{
 			$detalle_liquidacion_novedad_id = $this -> DbgetMaxConsecutive("detalle_liquidacion_novedad","detalle_liquidacion_novedad_id",$Conex,false,1);
 			$insert = "INSERT INTO 	detalle_liquidacion_novedad (detalle_liquidacion_novedad_id,puc_id,liquidacion_novedad_id,debito,credito,fecha_inicial,fecha_final,dias,observacion,concepto,tercero_id,numero_identificacion,digito_verificacion) 
 			VALUES ($detalle_liquidacion_novedad_id,$puc_sal,$liquidacion_novedad_id, $debito,$credito,'$fecha_inicial','$fecha_final',$dias_inca_sub,'$observacion','INCAPACIDADES',$tercero_id,$numero_identificacion,$digito_verificacion)";
+
+			$this -> query($insert,$Conex,true);
+		}
+		
+		//licencias
+		$debito=intval($result[$i]['dias_lice_re']*$sal_dia_cont);
+		$deb_total=$deb_total+$debito;	
+		$credito=0;
+
+		$diasRe = $result[$i]['dias_lice_re'];
+		
+		if($diasRe>0){
+		
+			$detalle_liquidacion_novedad_id = $this -> DbgetMaxConsecutive("detalle_liquidacion_novedad","detalle_liquidacion_novedad_id",$Conex,false,1);
+			$insert = "INSERT INTO 	detalle_liquidacion_novedad (detalle_liquidacion_novedad_id,puc_id,liquidacion_novedad_id,debito,credito,fecha_inicial,fecha_final,dias,observacion,concepto,tercero_id,numero_identificacion,digito_verificacion) 
+			VALUES ($detalle_liquidacion_novedad_id,$puc_sal,$liquidacion_novedad_id, $debito,$credito,'$fecha_inicial','$fecha_final',$diasRe,'$observacion','LICENCIAS',$tercero_id,$numero_identificacion,$digito_verificacion)";
 
 			$this -> query($insert,$Conex,true);
 		}

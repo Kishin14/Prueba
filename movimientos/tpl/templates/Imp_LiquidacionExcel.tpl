@@ -39,6 +39,7 @@
              <th rowspan="2">SUELDO BASE</th>
             <th rowspan="2"><p>DIAS SALARIO</p></th>
              <th rowspan="2"><p>DIAS INCAPACIDADES</p></th> 
+             <th rowspan="2"><p>DIAS LICENCIAS</p></th> 
                  
              <th colspan="{$cols_deb}" align="center">DEVENGADO</th>
              <th colspan="{$cols_cre}" align="center">DEDUCCIONES</th>
@@ -78,6 +79,7 @@
                  <td align="right">${$d.sueldo_base|number_format:0:',':'.'}</td>  
                  <td align="center">{$d.dias}</td>
                  <td align="center">{$d.dias_incapacidad}</td>
+                 <td align="center">{$d.dias_licencia}</td>
                 
                 {foreach name=debito from=$CONCDEBITO1 item=i}
                     <td align="right">{$d[$i.concepto]}</td> 
@@ -108,6 +110,7 @@
             <tr>
                 <td colspan="3">&nbsp;TOTALES</td>
                 <td align="right">{$sueldobasesum}</td> 
+                <td align="right">&nbsp;</td>
                 <td align="right">&nbsp;</td>
                 <td align="right">&nbsp;</td>
                 

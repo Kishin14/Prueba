@@ -156,13 +156,15 @@ final class Imp_Liquidacion extends Controler{
 		  
 		  $diasIncapacidad = $Model -> getDiasIncapacidad($liquidacion_novedad_id,$fecha_inicial,$fecha_final,$this -> Conex);
 		  $diasIncapacidad = $this->groupArrayDias($diasIncapacidad, 'contrato_id');
-		   
+
+		  $diasLicencia = $Model -> getDiasLicencia($liquidacion_novedad_id,$fecha_inicial,$fecha_final,$this->Conex);
+          $diasLicencia = $this->groupArrayDias($diasLicencia, 'contrato_id');
 
 	      $Layout -> setLiquidacion($con_deb1,$con_cre1,$con_debExt1,$con_creExt1,$con_sal1,
 									
 									$Model -> getLiquidacion($select_deb_total,$select_cre_total,$select_deb,
 									$select_cre,
-									$select_debExt,$select_creExt,$select_sal,$diasIncapacidad,$oficina_id,$this -> getEmpresaId,$this -> Conex),$Model -> getTotales($select_tot_deb,$select_tot_cre,$select_tot_debExt,$select_tot_creExt,$select_tot_sal,$this -> getEmpresaId,$this -> Conex));
+									$select_debExt,$select_creExt,$select_sal,$diasIncapacidad,$diasLicencia,$oficina_id,$this -> getEmpresaId,$this -> Conex),$Model -> getTotales($select_tot_deb,$select_tot_cre,$select_tot_debExt,$select_tot_creExt,$select_tot_sal,$this -> getEmpresaId,$this -> Conex));
 
 		  
 	  }elseif($_REQUEST['tipo_impresion']=='DP'){
