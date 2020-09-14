@@ -258,6 +258,7 @@ $(document).ready(function(){
 	var fecha_inicial      = $("#fecha_inicial").val();
 	var fecha_final        = $("#fecha_final").val();
 	var periodicidad       = $("#periodicidad").val();
+	var periodo 		   = $("#periodo").val();
 	var area_laboral       = $("#area_laboral").val();
 	var centro_de_costo_id = $("#centro_de_costo_id").val();	
 	var contrato_id        = $("#contrato_id").val();
@@ -272,10 +273,10 @@ $(document).ready(function(){
 			success: function (resp) {	
 
 				var data = $.parseJSON(resp);
-                
+                console.log(data);
 				if(data != null){
 					
-					if(data.length > 1){
+					if(data.length >= 1){
 						var mensaje = '';
 						for(var i = 0; i < data.length; i++){
 
@@ -303,7 +304,7 @@ $(document).ready(function(){
 							function (r) {
 								if (r) {
 									//Codigo si se le da ACEPTAR al Jconfirm.
-									var QueryString = "ACTIONCONTROLER=onclickSave&previsual=true&empleados=" + empleados + "&fecha_inicial=" + fecha_inicial + "&fecha_final=" + fecha_final + "&periodicidad=" + periodicidad + "&area_laboral=" + area_laboral + "&centro_de_costo_id=" + centro_de_costo_id + "&contrato_id=" + contrato_id;
+									var QueryString = "ACTIONCONTROLER=onclickSave&previsual=true&empleados=" + empleados + "&fecha_inicial=" + fecha_inicial + "&fecha_final=" + fecha_final + "&periodicidad=" + periodicidad + "&area_laboral=" + area_laboral + "&centro_de_costo_id=" + centro_de_costo_id + "&contrato_id=" + contrato_id+"&periodo="+periodo;
 
 									$.ajax({
 										type: "POST",
@@ -322,7 +323,7 @@ $(document).ready(function(){
 													if (resp.indexOf('<html>') != -1) {
 														document.location.href = "RegistrarClass.php?" + QueryString;
 													} else {
-														alertJquery(resp, "atencion");
+														alertJquery(resp, "Atencion");
 													}
 
 												}
@@ -358,7 +359,7 @@ $(document).ready(function(){
 
 						alertJquery("¡Este contrato no se liquidar&aacute!. Si desea puede actualizar la periodicidad en el contrato: <br>" + mensaje + "<br>Por favor tenga en cuenta que la liquidaci&oacuten que se esta haciendo tiene periodicidad: <b style='color:red'>"+periodicidad2);
 
-						}
+					}
 				}else{
 					var QueryString = "ACTIONCONTROLER=onclickSave&previsual=true&empleados=" + empleados + "&fecha_inicial=" + fecha_inicial + "&fecha_final=" + fecha_final + "&periodicidad=" + periodicidad + "&area_laboral=" + area_laboral + "&centro_de_costo_id=" + centro_de_costo_id + "&contrato_id=" + contrato_id;
 

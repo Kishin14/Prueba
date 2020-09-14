@@ -312,9 +312,8 @@ final class Patronales extends Controler{
 
 	$fecha_inicial = $_REQUEST['fecha_inicial'];
 	$fecha_final = $_REQUEST['fecha_final'];	
-	$dias	= intval(floor(abs((strtotime($fecha_inicial)-strtotime($fecha_final))/86400))+1);
-	
-	$dias = $dias==31 ? 30 : $dias;
+	$dias = $this->restaFechasCont($fecha_inicial, $fecha_final);
+	//$dias = $dias==31 ? 30 : $dias;
 	
 
 	if(substr($fecha_inicial,0,4)!=substr($fecha_final,0,4)) exit("Las fechas Inicial y final no pueden ser en diferente A&ntilde;o");

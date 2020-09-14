@@ -33,15 +33,16 @@ function setDataFormWithResponse(){
 		}
 		
 		if(prestaciones_sociales=='1'){
-			$("#empresa_eps,#empresa_pension,#empresa_arl,#empresa_caja,#empresa_cesan,#empresa_eps_id,#empresa_pension_id,#empresa_arl_id,#empresa_caja_id,#empresa_cesan_id,#empresa_pension_id").addClass("obligatorio");	
-			$('#empresa_eps,#empresa_pension,#empresa_arl,#empresa_caja,#empresa_cesan').attr("disabled","");  
-		}else{
-			$("#empresa_caja,#empresa_cesan,#empresa_caja_id,#empresa_cesan_id,#empresa_pension_id,#fecha_inicio_pension,#fecha_inicio_compensacion,#fecha_inicio_cesantias").removeClass("obligatorio");	
-			$("#empresa_caja,#empresa_cesan,#empresa_pension,#fecha_inicio_pension,#fecha_inicio_compensacion,#fecha_inicio_cesantias").removeClass("requerido");
-			$('#empresa_caja,#empresa_cesan,#empresa_pension,#fecha_inicio_pension,#fecha_inicio_compensacion,#fecha_inicio_cesantias').attr("disabled","true");  
-			$('#empresa_caja_id,#empresa_cesan_id,#empresa_pension_id').val("");  					
-			$('#empresa_caja,#empresa_cesan').val("");  
-		}
+			$("#horario_ini,#horario_fin,#empresa_eps,#empresa_pension,#empresa_arl,#empresa_caja,#empresa_cesan,#empresa_eps_id,#empresa_pension_id,#empresa_arl_id,#empresa_caja_id,#empresa_cesan_id,#empresa_pension,#empresa_pension_id").addClass("obligatorio");	
+			$('#horario_ini,#horario_fin,#empresa_eps,#empresa_pension,#empresa_arl,#empresa_caja,#empresa_cesan,#empresa_pension,#empresa_pension_id').attr("disabled","");  
+		  }else{
+			$("#horario_ini,#horario_fin,#empresa_caja,#empresa_cesan,#empresa_caja_id,#empresa_cesan_id,#empresa_pension,#empresa_pension_id,#fecha_inicio_pension,#fecha_inicio_compensacion,#fecha_inicio_cesantias").removeClass("obligatorio");	
+			$("#horario_ini,#horario_fin,#empresa_caja,#empresa_cesan,#empresa_pension,#empresa_pension_id,#fecha_inicio_pension,#fecha_inicio_compensacion,#fecha_inicio_cesantias").removeClass("requerido");
+			$('#horario_ini,#horario_fin,#empresa_caja,#empresa_cesan,#empresa_pension,#empresa_pension_id,#fecha_inicio_pension,#fecha_inicio_compensacion,#fecha_inicio_cesantias').attr("disabled","true");  
+			
+			$('#empresa_caja_id,#empresa_cesan_id,#empresa_pension,#empresa_pension_id').val("");  					
+			$('#horario_ini,#horario_fin,#empresa_caja,#empresa_cesan').val("");  
+		  }
 
 		if($('#guardar'))    $('#guardar').attr("disabled","true");
 		if($('#limpiar'))    $('#limpiar').attr("disabled","");
