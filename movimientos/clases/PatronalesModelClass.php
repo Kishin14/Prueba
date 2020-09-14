@@ -303,7 +303,8 @@ final class PatronalesModel extends Db{
 				$this -> query($insert,$Conex,true);
 			}elseif($result[$i]['prestaciones_sociales']==0 && $result[$i]['salud']==1){//calculo salud para contratos sin prestaciones pero pago salud al 100%
 				$por_salud = ($result_per[0]['desc_empre_salud']+$result_per[0]['desc_emple_salud']);
-				$valor_salud=intval(intval((((($sueldo_base))/30)*$dias_pat)+$total_base)*($por_salud/100));
+				$sueldo = $sueldo_base > $salrio ? $sueldo_base : $salrio;
+				$valor_salud=intval(intval((((($sueldo))/30)*$dias_pat)+$total_base)*($por_salud/100));
 				$debito=$valor_salud;
 				$credito=0;
 		

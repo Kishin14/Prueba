@@ -30,19 +30,16 @@ final class reporteEmpleadoModel extends Db{
    
   public function getReporteMC1($desde,$hasta,$Conex){ 	   	
  
-	    $select = "SELECT (SELECT CONCAT_WS(' ', c.primer_nombre,c.segundo_nombre,c.primer_apellido,c.segundo_apellido)) AS nombre_convocado,
-					c.numero_identificacion,		
-					c.direccion,
-					c.telefono,
-					c.movil,
-		 			(SELECT u.nombre FROM ubicacion u WHERE u.ubicacion_id=c.ubicacion_id) AS ciudad,
-					p.fecha,
-					(SELECT ca.nombre_cargo FROM cargo ca WHERE ca.cargo_id=co.cargo_id) AS nombre_cargo
-					FROM convocado c, convocatoria co, postulacion p 		
-					WHERE c.convocado_id=p.convocado_id AND p.convocatoria_id=co.convocatoria_id AND p.fecha BETWEEN '$desde' AND '$hasta' ORDER BY c.convocado_id";		  
+	    $select = "SELECT 
+		t.numero_identificacion,(SELECT CONCAT_WS(' ', t.primer_nombre,t.segundo_nombre,t.primer_apellido,t.segundo_apellido)) AS nombre_empleado,e.sexo,t.direccion,t.telefono,t.movil,
+		(SELECT u.nombre FROM ubicacion u WHERE u.ubicacion_id=t.ubicacion_id) AS ciudad,
+		(SELECT ca.nombre_cargo FROM cargo ca WHERE ca.cargo_id=co.cargo_id) AS nombre_cargo
+		
+				FROM contrato co, empleado e, tercero t
+				WHERE co.empleado_id=e.empleado_id AND  co.fecha_inicio BETWEEN '$desde' AND '$hasta'  AND t.tercero_id=e.tercero_id ORDER BY e.empleado_id";		  
 		  
 		  //echo $select;		  
-		  $results = $this -> DbFetchAll($select,$Conex);
+		  $results = $this -> DbFetchAll($select,$Conex,true);
 		  return $results;
   } 
   
