@@ -21,7 +21,7 @@ final class Imp_LiquidacionLayout extends View{
   
    
   public function setLiquidacion($con_deb1,$con_cre1,$con_debExt1,$con_creExt1,$con_sal1,$liquidacion,$totales){
-
+	  
 	 $this -> assign("DETALLES", $liquidacion);  
 	 $this -> assign("TOTALES",  $totales);  
 	 $this -> assign("TIPOIMPRE",$_REQUEST['tipo_impresion']);
