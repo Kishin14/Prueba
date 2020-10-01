@@ -394,7 +394,7 @@ final class RegistrarModel extends Db{
 			//salud
 
 			$debito    = 0;
-			$credito   = intval((intval(((($sueldo_base)/30)*$dias)+$total_base)*$result_per[0]['desc_emple_salud'])/100);
+			$credito   = intval((intval(((($sueldo_base)/30)*($dias+$diasRe))+$total_base)*$result_per[0]['desc_emple_salud'])/100);
 			$deb_total = $deb_total+$debito;
 			$cre_total = $cre_total+$credito;
 			
@@ -405,7 +405,7 @@ final class RegistrarModel extends Db{
 	
 			//pension
 			$debito=0;
-			$credito=intval((intval(((($sueldo_base)/30)*$dias)+$total_base)*$result_per[0]['desc_emple_pension'])/100);
+			$credito=intval((intval(((($sueldo_base)/30)*($dias+$diasRe))+$total_base)*$result_per[0]['desc_emple_pension'])/100);
 			$deb_total=$deb_total+$debito;
 			$cre_total=$cre_total+$credito;
 			
@@ -1166,7 +1166,7 @@ final class RegistrarModel extends Db{
 
 			//salud
 			$debito=0;
-			$credito=intval((intval(((($sueldo_base)/30)*$dias)+$total_base)*$result_per[0]['desc_emple_salud'])/100);
+			$credito=intval((intval(((($sueldo_base)/30)*($dias+$diasRe))+$total_base)*$result_per[0]['desc_emple_salud'])/100);
 			$deb_total=$deb_total+$debito;
 			$cre_total=$cre_total+$credito;
 			
@@ -1177,7 +1177,7 @@ final class RegistrarModel extends Db{
 	
 			//pension
 			$debito=0;
-			$credito=intval((intval(((($sueldo_base)/30)*$dias)+$total_base)*$result_per[0]['desc_emple_pension'])/100);
+			$credito=intval((intval(((($sueldo_base)/30)*($dias+$diasRe))+$total_base)*$result_per[0]['desc_emple_pension'])/100);
 			$deb_total=$deb_total+$debito;
 			$cre_total=$cre_total+$credito;
 		
