@@ -114,7 +114,7 @@ final class PatronalesModel extends Db{
 			(SELECT CONCAT_WS(' ',t.primer_nombre,t.primer_apellido) FROM empleado e, tercero t WHERE e.empleado_id=c.empleado_id AND t.tercero_id=e.tercero_id) AS empleado,
 			c.centro_de_costo_id,(SELECT cc.codigo FROM  centro_de_costo cc WHERE  cc.centro_de_costo_id=c.centro_de_costo_id ) AS codigo_centro,
 			
-			(SELECT car.porcentaje  FROM cargo ca, categoria_arl car WHERE ca.cargo_id=c.cargo_id AND car.categoria_arl_id=ca.categoria_arl_id ) AS desc_empre_arl
+			(SELECT car.porcentaje FROM contrato co, categoria_arl car WHERE co.categoria_arl_id=car.categoria_arl_id AND co.contrato_id = c.contrato_id) AS desc_empre_arl
 			
    			FROM liquidacion_novedad l, contrato c, tipo_contrato t 
 			WHERE l.estado='C' AND l.fecha_inicial>='$fecha_inicial' AND l.fecha_final<='$fecha_final' AND c.contrato_id=l.contrato_id AND t.tipo_contrato_id=c.tipo_contrato_id AND (t.prestaciones_sociales=1 OR (t.salud=1 AND t.prestaciones_sociales=0)) GROUP BY l.contrato_id";
