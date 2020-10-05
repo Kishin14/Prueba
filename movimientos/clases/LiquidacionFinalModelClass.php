@@ -234,6 +234,8 @@ final class LiquidacionFinalModel extends Db
 
             $select = "SELECT c.*,
             ADDDATE(c.fecha_ult_prima, INTERVAL 1 DAY) AS ultima_prima,
+            ADDDATE(c.fecha_ult_intcesan, INTERVAL 1 DAY) AS ultima_intcesan,
+            ADDDATE(c.fecha_ult_cesantias, INTERVAL 1 DAY) AS ultima_cesan,
 		(SELECT t.prestaciones_sociales FROM tipo_contrato t WHERE t.tipo_contrato_id=c.tipo_contrato_id) as prestaciones,
 		(((sueldo_base+subsidio_transporte)*$dias)/360) AS cesantias,
 		((((sueldo_base+subsidio_transporte)*0.12)*$dias)/360) AS int_cesantias,

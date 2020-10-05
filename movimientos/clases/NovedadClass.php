@@ -525,6 +525,20 @@ final class Novedad extends Controler{
 		   datatype=>array(type=>'text')
 	  );
 
+	  $this -> Campos[liquidacion_final] = array(
+		name =>'liquidacion_final',
+		id  =>'liquidacion_final',
+		type =>'select',
+		Boostrap =>'si',
+		options => array(array(value=>0,text=>'NO',selected=>0),array(value=>1,text=>'SI')),
+		required=>'yes',
+		datatype=>array(
+			type =>'integer'),
+		transaction=>array(
+		 	table =>array('novedad_fija'),
+		 	type =>array('column'))
+   );
+
 	/**********************************
  	             Botones
 	**********************************/

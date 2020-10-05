@@ -69,6 +69,10 @@
                             <td><label>Estado : </label></td>
                             <td>{$ESTADO}</td>              
                     	</tr>
+                        <tr>
+                            <td><label>Liquidacion Final : </label></td>
+                            <td>{$LIQFINAL}</td>
+                    	</tr>
             		</table>
         		</fieldset>
         		</td>

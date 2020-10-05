@@ -5,7 +5,7 @@ require_once("../../../framework/clases/PermisosFormClass.php");
 
 final class Imp_LiquidacionModel extends Db{ 
   
-  public function getLiquidacion($select_deb_total,$select_cre_total,$select_deb,$select_cre,$select_debExt,$select_creExt,$select_sal,$diasIncapacidad,$oficina_id,$empresa_id,$Conex){
+  public function getLiquidacion($select_deb_total,$select_cre_total,$select_deb,$select_cre,$select_debExt,$select_creExt,$select_sal,$diasIncapacidad,$diasLicencia,$oficina_id,$empresa_id,$Conex){
  
     $liquidacion_novedad_id = $this -> requestDataForQuery('liquidacion_novedad_id','integer');
 	
@@ -37,7 +37,7 @@ final class Imp_LiquidacionModel extends Db{
 				AND dl.liquidacion_novedad_id=ln.liquidacion_novedad_id AND ln.estado!='A' GROUP BY ln.contrato_id ORDER BY empleado";
 				
 		  $result = $this -> DbFetchAll($select,$Conex,true); 
-		
+		// INCAPACIDADES
 		  for ($i=0; $i < count($result); $i++) { 
 		
 			if(array_search($result[$i]['contrato_id'],array_column($diasIncapacidad,'contrato_id')) !== false){//SE VALIDA SI ESE CONTRATO ESTA O NO ESTA EN EL ARRAY DE DIAS NO REMUNERADOS
@@ -58,6 +58,27 @@ final class Imp_LiquidacionModel extends Db{
 	
 		}
 
+		//LICENCIAS
+
+		for ($i=0; $i < count($result); $i++) { 
+		
+			if(array_search($result[$i]['contrato_id'],array_column($diasLicencia,'contrato_id')) !== false){//SE VALIDA SI ESE CONTRATO ESTA O NO ESTA EN EL ARRAY DE DIAS NO REMUNERADOS
+	
+				for ($j=0; $j < count($diasLicencia); $j++) { 
+	
+					if($diasLicencia[$j]['contrato_id']==$result[$i]['contrato_id']){//SE VALIDA SI ESE CONTRATO ES IGUAL AL CONTRATO EN EL ARRAY DE DIAS NO REMUNERADOS PARA ANEXARLO
+	
+						$result[$i]['dias_licencia'] = $diasLicencia[$j]['dias'];
+	
+					}
+					
+				}
+	
+			}else{
+				$result[$i]['dias_licencia'] = '';//EN CASO CONTRARIO NO ANEXE EL DIA
+			}
+	
+		}
 		  
 	  
 	}else{
@@ -77,13 +98,56 @@ final class Imp_LiquidacionModel extends Db{
 		FROM 
 		
 		liquidacion_novedad ln,
-		licencia l
+		licencia l,
+		tipo_incapacidad ti
 		
 		WHERE 
 
 		ln.contrato_id = l.contrato_id AND 
 		
 		l.estado='A' AND   ln.estado!='A' AND
+
+		l.tipo_incapacidad_id = ti.tipo_incapacidad_id AND
+
+		ti.tipo='I' AND
+		
+		(ln.fecha_inicial BETWEEN  l.fecha_inicial AND l.fecha_final OR ln.fecha_final  BETWEEN  l.fecha_inicial AND l.fecha_final OR l.fecha_inicial BETWEEN ln.fecha_inicial AND ln.fecha_final) AND
+		
+		ln.fecha_inicial = (SELECT fecha_inicial FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id ) AND 
+		
+		ln.fecha_final  = (SELECT fecha_final FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id ) AND 
+		
+		ln.area_laboral = (SELECT area_laboral FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id) AND
+		
+		ln.periodicidad = (SELECT periodicidad FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id)"; 
+		
+		$result = $this -> DbFetchAll($select,$Conex,true);
+	return $result;
+  }
+
+  public function getDiasLicencia($liquidacion_novedad_id,$fecha_inicial,$fecha_final,$Conex){
+	$select = "SELECT 
+	
+		IF('$fecha_inicial'>l.fecha_inicial,'$fecha_inicial',l.fecha_inicial) AS fecha_inicial, 
+		IF(l.fecha_final<'$fecha_final',l.fecha_final,'$fecha_final') AS fecha_final,
+		ln.contrato_id,
+		l.licencia_id
+		
+		FROM 
+		
+		liquidacion_novedad ln,
+		licencia l,
+		tipo_incapacidad ti
+		
+		WHERE 
+
+		ln.contrato_id = l.contrato_id AND 
+		
+		l.estado='A' AND   ln.estado!='A' AND
+
+		l.tipo_incapacidad_id = ti.tipo_incapacidad_id AND
+
+		ti.tipo='L' AND
 		
 		(ln.fecha_inicial BETWEEN  l.fecha_inicial AND l.fecha_final OR ln.fecha_final  BETWEEN  l.fecha_inicial AND l.fecha_final OR l.fecha_inicial BETWEEN ln.fecha_inicial AND ln.fecha_final) AND
 		

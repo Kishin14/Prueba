@@ -292,23 +292,35 @@ final class ContratoModel extends Db
 
             $select = "SELECT liquidacion_cesantias_id	FROM liquidacion_cesantias	WHERE	contrato_id = $contrato_id AND inicial=1 AND estado='C'";
             $result = $this->DbFetchAll($select, $Conex, true);
+
+            $liquidacion_cesantias_id = $result[0]['liquidacion_cesantias_id'];
+
             if (count($result) == 0) {
                 $liquidacion_cesantias_id = $this->DbgetMaxConsecutive("liquidacion_cesantias", "liquidacion_cesantias_id", $Conex, true, 1);
                 $insert = "INSERT INTO liquidacion_cesantias (liquidacion_cesantias_id,fecha_liquidacion,fecha_corte,fecha_ultimo_corte,beneficiario, contrato_id, empleado_id,salario,fecha_inicio_contrato,estado,observaciones,inicial)
 									VALUES ($liquidacion_cesantias_id,'$fecha_ult_cesantias','$fecha_ult_cesantias','$fecha_ult_cesantias','2',$contrato_id,$empleado_id,$sueldo_base,$fecha_inicio,'C' ,'REGISTRO INICIAL CONTRATO',1)";
                 $this->query($insert, $Conex, true);
+            }else{
+                $update = "UPDATE liquidacion_cesantias SET fecha_liquidacion='$fecha_ult_cesantias',fecha_corte='$fecha_ult_cesantias',fecha_ultimo_corte='$fecha_ult_cesantias',beneficiario='2', contrato_id=$contrato_id, empleado_id=$empleado_id,salario=$sueldo_base,fecha_inicio_contrato=$fecha_inicio,estado='C',observaciones='REGISTRO INICIAL CONTRATO',inicial=1 WHERE liquidacion_cesantias_id=$liquidacion_cesantias_id";
+                $this->query($update, $Conex, true);
             }
         }
         //REGISTRO INT CESANTIAS HISTORIAL
         if ($fecha_ult_intcesan != '') {
             $select = "SELECT liquidacion_int_cesantias_id	FROM liquidacion_int_cesantias	WHERE	contrato_id = $contrato_id AND inicial=1 AND estado='C'";
             $result = $this->DbFetchAll($select, $Conex, true);
+
+            $liquidacion_int_cesantias_id = $result[0]['liquidacion_int_cesantias_id'];
+
             if (count($result) == 0) {
 
                 $liquidacion_int_cesantias_id = $this->DbgetMaxConsecutive("liquidacion_int_cesantias", "liquidacion_int_cesantias_id", $Conex, true, 1);
                 $insert = "INSERT INTO liquidacion_int_cesantias (liquidacion_int_cesantias_id,fecha_liquidacion,fecha_corte,fecha_ultimo_corte,beneficiario, contrato_id, empleado_id,salario,fecha_inicio_contrato,estado,observaciones,inicial)
 									VALUES ($liquidacion_int_cesantias_id,'$fecha_ult_intcesan','$fecha_ult_intcesan','$fecha_ult_intcesan','2',$contrato_id,$empleado_id,$sueldo_base,$fecha_inicio,'C' ,'REGISTRO INICIAL CONTRATO',1)";
                 $this->query($insert, $Conex, true);
+            }else{
+                $update = "UPDATE liquidacion_int_cesantias SET fecha_liquidacion='$fecha_ult_cesantias',fecha_corte='$fecha_ult_cesantias',fecha_ultimo_corte='$fecha_ult_cesantias',beneficiario='2', contrato_id=$contrato_id, empleado_id=$empleado_id,salario=$sueldo_base,fecha_inicio_contrato=$fecha_inicio,estado='C',observaciones='REGISTRO INICIAL CONTRATO',inicial=1 WHERE liquidacion_int_cesantias_id=$liquidacion_int_cesantias_id";
+                $this->query($update, $Conex, true);
             }
         }
         //REGISTRO PRIMA HISTORIAL
