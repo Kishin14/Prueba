@@ -20,7 +20,7 @@ final class DetallesNovedadesFijasModel extends Db{
 				  
 				  CASE n.concepto_area_id WHEN '3' THEN 'BONIFICACION' WHEN '1' THEN 'DESCUENTO DE PAGO PRONTO' WHEN '4' THEN 'PRESTAMOS A EMPLEADOS' WHEN '2' THEN 'VIATICOS' END AS concepto_area_id
 				 
-				 From novedad_fija n";
+				 From novedad_fija n WHERE n.fecha_inicial >= DATE('$desde') AND n.fecha_final <= DATE('$hasta')";
 		//exit($select);
 		$results = $this -> DbFetchAll($select,$Conex);
 		$i=0;
