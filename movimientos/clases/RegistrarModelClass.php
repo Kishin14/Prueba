@@ -639,7 +639,7 @@ final class RegistrarModel extends Db{
 	
 	#Funcion para actualizar el estado a las novedades relacionadas con el contrato
 	
-	$this -> actualizarNovedad($Conex,$fecha_final,$contrato_id,'I');
+	$this -> actualizarNovedad($Conex,$fecha_final,$contrato_id,'P');
 
 	if($previsual == 'true'){
 	
@@ -684,7 +684,7 @@ final class RegistrarModel extends Db{
   
   public function actualizarNovedad($Conex,$fecha_final,$contrato_id,$estado){
 	  
-	$consul_estado = $estado == 'I' ? "AND n.estado='A'" : "AND n.estado='I'"; 
+	$consul_estado = $estado == 'P' ? "AND n.estado='A'" : "AND n.estado='P'"; 
 	  
 	require_once("DetalleNovedadModelClass.php");	    
 	
@@ -1408,7 +1408,7 @@ final class RegistrarModel extends Db{
 		
 		#Funcion para actualizar el estado a las novedades relacionadas con el contrato
 	
-		$this -> actualizarNovedad($Conex,$fecha_final,$contrato_id,'I');
+		$this -> actualizarNovedad($Conex,$fecha_final,$contrato_id,'P');
 		
 	}
 			

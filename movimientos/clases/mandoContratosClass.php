@@ -30,19 +30,22 @@ final class mandoContratos extends Controler
         $Attributes = array(
             id => 'numero_contrato',
             title => 'CONTRATOS ACTIVOS',
-            sortname => 'dias',
+            sortname => 'fecha_inicio',
+            sortorder => 'desc',
             width => 'auto',
             height => 'auto',
+            rowNum => 100,
+            align => 'center',
         );
         $Cols = array(
             array(name => 'numero_contrato', index => 'numero_contrato', sorttype => 'text', width => '60', align => 'left'),
             array(name => 'tipo_contrato', index => 'tipo_contrato', sorttype => 'text', width => '150', align => 'left'),
-            array(name => 'empleado', index => 'empleado', sorttype => 'text', width => '160', align => 'left'),
-            array(name => 'fecha_inicio', index => 'fecha_inicio', sorttype => 'text', width => '140', align => 'left'),
-            array(name => 'fecha_terminacion', index => 'fecha_terminacion', sorttype => 'text', width => '120', align => 'left'),
+            array(name => 'empleado', index => 'empleado', sorttype => 'text', width => '250', align => 'left'),
+            array(name => 'fecha_inicio', index => 'fecha_inicio', sorttype => 'text', width => '100', align => 'left'),
+            array(name => 'fecha_terminacion', index => 'fecha_terminacion', sorttype => 'text', width => '100', align => 'left'),
             array(name => 'cargo', index => 'cargo', sorttype => 'text', width => '120', align => 'left'),
             array(name => 'estado', index => 'estado', sorttype => 'text', width => '60', align => 'left'),
-            array(name => 'dias', index => 'dias', sorttype => 'text', width => '120', align => 'left'),
+            array(name => 'dias', index => 'dias', sorttype => 'text', width => '50', align => 'left'),
         );
 
         $Titles = array(

@@ -26,7 +26,7 @@ final class mandoContratosModel extends Db
 
         $Query = "SELECT c.numero_contrato,
                    (SELECT t.nombre FROM tipo_contrato t WHERE t.tipo_contrato_id=c.tipo_contrato_id) AS tipo_contrato,
-                   (SELECT CONCAT_WS('',t.primer_nombre,t.segundo_nombre,t.primer_apellido,t.segundo_apellido,t.razon_social)
+                   (SELECT CONCAT_WS(' ',t.primer_nombre,t.segundo_nombre,t.primer_apellido,t.segundo_apellido,t.razon_social)
                    FROM tercero t, empleado e WHERE t.tercero_id=e.tercero_id AND e.empleado_id=c.empleado_id)AS empleado,
                    DATE_FORMAT(c.fecha_inicio,'%m-%d-%Y') AS fecha_inicio,
                    DATE_FORMAT(c.fecha_terminacion,'%m-%d-%Y') AS fecha_terminacion,
