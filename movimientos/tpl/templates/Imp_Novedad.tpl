@@ -205,7 +205,7 @@
                         <td class="cellTotal" style="padding:5px;"><font size="2"><b>Beneficiario :</b> {$DATOS.tercero}</font></td>
                     </tr>
                     <tr>
-                        <td class="cellTotal" style="padding:5px;"><font size="2"><b>Fecha Inicial :</b> {$DATOS.fecha_final}</font></td>
+                        <td class="cellTotal" style="padding:5px;"><font size="2"><b>Fecha Inicial :</b> {$DATOS.fecha_inicial}</font></td>
                         <td class="cellTotal" style="padding:5px;"><font size="2"><b>Fecha Final :</b> {$DATOS.fecha_final}</font></td>
                     </tr>
                     <tr>
