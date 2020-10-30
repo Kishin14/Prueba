@@ -40,41 +40,14 @@ $(document).ready(function(){
 	}
   });
 
-   $("#concepto_area_id").change(function(){ 
+   $("#estado").change(function(){ 
 
-	  var QueryString = "ACTIONCONTROLER=setDataConcepto&concepto_area_id="+this.value;
-	  
-	  $.ajax({
-		url        : "NovedadClass.php?rand="+Math.random(),
-		data       : QueryString,
-		beforeSend : function(){
-		  
-		},
-		success    : function(response){
-		  
-		  try{
-	 
-			  var responseArray         = $.parseJSON(response); 
-			  var contabiliza           =responseArray['contabiliza'];
-			  var tipo_novedad           =responseArray['tipo_novedad'];
-			  if(contabiliza=='SI'){
-		  		  $("#documento_anexo,#tipo_documento_id").addClass("obligatorio");
-			  }else{
-		  		  $("#documento_anexo,#tipo_documento_id").removeClass("obligatorio");
-			  }
-			  
-			  $("#tipo_novedad").val(tipo_novedad);
-			  
-
-		  }catch(e){
-			 console.log("Error Try Catch : "+e);
-		   }
-		  
+		var estado = $('#estado').val();
+		if(estado == 'P'){
+			$('#estado').val('A');
+			alertJquery('No se puede cambiar a estado <strong>Procesado</strong> ya que este es automatico.','Atención')
 		}
-		
-	  });
-
-   });
+	});
 
   resetDetalle('detalleNovedad');
 

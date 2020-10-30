@@ -467,7 +467,7 @@ final class Novedad extends Controler{
 		id  =>'estado',
 		type =>'select',
 		Boostrap =>'si',
-		options => array(array(value=>'A',text=>'ACTIVO',selected=>'A'),array(value=>'I',text=>'INACTIVO')),
+		options => array(array(value=>'A',text=>'ACTIVO',selected=>'A'),array(value=>'I',text=>'INACTIVO'),array(value=>'P',text=>'PROCESADO')),
 		required=>'yes',
 		datatype=>array(
 			type =>'text',
