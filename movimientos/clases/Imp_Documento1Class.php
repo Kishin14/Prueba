@@ -151,7 +151,12 @@ final class Imp_Documento{
   	  $pdf->Cell(40,8,'Reviso','LRB',0,'C');		  	  
   	  $pdf->Cell(40,8,'Aprobo','LRB',0,'C');	
   	  $pdf->Cell(40,8,'C.C / NIT','LRB',0,'C');	
- 	  $pdf->Cell(40,8,'Huella','LRB',0,'C');		   	  	  	  
+	   $pdf->Cell(40,8,'Huella','LRB',0,'C');	
+	    /* Nueva linea para mostrar modulo de procedencia */
+
+		 $pdf->Ln(8);	
+		 $pdf->SetFont('Arial','I',8);	 	 	 	  
+		   $pdf->Cell(200,8,'Modulo de procedencia : NOMINA','',0,'C');	   	  	  	  
 	  
 	  $pdf->Output();	  
 	  
