@@ -159,8 +159,11 @@
         	<iframe name="EstudioEmpleado" id="EstudiosEmpleado" src="about:blank"></iframe>
 		</div>
     </fieldset>
+    
     {$FORM1END}
-    <fieldset>{$GRIDPARAMETROS}</fieldset>
+    
+    <br>
+        <button type="button" class="btn btn-warning btn-sm" id="mostrar_grid"  onclick="showTable()" style="float:right;">Mostrar tabla</button>
 
 </body>
 </html>

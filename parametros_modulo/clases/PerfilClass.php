@@ -78,6 +78,62 @@ final class Perfil extends Controler{
 		$Layout -> SetGridPerfil($Attributes,$Titles,$Cols,$Model -> GetQueryPerfilGrid());
 		$Layout -> RenderMain();
 	}
+	
+	protected function showGrid(){
+	  
+		require_once("PerfilLayoutClass.php");
+		require_once("PerfilModelClass.php");
+
+		$Layout   = new PerfilLayout($this -> getTitleTab(),$this -> getTitleForm());
+		$Model    = new PerfilModel();
+		  
+		 //// GRID ////
+		$Attributes = array(
+			id		=>'perfil',
+			title	=>'Listado de Perfiles',
+			sortname=>'experiencia',
+			width	=>'auto',
+			height	=>'250'
+		);
+
+		$Cols = array(
+			array(name=>'perfil_id',			index=>'perfil_id',			sorttype=>'text',	width=>'70',	align=>'center'),
+			array(name=>'cargo_id',				index=>'cargo_id',			sorttype=>'text',	width=>'200',	align=>'left'),
+			array(name=>'arl',					index=>'arl',				sorttype=>'text',	width=>'150',	align=>'center'),
+			array(name=>'nivel_escolaridad_id',	index=>'nivel_escolaridad_id',sorttype=>'text',	width=>'120',	align=>'left'),
+			array(name=>'experiencia',			index=>'experiencia',		sorttype=>'text',	width=>'80',	align=>'center'),
+			array(name=>'escala_salarial_id',	index=>'escala_salarial_id',sorttype=>'text',	width=>'130',	align=>'center'),
+			array(name=>'sexo',					index=>'sexo',				sorttype=>'text',	width=>'50',	align=>'center'),
+			array(name=>'minimo_edad',			index=>'minimo_edad',		sorttype=>'text',	width=>'80',	align=>'center'),
+			array(name=>'maximo_edad',			index=>'maximo_edad',		sorttype=>'text',	width=>'80',	align=>'center'),
+			array(name=>'rango_sal_minimo',		index=>'rango_sal_minimo',	sorttype=>'text',	width=>'80',	align=>'center'),
+			array(name=>'rango_sal_maximo',		index=>'rango_sal_maximo',	sorttype=>'text',	width=>'80',	align=>'center'),
+			array(name=>'estado_civil_id',		index=>'estado_civil_id',	sorttype=>'text',	width=>'100',	align=>'left'),
+			array(name=>'ocupacion_dane',		index=>'ocupacion_dane',	sorttype=>'text',	width=>'100',	align=>'left')			
+
+		);
+
+		$Titles = array(
+			'CODIGO',
+			'CARGO',
+			'CAT ARL',
+			'NIVEL ESCOLARIDAD',
+			'EXPERIENCIA',
+			'ESCALA SALARIAL',
+			'SEXO',
+			'EDAD MIN',
+			'EDAD MAX',
+			'RANGO SALARIO MIN',
+			'RANGO SALARIO MAX',
+			'ESTADO CIVIL',
+			'OCUPACION DANE'
+		);
+
+		$html = $Layout -> SetGridPerfil($Attributes,$Titles,$Cols,$Model -> GetQueryPerfilGrid());
+		 
+		 print $html;
+		  
+	  }
 
 	protected function onclickValidateRow(){
 		require_once("PerfilModelClass.php");

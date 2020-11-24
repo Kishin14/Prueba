@@ -116,9 +116,18 @@ final class NovedadLayout extends View{
       require_once("../../../framework/clases/grid/JqGridClass.php");
 	  $TableGrid = new JqGrid();
  	  $TableGrid -> SetJqGrid($Attributes,$Titles,$Cols,$Query);
-      $this -> assign("GRIDNOVEDAD",$TableGrid -> RenderJqGrid());
-      $this -> assign("TABLEGRIDCSS",$TableGrid -> GetJqGridCss());
-      $this -> assign("TABLEGRIDJS",$TableGrid -> GetJqGridJs());
+    
+     $head = "'<head>".
+	 
+     $TableGrid -> GetJqGridJs()." ".
+     
+     $TableGrid -> GetJqGridCss()."
+     
+     </head>";
+     
+     $body = "<body>".$TableGrid -> RenderJqGrid()."</body>";
+     
+     return "<html>".$head." ".$body."</html>";
     }   
    
         

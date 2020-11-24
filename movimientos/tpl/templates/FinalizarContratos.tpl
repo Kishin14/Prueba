@@ -3,14 +3,14 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <link rel="stylesheet" href="../../../framework/css/bootstrap1.css">
 {$JAVASCRIPT}
-{$TABLEGRIDJS}
+
 {$CSSSYSTEM}
-{$TABLEGRIDCSS}
+
 {$TITLETAB}  
 </head>
 <body>
     <fieldset>
-    <legend><img src="/colpinones/produccion/movimientos/media/images/MenuArbol/contrato.png" height="50"><p style="color: #FFF">FINALIZACI&Oacute;N DE CONTRATOS NO LABORALES</p></legend> 
+    <legend>{$TITLEFORM}</legend>
 
    <div id="table_find">
       <table align="center">
@@ -59,6 +59,6 @@
     </fieldset>         
     
     {$FORM1END}      
-    {$GRIDPARAMETROS}
+    <button type="button" class="btn btn-warning btn-sm" id="mostrar_grid"  onclick="showTable()" style="float:right;">Mostrar tabla</button>
 </body>
 </html>

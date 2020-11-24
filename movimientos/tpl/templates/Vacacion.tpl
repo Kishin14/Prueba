@@ -4,9 +4,9 @@
    <link rel="stylesheet" href="../../../framework/css/bootstrap1.css">
    <script src="../../../framework/js/moment.min.js"></script>
   {$JAVASCRIPT}
-  {$TABLEGRIDJS}
+ 
   {$CSSSYSTEM}
-  {$TABLEGRIDCSS}
+ 
   {$TITLETAB}  
   </head>
 
@@ -188,7 +188,7 @@
     </div>
     <!--FIN Cuadro de informacion-->
     
-    <fieldset>{$GRIDPARAMETROS}</fieldset>
+    <fieldset><button type="button" class="btn btn-warning btn-sm" id="mostrar_grid"  onclick="showTable()" style="float:right;">Mostrar tabla</button></fieldset>
 
      <div id="divAnulacion" style="display:none;">
       <form onSubmit="return false">

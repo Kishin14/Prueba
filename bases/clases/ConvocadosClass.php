@@ -71,6 +71,59 @@
 			$Layout -> SetGridConvocados($Attributes,$Titles,$Cols,$Model -> GetQueryConvocadosGrid());
 			$Layout -> RenderMain();
 		}
+		
+		protected function showGrid(){
+	  
+			require_once("ConvocadosLayoutClass.php");
+			require_once("ConvocadosModelClass.php");
+
+			$Layout   = new ConvocadosLayout($this -> getTitleTab(),$this -> getTitleForm());
+			$Model    = new ConvocadosModel();
+			  
+			//// GRID ////
+			$Attributes = array(
+				id		=>'convocado',
+				title	=>'Lista de Convocados',
+				sortname=>'numero_identificacion',
+				width	=>'auto',
+				height	=>'250'
+			);
+
+			$Cols = array(
+				array(name=>'convocado_id',				index=>'convocado_id',				sorttype=>'text',	width=>'100',	align=>'center'),
+				array(name=>'tipo_identificacion_id',	index=>'tipo_identificacion_id',	sorttype=>'text',	width=>'150',	align=>'center'),
+				array(name=>'numero_identificacion',	index=>'numero_identificacion',		sorttype=>'text',	width=>'150',	align=>'center'),
+				array(name=>'primer_nombre',			index=>'primer_nombre',				sorttype=>'text',	width=>'150',	align=>'center'),
+				array(name=>'segundo_nombre',			index=>'segundo_nombre',			sorttype=>'text',	width=>'150',	align=>'center'),
+				array(name=>'primer_apellido',			index=>'primer_apellido',			sorttype=>'text',	width=>'150',	align=>'center'),
+				array(name=>'segundo_apellido',			index=>'segundo_apellido',			sorttype=>'text',	width=>'150',	align=>'center'),
+				array(name=>'direccion',				index=>'direccion',					sorttype=>'text',	width=>'150',	align=>'center'),
+				array(name=>'telefono',					index=>'telefono',					sorttype=>'text',	width=>'150',	align=>'center'),
+				array(name=>'movil',					index=>'movil',						sorttype=>'text',	width=>'150',	align=>'center'),
+				array(name=>'ubicacion_id',				index=>'ubicacion_id',				sorttype=>'text',	width=>'150',	align=>'center'),
+				array(name=>'estado',					index=>'estado',					sorttype=>'text',	width=>'150',	align=>'center')
+			);
+
+			$Titles = array(
+				'CONVOCADOOO',
+				'TIPO IDENTIFICACION',
+				'IDENTIFICACION',
+				'PRIMER NOMBRE',
+				'SEGUNDO NOMBRE',
+				'PRIMER APELLIDO',
+				'SEGUNDO APELLIDO',
+				'DIRECCION',
+				'TELEFONO',
+				'MOVIL',
+				'UBICACION',
+				'ESTADO'
+			);
+
+			$html = $Layout -> SetGridConvocados($Attributes,$Titles,$Cols,$Model -> GetQueryConvocadosGrid());
+			 
+			 print $html;
+			  
+		  }
 
 		protected function onclickValidateRow(){
 			require_once("ConvocadosModelClass.php");

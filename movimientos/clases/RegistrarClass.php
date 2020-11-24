@@ -404,7 +404,19 @@ final class Registrar extends Controler
         $Layout->setCausalesAnulacion($Model->getCausalesAnulacion($this->getConex()));
         $Layout->SetCosto($Model->GetCosto($this->getConex()));
 
-        //// GRID ////
+        $Layout->RenderMain();
+
+    }
+    
+    protected function showGrid(){
+	  
+        require_once "RegistrarLayoutClass.php";
+        require_once "RegistrarModelClass.php";
+
+        $Layout = new RegistrarLayout($this->getTitleTab(), $this->getTitleForm());
+        $Model = new RegistrarModel();
+          
+          //// GRID ////
         $Attributes = array(
             id => 'Registrar',
             title => 'Registrar Novedades Nomima',
@@ -434,11 +446,11 @@ final class Registrar extends Controler
             'ESTADO',
         );
 
-        $Layout->SetGridRegistrar($Attributes, $Titles, $Cols, $Model->getQueryRegistrarGrid());
-
-        $Layout->RenderMain();
-
-    }
+        $html = $Layout->SetGridRegistrar($Attributes, $Titles, $Cols, $Model->getQueryRegistrarGrid());
+         
+         print $html;
+          
+      }
 
     protected function onclickValidateRow()
     {

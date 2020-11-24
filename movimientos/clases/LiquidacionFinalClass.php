@@ -38,8 +38,20 @@ final class LiquidacionFinal extends Controler
         $Layout->SetCausalDes($Model->GetCausalDes($this->getConex()));
         $Layout->setCausalesAnulacion($Model->getCausalesAnulacion($this->getConex()));
 
-        //// GRID ////
-        $Attributes = array(
+        $Layout->RenderMain();
+
+    }
+    
+    protected function showGrid(){
+	  
+        require_once "LiquidacionFinalLayoutClass.php";
+        require_once "LiquidacionFinalModelClass.php";
+
+        $Layout = new LiquidacionFinalLayout($this->getTitleTab(), $this->getTitleForm());
+        $Model = new LiquidacionFinalModel();
+          
+         //// GRID ////
+         $Attributes = array(
             id => 'liquidacion_definitiva',
             title => 'Listado de Liquidacion Nomina',
             sortname => 'liquidacion_definitiva_id',
@@ -64,11 +76,11 @@ final class LiquidacionFinal extends Controler
             'ESTADO',
         );
 
-        $Layout->SetGridLiquidacionFinal($Attributes, $Titles, $Cols, $Model->GetQueryLiquidacionFinalGrid());
-
-        $Layout->RenderMain();
-
-    }
+        $html = $Layout->SetGridLiquidacionFinal($Attributes, $Titles, $Cols, $Model->GetQueryLiquidacionFinalGrid());
+         
+         print $html;
+          
+      }
 
     protected function onclickValidateRow()
     {

@@ -27,8 +27,17 @@ final class Convocatoria extends Controler{
 		//LISTA MENU
 		$Layout -> Setcargo($Model -> Getcargo($this -> getConex()));
 		
+		$Layout -> RenderMain();
+	}
+	
+	protected function showGrid(){
+	  
+		require_once("ConvocatoriaLayoutClass.php");
+		require_once("ConvocatoriaModelClass.php");
 
-
+		$Layout   = new ConvocatoriaLayout($this -> getTitleTab(),$this -> getTitleForm());
+		$Model    = new ConvocatoriaModel();
+		  
 		//// GRID ////
 		$Attributes = array(
 			id		=>'convocatoria',
@@ -54,9 +63,11 @@ final class Convocatoria extends Controler{
 			'ESTADO'
 		);
 
-		$Layout -> SetGridConvocatoria($Attributes,$Titles,$Cols,$Model -> GetQueryConvocatoriaGrid());
-		$Layout -> RenderMain();
-	}
+		$html = $Layout -> SetGridConvocatoria($Attributes,$Titles,$Cols,$Model -> GetQueryConvocatoriaGrid());
+		 
+		 print $html;
+		  
+	  }
 
 	protected function onclickValidateRow(){
 		require_once("ConvocatoriaModelClass.php");

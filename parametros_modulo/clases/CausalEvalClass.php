@@ -56,6 +56,42 @@ final class CausalEval extends Controler{
 	$Layout -> RenderMain();
   
   }
+  
+  protected function showGrid(){
+	  
+	require_once("CausalEvalLayoutClass.php");
+	require_once("CausalEvalModelClass.php");
+	
+	$Layout   = new CausalEvalLayout($this -> getTitleTab(),$this -> getTitleForm());
+    $Model    = new CausalEvalModel();
+	  
+	 //// GRID ////
+	$Attributes = array(
+		id		=>'causal_desempeno',
+		title		=>'Listado de causas de desempeño',
+		sortname	=>'nombre',
+		width		=>'600',
+		height	=>'200'
+	  );
+  
+	  $Cols = array(
+		  array(name=>'causal_desempeno_id',		index=>'causal_desempeno_id',		sorttype=>'text',	width=>'50',	align=>'center'),
+		  array(name=>'nombre',		index=>'nombre',		sorttype=>'text',	width=>'300',	align=>'left'),
+		  array(name=>'nota',		    index=>'nota',		    sorttype=>'text',	width=>'200',	align=>'left'),
+			array(name=>'estado',		index=>'estado',		sorttype=>'text',	width=>'200',	align=>'center')
+	  );
+		
+	  $Titles = array('CODIGO',
+					  'NOMBRE',
+					  'ESTADO',
+					  'NOTA MINIMA',
+	  );
+	  
+	  $html = $Layout -> SetGridCausalEval($Attributes,$Titles,$Cols,$Model -> GetQueryCausalEvalGrid());
+	 
+	 print $html;
+	  
+  }
 
   protected function onclickValidateRow(){
 	require_once("CausalEvalModelClass.php");

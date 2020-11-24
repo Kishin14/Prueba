@@ -297,17 +297,17 @@ final class ProfesionesLayout extends View{
 
 
 
-      $this -> assign("GRIDPARAMETROS",$TableGrid -> RenderJqGrid());
-
-
-
-      $this -> assign("TABLEGRIDCSS",$TableGrid -> GetJqGridCss());
-
-
-
-      $this -> assign("TABLEGRIDJS",$TableGrid -> GetJqGridJs());
-
-
+     $head = "'<head>".
+	 
+     $TableGrid -> GetJqGridJs()." ".
+    
+     $TableGrid -> GetJqGridCss()."
+    
+     </head>";
+    
+     $body = "<body>".$TableGrid -> RenderJqGrid()."</body>";
+    
+     return "<html>".$head." ".$body."</html>";
 
     }
 

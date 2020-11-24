@@ -31,45 +31,56 @@ final class FinalizarContratos extends Controler{
 	$Layout ->  SetMotivoTer        ($Model -> GetMotivoTer($this -> getConex()));
 	$Layout ->  SetCausalDes	    ($Model -> GetCausalDes($this -> getConex()));
 	$Layout ->  setCausalesAnulacion($Model -> getCausalesAnulacion($this -> getConex()));	
-	
-
-	//// GRID ////
-	$Attributes = array(
-	  id		=>'contrato',
-	  title		=>'Listado de contratos finalizados no laborales',
-	  sortname	=>'numero_contrato',
-	  width		=>'auto',
-	  height	=>'200'
-	);
-
-	$Cols = array(
-		array(name=>'numero_contrato',		         index=>'liquidacion_definitiva_id',	sorttype=>'text',	width=>'100	',	align=>'center'),
-		array(name=>'fecha_inicio',		             index=>'fecha_inicio',	                sorttype=>'date',	width=>'130',	align=>'center'),
-		array(name=>'fecha_terminacion',		     index=>'fecha_terminacion',	        sorttype=>'date',	width=>'130',	align=>'center'),
-		array(name=>'fecha_terminacion_real',	     index=>'fecha_terminacion_real',		sorttype=>'date',	width=>'130',	align=>'center'),
-	  	array(name=>'empleado',						 index=>'empleado',		                sorttype=>'text',	width=>'220',	align=>'center'),
-	  	array(name=>'tipo_contrato_id',				 index=>'tipo_contrato_id',		        sorttype=>'text',	width=>'150',	align=>'center'),
-	  	array(name=>'cargo_id',					     index=>'cargo_id',		                sorttype=>'text',	width=>'150',	align=>'center'),
-	  	array(name=>'motivo_terminacion_id',		 index=>'motivo_terminacion_id',		sorttype=>'text',	width=>'150',	align=>'center'),
-	  	array(name=>'estado',					     index=>'estado',		                sorttype=>'text',	width=>'120',	align=>'center')
-	  
-	);
-	  
-    $Titles = array('No. CONTRATO',
-					'FECHA INICIO',
-    				'FECHA TERMINACION',
-					'FECHA TERMINACION REAL',
-    				'EMPLEADO',
-					'TIPO CONTRATO',
-					'CARGO',
-					'MOTIVO TERMINACION',
-					'ESTADO'
-	                );
-	
-	$Layout -> SetGridFinalizarContratos($Attributes,$Titles,$Cols,$Model -> GetQueryFinalizarContratosGrid());
 
 	$Layout -> RenderMain();
   
+  }
+  
+  protected function showGrid(){
+	  
+	require_once("FinalizarContratosLayoutClass.php");
+	require_once("FinalizarContratosModelClass.php");
+	
+	$Layout   = new FinalizarContratosLayout($this -> getTitleTab(),$this -> getTitleForm());
+    $Model    = new FinalizarContratosModel();
+	  
+	 //// GRID ////
+	$Attributes = array(
+		id		=>'contrato',
+		title		=>'Listado de contratos finalizados no laborales',
+		sortname	=>'numero_contrato',
+		width		=>'auto',
+		height	=>'200'
+	  );
+  
+	  $Cols = array(
+		  array(name=>'numero_contrato',		         index=>'liquidacion_definitiva_id',	sorttype=>'text',	width=>'100	',	align=>'center'),
+		  array(name=>'fecha_inicio',		             index=>'fecha_inicio',	                sorttype=>'date',	width=>'130',	align=>'center'),
+		  array(name=>'fecha_terminacion',		     index=>'fecha_terminacion',	        sorttype=>'date',	width=>'130',	align=>'center'),
+		  array(name=>'fecha_terminacion_real',	     index=>'fecha_terminacion_real',		sorttype=>'date',	width=>'130',	align=>'center'),
+			array(name=>'empleado',						 index=>'empleado',		                sorttype=>'text',	width=>'220',	align=>'center'),
+			array(name=>'tipo_contrato_id',				 index=>'tipo_contrato_id',		        sorttype=>'text',	width=>'150',	align=>'center'),
+			array(name=>'cargo_id',					     index=>'cargo_id',		                sorttype=>'text',	width=>'150',	align=>'center'),
+			array(name=>'motivo_terminacion_id',		 index=>'motivo_terminacion_id',		sorttype=>'text',	width=>'150',	align=>'center'),
+			array(name=>'estado',					     index=>'estado',		                sorttype=>'text',	width=>'120',	align=>'center')
+		
+	  );
+		
+	  $Titles = array('No. CONTRATO',
+					  'FECHA INICIO',
+					  'FECHA TERMINACION',
+					  'FECHA TERMINACION REAL',
+					  'EMPLEADO',
+					  'TIPO CONTRATO',
+					  'CARGO',
+					  'MOTIVO TERMINACION',
+					  'ESTADO'
+					  );
+	  
+	 $html =  $Layout -> SetGridFinalizarContratos($Attributes,$Titles,$Cols,$Model -> GetQueryFinalizarContratosGrid());
+	 
+	 print $html;
+	  
   }
 
   protected function onclickValidateRow(){

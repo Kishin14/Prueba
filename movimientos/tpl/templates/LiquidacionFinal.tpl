@@ -3,9 +3,9 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <link rel="stylesheet" href="../../../framework/css/bootstrap1.css">
 {$JAVASCRIPT}
-{$TABLEGRIDJS}
+
 {$CSSSYSTEM}
-{$TABLEGRIDCSS}
+
 {$TITLETAB}  
 </head>
 <body>
@@ -79,7 +79,7 @@
 	</fieldset>
     
     {$FORM1END}  
-    <fieldset>{$GRIDPARAMETROS}</fieldset>
+    <fieldset><button type="button" class="btn btn-warning btn-sm" id="mostrar_grid"  onclick="showTable()" style="float:right;">Mostrar tabla</button></fieldset>
     <div id="divAnulacion" style="display:none;">
       <form onSubmit="return false">
         <table>              

@@ -42,42 +42,55 @@ final class Prima extends Controler{
 
 		}
 
-	//// GRID ////
-	$Attributes = array(
-	  id		=>'liquidacion_prima_id',
-	  title		=>'Listado de Liquidaciones Primas',
-	  sortname	=>'fecha_liquidacion',
-	  width		=>'1150',
-	  height	=>'200'
-	);
-
-	$Cols = array(
-		array(name=>'liquidacion_prima_id',		index=>'liquidacion_prima_id',	sorttype=>'text',	width=>'50',	align=>'center'),
-		array(name=>'contrato_id',				index=>'contrato_id',			sorttype=>'text',	width=>'190',	align=>'left'),
-	  	array(name=>'encabezado_registro_id',	index=>'encabezado_registro_id',sorttype=>'text',	width=>'100',	align=>'center'),
-	  	array(name=>'fecha_liquidacion',		index=>'fecha_liquidacion',		sorttype=>'text',	width=>'115',	align=>'center'),
-	  	array(name=>'periodo',					index=>'periodo',				sorttype=>'text',	width=>'100',	align=>'center'),
-	  	array(name=>'total',					index=>'total',					sorttype=>'text',	width=>'120',	align=>'center'),
-	  	array(name=>'tipo_liquidacion',			index=>'tipo_liquidacion',		sorttype=>'text',	width=>'120',	align=>'center'),
-	  	array(name=>'observaciones',			index=>'observaciones',			sorttype=>'text',	width=>'340',	align=>'center'),
-	  	array(name=>'estado',					index=>'estado',				sorttype=>'text',	width=>'80',	align=>'center')
-	);
-	  
-    $Titles = array('No.',
-    				'EMPLEADO',
-    				'<span style="font-size: 10px">DOC. CONTABLE</span>',
-    				'<span style="font-size: 10px">FECHA LIQUIDACION</span>',
-    				'PERIODO CONT.',
-					'TOTAL',
-					'TIPO LIQUIDACION',
-					'OBSERVACIONES',
-					'ESTADO'
-	);
-	
-	$Layout -> SetGridPrima($Attributes,$Titles,$Cols,$Model -> GetQueryPrimaGrid());
-
 	$Layout -> RenderMain();
   
+  }
+  
+  
+  protected function showGrid(){
+	  
+	require_once("PrimaLayoutClass.php");
+	require_once("PrimaModelClass.php");
+	
+	$Layout   = new PrimaLayout($this -> getTitleTab(),$this -> getTitleForm());
+    $Model    = new PrimaModel();
+	  
+	//// GRID ////
+	$Attributes = array(
+		id		=>'liquidacion_prima_id',
+		title		=>'Listado de Liquidaciones Primas',
+		sortname	=>'fecha_liquidacion',
+		width		=>'1150',
+		height	=>'200'
+	  );
+  
+	  $Cols = array(
+		  array(name=>'liquidacion_prima_id',		index=>'liquidacion_prima_id',	sorttype=>'text',	width=>'50',	align=>'center'),
+		  array(name=>'contrato_id',				index=>'contrato_id',			sorttype=>'text',	width=>'190',	align=>'left'),
+			array(name=>'encabezado_registro_id',	index=>'encabezado_registro_id',sorttype=>'text',	width=>'100',	align=>'center'),
+			array(name=>'fecha_liquidacion',		index=>'fecha_liquidacion',		sorttype=>'text',	width=>'115',	align=>'center'),
+			array(name=>'periodo',					index=>'periodo',				sorttype=>'text',	width=>'100',	align=>'center'),
+			array(name=>'total',					index=>'total',					sorttype=>'text',	width=>'120',	align=>'center'),
+			array(name=>'tipo_liquidacion',			index=>'tipo_liquidacion',		sorttype=>'text',	width=>'120',	align=>'center'),
+			array(name=>'observaciones',			index=>'observaciones',			sorttype=>'text',	width=>'340',	align=>'center'),
+			array(name=>'estado',					index=>'estado',				sorttype=>'text',	width=>'80',	align=>'center')
+	  );
+		
+	  $Titles = array('No.',
+					  'EMPLEADO',
+					  '<span style="font-size: 10px">DOC. CONTABLE</span>',
+					  '<span style="font-size: 10px">FECHA LIQUIDACION</span>',
+					  'PERIODO CONT.',
+					  'TOTAL',
+					  'TIPO LIQUIDACION',
+					  'OBSERVACIONES',
+					  'ESTADO'
+	  );
+	  
+	 $html = $Layout -> SetGridPrima($Attributes,$Titles,$Cols,$Model -> GetQueryPrimaGrid());
+	 
+	 print $html;
+	  
   }
 
   protected function onclickValidateRow(){

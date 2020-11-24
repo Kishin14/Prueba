@@ -70,10 +70,11 @@
         	<tr>
        			<td colspan="4" align="center">{$GUARDAR}&nbsp;{$ACTUALIZAR}&nbsp;{$IMPRIMIR}&nbsp;{$LIMPIAR}</td>
         	</tr>
-        </table>		 
+        </table>
+        <button type="button" class="btn btn-warning btn-sm" id="mostrar_grid"  onclick="showTable()" style="float:right;">Mostrar tabla</button>		 
     </fieldset>
     {$FORM1END}
-    <fieldset>{$GRIDNOVEDAD}</fieldset>
+   
 
 </body>
 </html>
