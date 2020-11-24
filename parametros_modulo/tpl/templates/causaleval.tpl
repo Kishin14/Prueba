@@ -48,9 +48,11 @@
                 <td colspan="2" align="center">{$GUARDAR}&nbsp;{$ACTUALIZAR}&nbsp;{$BORRAR}&nbsp;{$LIMPIAR}</td>
             </tr>
         </table>
+        <button type="button" class="btn btn-warning btn-sm" id="mostrar_grid"  onclick="showTable()" style="float:right;">Mostrar tabla</button>
+        
     {$FORM1END}
     </fieldset>
-    <fieldset>{$GRIDPARAMETROS}</fieldset>
+   
 
 </body>
 </html>

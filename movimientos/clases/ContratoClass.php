@@ -37,7 +37,18 @@ final class Contrato extends Controler
 
         $Layout->SetTiposCuenta($Model->GetTipoCuenta($this->getConex()));
 
-        //// GRID ////
+        $Layout->RenderMain();
+    }
+    
+    protected function showGrid(){
+	  
+        require_once "ContratoLayoutClass.php";
+        require_once "ContratoModelClass.php";
+
+        $Layout = new ContratoLayout($this->getTitleTab(), $this->getTitleForm());
+        $Model = new ContratoModel();
+          
+           //// GRID ////
         $Attributes = array(
             id => 'contrato',
             title => 'Lista de Contratos',
@@ -97,9 +108,11 @@ final class Contrato extends Controler
             'CARNE',
         );
 
-        $Layout->SetGridContrato($Attributes, $Titles, $Cols, $Model->GetQueryContratoGrid());
-        $Layout->RenderMain();
-    }
+        $html = $Layout->SetGridContrato($Attributes, $Titles, $Cols, $Model->GetQueryContratoGrid()); 
+         
+         print $html;
+          
+      }
 
     protected function onclickValidateRow()
     {

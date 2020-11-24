@@ -88,6 +88,64 @@ final class Novedad extends Controler{
 	$Layout -> RenderMain();
 
   }
+  
+  protected function showGrid(){
+	  
+	require_once("NovedadLayoutClass.php");
+	require_once("NovedadModelClass.php");
+
+	$Layout              = new NovedadLayout($this -> getTitleTab(),$this -> getTitleForm());
+    $Model               = new NovedadModel();	
+	  
+	 //// GRID ////
+	$Attributes = array(
+		id		=>'novedad',
+		title		=>'Listado de Tipos de Novedades',
+		sortname	=>'novedad_fija_id',
+		width		=>'auto',
+		height	=>'200'
+	  );
+  
+	  $Cols = array(
+		  array(name=>'novedad_fija_id',		index=>'novedad_fija_id',	sorttype=>'text',	width=>'60',	align=>'center'),
+		  array(name=>'fecha_novedad',		index=>'fecha_novedad',		sorttype=>'text',	width=>'110',	align=>'center'),
+			array(name=>'contrato',				index=>'contrato',			sorttype=>'text',	width=>'120',	align=>'center'),		
+		  array(name=>'tipo_novedad',			index=>'tipo_novedad',		sorttype=>'text',	width=>'150',	align=>'center'),
+		  array(name=>'naturaleza',			index=>'naturaleza',		sorttype=>'text',	width=>'100',	align=>'center'),		
+		  array(name=>'concepto',				index=>'concepto',			sorttype=>'text',	width=>'180',	align=>'center'),
+			array(name=>'fecha_inicial',		index=>'fecha_inicial',		sorttype=>'text',	width=>'100',	align=>'center'),
+			array(name=>'fecha_final',			index=>'fecha_final',		sorttype=>'text',	width=>'100',	align=>'center'),
+			array(name=>'valor',				index=>'valor',				sorttype=>'text',	width=>'80',	align=>'right',  format => 'currency'),
+			array(name=>'cuotas',				index=>'cuotas',			sorttype=>'text',	width=>'80',	align=>'center'),
+			array(name=>'valor_cuota',			index=>'valor_cuota',		sorttype=>'text',	width=>'90',	align=>'right',  format => 'currency'),		
+			array(name=>'periodicidad',			index=>'periodicidad',		sorttype=>'text',	width=>'120',	align=>'center'),
+			array(name=>'beneficiario',			index=>'beneficiario',		sorttype=>'text',	width=>'150',	align=>'center'),
+		  array(name=>'doc_contable',			index=>'doc_contable',		sorttype=>'text',	width=>'100',	align=>'center'),
+			array(name=>'estado',				index=>'estado',			sorttype=>'text',	width=>'120',	align=>'center')
+	  );
+		
+	  $Titles = array('CODIGO',
+					  'FECHA NOVEDAD',
+					  'CONTRATO',					
+					  'TIPO NOVEDAD',
+					  'NATURALEZA',
+					  'CONCEPTO',
+					  'FECHA INICIAL',
+					  'FECHA FINAL',
+					  'VALOR',
+					  'CUOTAS',
+					  'VALOR CUOTA',					
+					  'PERIODICIDAD',
+					  'BENEFICIARIO',
+					  'DOC CONTABLE',
+					  'ESTADO'
+	  );
+	  
+	 $html =  $Layout -> SetGridNovedad($Attributes,$Titles,$Cols,$Model -> GetQueryNovedadGrid());
+	 
+	 print $html;
+	  
+  }
 
 	protected function validarFechas(){
 

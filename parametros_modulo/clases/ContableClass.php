@@ -26,9 +26,19 @@ final class Contable extends Controler{
 		$Layout -> SetCampos($this -> Campos);
 
 		//LISTA MENU
-		
+	
+		$Layout -> RenderMain();
+	}
+	
+	
+	protected function showGrid(){
+	  
+		require_once("ContableLayoutClass.php");
+		require_once("ContableModelClass.php");
 
-
+		$Layout   = new ContableLayout($this -> getTitleTab(),$this -> getTitleForm());
+		$Model    = new ContableModel();
+		  
 		//// GRID ////
 		$Attributes = array(
 			id		=>'concepto_area',
@@ -68,9 +78,11 @@ final class Contable extends Controler{
 			'ESTADO'
 		);
 
-		$Layout -> SetGridContable($Attributes,$Titles,$Cols,$Model -> GetQueryContableGrid());
-		$Layout -> RenderMain();
-	}
+		$html = $Layout -> SetGridContable($Attributes,$Titles,$Cols,$Model -> GetQueryContableGrid());
+		 
+		 print $html;
+		  
+	  }
 
 	protected function onclickValidateRow(){
 		require_once("ContableModelClass.php");

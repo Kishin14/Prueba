@@ -56,6 +56,38 @@ final class Parametros_documento extends Controler{
 	$Layout -> RenderMain();
 
   }
+  
+  protected function showGrid(){
+	  
+	require_once("Parametros_documentoLayoutClass.php");
+	require_once("Parametros_documentoModelClass.php");
+	
+	$Layout   = new Parametros_documentoLayout($this -> getTitleTab(),$this -> getTitleForm());
+    $Model    = new Parametros_documentoModel();
+	  
+	 //// GRID ////
+	$Attributes = array(
+		id		=>'tipo_documento_laboral_id',
+		title		=>'Listado Documentos',
+		sortname	=>'nombre_documento',
+		width		=>'600',
+		height	=>'200'
+	  );
+  
+	  $Cols = array(
+		  array(name=>'tipo_documento_laboral_id',		index=>'tipo_documento_laboral_id',		sorttype=>'text',	width=>'50',	align=>'center'),
+		  array(name=>'nombre_documento',		index=>'nombre_documento',		sorttype=>'text',	width=>'300',	align=>'left')
+	  );
+		
+	  $Titles = array('CODIGO',
+					  'NOMBRE DOCUMENTO'
+	  );
+	  
+	 $html = $Layout -> SetGridParametroDocumento($Attributes,$Titles,$Cols,$Model -> GetQueryParametroDocumento());
+	 
+	 print $html;
+	  
+  }
 
   protected function onclickValidateRow(){	
   

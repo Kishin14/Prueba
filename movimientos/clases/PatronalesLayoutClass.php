@@ -110,9 +110,18 @@ final class PatronalesLayout extends View{
 
      $TableGrid = new JqGrid();
      $TableGrid -> SetJqGrid($Attributes,$Titles,$Cols,$Query,$SubAttributes,$SubTitles,$SubCols,$SubQuery);
-     $this -> assign("GRIDLIQ_NOVEDAD",$TableGrid -> RenderJqGrid());
-     $this -> assign("TABLEGRIDCSS",$TableGrid -> GetJqGridCss());
-     $this -> assign("TABLEGRIDJS",$TableGrid -> GetJqGridJs());
+     
+     $head = "'<head>".
+	 
+     $TableGrid -> GetJqGridJs()." ".
+     
+     $TableGrid -> GetJqGridCss()."
+     
+     </head>";
+     
+     $body = "<body>".$TableGrid -> RenderJqGrid()."</body>";
+     
+     return "<html>".$head." ".$body."</html>";
 
    }
 

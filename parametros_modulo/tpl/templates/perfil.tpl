@@ -3,9 +3,9 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <link rel="stylesheet" href="../../../framework/css/bootstrap1.css">
     {$JAVASCRIPT}
-    {$TABLEGRIDJS}
+   
     {$CSSSYSTEM}
-    {$TABLEGRIDCSS}
+   
     {$TITLETAB}  
 </head>
 
@@ -107,6 +107,8 @@
     	<div>
         	<iframe name="ProfesionPerfil" id="ProfesionPerfil" src="about:blank"></iframe>
 		</div>
+        <br><br>
+        <button type="button" class="btn btn-warning btn-sm" id="mostrar_grid"  onclick="showTable()" style="float:right;">Mostrar tabla</button>
     {$FORM1END}
     </fieldset>
 
@@ -124,7 +126,7 @@
     </div>
     <!--FIN Cuadro de informacion-->
     
-    <fieldset>{$GRIDPARAMETROS}</fieldset>
+  
 
 </body>
 </html>

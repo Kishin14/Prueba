@@ -28,7 +28,18 @@ final class EmpPrestacion extends Controler{
 		$Layout -> SetRegimen($Model -> GetRegimen($this -> getConex()));
 		$Layout -> SetIdentificacion($Model -> GetIdentificacion($this -> getConex()));
 
-		//// GRID ////
+		$Layout -> RenderMain();
+	}
+	
+	protected function showGrid(){
+	  
+		require_once("EmpPrestacionLayoutClass.php");
+		require_once("EmpPrestacionModelClass.php");
+
+		$Layout   = new EmpPrestacionLayout($this -> getTitleTab(),$this -> getTitleForm());
+		$Model    = new EmpPrestacionModel();
+		  
+		  //// GRID ////
 		$Attributes = array(
 			id		=>'empresa_prestaciones',
 			title	=>'Listado de Prestaciones sociales',
@@ -86,9 +97,12 @@ final class EmpPrestacion extends Controler{
 			'TIPO IDENTIFICACION',
 			'REGIMEN'
 		);
-		$Layout -> SetGridEmpPrestacion($Attributes,$Titles,$Cols,$Model -> GetQueryEmpPrestacionGrid());
-		$Layout -> RenderMain();
-	}
+		
+		$html = $Layout -> SetGridEmpPrestacion($Attributes,$Titles,$Cols,$Model -> GetQueryEmpPrestacionGrid());
+		 
+		 print $html;
+		  
+	  }
 
 	protected function onclickValidateRow(){
 		require_once("EmpPrestacionModelClass.php");

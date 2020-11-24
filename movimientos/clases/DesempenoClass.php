@@ -28,8 +28,18 @@
 			/*$Layout -> SetTip($Model -> GetTip($this -> getConex()));*/
 			$Layout -> SetCausal($Model -> GetCausal($this -> getConex()));
 
+			$Layout -> RenderMain();
+		}
+		
+		protected function showGrid(){
+	  
+			require_once("DesempenoLayoutClass.php");
+			require_once("DesempenoModelClass.php");
 
-			//// GRID ////
+			$Layout   = new DesempenoLayout($this -> getTitleTab(),$this -> getTitleForm());
+			$Model    = new DesempenoModel();
+			  
+			 //// GRID ////
 			$Attributes = array(
 				id		=>'desempeno',
 				title	=>'Listado calificacion desempeño',
@@ -56,9 +66,11 @@
 		
 			);
 
-			$Layout -> SetGridDesempeno($Attributes,$Titles,$Cols,$Model -> GetQueryDesempenoGrid());
-			$Layout -> RenderMain();
-		}
+			$html = $Layout -> SetGridDesempeno($Attributes,$Titles,$Cols,$Model -> GetQueryDesempenoGrid()); 
+			 
+			 print $html;
+			  
+		  }
 
 	  protected function onclickValidateRow(){
 	

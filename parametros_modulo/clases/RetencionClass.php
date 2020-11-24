@@ -29,8 +29,18 @@
 			//LISTA MENU
 			$Layout -> SetPeriodo($Model -> GetPeriodo($this -> getConex()));
 
+			$Layout -> RenderMain();
+		}
+		
+		protected function showGrid(){
+	  
+			require_once("RetencionLayoutClass.php");
+			require_once("RetencionModelClass.php");
 
-			//// GRID ////
+			$Layout   = new RetencionLayout($this -> getTitleTab(),$this -> getTitleForm());
+			$Model    = new RetencionModel();
+			  
+			 //// GRID ////
 			$Attributes = array(
 				id		=>'retencion_salarial',
 				title	=>'Listado de Retencion',
@@ -55,9 +65,11 @@
 				'PERIODO CONTABLE'
 			);
 
-			$Layout -> SetGridRetencion($Attributes,$Titles,$Cols,$Model -> GetQueryRetencionGrid());
-			$Layout -> RenderMain();
-		}
+			$html = $Layout -> SetGridRetencion($Attributes,$Titles,$Cols,$Model -> GetQueryRetencionGrid());
+			 
+			 print $html;
+			  
+		  }
 
 		protected function onclickValidateRow(){
 			require_once("RetencionModelClass.php");

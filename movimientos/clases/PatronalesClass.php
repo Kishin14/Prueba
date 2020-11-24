@@ -265,7 +265,19 @@ final class Patronales extends Controler
         //LISTA MENU
         $Layout->setCausalesAnulacion($Model->getCausalesAnulacion($this->getConex()));
 
-        //// GRID ////
+        $Layout->RenderMain();
+        
+    }
+    
+    protected function showGrid(){
+	  
+        require_once "PatronalesLayoutClass.php";
+        require_once "PatronalesModelClass.php";
+
+        $Layout = new PatronalesLayout($this->getTitleTab(), $this->getTitleForm());
+        $Model = new PatronalesModel();
+          
+          //// GRID ////
         $Attributes = array(
             id => 'Patronales',
             title => 'Liquidacion Patronales',
@@ -291,9 +303,11 @@ final class Patronales extends Controler
             'ESTADO',
         );
 
-        $Layout->SetGridPatronales($Attributes, $Titles, $Cols, $Model->getQueryPatronalesGrid());
-        $Layout->RenderMain();
-    }
+        $html = $Layout->SetGridPatronales($Attributes, $Titles, $Cols, $Model->getQueryPatronalesGrid());
+         
+         print $html;
+          
+      }
 
     protected function onclickValidateRow()
     {

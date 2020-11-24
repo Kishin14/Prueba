@@ -30,8 +30,19 @@
 			$Layout -> SetPeriodo($Model -> GetPeriodo($this -> getConex()));
 			$Layout -> SetImpuesto($Model -> GetImpuesto($this -> getConex()));
 
+			$Layout -> RenderMain();
+		}
+		
+		
+		protected function showGrid(){
+	  
+			require_once("UVTLayoutClass.php");
+			require_once("UVTModelClass.php");
 
-			//// GRID ////
+			$Layout   = new UVTLayout($this -> getTitleTab(),$this -> getTitleForm());
+			$Model    = new UVTModel();
+			  
+			 //// GRID ////
 			$Attributes = array(
 				id		=>'uvt',
 				title	=>'Listado de uvt',
@@ -56,9 +67,11 @@
 				'IMPUESTO'
 			);
 
-			$Layout -> SetGridUVT($Attributes,$Titles,$Cols,$Model -> GetQueryUVTGrid());
-			$Layout -> RenderMain();
-		}
+			$html = $Layout -> SetGridUVT($Attributes,$Titles,$Cols,$Model -> GetQueryUVTGrid());
+			 
+			 print $html;
+			  
+		  }
 
 		protected function onclickValidateRow(){
 			require_once("UVTModelClass.php");

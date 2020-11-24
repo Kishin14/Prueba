@@ -30,6 +30,17 @@ final class Bases extends Controler{
 		$Layout -> SetPeriodoContableNuevo($Model -> GetPeriodoContableNuevo($this -> getConex()));
 		$Layout -> SetTiposDocumentoContable($Model -> getTiposDocumentoContable($this -> getConex()));
 
+		$Layout -> RenderMain();
+	}
+	
+	protected function showGrid(){
+	  
+		require_once("BasesLayoutClass.php");
+		require_once("BasesModelClass.php");
+
+		$Layout   = new BasesLayout($this -> getTitleTab(),$this -> getTitleForm());
+		$Model    = new BasesModel();
+		  
 		//// GRID ////
 
 		$Attributes = array(
@@ -247,9 +258,11 @@ final class Bases extends Controler{
 
 		);
 
-		$Layout -> SetGridBases($Attributes,$Titles,$Cols,$Model -> GetQueryBasesGrid());
-		$Layout -> RenderMain();
-	}
+		$html = $Layout -> SetGridBases($Attributes,$Titles,$Cols,$Model -> GetQueryBasesGrid());
+		 
+		 print $html;
+		  
+	  }
 
 	protected function onclickValidateRow(){
 		require_once("BasesModelClass.php");

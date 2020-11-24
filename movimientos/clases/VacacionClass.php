@@ -86,6 +86,60 @@ final class Vacacion extends Controler{
 	$Layout -> RenderMain();
   
   }
+  
+  protected function showGrid(){
+	  
+	require_once("VacacionLayoutClass.php");
+	require_once("VacacionModelClass.php");
+	
+	$Layout   = new VacacionLayout($this -> getTitleTab(),$this -> getTitleForm());
+    $Model    = new VacacionModel();
+	  
+	 //// GRID ////
+	$Attributes = array(
+		id		=>'liquidacion_vacaciones_id',
+		title		=>'Listado de Liquidaciones Vacaciones',
+		sortname	=>'fecha_liquidacion',
+		width		=>'1150',
+		height	=>'200'
+	  );
+  
+	  $Cols = array(
+		  array(name=>'liquidacion_vacaciones_id',index=>'liquidacion_vacaciones_id',	sorttype=>'text',	width=>'50',	align=>'center'),
+		  array(name=>'contrato_id',				index=>'contrato_id',				sorttype=>'text',	width=>'200',	align=>'left'),
+			array(name=>'encabezado_registro_id',	index=>'encabezado_registro_id',	sorttype=>'text',	width=>'100',	align=>'center'),
+			array(name=>'fecha_liquidacion',		index=>'fecha_liquidacion',			sorttype=>'text',	width=>'90',	align=>'center'),
+			array(name=>'fecha_dis_inicio',			index=>'fecha_dis_inicio',			sorttype=>'text',	width=>'90',	align=>'center'),
+			array(name=>'fecha_dis_final',			index=>'fecha_dis_final',			sorttype=>'text',	width=>'90',	align=>'center'),
+			array(name=>'fecha_reintegro',			index=>'fecha_reintegro',			sorttype=>'text',	width=>'90',	align=>'center'),
+			array(name=>'dias',						index=>'dias',						sorttype=>'text',	width=>'50',	align=>'center'),
+			array(name=>'valor',					index=>'valor',						sorttype=>'text',	width=>'80',	align=>'center'),
+			array(name=>'concepto',					index=>'concepto',					sorttype=>'text',	width=>'360',	align=>'left'),
+			array(name=>'observaciones',			index=>'observaciones',				sorttype=>'text',	width=>'140',	align=>'left'),
+			array(name=>'estado',					index=>'estado',					sorttype=>'text',	width=>'80',	align=>'center')
+	  );
+		
+	  $Titles = array('No.',
+					  'EMPLEADO',
+					  '<span style="font-size: 10px">DOC. CONTABLE</span>',
+					  '<span style="font-size: 10px">FECHA LIQUIDACION</span>',
+					  '<span style="font-size: 10px">FECHA INICIO</span>',
+					  '<span style="font-size: 10px">FECHA FINAL</span>',
+					  '<span style="font-size: 10px">FECHA REINTEGRO</span>',
+					  'DIAS',
+					  'VALOR',
+					  'CONCEPTO',
+					  'OBSERVACIONES',
+					  'ESTADO'
+	  );
+	  
+	  
+	  
+	  $html = $Layout -> SetGridVacacion($Attributes,$Titles,$Cols,$Model -> GetQueryVacacionGrid());
+	 
+	 print $html;
+	  
+  }
 
   protected function onclickValidateRow(){
 	require_once("VacacionModelClass.php");

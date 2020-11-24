@@ -3,9 +3,9 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <link rel="stylesheet" href="../../../framework/css/bootstrap1.css">
     {$JAVASCRIPT}
-    {$TABLEGRIDJS}
+    
     {$CSSSYSTEM}
-    {$TABLEGRIDCSS}
+   
     {$TITLETAB}  
 </head>
 
@@ -326,10 +326,11 @@
             <td  align="center">{$GUARDAR}&nbsp;{$ACTUALIZAR}&nbsp;{$BORRAR}&nbsp;{$DUPLICAR}&nbsp;{$LIMPIAR}</td>
         </tr>
     </table>
+    <button type="button" class="btn btn-warning btn-sm" id="mostrar_grid"  onclick="showTable()" style="float:right;">Mostrar tabla</button>
     {$FORM1END}
     </fieldset>
-    <fieldset>{$GRIDPARAMETROS}</fieldset>
-    <div id="divAnulacion">
+   
+    <div id="divAnulacion" style="display:none">
       <form>
         <table>       
           <tr>

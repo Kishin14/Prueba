@@ -4,9 +4,9 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <link rel="stylesheet" href="../../../framework/css/bootstrap1.css">
     {$JAVASCRIPT}
-    {$TABLEGRIDJS}
+   
     {$CSSSYSTEM}
-    {$TABLEGRIDCSS}
+    
     {$TITLETAB}  
 </head>
 
@@ -70,7 +70,8 @@
             </tr>
         </table>
     {$FORM1END}
+    <button type="button" class="btn btn-warning btn-sm" id="mostrar_grid"  onclick="showTable()" style="float:right;">Mostrar tabla</button>
     </fieldset>
-    <fieldset>{$GRIDPARAMETROS}</fieldset>
+   
 </body>
 </html>

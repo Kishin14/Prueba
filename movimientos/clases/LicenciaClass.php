@@ -36,43 +36,55 @@ final class Licencia extends Controler{
 		$Layout -> setLicenciaFrame($licencia_id);
 
 	}
-
-
-	//// GRID ////
-	$Attributes = array(
-	  id		=>'licencia',
-	  title		=>'Listado de Licencias',
-	  sortname	=>'licencia_id',
-	  width		=>'auto',
-	  height	=>'200'
-	);
-
-	$Cols = array(
-		array(name=>'licencia_id',			index=>'licencia_id',		sorttype=>'text',	width=>'60',	align=>'center'),
-		array(name=>'fecha_licencia',		index=>'fecha_licencia',	sorttype=>'text',	width=>'110',	align=>'center'),
-	  	array(name=>'contrato',				index=>'contrato',			sorttype=>'text',	width=>'120',	align=>'center'),		
-		array(name=>'concepto',				index=>'concepto',			sorttype=>'text',	width=>'180',	align=>'center'),
-		array(name=>'enfermedad',			index=>'enfermedad',		sorttype=>'text',	width=>'180',	align=>'center'),
-	  	array(name=>'diagnostico',			index=>'diagnostico',		sorttype=>'text',	width=>'180',	align=>'center'),
-	  	array(name=>'fecha_inicial',		index=>'fecha_inicial',		sorttype=>'text',	width=>'100',	align=>'center'),
-	  	array(name=>'fecha_final',			index=>'fecha_final',		sorttype=>'text',	width=>'100',	align=>'center'),
-	  	array(name=>'estado',				index=>'estado',			sorttype=>'text',	width=>'120',	align=>'center')
-	);
-	  
-    $Titles = array('CODIGO',
-					'FECHA NOVEDAD',
-					'CONTRATO',					
-					'CONCEPTO',
-					'ENFERMEDAD',
-					'DIAGNOSTICO',
-    				'FECHA INICIAL',
-    				'FECHA FINAL',
-					'ESTADO'
-	);
-	
-	$Layout -> SetGridLicencia($Attributes,$Titles,$Cols,$Model -> GetQueryLicenciaGrid());
 	$Layout -> RenderMain();
 
+  }
+  
+  
+  protected function showGrid(){
+	  
+	require_once("LicenciaLayoutClass.php");
+	require_once("LicenciaModelClass.php");
+
+	$Layout              = new LicenciaLayout($this -> getTitleTab(),$this -> getTitleForm());
+    $Model               = new LicenciaModel();	  
+	  
+	//// GRID ////
+	$Attributes = array(
+		id		=>'licencia',
+		title		=>'Listado de Licencias',
+		sortname	=>'licencia_id',
+		width		=>'auto',
+		height	=>'200'
+	  );
+  
+	  $Cols = array(
+		  array(name=>'licencia_id',			index=>'licencia_id',		sorttype=>'text',	width=>'60',	align=>'center'),
+		  array(name=>'fecha_licencia',		index=>'fecha_licencia',	sorttype=>'text',	width=>'110',	align=>'center'),
+			array(name=>'contrato',				index=>'contrato',			sorttype=>'text',	width=>'120',	align=>'center'),		
+		  array(name=>'concepto',				index=>'concepto',			sorttype=>'text',	width=>'180',	align=>'center'),
+		  array(name=>'enfermedad',			index=>'enfermedad',		sorttype=>'text',	width=>'180',	align=>'center'),
+			array(name=>'diagnostico',			index=>'diagnostico',		sorttype=>'text',	width=>'180',	align=>'center'),
+			array(name=>'fecha_inicial',		index=>'fecha_inicial',		sorttype=>'text',	width=>'100',	align=>'center'),
+			array(name=>'fecha_final',			index=>'fecha_final',		sorttype=>'text',	width=>'100',	align=>'center'),
+			array(name=>'estado',				index=>'estado',			sorttype=>'text',	width=>'120',	align=>'center')
+	  );
+		
+	  $Titles = array('CODIGO',
+					  'FECHA NOVEDAD',
+					  'CONTRATO',					
+					  'CONCEPTO',
+					  'ENFERMEDAD',
+					  'DIAGNOSTICO',
+					  'FECHA INICIAL',
+					  'FECHA FINAL',
+					  'ESTADO'
+	  );
+	  
+	  $html = $Layout -> SetGridLicencia($Attributes,$Titles,$Cols,$Model -> GetQueryLicenciaGrid());
+	 
+	  print $html;
+	  
   }
 		
  	protected function setDiagnostico(){

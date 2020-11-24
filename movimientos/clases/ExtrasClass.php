@@ -35,9 +35,18 @@
 				$Layout -> setHoraExtraFrame($hora_extra_id);
 
 			}
+			$Layout -> RenderMain();
+		}
+		
+		protected function showGrid(){
+	  
+			require_once("ExtrasLayoutClass.php");
+			require_once("ExtrasModelClass.php");
 
-
-			//// GRID ////
+			$Layout   = new ExtrasLayout($this -> getTitleTab(),$this -> getTitleForm());
+			$Model    = new ExtrasModel();
+			  
+			 //// GRID ////
 			$Attributes = array(
 				id		=>'Extras',
 				title	=>'Listado de Horas Extras',
@@ -84,9 +93,11 @@
 				'ESTADO',				
 			);
 
-			$Layout -> SetGridExtras($Attributes,$Titles,$Cols,$Model -> GetQueryExtrasGrid());
-			$Layout -> RenderMain();
-		}
+			$html = $Layout -> SetGridExtras($Attributes,$Titles,$Cols,$Model -> GetQueryExtrasGrid()); 
+			 
+			 print $html;
+			  
+		  }
 
 		protected function onclickValidateRow(){
 			require_once("ExtrasModelClass.php");

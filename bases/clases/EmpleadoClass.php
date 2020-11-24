@@ -35,7 +35,19 @@
 			$Layout -> SetConvocados($Model -> GetConvocados($this -> getConex()));
 			// $Layout -> SetCivil($Model -> GetCivil($this -> getConex()));
 
-			//// GRID ////
+			
+			$Layout -> RenderMain();
+		}
+		
+		protected function showGrid(){
+	  
+			require_once("EmpleadoLayoutClass.php");
+			require_once("EmpleadoModelClass.php");
+
+			$Layout   = new EmpleadoLayout($this -> getTitleTab(),$this -> getTitleForm());
+			$Model    = new EmpleadoModel();
+			  
+			 //// GRID ////
 			$Attributes = array(
 				id		=>'empleado',
 				title	=>'Listado de Empleados',
@@ -87,9 +99,11 @@
 				
 			);
 
-			$Layout -> SetGridEmpleado($Attributes,$Titles,$Cols,$Model -> GetQueryEmpleadoGrid());
-			$Layout -> RenderMain();
-		}
+			$html = $Layout -> SetGridEmpleado($Attributes,$Titles,$Cols,$Model -> GetQueryEmpleadoGrid());
+			 
+			 print $html;
+			  
+		  }
 
 		protected function onclickValidateRow(){
 			require_once("EmpleadoModelClass.php");
