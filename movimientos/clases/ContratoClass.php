@@ -800,7 +800,7 @@ final class Contrato extends Controler
             id => 'escaner_eps',
             type => 'file',
             value => '',
-            path => '/application/imagenes/nomina/contrato/',
+            path => '/transAlejandria/imagenes/nomina/contrato/',
             size => '70',
             //required=>'yes',
             datatype => array(
@@ -819,7 +819,7 @@ final class Contrato extends Controler
             id => 'escaner_pension',
             type => 'file',
             value => '',
-            path => '/application/imagenes/nomina/contrato/',
+            path => '/transAlejandria/imagenes/nomina/contrato/',
             size => '70',
             //required=>'yes',
             datatype => array(
@@ -838,7 +838,7 @@ final class Contrato extends Controler
             id => 'escaner_arl',
             type => 'file',
             value => '',
-            path => '/application/imagenes/nomina/contrato/',
+            path => '/transAlejandria/imagenes/nomina/contrato/',
             size => '70',
             //required=>'yes',
             datatype => array(
@@ -857,7 +857,7 @@ final class Contrato extends Controler
             id => 'escaner_caja',
             type => 'file',
             value => '',
-            path => '/application/imagenes/nomina/contrato/',
+            path => '/transAlejandria/imagenes/nomina/contrato/',
             size => '70',
             //required=>'yes',
             datatype => array(
@@ -876,7 +876,7 @@ final class Contrato extends Controler
             id => 'escaner_cesan',
             type => 'file',
             value => '',
-            path => '/application/imagenes/nomina/contrato/',
+            path => '/transAlejandria/imagenes/nomina/contrato/',
             size => '70',
             //required=>'yes',
             datatype => array(
@@ -924,7 +924,7 @@ final class Contrato extends Controler
             id => 'escaner_bancario',
             type => 'file',
             value => '',
-            path => '/application/imagenes/nomina/contrato/',
+            path => '/transAlejandria/imagenes/nomina/contrato/',
             size => '70',
             //required=>'yes',
             datatype => array(
@@ -943,7 +943,7 @@ final class Contrato extends Controler
             id => 'examen_medico',
             type => 'file',
             value => '',
-            path => '/application/imagenes/nomina/contrato/',
+            path => '/transAlejandria/imagenes/nomina/contrato/',
             size => '70',
             //required=>'yes',
             datatype => array(
@@ -962,7 +962,7 @@ final class Contrato extends Controler
             id => 'examen_egreso',
             type => 'file',
             value => '',
-            path => '/application/imagenes/nomina/contrato/',
+            path => '/transAlejandria/imagenes/nomina/contrato/',
             size => '70',
             //required=>'yes',
             datatype => array(
@@ -981,7 +981,7 @@ final class Contrato extends Controler
             id => 'examen_periodico',
             type => 'file',
             value => '',
-            path => '/application/imagenes/nomina/contrato/',
+            path => '/transAlejandria/imagenes/nomina/contrato/',
             size => '70',
             //required=>'yes',
             datatype => array(
@@ -1000,7 +1000,7 @@ final class Contrato extends Controler
             id => 'salud_ocupacional',
             type => 'file',
             value => '',
-            path => '/application/imagenes/nomina/contrato/',
+            path => '/transAlejandria/imagenes/nomina/contrato/',
             size => '70',
             //required=>'yes',
             datatype => array(
@@ -1019,7 +1019,7 @@ final class Contrato extends Controler
             id => 'cartas_cyc',
             type => 'file',
             value => '',
-            path => '/application/imagenes/nomina/contrato/',
+            path => '/transAlejandria/imagenes/nomina/contrato/',
             size => '70',
             //required=>'yes',
             datatype => array(
@@ -1038,7 +1038,7 @@ final class Contrato extends Controler
             id => 'entrega_dotacion',
             type => 'file',
             value => '',
-            path => '/application/imagenes/nomina/contrato/',
+            path => '/transAlejandria/imagenes/nomina/contrato/',
             size => '70',
             //required=>'yes',
             datatype => array(
@@ -1057,7 +1057,7 @@ final class Contrato extends Controler
             id => 'contrato_firmado',
             type => 'file',
             value => '',
-            path => '/application/imagenes/nomina/contrato/',
+            path => '/transAlejandria/imagenes/nomina/contrato/',
             size => '70',
             //required=>'yes',
             datatype => array(
@@ -1076,7 +1076,7 @@ final class Contrato extends Controler
             id => 'incapacidades',
             type => 'file',
             value => '',
-            path => '/application/imagenes/nomina/contrato/',
+            path => '/transAlejandria/imagenes/nomina/contrato/',
             size => '70',
             //required=>'yes',
             datatype => array(
@@ -1095,7 +1095,7 @@ final class Contrato extends Controler
             id => 'paz_salvo',
             type => 'file',
             value => '',
-            path => '/application/imagenes/nomina/contrato/',
+            path => '/transAlejandria/imagenes/nomina/contrato/',
             size => '70',
             //required=>'yes',
             datatype => array(
@@ -1114,7 +1114,7 @@ final class Contrato extends Controler
             id => 'certi_procu',
             type => 'file',
             value => '',
-            path => '/application/imagenes/nomina/contrato/',
+            path => '/transAlejandria/imagenes/nomina/contrato/',
             size => '70',
             //required=>'yes',
             datatype => array(
@@ -1133,7 +1133,7 @@ final class Contrato extends Controler
             id => 'certi_antece',
             type => 'file',
             value => '',
-            path => '/application/imagenes/nomina/contrato/',
+            path => '/transAlejandria/imagenes/nomina/contrato/',
             size => '70',
             //required=>'yes',
             datatype => array(
@@ -1152,7 +1152,7 @@ final class Contrato extends Controler
             id => 'certi_contralo',
             type => 'file',
             value => '',
-            path => '/application/imagenes/nomina/contrato/',
+            path => '/transAlejandria/imagenes/nomina/contrato/',
             size => '70',
             //required=>'yes',
             datatype => array(
@@ -1171,7 +1171,7 @@ final class Contrato extends Controler
             id => 'certi_liquidacion',
             type => 'file',
             value => '',
-            path => '/application/imagenes/nomina/contrato/',
+            path => '/transAlejandria/imagenes/nomina/contrato/',
             size => '70',
             //required=>'yes',
             datatype => array(
@@ -1190,7 +1190,7 @@ final class Contrato extends Controler
             id => 'certi_laboral',
             type => 'file',
             value => '',
-            path => '/application/imagenes/nomina/contrato/',
+            path => '/transAlejandria/imagenes/nomina/contrato/',
             size => '70',
             //required=>'yes',
             datatype => array(
@@ -1209,7 +1209,7 @@ final class Contrato extends Controler
             id => 'foto',
             type => 'file',
             value => '',
-            path => '/application/imagenes/nomina/contrato/',
+            path => '/transAlejandria/imagenes/nomina/contrato/',
             size => '70',
             //required=>'yes',
             datatype => array(
