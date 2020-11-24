@@ -538,6 +538,13 @@ final class Registrar extends Controler
         if ($empleados == 'U') {
 
             $contrato_id = $_REQUEST['contrato_id'];
+
+            $condicion_contrato = '';
+
+            if(is_numeric($contrato_id)){
+                $condicion_contrato = " AND l.contrato_id = $contrato_id";
+            }
+
             $result = $Model->validarContratos($fecha_inicial, $fecha_final, $this->getConex(), $contrato_id);
 
             if ($result > 0) {
@@ -632,18 +639,18 @@ final class Registrar extends Controler
                     $select_deb_total = " (SELECT SUM(d.debito)
 				FROM liquidacion_novedad l, detalle_liquidacion_novedad d
 				WHERE l.contrato_id =ln.contrato_id AND l.liquidacion_novedad_id=ln.liquidacion_novedad_id
-				AND d.liquidacion_novedad_id=l.liquidacion_novedad_id AND d.debito>0 AND d.sueldo_pagar=0 AND l.estado!='A' ) AS total_debito,";
+				AND d.liquidacion_novedad_id=l.liquidacion_novedad_id AND d.debito>0 AND d.sueldo_pagar=0 AND l.estado!='A' $condicion_contrato) AS total_debito,";
 
                     $select_cre_total = " (SELECT SUM(d.credito)
 				FROM liquidacion_novedad l, detalle_liquidacion_novedad d
 				WHERE l.contrato_id =ln.contrato_id AND l.liquidacion_novedad_id=ln.liquidacion_novedad_id
-				AND d.liquidacion_novedad_id=l.liquidacion_novedad_id AND d.credito>0 AND d.sueldo_pagar=0 AND l.estado!='A') AS total_credito,";
+				AND d.liquidacion_novedad_id=l.liquidacion_novedad_id AND d.credito>0 AND d.sueldo_pagar=0 AND l.estado!='A' $condicion_contrato) AS total_credito,";
 
                     for ($i = 0; $i < count($con_deb); $i++) {
                         $select_deb .= " (SELECT SUM(d.debito) FROM   liquidacion_novedad l, detalle_liquidacion_novedad d
 				WHERE l.fecha_inicial = (SELECT fecha_inicial FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id )
 				AND l.fecha_final = (SELECT fecha_final FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id ) AND l.estado!='A'
-				AND d.liquidacion_novedad_id=l.liquidacion_novedad_id AND l.contrato_id=ln.contrato_id AND d.concepto LIKE ('" . $con_deb[$i]['concepto'] . "') ) AS " . str_replace(" ", "_", $con_deb[$i]['concepto']) . ", ";
+				AND d.liquidacion_novedad_id=l.liquidacion_novedad_id AND l.contrato_id=ln.contrato_id AND d.concepto LIKE ('" . $con_deb[$i]['concepto'] . "') $condicion_contrato) AS " . str_replace(" ", "_", $con_deb[$i]['concepto']) . ", ";
                         $con_deb1[$i]['concepto'] = str_replace(" ", "_", $con_deb[$i]['concepto']);
                     }
 
@@ -651,7 +658,7 @@ final class Registrar extends Controler
                         $select_tot_deb .= " (SELECT SUM(d.debito) FROM   liquidacion_novedad l, detalle_liquidacion_novedad d
 				WHERE l.fecha_inicial = (SELECT fecha_inicial FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id )
 				AND l.fecha_final = (SELECT fecha_final FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id ) AND l.estado!='A'
-				AND d.liquidacion_novedad_id=l.liquidacion_novedad_id AND d.concepto LIKE ('" . $con_deb[$i]['concepto'] . "') ) AS " . str_replace(" ", "_", $con_deb[$i]['concepto']) . ", ";
+				AND d.liquidacion_novedad_id=l.liquidacion_novedad_id AND d.concepto LIKE ('" . $con_deb[$i]['concepto'] . "') $condicion_contrato) AS " . str_replace(" ", "_", $con_deb[$i]['concepto']) . ", ";
 
                     }
 
@@ -659,7 +666,7 @@ final class Registrar extends Controler
                         $select_debExt .= " (SELECT SUM(d.debito) FROM   liquidacion_novedad l, detalle_liquidacion_novedad d
 				WHERE l.fecha_inicial = (SELECT fecha_inicial FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id )
 				AND l.fecha_final = (SELECT fecha_final FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id ) AND l.estado!='A'
-				AND d.liquidacion_novedad_id=l.liquidacion_novedad_id AND l.contrato_id=ln.contrato_id AND d.concepto_area_id =" . $con_debExt[$i]['concepto_area_id'] . " ) AS " . str_replace(" ", "_", $con_debExt[$i]['concepto']) . ", ";
+				AND d.liquidacion_novedad_id=l.liquidacion_novedad_id AND l.contrato_id=ln.contrato_id AND d.concepto_area_id =" . $con_debExt[$i]['concepto_area_id'] . " $condicion_contrato) AS " . str_replace(" ", "_", $con_debExt[$i]['concepto']) . ", ";
                         $con_debExt1[$i]['concepto'] = str_replace(" ", "_", $con_debExt[$i]['concepto']);
                     }
 
@@ -667,7 +674,7 @@ final class Registrar extends Controler
                         $select_tot_debExt .= " (SELECT SUM(d.debito) FROM   liquidacion_novedad l, detalle_liquidacion_novedad d
 				WHERE l.fecha_inicial = (SELECT fecha_inicial FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id )
 				AND l.fecha_final = (SELECT fecha_final FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id ) AND l.estado!='A'
-				AND d.liquidacion_novedad_id=l.liquidacion_novedad_id  AND d.concepto_area_id =" . $con_debExt[$i]['concepto_area_id'] . " ) AS " . str_replace(" ", "_", $con_debExt[$i]['concepto']) . ", ";
+				AND d.liquidacion_novedad_id=l.liquidacion_novedad_id  AND d.concepto_area_id =" . $con_debExt[$i]['concepto_area_id'] . " $condicion_contrato) AS " . str_replace(" ", "_", $con_debExt[$i]['concepto']) . ", ";
 
                     }
 
@@ -675,7 +682,7 @@ final class Registrar extends Controler
                         $select_cre .= " (SELECT SUM(d.credito) FROM   liquidacion_novedad l, detalle_liquidacion_novedad d
 				WHERE l.fecha_inicial = (SELECT fecha_inicial FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id )
 				AND l.fecha_final = (SELECT fecha_final FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id ) AND l.estado!='A'
-				AND d.liquidacion_novedad_id=l.liquidacion_novedad_id AND l.contrato_id=ln.contrato_id AND d.concepto LIKE ('" . $con_cre[$i]['concepto'] . "') ) AS " . str_replace(" ", "_", $con_cre[$i]['concepto']) . ", ";
+				AND d.liquidacion_novedad_id=l.liquidacion_novedad_id AND l.contrato_id=ln.contrato_id AND d.concepto LIKE ('" . $con_cre[$i]['concepto'] . "') $condicion_contrato) AS " . str_replace(" ", "_", $con_cre[$i]['concepto']) . ", ";
                         $con_cre1[$i]['concepto'] = str_replace(" ", "_", $con_cre[$i]['concepto']);
                     }
 
@@ -683,7 +690,7 @@ final class Registrar extends Controler
                         $select_tot_cre .= " (SELECT SUM(d.credito) FROM   liquidacion_novedad l, detalle_liquidacion_novedad d
 				WHERE l.fecha_inicial = (SELECT fecha_inicial FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id )
 				AND l.fecha_final = (SELECT fecha_final FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id ) AND l.estado!='A'
-				AND d.liquidacion_novedad_id=l.liquidacion_novedad_id  AND d.concepto LIKE ('" . $con_cre[$i]['concepto'] . "') ) AS " . str_replace(" ", "_", $con_cre[$i]['concepto']) . ", ";
+				AND d.liquidacion_novedad_id=l.liquidacion_novedad_id  AND d.concepto LIKE ('" . $con_cre[$i]['concepto'] . "') $condicion_contrato) AS " . str_replace(" ", "_", $con_cre[$i]['concepto']) . ", ";
 
                     }
 
@@ -691,7 +698,7 @@ final class Registrar extends Controler
                         $select_creExt .= " (SELECT SUM(d.credito) FROM   liquidacion_novedad l, detalle_liquidacion_novedad d
 				WHERE l.fecha_inicial = (SELECT fecha_inicial FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id )
 				AND l.fecha_final = (SELECT fecha_final FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id ) AND l.estado!='A'
-				AND d.liquidacion_novedad_id=l.liquidacion_novedad_id AND l.contrato_id=ln.contrato_id AND d.concepto_area_id = " . $con_creExt[$i]['concepto_area_id'] . " ) AS " . str_replace(" ", "_", $con_creExt[$i]['concepto']) . ", ";
+				AND d.liquidacion_novedad_id=l.liquidacion_novedad_id AND l.contrato_id=ln.contrato_id AND d.concepto_area_id = " . $con_creExt[$i]['concepto_area_id'] . " $condicion_contrato) AS " . str_replace(" ", "_", $con_creExt[$i]['concepto']) . ", ";
                         $con_creExt1[$i]['concepto'] = str_replace(" ", "_", $con_creExt[$i]['concepto']);
                     }
 
@@ -699,7 +706,7 @@ final class Registrar extends Controler
                         $select_tot_creExt .= " (SELECT SUM(d.credito) FROM   liquidacion_novedad l, detalle_liquidacion_novedad d
 				WHERE l.fecha_inicial = (SELECT fecha_inicial FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id )
 				AND l.fecha_final = (SELECT fecha_final FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id ) AND l.estado!='A'
-				AND d.liquidacion_novedad_id=l.liquidacion_novedad_id  AND d.concepto_area_id = " . $con_creExt[$i]['concepto_area_id'] . " ) AS " . str_replace(" ", "_", $con_creExt[$i]['concepto']) . ", ";
+				AND d.liquidacion_novedad_id=l.liquidacion_novedad_id  AND d.concepto_area_id = " . $con_creExt[$i]['concepto_area_id'] . " $condicion_contrato) AS " . str_replace(" ", "_", $con_creExt[$i]['concepto']) . ", ";
 
                     }
 
@@ -707,7 +714,7 @@ final class Registrar extends Controler
                         $select_sal .= " (SELECT SUM(d.credito) FROM   liquidacion_novedad l, detalle_liquidacion_novedad d
 				WHERE l.fecha_inicial = (SELECT fecha_inicial FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id )
 				AND l.fecha_final = (SELECT fecha_final FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id ) AND l.estado!='A'
-				AND d.liquidacion_novedad_id=l.liquidacion_novedad_id AND l.contrato_id=ln.contrato_id AND d.concepto LIKE ('" . $con_sal[$i]['concepto'] . "') ) AS " . str_replace(" ", "_", $con_sal[$i]['concepto']) . ", ";
+				AND d.liquidacion_novedad_id=l.liquidacion_novedad_id AND l.contrato_id=ln.contrato_id AND d.concepto LIKE ('" . $con_sal[$i]['concepto'] . "') $condicion_contrato) AS " . str_replace(" ", "_", $con_sal[$i]['concepto']) . ", ";
                         $con_sal1[$i]['concepto'] = str_replace(" ", "_", $con_sal[$i]['concepto']);
                     }
 
@@ -715,7 +722,7 @@ final class Registrar extends Controler
                         $select_tot_sal .= " (SELECT SUM(d.credito) FROM   liquidacion_novedad l, detalle_liquidacion_novedad d
 				WHERE l.fecha_inicial = (SELECT fecha_inicial FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id )
 				AND l.fecha_final = (SELECT fecha_final FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id ) AND l.estado!='A'
-				AND d.liquidacion_novedad_id=l.liquidacion_novedad_id AND d.concepto LIKE ('" . $con_sal[$i]['concepto'] . "') ) AS " . str_replace(" ", "_", $con_sal[$i]['concepto']) . ", ";
+				AND d.liquidacion_novedad_id=l.liquidacion_novedad_id AND d.concepto LIKE ('" . $con_sal[$i]['concepto'] . "') $condicion_contrato) AS " . str_replace(" ", "_", $con_sal[$i]['concepto']) . ", ";
 
                     }
                     
@@ -724,13 +731,13 @@ final class Registrar extends Controler
                     $fecha_inicial = $_REQUEST['fecha_inicial'];
                     $fecha_final = $_REQUEST['fecha_final'];
                     
-                    $diasIncapacidad = $Model -> getDiasIncapacidad($liquidacion_novedad_id,$fecha_inicial,$fecha_final,$this->getConex());
+                    $diasIncapacidad = $Model -> getDiasIncapacidad($contrato_id,$liquidacion_novedad_id,$fecha_inicial,$fecha_final,$this->getConex());
                     $diasIncapacidad = $this->groupArrayDias($diasIncapacidad, 'contrato_id');
 
-                    $diasLicencia = $Model -> getDiasLicencia($liquidacion_novedad_id,$fecha_inicial,$fecha_final,$this->getConex());
+                    $diasLicencia = $Model -> getDiasLicencia($contrato_id,$liquidacion_novedad_id,$fecha_inicial,$fecha_final,$this->getConex());
                     $diasLicencia = $this->groupArrayDias($diasLicencia, 'contrato_id');
                     
-                    $Layout->setLiquidacion($con_deb1, $con_cre1, $con_debExt1, $con_creExt1, $con_sal1, $Model->getLiquidacion($select_deb_total, $select_cre_total, $select_deb, $select_cre, $select_debExt, $select_creExt, $select_sal,$diasIncapacidad,$diasLicencia,$this->getOficinaId(), $this->getEmpresaId(), $this->getConex()), $Model->getTotales($select_tot_deb, $select_tot_cre, $select_tot_debExt, $select_tot_creExt, $select_tot_sal, $this->getEmpresaId(), $this->getConex()));
+                    $Layout->setLiquidacion($con_deb1, $con_cre1, $con_debExt1, $con_creExt1, $con_sal1, $Model->getLiquidacion($contrato_id,$select_deb_total, $select_cre_total, $select_deb, $select_cre, $select_debExt, $select_creExt, $select_sal,$diasIncapacidad,$diasLicencia,$this->getOficinaId(), $this->getEmpresaId(), $this->getConex()), $Model->getTotales($contrato_id,$select_tot_deb, $select_tot_cre, $select_tot_debExt, $select_tot_creExt, $select_tot_sal, $this->getEmpresaId(), $this->getConex()));
 
                     $Layout->exportToExcel('Imp_LiquidacionExcel.tpl');
 
@@ -743,6 +750,8 @@ final class Registrar extends Controler
 
             }
         } elseif ($empleados == 'T') {
+
+            $contrato_id = 'N/A';
 
             $result = $Model->validarContratos($fecha_inicial, $fecha_final,$this->getConex());
 
@@ -919,13 +928,13 @@ final class Registrar extends Controler
 
 					$liquidacion_novedad_id = $this -> requestDataForQuery('liquidacion_novedad_id','integer');
                     
-					$diasIncapacidad = $Model -> getDiasIncapacidad($liquidacion_novedad_id,$fecha_inicial,$fecha_final,$this->getConex());
+					$diasIncapacidad = $Model -> getDiasIncapacidad($contrato_id,$liquidacion_novedad_id,$fecha_inicial,$fecha_final,$this->getConex());
                     $diasIncapacidad = $this->groupArrayDias($diasIncapacidad, 'contrato_id');
 
-                    $diasLicencia = $Model -> getDiasLicencia($liquidacion_novedad_id,$fecha_inicial,$fecha_final,$this->getConex());
+                    $diasLicencia = $Model -> getDiasLicencia($contrato_id,$liquidacion_novedad_id,$fecha_inicial,$fecha_final,$this->getConex());
                     $diasLicencia = $this->groupArrayDias($diasLicencia, 'contrato_id');
                     
-                    $Layout->setLiquidacion($con_deb1, $con_cre1, $con_debExt1, $con_creExt1, $con_sal1, $Model->getLiquidacion($select_deb_total, $select_cre_total, $select_deb, $select_cre, $select_debExt, $select_creExt, $select_sal,$diasIncapacidad, $diasLicencia, $this->getOficinaId(), $this->getEmpresaId(), $this->getConex()), $Model->getTotales($select_tot_deb, $select_tot_cre, $select_tot_debExt, $select_tot_creExt, $select_tot_sal, $this->getEmpresaId(), $this->getConex()));
+                    $Layout->setLiquidacion($con_deb1, $con_cre1, $con_debExt1, $con_creExt1, $con_sal1, $Model->getLiquidacion($contrato_id,$select_deb_total, $select_cre_total, $select_deb, $select_cre, $select_debExt, $select_creExt, $select_sal,$diasIncapacidad, $diasLicencia, $this->getOficinaId(), $this->getEmpresaId(), $this->getConex()), $Model->getTotales($contrato_id,$select_tot_deb, $select_tot_cre, $select_tot_debExt, $select_tot_creExt, $select_tot_sal, $this->getEmpresaId(), $this->getConex()));
 
                     $Layout->exportToExcel('Imp_LiquidacionExcel.tpl');
 

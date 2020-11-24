@@ -60,9 +60,9 @@ final class Imp_Documento{
 	  $pdf->Ln(5);	
       $pdf->SetFont('Arial','B',10);	 	 	 	  
 	  $pdf->Cell(35,5,$encabezado[0]['texto_tercero'],1,0,'L');	
-	  $pdf->Cell(80,5,substr(utf8_decode($imputaciones[0]['nombre_identificacion']),0,37),1,0,'L');	
-	  $pdf->Cell(35,5,$imputaciones[0]['tipo_ident'],1,0,'L');	
-	  $pdf->Cell(50,5,$imputaciones[0]['identificacion_tercero'],1,0,'L');	
+	  $pdf->Cell(80,5,utf8_decode($encabezado[0]['razon_social'].' '.$encabezado[0]['primer_nombre'].' '.$encabezado[0]['segundo_nombre'].' '.$encabezado[0]['primer_apellido'].' '.$encabezado[0]['segundo_apellido']),1,0,'L');	
+	  $pdf->Cell(35,5,$encabezado[0]['tipo_identificacion_emp'],1,0,'L');	
+	  $pdf->Cell(50,5,$encabezado[0]['numero_identificacion'],1,0,'L');		
 	 
 	  $pdf->Ln(5);	
       $pdf->SetFont('Arial','B',10);	 	 	 	  
@@ -151,7 +151,12 @@ final class Imp_Documento{
   	  $pdf->Cell(40,8,'Reviso','LRB',0,'C');		  	  
   	  $pdf->Cell(40,8,'Aprobo','LRB',0,'C');	
   	  $pdf->Cell(40,8,'C.C / NIT','LRB',0,'C');	
- 	  $pdf->Cell(40,8,'Huella','LRB',0,'C');		   	  	  	  
+	   $pdf->Cell(40,8,'Huella','LRB',0,'C');	
+	    /* Nueva linea para mostrar modulo de procedencia */
+
+		 $pdf->Ln(8);	
+		 $pdf->SetFont('Arial','I',8);	 	 	 	  
+		   $pdf->Cell(200,8,'Modulo de procedencia : NOMINA','',0,'C');	   	  	  	  
 	  
 	  $pdf->Output();	  
 	  
