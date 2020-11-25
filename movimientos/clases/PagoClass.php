@@ -36,42 +36,6 @@ final class Pago extends Controler{
 	$Layout -> setUsuarioId($this -> getUsuarioId(),$this -> getOficinaId());	
 	$Layout -> setCausalesAnulacion($Model -> getCausalesAnulacion($this -> getConex()));
 
-
-	//// GRID ////
-	$Attributes = array(
-	  id		=>'pago',
-	  title		=>'Listado de Pagos',
-	  sortname	=>'fecha',
-	  width		=>'auto',
-	  height	=>'250'
-	);
-
-	$Cols = array(
-	  array(name=>'fecha',						index=>'fecha',						sorttype=>'date',	width=>'100',	align=>'left'),
-	  array(name=>'ingreso_abono_nomina',		index=>'ingreso_abono_nomina',		sorttype=>'date',	width=>'120',	align=>'left'),
-	  array(name=>'tipo_doc',					index=>'tipo_doc',					sorttype=>'text',	width=>'120',	align=>'left'),
-	  array(name=>'num_ref',					index=>'num_ref',					sorttype=>'text',	width=>'90',	align=>'left'),	 
-	  array(name=>'aplica',						index=>'aplica',					sorttype=>'text',	width=>'90',	align=>'left'),	 
-	  array(name=>'empleado',					index=>'empleado',					sorttype=>'text',	width=>'140',	align=>'left'),
-	  array(name=>'forma_pago',					index=>'forma_pago',				sorttype=>'text',	width=>'140',	align=>'left'),
-	  array(name=>'concepto_abono_nomina',		index=>'concepto_abono_nomina',	sorttype=>'text',	width=>'200',	align=>'left'),
-	  array(name=>'valor_abono_nomina',		index=>'valor_abono_nomina',		sorttype=>'text',	width=>'100',	align=>'center', format => 'currency'),
-	  array(name=>'estado_abono_nomina',		index=>'estado_abono_nomina',		sorttype=>'text',	width=>'100',	align=>'left')	  
-	);
-	  
-    $Titles = array('FECHA PAGO',
-					'FECHA INGRESO',
-					'DOCUMENTO',
-					'No',
-					'APLICA',
-					'EMPLEADO',
-					'FORMA PAGO',					
-					'CONCEPTO',
-					'VALOR',
-					'ESTADO'
-	);
-	
-	$Layout -> SetGridPago($Attributes,$Titles,$Cols,$Model -> GetQueryPagoGrid());
 	$Layout -> RenderMain();
   
   }
