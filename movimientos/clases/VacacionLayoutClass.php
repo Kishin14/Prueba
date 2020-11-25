@@ -46,6 +46,7 @@ final class VacacionLayout extends View{
      $this -> TplInclude -> IncludeCss("../../../framework/css/reset.css");
      $this -> TplInclude -> IncludeCss("../../../framework/css/general.css");
      $this -> TplInclude -> IncludeCss("../../../framework/css/jquery.alerts.css");
+	   $this -> TplInclude -> IncludeCss("../../../framework/css/jqgrid/redmond/jquery-ui-1.8.2.custom.css");		 
      $this -> TplInclude -> IncludeCss("../../../framework/css/bootstrap.css");
 	
 	 $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.js");
@@ -60,6 +61,7 @@ final class VacacionLayout extends View{
      $this -> TplInclude -> IncludeJs("../js/Vacacion.js");
      $this -> TplInclude -> IncludeJs("../../../framework/js/jqeffects/jquery.magnifier.js");
      $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.alerts.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/jqgrid/jquery-ui-1.8.2.custom.min.js");	 
 	 $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.filestyle.js");
 	
      $this -> assign("CSSSYSTEM",			$this -> TplInclude -> GetCssInclude());
