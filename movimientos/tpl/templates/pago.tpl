@@ -2,11 +2,11 @@
 <head>
    <meta http-equiv="content-type" content="text/html; charset=utf-8"> 
    <link rel="stylesheet" href="../../../framework/css/bootstrap1.css">
-  {$JAVASCRIPT}
+   {$JAVASCRIPT}
+   
+   {$CSSSYSTEM} 
   
-  {$CSSSYSTEM} 
- 
-  {$TITLETAB}
+  
 </head>
 
 <body>

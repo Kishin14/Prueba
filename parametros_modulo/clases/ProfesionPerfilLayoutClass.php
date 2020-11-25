@@ -135,6 +135,7 @@ final class ProfesionPerfilLayout extends View{
 
 
      $this -> TplInclude -> IncludeCss("../../../framework/css/jquery.alerts.css");
+	   $this -> TplInclude -> IncludeCss("../../../framework/css/jqgrid/redmond/jquery-ui-1.8.2.custom.css");		 
 
 
 

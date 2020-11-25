@@ -26,6 +26,7 @@ final class reporteConvocadosLayout extends View{
      $this -> TplInclude -> IncludeCss("../../../framework/css/general.css");
      $this -> TplInclude -> IncludeCss("../../../framework/css/DatosBasicos.css");
      $this -> TplInclude -> IncludeCss("../../../framework/css/jquery.alerts.css");
+	   $this -> TplInclude -> IncludeCss("../../../framework/css/jqgrid/redmond/jquery-ui-1.8.2.custom.css");		 
      $this -> TplInclude -> IncludeCss("../../../framework/css/jqgrid/redmond/jquery-ui-1.8.2.custom.css");
      $this -> TplInclude -> IncludeCss("../css/reportes.css");
 	 
@@ -37,7 +38,8 @@ final class reporteConvocadosLayout extends View{
      $this -> TplInclude -> IncludeJs("../../../framework/js/ajax-dynamic-list.js");
      $this -> TplInclude -> IncludeJs("../js/reporteConvocados.js"); 
      $this -> TplInclude -> IncludeJs("../../../framework/js/funcionesDetalle.js");	 
-     $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.alerts.js");	
+     $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.alerts.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/jqgrid/jquery-ui-1.8.2.custom.min.js");	 	
      $this -> TplInclude -> IncludeJs("../../../framework/js/jqeffects/jquery.magnifier.js");
 	 $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.filestyle.js");
 	 $this -> TplInclude -> IncludeJs("../../../framework/js/ajaxupload.3.6.js");

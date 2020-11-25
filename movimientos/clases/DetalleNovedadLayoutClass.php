@@ -33,6 +33,7 @@ final class DetalleNovedadLayout extends View{
      $this -> TplInclude -> IncludeCss("../../../framework/css/generalDetalle.css");
      $this -> TplInclude -> IncludeCss("../../../framework/css/jquery.autocomplete.css");
      $this -> TplInclude -> IncludeCss("../../../framework/css/jquery.alerts.css");
+	   $this -> TplInclude -> IncludeCss("../../../framework/css/jqgrid/redmond/jquery-ui-1.8.2.custom.css");		 
 	 
      $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.js");
      $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.autocomplete.js");

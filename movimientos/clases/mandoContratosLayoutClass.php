@@ -21,6 +21,7 @@ final class mandoContratosLayout extends View
         $this->TplInclude->IncludeCss("../../../framework/css/DatosBasicos.css");
         $this->TplInclude->IncludeCss("../../../facturacion/Contratos/css/mandoContratos.css");
         $this->TplInclude->IncludeCss("../../../framework/css/jquery.alerts.css");
+	   $this -> TplInclude -> IncludeCss("../../../framework/css/jqgrid/redmond/jquery-ui-1.8.2.custom.css");		 
         $this->TplInclude->IncludeCss("../../../framework/sweetalert2/dist/sweetalert2.min.css");
         $this->TplInclude->IncludeCss("../../../framework/css/bootstrap1.css");
 
@@ -33,6 +34,7 @@ final class mandoContratosLayout extends View
         $this->TplInclude->IncludeJs("../../../framework/js/ajax-dynamic-list.js");
         $this->TplInclude->IncludeJs("../../../nomina/movimientos/js/mandoContratos.js");
         $this->TplInclude->IncludeJs("../../../framework/js/jquery.alerts.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/jqgrid/jquery-ui-1.8.2.custom.min.js");	 
         $this->TplInclude->IncludeJs("../../../framework/sweetalert2/dist/sweetalert2.min.js");
 
         $this->assign("CSSSYSTEM", $this->TplInclude->getCssInclude());

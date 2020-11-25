@@ -34,6 +34,7 @@ final class ConyugeEmpleadoLayout extends View{
      $this -> TplInclude -> IncludeCss("https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css");
      $this -> TplInclude -> IncludeCss("../../../framework/css/jquery.autocomplete.css");
      $this -> TplInclude -> IncludeCss("../../../framework/css/jquery.alerts.css");
+	   $this -> TplInclude -> IncludeCss("../../../framework/css/jqgrid/redmond/jquery-ui-1.8.2.custom.css");		 
      $this -> TplInclude -> IncludeJs("https://code.jquery.com/jquery-2.2.0.min.js");
      
      $this ->  TplInclude  ->  IncludeJs("https://code.jquery.com/ui/1.11.4/jquery-ui.js");
