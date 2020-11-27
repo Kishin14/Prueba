@@ -1,0 +1,139 @@
+// JavaScript Document
+
+function setDataFormWithResponse(){
+	
+RequiredRemove();
+
+var params     = new Array({campos:"tercero_id",valores:$('#tercero_id').val()});
+var formulario = document.forms[0];
+var url        = 'UsuariosClass.php';
+
+FindRow(params,formulario,url,null,null);
+
+if($('#guardar'))    $('#guardar').attr("disabled","true");
+if($('#actualizar')) $('#actualizar').attr("disabled","");
+if($('#borrar'))     $('#borrar').attr("disabled","");
+if($('#limpiar'))    $('#limpiar').attr("disabled","");
+}
+
+function UsuarioOnSaveOnUpdateonDelete(formulario,resp){
+
+   Reset(formulario);
+   clearFind();   
+   
+   $("#refresh_QUERYGRID_terceros").click();
+   $("#tipo_persona_id").val(1);
+	
+    if($('#guardar'))    $('#guardar').attr("disabled","");
+    if($('#actualizar')) $('#actualizar').attr("disabled","true");
+    if($('#borrar'))     $('#borrar').attr("disabled","true");
+    if($('#limpiar'))    $('#limpiar').attr("disabled","");	   
+   
+   	jAlert(resp,"Usuarios");
+	
+}
+
+function usuarioOnReset(formulario){
+	
+	Reset(formulario);
+	clearFind();
+	
+	$("#tipo_persona_id").val(1);
+	
+    if($('#guardar'))    $('#guardar').attr("disabled","");
+    if($('#actualizar')) $('#actualizar').attr("disabled","true");
+    if($('#borrar'))     $('#borrar').attr("disabled","true");
+    if($('#limpiar'))    $('#limpiar').attr("disabled","");	
+}
+
+function ValidaOtrosTercero(Forma){
+	
+  var Pnombre     = Forma.primer_nombre;
+  var Snombre     = Forma.segundo_nombre;
+  var Papellido   = Forma.primer_apellido;
+  var Sapellido   = Forma.segundo_apellido;
+  
+  if(vacio(Pnombre.value) && vacio(Snombre.value) && vacio(Papellido.value) && vacio(Sapellido.value) ){
+	   
+    jAlert("Debe ingresar los datos descriptivos para el tercero\n\nPor ejemplo : Primer Nombre");
+	return false;
+	  
+  }else if(!vacio(Pnombre.value)){
+		  
+		  if(vacio(Papellido.value)){
+		   jAlert('Debe diligenciar el campo [ PRIMER APELLIDO ]');
+		   return false;
+	      }
+		  
+		}else if(!vacio(Papellido.value)){
+		  
+		   if(vacio(Pnombre.value)){
+		    jAlert('Debe diligenciar el campo [ PRIMER NOMBRE ]');
+		    return false;
+	       }
+		  
+		 }
+		 
+  return true;
+}
+
+
+$(document).ready(function(){
+  
+  $("#numero_identificacion").blur(function(){
+
+     var tercero_id = $("#tercero_id").val();
+     var params     = new Array({campos:"numero_identificacion",valores:$("#numero_identificacion").val()});
+	 
+	 if(!tercero_id.length > 0){
+	 
+     validaRegistro(this,params,"UsuariosClass.php",null,function(resp){    
+															  																  
+       if(parseInt(resp) != 0 ){
+
+         var params     = new Array({campos:"numero_identificacion",valores:$('#numero_identificacion').val()});
+         var formulario = document.forms[0];
+         var url        = 'UsuariosClass.php';
+
+         FindRow(params,formulario,url);
+		 
+		 $('#guardar').attr("disabled","true");
+         $('#actualizar').attr("disabled","");
+         $('#borrar').attr("disabled","");
+         $('#limpiar').attr("disabled","");		 
+
+	   }else{
+		  $('#guardar').attr("disabled","");
+          $('#actualizar').attr("disabled","true");
+          $('#borrar').attr("disabled","true");
+          $('#limpiar').attr("disabled","");
+		  }
+      });
+	 
+	 }else{
+ 		  //$('#guardar').attr("disabled","");
+          //$('#actualizar').attr("disabled","true");
+          //$('#borrar').attr("disabled","true");
+          //$('#limpiar').attr("disabled","");
+		}
+  
+  });
+  
+  $("#guardar,#actualizar").click(function(){
+	  
+	  var formulario = document.getElementById('usuariosForm');	  
+	  
+	  if(ValidaRequeridos(formulario) && ValidaOtrosTercero(formulario)){ 
+	    if(this.id == 'guardar'){
+         Send(formulario,'onclickSave',null,UsuarioOnSaveOnUpdateonDelete)
+		}else{
+            Send(formulario,'onclickUpdate',null,UsuarioOnSaveOnUpdateonDelete)
+		  }
+	  }
+	  
+	  	  
+  });
+  
+  
+});
+	

@@ -1,0 +1,93 @@
+/* TABLE
+ * ========================================================================= */
+#tree{
+  border: 1px solid #888;
+  border-collapse: collapse;
+  line-height: 1;
+  margin: 55px auto;
+  width: 90%;
+  background:#FFFFFF;
+}
+
+/* Caption
+ * ------------------------------------------------------------------------- */
+#tree caption {
+  font-size: .9em;
+  font-weight: bold;
+}
+
+/* Header
+ * ------------------------------------------------------------------------- */
+#tree thead {
+  background: #aaa url(../../../frameworkmedia/images/treeTable/bg-table-thead.png) repeat-x top left;
+  font-size: .9em;
+}
+
+#tree thead tr th {
+  border: 1px solid #888;
+  font-weight: normal;
+  padding: .3em 1.67em .1em 1.67em;
+  text-align: left;
+}
+
+/* Body
+ * ------------------------------------------------------------------------- */
+#tree tbody tr td {
+  cursor: default;
+  padding: .3em 1.5em;
+}
+
+#tree tbody tr.even {
+  background: #f3f3f3;
+}
+
+#tree tbody tr.odd {
+  background: #fff;
+}
+
+#tree span {
+  background-position: center left;
+  background-repeat: no-repeat;
+  padding: .2em 0 .2em 1.5em;
+}
+
+#tree span.file {
+  background-image: url(../../../frameworkmedia/images/treeTable/page_white_text.png);
+}
+
+#tree span.folder {
+  background-image: url(../../../frameworkmedia/images/treeTable/folder.png);
+}
+
+.rowTreeOver{
+	background:#0066FF;
+}
+
+#convenciones{
+/*width:90%;
+height:35px;
+background-color:#D6DFF7;
+margin-left:23px;
+position:absolute;
+top:270px;*/
+width: 90%;
+height: 44px;
+background-color: #D6DFF7;
+margin-left: 28px;
+position: absolute;
+top: 305px;
+}
+
+#convenciones label{
+font-size:9px;
+float:none;
+vertical-align:middle;
+cursor:pointer;
+}
+
+#tree input,#tree span{
+padding:0px 0px 0px 0px;
+}
+#tree span{
+padding-top:2px;
+}
