@@ -1353,7 +1353,7 @@ final class RegistrarModel extends Db{
 				(SELECT t.numero_identificacion FROM tercero t WHERE t.tercero_id=n.tercero_id  ) AS numero_identificacion,
 				(SELECT t.digito_verificacion FROM tercero t WHERE t.tercero_id=n.tercero_id  ) AS digito_verificacion
 				FROM novedad_fija n, concepto_area c
-				WHERE n.contrato_id=$contrato_id AND n.estado='A' AND n.fecha_inicial >= '$fecha_inicial' AND n.fecha_final <= '$fecha_final' AND c.concepto_area_id=n.concepto_area_id";
+				WHERE n.contrato_id=$contrato_id AND n.estado='A' AND '$fecha_final' BETWEEN  n.fecha_inicial AND n.fecha_final AND c.concepto_area_id=n.concepto_area_id";
 				//die($select2);
 
 			
