@@ -8,12 +8,23 @@ var params     = new Array({campos:"tercero_id",valores:$('#tercero_id').val()})
 var formulario = document.forms[0];
 var url        = 'UsuariosClass.php';
 
-FindRow(params,formulario,url,null,null);
+
+FindRow(params,formulario,url,null,function(resp){
+  
+  var data = $.parseJSON(resp);
+  
+  ocultaFilaNombresRazon(data[0]['tipo_persona_id']);
+  
+  
+});
 
 if($('#guardar'))    $('#guardar').attr("disabled","true");
 if($('#actualizar')) $('#actualizar').attr("disabled","");
 if($('#borrar'))     $('#borrar').attr("disabled","");
 if($('#limpiar'))    $('#limpiar').attr("disabled","");
+
+
+
 }
 
 function showTable(){
@@ -138,8 +149,9 @@ $(document).ready(function(){
 
      var tercero_id = $("#tercero_id").val();
      var params     = new Array({campos:"numero_identificacion",valores:$("#numero_identificacion").val()});
-	 
-	 if(!tercero_id.length > 0){
+
+   
+   if(!tercero_id.length > 0){
 	 
      validaRegistro(this,params,"UsuariosClass.php",null,function(resp){    
 															  																  
@@ -149,7 +161,13 @@ $(document).ready(function(){
          var formulario = document.forms[0];
          var url        = 'UsuariosClass.php';
 
-         FindRow(params,formulario,url);
+         FindRow(params,formulario,url,null,function(resp){
+         
+         var data = $.parseJSON(resp);
+ 
+         ocultaFilaNombresRazon(data[0]['tipo_persona_id']);   
+         
+        });
 		 
 		 $('#guardar').attr("disabled","true");
          $('#actualizar').attr("disabled","");
@@ -171,6 +189,12 @@ $(document).ready(function(){
           //$('#limpiar').attr("disabled","");
 		}
   
+  });
+  
+  $("#tipo_persona_id").change(function(){
+    
+    ocultaFilaNombresRazon(this.value);
+    
   });
     
   
