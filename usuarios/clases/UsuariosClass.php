@@ -28,9 +28,11 @@ final class Tercero extends Controler{
     $Layout -> setLimpiar	($Model -> getPermiso($this -> getActividadId(),'CLEAR',$this -> getConex()));	
 	
     $Layout -> setCampos	($this -> Campos);
+	
 	$Layout -> SetTiposId	($Model -> GetTipoId($this -> getConex()));
 	$Layout -> setEmpresas	($Model -> getEmpresas($this -> getConex()));	
-
+	$Layout -> SetTiposPersona($Model -> GetTipoPersona($this -> getConex()));
+	
 	$Layout -> RenderMain();
   
   }
@@ -183,6 +185,21 @@ final class Tercero extends Controler{
 			table	=>array('tercero','usuario'),
 			type	=>array('primary_key','column'))
 	);
+	
+	$this -> Campos[tipo_persona_id] = array(
+		name	=>'tipo_persona_id',
+		id		=>'tipo_persona_id',
+		type	=>'select',
+		options	=>null,
+		required=>'yes',
+		//tabindex=>'2',
+	 	datatype=>array(
+			type	=>'integer',
+			length	=>'1'),
+		transaction=>array(
+			table	=>array('tercero'),
+			type	=>array('column'))
+	);
 	  
 	$this -> Campos[tipo_identificacion_id] = array(
 		name	=>'tipo_identificacion_id',
@@ -198,19 +215,6 @@ final class Tercero extends Controler{
 			type	=>array('column'))
 	);
 	  
-	$this -> Campos[tipo_persona_id] = array(
-		name	=>'tipo_persona_id',
-		id		=>'tipo_persona_id',
-		type	=>'hidden',
-		value	=>1,
-		datatype=> array(
-			type	=>'integer',
-			length	=>'1'),
-    	transaction=>array(
-			table	=>array('tercero'),
-			type	=>array('column'))
-	);
-	
 	$this -> Campos[numero_identificacion] = array(
 		name	=>'numero_identificacion',
 		id		=>'numero_identificacion',
@@ -225,6 +229,19 @@ final class Tercero extends Controler{
 			table	=>array('tercero'),
 			type	=>array('column'))
 	);
+	
+	$this -> Campos[razon_social] = array(
+		name	=>'razon_social',
+	   id		=>'razon_social',
+	   type	=>'text',
+	   //tabindex=>'8',
+		size=>'45',
+	   datatype=>array(
+		   type	=>'text'),
+	   transaction=>array(
+		   table	=>array('tercero'),
+		   type	=>array('column'))
+   );
 	 	 
 	$this -> Campos[primer_apellido] = array(
 		name	=>'primer_apellido',
