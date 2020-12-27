@@ -155,8 +155,16 @@ final class UsuarioModel extends Db{
   }	
 			 	
   public function GetTipoId($Conex){
-	return $this  -> DbFetchAll("SELECT tipo_identificacion_id AS value,nombre AS text FROM tipo_identificacion WHERE 
-								tipo_identificacion_id != 2 ORDER BY nombre ASC",$Conex,$ErrDb = false);
+	return $this  -> DbFetchAll("SELECT tipo_identificacion_id AS value,nombre AS text FROM tipo_identificacion  ORDER BY nombre ASC",$Conex,true);
+  }
+  
+  	
+  public function GetTipoPersona($Conex){
+
+    $result = $this -> DbFetchAll("SELECT tipo_persona_id AS value,nombre AS text FROM tipo_persona",$Conex,false);
+  
+    return $result;
+  
   }
   
   public function getEmpresas($Conex){
