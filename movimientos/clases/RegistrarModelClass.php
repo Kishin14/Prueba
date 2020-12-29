@@ -986,7 +986,7 @@ final class RegistrarModel extends Db{
 			$dias_sub = 0;
 
 		}elseif($dias_real<=$result[$i]['dias_lice_re']){
-			$dias = $dias_total-$dife_vacas-$result[$i]['dias_desc']-$result[$i]['dias_lice_nore'];
+			$dias = $dias_total-$dife_vacas-$result[$i]['dias_desc']-$result[$i]['dias_lice_re'];
 			$dias_sub = 0;
 
 		}else{
