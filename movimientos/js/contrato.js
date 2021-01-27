@@ -253,7 +253,7 @@ $(document).ready(function(){
 		$("#fecha_inicio_cesantias").addClass("requerido");	
 	});
 
-  $("#tipo_contrato_id").change(function(){
+  $("#tipo_contrato_id").change(function(){//
 	 var tipo_contrato_id = $('#tipo_contrato_id').val();
 	 if(parseInt(tipo_contrato_id)>0){
 		  var QueryString = "ACTIONCONTROLER=setTipoContra&tipo_contrato_id="+tipo_contrato_id;
@@ -281,6 +281,7 @@ $(document).ready(function(){
 					$("#fecha_terminacion").removeClass("obligatorio");	
 					$("#fecha_terminacion").removeClass("requerido");
 					$('#fecha_terminacion').attr("disabled","true");  
+					
 				  }
 
 				  if(prestaciones_sociales=='1'){
@@ -296,7 +297,7 @@ $(document).ready(function(){
 				  }
 				  
 				  if(!isNaN(tiempo_contrato)){ 
-					  calculaFechaFin(tiempo_contrato);
+					  calculaFechaFin(tiempo_contrato,tipo);
 				  }
 
 			  }catch(e){
@@ -380,7 +381,7 @@ $(document).ready(function(){
 });
 
 
-function calculaFechaFin(tiempo_contrato){
+function calculaFechaFin(tiempo_contrato,tipo_contrato = 'F'){
 
 	var fechai = $('#fecha_inicio').val();
 
@@ -399,8 +400,13 @@ function calculaFechaFin(tiempo_contrato){
 			  try{
 				  var responseArray       = $.parseJSON(response); 
 				  var fecha_fin        	  = responseArray['fechafin'];
-				 
+				  
+				  //Valida Contrato Indefinido
+				  
+				  var fecha_fin = tipo_contrato == 'I' ? '' : fecha_fin;
+				  
 				  $('#fecha_terminacion').val(fecha_fin);
+				 
 			  }catch(e){
 				 alertJquery(e);
 			  }
