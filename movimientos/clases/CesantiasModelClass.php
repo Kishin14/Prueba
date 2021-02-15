@@ -650,7 +650,7 @@ final class CesantiasModel extends Db{
 		
 		$select = "SELECT c.contrato_id,
 		SUM(c.sueldo_base+subsidio_transporte) AS sueldo_base,
-		(SELECT MAX(fecha_corte) FROM liquidacion_cesantias WHERE contrato_id=c.contrato_id AND estado='C' ) AS fecha_ultimo_corte,
+		COALESCE((SELECT MAX(fecha_corte) FROM liquidacion_cesantias WHERE contrato_id=c.contrato_id AND estado='C' ),c.fecha_ult_cesantias) AS fecha_ultimo_corte,
 		IF(c.fecha_ult_cesantias IS NOT NULL,c.fecha_ult_cesantias,c.fecha_inicio)AS fecha_inicio,
 		(SELECT nombre_cargo FROM cargo WHERE cargo_id=c.cargo_id) AS cargo,
 		(SELECT t.numero_identificacion FROM tercero t, empleado e WHERE t.tercero_id=e.tercero_id AND e.empleado_id=c.empleado_id) AS numero_identificacion,
