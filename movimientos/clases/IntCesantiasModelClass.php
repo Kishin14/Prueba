@@ -644,7 +644,7 @@ final class IntCesantiasModel extends Db{
 	
 	}
 	
-	public function getDataEmpleado($empleado_id,$oficina_id,$Conex){
+	public function getDataEmpleado($empleado_id,$fecha_liquidacion,$oficina_id,$Conex){
 	
 		
 		$select = "SELECT c.contrato_id,
@@ -659,6 +659,12 @@ final class IntCesantiasModel extends Db{
 
 		$result = $this -> DbFetchAll($select,$Conex,$ErrDb = false);
 		if(count($result)>0){
+			$select_prom = "SELECT SUM(dl.debito)AS base,count(*) AS pagos,dl.debito  FROM detalle_liquidacion_novedad dl WHERE dl.debito>0 AND dl.concepto = 'SALARIO' AND dl.liquidacion_novedad_id IN(SELECT id FROM (SELECT liquidacion_novedad_id AS id FROM liquidacion_novedad l WHERE contrato_id = ".$result[0]['contrato_id']." AND estado='C' AND fecha_inicial <'$fecha_liquidacion' ORDER BY fecha_inicial DESC limit 8)AS t) ";
+			$result_prom = $this -> DbFetchAll($select_prom,$Conex,$ErrDb = false);
+
+			$sueldo_promedio = $result_prom[0]['base']/($result_prom[0]['pagos']/2);
+
+			$result[0]['sueldo_base'] = $result_prom[0]['base']>0 ? $sueldo_promedio : $result[0]['sueldo_base']  ;
 			return $result;
 		}else {
 			exit("No se encontr&oacute; un contrato activo para el empleado!!");

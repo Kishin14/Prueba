@@ -1016,7 +1016,7 @@ final class RegistrarModel extends Db{
 		
 		$select_inca = "SELECT (DATEDIFF(IF(l.fecha_final>'$fecha_final','$fecha_final',l.fecha_final),IF(l.fecha_inicial>'$fecha_inicial',l.fecha_inicial,'$fecha_inicial'))+1) AS dias_inca, ti.dia, ti.porcentaje,ti.descuento  
 					FROM licencia l, tipo_incapacidad ti WHERE  l.contrato_id=$contrato_id AND l.estado!='I' AND ti.tipo_incapacidad_id=l.tipo_incapacidad_id AND ti.tipo='I'  AND ('$fecha_inicial' BETWEEN  l.fecha_inicial AND l.fecha_final OR '$fecha_final'  BETWEEN  l.fecha_inicial AND l.fecha_final OR l.fecha_inicial BETWEEN '$fecha_inicial' AND '$fecha_final') ";
-    
+  
 		$result_inca = $this -> DbFetchAll($select_inca,$Conex,true);
 		
 		
@@ -1374,11 +1374,11 @@ final class RegistrarModel extends Db{
 		for($j=0;$j<count($result2);$j++){
 
 			if($result2[$j]['tipo_novedad']=='V'){
-				$debito=$result2[$j]['valor_cuota'];
+				$debito=intval($result2[$j]['valor_cuota']);
 				$credito=0;
 			}else{
 				$debito=0;
-				$credito=$result2[$j]['valor_cuota'];
+				$credito=intval($result2[$j]['valor_cuota']);
 				
 			}
 			$deb_total=$deb_total+$debito;
@@ -1408,14 +1408,14 @@ final class RegistrarModel extends Db{
 		
 		//sueldo a pagar
 		$debito=0;
-		$credito=($deb_total-$cre_total);
+		$credito=intval($deb_total-$cre_total);
 		
 		$detalle_liquidacion_novedad_id = $this -> DbgetMaxConsecutive("detalle_liquidacion_novedad","detalle_liquidacion_novedad_id",$Conex,false,1);
 		$insert = "INSERT INTO 	detalle_liquidacion_novedad (detalle_liquidacion_novedad_id,puc_id,liquidacion_novedad_id,debito,credito,fecha_inicial,fecha_final,dias,observacion,concepto,sueldo_pagar,tercero_id,numero_identificacion,digito_verificacion) 
 		VALUES ($detalle_liquidacion_novedad_id,$puc_sueldo_pagar,$liquidacion_novedad_id,$debito,$credito,'$fecha_inicial','$fecha_final',$dias,'$observacion','SUELDO PAGAR',1,$tercero_id,$numero_identificacion,$digito_verificacion)";
 		$this -> query($insert,$Conex,true);
 
-		echo $insert;
+		
 		$deb_total=0;
 		$cre_total=0;
 		
