@@ -86,7 +86,7 @@ final class reportesContratos extends Controler{
 		name	=>'desde',
 		id		=>'desde',
 		type	=>'text',
-		required=>'yes',
+		//required=>'yes',
 	 	datatype=>array(
 			type	=>'date',
 			length	=>'10')
@@ -96,7 +96,7 @@ final class reportesContratos extends Controler{
 		name	=>'hasta',
 		id		=>'hasta',
 		type	=>'text',
-		required=>'yes',
+		//required=>'yes',
 	 	datatype=>array(
 			type	=>'date',
 			length	=>'10')
