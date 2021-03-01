@@ -17,7 +17,7 @@ final class DetalleNovedadModel extends Db{
 		
 		$num_cuotas   = $result[0]['cuotas'];
 		$periodicidad = $result[0]['periodicidad'];
-		$valor_cuota  = $result[0]['valor_cuota'];
+		$valor_cuota  = intval($result[0]['valor_cuota']);
 		$fecha_inicial= $result[0]['fecha_inicial'];
 		$valor		  = $result[0]['valor'];
 

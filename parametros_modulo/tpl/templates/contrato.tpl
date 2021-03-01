@@ -43,24 +43,26 @@
             <tr>
                 <td><label>Tipo : </label></td>
                 <td>{$TIPO}</td>             
-            </tr>
-            <tr>
                 <td><label>Tiempo Contrato (meses) : </label></td>
                 <td>{$TIEMPOCONTRATO}</td>       
-                <td><label>Indemnizaci&oacute;n  : </label></td>
-                <td>{$INDEMNIZACION}</td>
             </tr>
             <tr>
+                <td><label>Indemnizaci&oacute;n  : </label></td>
+                <td>{$INDEMNIZACION}</td>
                 <td><label>Liquidaci&oacute;n: </label></td>
                 <td>{$LIQUIDACION}</td>
+            </tr>
+            <tr>
                 <td><label>Prestaciones Sociales : </label></td>
                 <td>{$PRESTACIONES}</td>
+                <td><label>ARL : </label></td>
+                <td>{$ARL}</td>
             </tr>
             <tr>
                 <td><label>Salud: </label></td>
                 <td>{$SALUD}</td>
-                <td><label>ARL : </label></td>
-                <td>{$ARL}</td>
+                <td><label>Pension: </label></td>
+                <td>{$PENSION}</td>
             </tr>
             <tr>
                 <td colspan="4" align="center">&nbsp;</td>

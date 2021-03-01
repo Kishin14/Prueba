@@ -171,9 +171,9 @@ function getTotalDebitoCredito(liquidacion_cesantias_id){
 
 }
 
-function setDataEmpleado(empleado_id){
+function setDataEmpleado(empleado_id,fecha_corte){
     
-  var QueryString = "ACTIONCONTROLER=setDataEmpleado&empleado_id="+empleado_id;
+  var QueryString = "ACTIONCONTROLER=setDataEmpleado&empleado_id="+empleado_id+'&fecha_liquidacion='+fecha_corte;
   
   $.ajax({
     url        : "CesantiasClass.php?rand="+Math.random(),
@@ -576,18 +576,24 @@ $(document).ready(function(){
   	$("#detalleCesantias").attr("src","../../../framework/tpl/blank.html");	
 
 
+
 	 $("#fecha_corte,#fecha_ultimo_corte").change(function(){
-												   
-		if(this.id=='fecha_ultimo_corte' && $("#fecha_ultimo_corte").val()!=$("#fecha_ultimo_corte1").val() && $('#si_empleado').val()==1 ){
-			alertJquery('Para la Liquidacion Individual No se puede Cambiar la fecha de Ultimo Corte','Validacion Cesantias');
+		 
+		 if(this.id=='fecha_ultimo_corte' && $("#fecha_ultimo_corte").val()!=$("#fecha_ultimo_corte1").val() && $('#si_empleado').val()==1 ){
+			 alertJquery('Para la Liquidacion Individual No se puede Cambiar la fecha de Ultimo Corte','Validacion Cesantias');
 			 $("#fecha_ultimo_corte").val($("#fecha_ultimo_corte1").val());
-		}else{
-			calculaValor();								
-			
-		}
-	});
-
-
+			}else{
+				calculaValor();	
+				
+				
+			}
+		});
+		
+		$("#fecha_corte").change(function(){
+			if($('#empleado_id').val()!='' && $('#fecha_corte').val()!=''){
+				setDataEmpleado($('#empleado_id').val(),$('#fecha_corte').val());
+			}
+		});	
 	
 	$("#tipo_liquidacion").change(function(){										
 		/* if($("#si_empleado").val()=='ALL' && $("#tipo_liquidacion").val()=='P'){
