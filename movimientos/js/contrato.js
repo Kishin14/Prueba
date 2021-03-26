@@ -4,6 +4,7 @@ function setDataFormWithResponse(){
 	var parametros  = new Array({campos:"contrato_id",valores:parametrosId});
 	var forma       = document.forms[0];
 	var controlador = 'ContratoClass.php';
+	var tipo = '';
 
 	FindRow(parametros,forma,controlador,null,function(resp){
 										   
@@ -253,7 +254,7 @@ $(document).ready(function(){
 		$("#fecha_inicio_cesantias").addClass("requerido");	
 	});
 
-  $("#tipo_contrato_id").change(function(){//
+  $("#tipo_contrato_id").change(function(){
 	 var tipo_contrato_id = $('#tipo_contrato_id').val();
 	 if(parseInt(tipo_contrato_id)>0){
 		  var QueryString = "ACTIONCONTROLER=setTipoContra&tipo_contrato_id="+tipo_contrato_id;
@@ -269,7 +270,7 @@ $(document).ready(function(){
 			  try{
 		 
 				  var responseArray       = $.parseJSON(response); 
-				  var tipo             	  = responseArray['tipo'];
+				  tipo             	  = responseArray['tipo'];
 				  var tiempo_contrato  	  = responseArray['tiempo_contrato'];
 				  var prestaciones_sociales= responseArray['prestaciones_sociales'];
 				  $('#tiempo_contrato').val(tiempo_contrato);
@@ -281,7 +282,6 @@ $(document).ready(function(){
 					$("#fecha_terminacion").removeClass("obligatorio");	
 					$("#fecha_terminacion").removeClass("requerido");
 					$('#fecha_terminacion').attr("disabled","true");  
-					
 				  }
 
 				  if(prestaciones_sociales=='1'){
@@ -297,7 +297,7 @@ $(document).ready(function(){
 				  }
 				  
 				  if(!isNaN(tiempo_contrato)){ 
-					  calculaFechaFin(tiempo_contrato,tipo);
+					calculaFechaFin(tiempo_contrato,tipo);
 				  }
 
 			  }catch(e){
@@ -312,7 +312,7 @@ $(document).ready(function(){
   
   $('#fecha_inicio').change(function(){	  
 	  var tiempo_contrato = $('#tiempo_contrato').val();
-	  calculaFechaFin(tiempo_contrato);
+	  calculaFechaFin(tiempo_contrato,tipo);
 	});
 ///INICIO VALIDACION FECHAS DE REPORTE
  
