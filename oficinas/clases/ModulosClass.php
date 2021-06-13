@@ -31,7 +31,7 @@ final class ModulosClass extends Controler
 
         $Layout->setModulos($modulos);
 
-        $Layout->setChildren($children);
+        //$Layout->setChildren($children);
 
         $Layout->RenderMain();
 

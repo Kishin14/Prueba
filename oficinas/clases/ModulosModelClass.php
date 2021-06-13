@@ -26,7 +26,20 @@ final class ModulosModel extends Db
     public function getEmpresasTree($Conex)
     {
 
-        $select = "SELECT consecutivo,descripcion,path_imagen,color,modulo FROM actividad WHERE modulo = 1 AND consecutivo != 1 AND display = 1 ORDER BY orden";
+        $select = "SELECT 
+            consecutivo,
+            nivel_superior,
+            descripcion,
+            path_imagen,
+            IF((modulo IS NULL) || (modulo = 0), 0, 1) AS modulo,
+            url_destino,
+            estado,
+            IF((url_destino != '') && (url_destino IS NOT NULL), 1, 0) AS es_formulario
+        FROM 
+            actividad
+        WHERE 
+            consecutivo != 1
+        ORDER BY orden";
 
         $result = $this->DbFetchAll($select, $Conex);
 
@@ -44,7 +57,18 @@ final class ModulosModel extends Db
 
             $nivel_superior = $modulo[consecutivo];
             
-            $select = "SELECT consecutivo,nivel_superior,descripcion,path_imagen,modulo FROM actividad WHERE nivel_superior = $nivel_superior ORDER BY orden;";
+            $select = "SELECT 
+                consecutivo,
+                nivel_superior,
+                descripcion,
+                path_imagen,
+                modulo,
+                IF((url_destino != '') && (url_destino IS NOT NULL), 1, 0) AS es_formulario
+            FROM 
+                actividad 
+            WHERE 
+                nivel_superior = $nivel_superior 
+            ORDER BY orden;";
             $result = $this->DbFetchAll($select, $Conex);
 
             foreach (array_filter($result) as $item) {
@@ -53,6 +77,7 @@ final class ModulosModel extends Db
                 $children[$i][nivel_superior] = $item[nivel_superior];
                 $children[$i][descripcion] = $item[descripcion];
                 $children[$i][path_imagen] = $item[path_imagen];
+                $children[$i][es_formulario] = $item[es_formulario];
 
                 $i++;
 
