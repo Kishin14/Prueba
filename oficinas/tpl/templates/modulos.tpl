@@ -25,7 +25,7 @@
                                 {if $m.modulo eq 1}
                                     
                                     <button type="button" class="collapsible">
-                                        <label><i class="arrow right" id="arrow"></i><img src="{$m.path_imagen}" width="25" height="25" >&nbsp;&nbsp;{$m.descripcion}</label>
+                                        <label><i class="arrow right" id="arrow"></i><img src="{$m.path_imagen}" width="25" height="25">&nbsp;&nbsp;{$m.descripcion}</label>
                                         <label class="switch">
                                             <input type="checkbox" onclick="" value="{$m.consecutivo}"><span class="slider round"></span>
                                         </label>
@@ -37,7 +37,7 @@
                                             {if $c.modulo eq 0 && $c.es_formulario eq 1 && $c.nivel_superior eq $m.consecutivo}
 
                                                 <p>
-                                                    <img src="{$c.path_imagen}" width="25" height="25" >&nbsp;&nbsp;{$c.descripcion}
+                                                    <img src="{$c.path_imagen}" width="25" height="25">&nbsp;&nbsp;{$c.descripcion}
                                                     <label class="switch">
                                                         <input type="checkbox" onclick="" value="{$c.consecutivo}"><span class="slider round"></span>
                                                     </label>
@@ -46,7 +46,7 @@
                                             {elseif $c.modulo eq 0 && $c.es_formulario eq 0 && $c.nivel_superior eq $m.consecutivo}
 
                                                 <button type="button" class="collapsible">
-                                                    <label><i class="arrow right" id="arrow"></i><img src="{$c.path_imagen}" width="25" height="25" >&nbsp;&nbsp;{$c.descripcion}</label>
+                                                    <label><i class="arrow right" id="arrow"></i><img src="{$c.path_imagen}" width="25" height="25">&nbsp;&nbsp;{$c.descripcion}</label>
                                                     <label class="switch">
                                                         <input type="checkbox" onclick="" value="{$c.consecutivo}"><span class="slider round"></span>
                                                     </label>
@@ -57,7 +57,7 @@
                                                         
                                                         {if $sc.modulo eq 0 && $sc.es_formulario eq 1 && $sc.nivel_superior eq $c.consecutivo}
 
-                                                            <p><img src="{$sc.path_imagen}" width="25" height="25" >&nbsp;&nbsp;{$sc.descripcion}
+                                                            <p><img src="{$sc.path_imagen}" width="25" height="25">&nbsp;&nbsp;{$sc.descripcion}
                                                             <label class="switch">
                                                                 <input type="checkbox" onclick="" value="{$sc.consecutivo}"><span class="slider round"></span>
                                                             </label></p>
@@ -65,7 +65,7 @@
                                                         {elseif $sc.modulo eq 0 && $sc.es_formulario eq 0 && $sc.nivel_superior eq $c.consecutivo}
                                                             
                                                             <button type="button" class="collapsible">
-                                                                <label><i class="arrow right" id="arrow"></i><img src="{$sc.path_imagen}" width="25" height="25" >&nbsp;&nbsp;{$sc.descripcion}</label>
+                                                                <label><i class="arrow right" id="arrow"></i><img src="{$sc.path_imagen}" width="25" height="25">&nbsp;&nbsp;{$sc.descripcion}</label>
                                                                 <label class="switch">
                                                                     <input type="checkbox" onclick="" value="{$sc.consecutivo}"><span class="slider round"></span>
                                                                 </label>
@@ -76,7 +76,7 @@
 
                                                                 {if $ssc.modulo eq 0 && $ssc.es_formulario eq 1 && $ssc.nivel_superior eq $sc.consecutivo}
 
-                                                                    <p><img src="{$ssc.path_imagen}" width="25" height="25" >&nbsp;&nbsp;{$ssc.descripcion}
+                                                                    <p><img src="{$ssc.path_imagen}" width="25" height="25">&nbsp;&nbsp;{$ssc.descripcion}
                                                                     <label class="switch">
                                                                         <input type="checkbox" onclick="" value="{$ssc.consecutivo}"><span class="slider round"></span>
                                                                     </label></p>
