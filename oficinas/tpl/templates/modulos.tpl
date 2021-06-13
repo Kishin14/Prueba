@@ -20,10 +20,10 @@
             <table>
                 <tbody>
                     {foreach from=$modulos item=m name=modulos}
+                        <!-- CUANDO ES MODULO PADRE -->
                         <tr>
                             <!-- COLLAPSIBLE -->
                                 {if $m.modulo eq 1}
-                                    
                                     <button type="button" class="collapsible">
                                         <label><i class="arrow right" id="arrow"></i><img src="{$m.path_imagen}" width="25" height="25">&nbsp;&nbsp;{$m.descripcion}</label>
                                         <label class="switch">
@@ -33,9 +33,9 @@
                                     <div class="content">
                                         
                                         {foreach from=$modulos item=c name=child}
-                                            
+                                            <!-- CUANDO ES MODULO HIJO DE SEGUNDO NIVEL -->
                                             {if $c.modulo eq 0 && $c.es_formulario eq 1 && $c.nivel_superior eq $m.consecutivo}
-
+                                                
                                                 <p>
                                                     <img src="{$c.path_imagen}" width="25" height="25">&nbsp;&nbsp;{$c.descripcion}
                                                     <label class="switch">
@@ -54,7 +54,7 @@
                                                 <div class="content">
 
                                                     {foreach from=$modulos item=sc name=sub_child}
-                                                        
+                                                        <!-- CUANDO ES MODULO HIJO DE TERCER NIVEL -->
                                                         {if $sc.modulo eq 0 && $sc.es_formulario eq 1 && $sc.nivel_superior eq $c.consecutivo}
 
                                                             <p><img src="{$sc.path_imagen}" width="25" height="25">&nbsp;&nbsp;{$sc.descripcion}
@@ -73,7 +73,7 @@
                                                             <div class="content">
                                                                 
                                                             {foreach from=$modulos item=ssc name=sub_sub_child}
-
+                                                                <!-- CUANDO ES MODULO HIJO DE CUARTO NIVEL -->
                                                                 {if $ssc.modulo eq 0 && $ssc.es_formulario eq 1 && $ssc.nivel_superior eq $sc.consecutivo}
 
                                                                     <p><img src="{$ssc.path_imagen}" width="25" height="25">&nbsp;&nbsp;{$ssc.descripcion}

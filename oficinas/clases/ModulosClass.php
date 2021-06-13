@@ -35,22 +35,6 @@ final class ModulosClass extends Controler
 
     }
 
-    protected function onclickSave()
-    {
-
-        require_once "ModulosModelClass.php";
-        $Model = new ModulosModel();
-
-        $Model->Save($this->Campos, $this->getConex());
-
-        if ($Model->GetNumError() > 0) {
-            exit('Error : ' . $Model->GetError());
-        } else {
-            exit('Se ingreso Exitosamente la Oficina');
-        }
-
-    }
-
     protected function moduleOnOff(){
 
         require_once "ModulosModelClass.php";
@@ -65,7 +49,7 @@ final class ModulosClass extends Controler
         } else {
             exit($estado);
         }
-        
+
     }
 
 }
