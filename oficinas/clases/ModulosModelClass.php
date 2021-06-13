@@ -47,45 +47,27 @@ final class ModulosModel extends Db
 
     }
 
-    public function getChildren($modulos, $Conex)
-    {
+    public function updateModule($consecutivo, $Conex){
 
-        $i = 0;
-        $children = Array();
+        $select = "SELECT
+            estado
+        FROM
+            actividad
+        WHERE
+            consecutivo = $consecutivo";
+        $result = $this->DbFetchAll($select, $Conex);
 
-        foreach ($modulos as $modulo) {
-
-            $nivel_superior = $modulo[consecutivo];
-            
-            $select = "SELECT 
-                consecutivo,
-                nivel_superior,
-                descripcion,
-                path_imagen,
-                modulo,
-                IF((url_destino != '') && (url_destino IS NOT NULL), 1, 0) AS es_formulario
-            FROM 
-                actividad 
-            WHERE 
-                nivel_superior = $nivel_superior 
-            ORDER BY orden;";
-            $result = $this->DbFetchAll($select, $Conex);
-
-            foreach (array_filter($result) as $item) {
-                
-                $children[$i][consecutivo] = $item[consecutivo];
-                $children[$i][nivel_superior] = $item[nivel_superior];
-                $children[$i][descripcion] = $item[descripcion];
-                $children[$i][path_imagen] = $item[path_imagen];
-                $children[$i][es_formulario] = $item[es_formulario];
-
-                $i++;
-
-            }
-
+        if ($result[0][estado] == 1) {
+            $estado = '0';
+            $update = "UPDATE actividad SET estado = $estado WHERE consecutivo = $consecutivo";
+        } else {
+            $estado = '1';
+            $update = "UPDATE actividad SET estado = $estado WHERE consecutivo = $consecutivo";
         }
 
-        return $children;
+        $this -> query($update,$Conex,true);
+
+        return $estado;
 
     }
 

@@ -25,8 +25,6 @@ final class ModulosClass extends Controler
 
         $modulos = $Model->getEmpresasTree($this->getConex());
 
-        $children = $Model->getChildren($modulos, $this->getConex());
-
         $Layout->setCampos();
 
         $Layout->setModulos($modulos);
@@ -51,6 +49,23 @@ final class ModulosClass extends Controler
             exit('Se ingreso Exitosamente la Oficina');
         }
 
+    }
+
+    protected function moduleOnOff(){
+
+        require_once "ModulosModelClass.php";
+        $Model = new ModulosModel();
+
+        $consecutivo = $_REQUEST['consecutivo'];
+        
+        $estado = $Model->updateModule($consecutivo, $this->getConex());
+
+        if ($Model->GetNumError() > 0) {
+            exit('Error : ' . $Model->GetError());
+        } else {
+            exit($estado);
+        }
+        
     }
 
 }

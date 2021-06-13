@@ -27,7 +27,7 @@
                                     <button type="button" class="collapsible">
                                         <label><i class="arrow right" id="arrow"></i><img src="{$m.path_imagen}" width="25" height="25">&nbsp;&nbsp;{$m.descripcion}</label>
                                         <label class="switch">
-                                            <input type="checkbox" onclick="" value="{$m.consecutivo}"><span class="slider round"></span>
+                                            <input type="checkbox" onclick="moduleOnOff({$m.consecutivo});" value="{$m.estado}"><span class="slider round"></span>
                                         </label>
                                     </button>
                                     <div class="content">
@@ -39,7 +39,7 @@
                                                 <p>
                                                     <img src="{$c.path_imagen}" width="25" height="25">&nbsp;&nbsp;{$c.descripcion}
                                                     <label class="switch">
-                                                        <input type="checkbox" onclick="" value="{$c.consecutivo}"><span class="slider round"></span>
+                                                        <input type="checkbox" onclick="moduleOnOff({$c.consecutivo});" value="{$c.estado}"><span class="slider round"></span>
                                                     </label>
                                                 </p>
 
@@ -48,7 +48,7 @@
                                                 <button type="button" class="collapsible">
                                                     <label><i class="arrow right" id="arrow"></i><img src="{$c.path_imagen}" width="25" height="25">&nbsp;&nbsp;{$c.descripcion}</label>
                                                     <label class="switch">
-                                                        <input type="checkbox" onclick="" value="{$c.consecutivo}"><span class="slider round"></span>
+                                                        <input type="checkbox" onclick="moduleOnOff({$c.consecutivo});" value="{$c.estado}"><span class="slider round"></span>
                                                     </label>
                                                 </button>
                                                 <div class="content">
@@ -59,7 +59,7 @@
 
                                                             <p><img src="{$sc.path_imagen}" width="25" height="25">&nbsp;&nbsp;{$sc.descripcion}
                                                             <label class="switch">
-                                                                <input type="checkbox" onclick="" value="{$sc.consecutivo}"><span class="slider round"></span>
+                                                                <input type="checkbox" onclick="moduleOnOff({$sc.consecutivo});" value="{$sc.estado}"><span class="slider round"></span>
                                                             </label></p>
 
                                                         {elseif $sc.modulo eq 0 && $sc.es_formulario eq 0 && $sc.nivel_superior eq $c.consecutivo}
@@ -67,7 +67,7 @@
                                                             <button type="button" class="collapsible">
                                                                 <label><i class="arrow right" id="arrow"></i><img src="{$sc.path_imagen}" width="25" height="25">&nbsp;&nbsp;{$sc.descripcion}</label>
                                                                 <label class="switch">
-                                                                    <input type="checkbox" onclick="" value="{$sc.consecutivo}"><span class="slider round"></span>
+                                                                    <input type="checkbox" onclick="moduleOnOff({$sc.consecutivo});" value="{$sc.estado}"><span class="slider round"></span>
                                                                 </label>
                                                             </button>
                                                             <div class="content">
@@ -78,7 +78,7 @@
 
                                                                     <p><img src="{$ssc.path_imagen}" width="25" height="25">&nbsp;&nbsp;{$ssc.descripcion}
                                                                     <label class="switch">
-                                                                        <input type="checkbox" onclick="" value="{$ssc.consecutivo}"><span class="slider round"></span>
+                                                                        <input type="checkbox" onclick="moduleOnOff({$ssc.consecutivo});" value="{$ssc.estado}"><span class="slider round"></span>
                                                                     </label></p>
 
                                                                 {/if}
