@@ -4,6 +4,7 @@ function setDataFormWithResponse(){
 	var parametros  = new Array({campos:"contrato_id",valores:parametrosId});
 	var forma       = document.forms[0];
 	var controlador = 'ContratoClass.php';
+	var tipo = '';
 
 	FindRow(parametros,forma,controlador,null,function(resp){
 										   
@@ -269,7 +270,7 @@ $(document).ready(function(){
 			  try{
 		 
 				  var responseArray       = $.parseJSON(response); 
-				  var tipo             	  = responseArray['tipo'];
+				  tipo             	  = responseArray['tipo'];
 				  var tiempo_contrato  	  = responseArray['tiempo_contrato'];
 				  var prestaciones_sociales= responseArray['prestaciones_sociales'];
 				  $('#tiempo_contrato').val(tiempo_contrato);
@@ -296,7 +297,7 @@ $(document).ready(function(){
 				  }
 				  
 				  if(!isNaN(tiempo_contrato)){ 
-					  calculaFechaFin(tiempo_contrato);
+					calculaFechaFin(tiempo_contrato,tipo);
 				  }
 
 			  }catch(e){
@@ -311,7 +312,7 @@ $(document).ready(function(){
   
   $('#fecha_inicio').change(function(){	  
 	  var tiempo_contrato = $('#tiempo_contrato').val();
-	  calculaFechaFin(tiempo_contrato);
+	  calculaFechaFin(tiempo_contrato,tipo);
 	});
 ///INICIO VALIDACION FECHAS DE REPORTE
  
@@ -380,7 +381,7 @@ $(document).ready(function(){
 });
 
 
-function calculaFechaFin(tiempo_contrato){
+function calculaFechaFin(tiempo_contrato,tipo_contrato = 'F'){
 
 	var fechai = $('#fecha_inicio').val();
 
@@ -399,8 +400,13 @@ function calculaFechaFin(tiempo_contrato){
 			  try{
 				  var responseArray       = $.parseJSON(response); 
 				  var fecha_fin        	  = responseArray['fechafin'];
-				 
+				  
+				  //Valida Contrato Indefinido
+				  
+				  var fecha_fin = tipo_contrato == 'I' ? '' : fecha_fin;
+				  
 				  $('#fecha_terminacion').val(fecha_fin);
+				 
 			  }catch(e){
 				 alertJquery(e);
 			  }

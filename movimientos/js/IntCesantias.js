@@ -586,6 +586,13 @@ $(document).ready(function(){
 		}
 	});
 
+	$("#fecha_corte").change(function(){
+		if($('#empleado_id').val()!='' && $('#fecha_corte').val()!=''){
+			setDataEmpleado($('#empleado_id').val(),$('#fecha_corte').val());
+		}
+	});	
+
+
 
 	
 	$("#tipo_liquidacion").change(function(){										

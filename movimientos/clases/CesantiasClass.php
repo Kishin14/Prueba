@@ -294,8 +294,9 @@ final class Cesantias extends Controler{
 	 require_once("CesantiasModelClass.php");
 	$Model = new CesantiasModel();
 	$empleado_id 	= $_REQUEST['empleado_id'];
+	$fecha_liquidacion 	= $_REQUEST['fecha_liquidacion']!= '' ? $_REQUEST['fecha_liquidacion'] : date("Y-m-d") ;
 	
-	$Data = $Model -> getDataEmpleado($empleado_id,$this -> getOficinaId(),$this -> getConex());
+	$Data = $Model -> getDataEmpleado($empleado_id,$fecha_liquidacion,$this -> getOficinaId(),$this -> getConex());
 	
 	echo json_encode($Data);
 	 

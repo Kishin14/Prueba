@@ -312,6 +312,21 @@ final class Contrato extends Controler{
 			type	=>array('column'))
 	);
 
+	$this -> Campos[pension] = array(
+		name	=>'pension',
+		id		=>'pension',
+		type	=>'select',
+		Boostrap =>'si',
+		options	=> array(array(value=>'0',text=>'NO',selected=>'0'),array(value=>'1',text=>'SI')),
+		required=>'yes',
+	 	datatype=>array(
+			type	=>'alphanum',
+			length	=>'1'),
+		transaction=>array(
+			table	=>array('tipo_contrato'),
+			type	=>array('column'))
+	);
+
 	$this -> Campos[arl] = array(
 		name	=>'arl',
 		id		=>'arl',

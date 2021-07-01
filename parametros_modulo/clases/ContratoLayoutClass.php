@@ -67,6 +67,7 @@ final class ContratoLayout extends View{
 	 $this -> assign("TIEMPOCONTRATO",     $this -> objectsHtml -> GetobjectHtml($this -> fields[tiempo_contrato]));
 
 	 $this -> assign("SALUD",     $this -> objectsHtml -> GetobjectHtml($this -> fields[salud]));
+	 $this -> assign("PENSION",     $this -> objectsHtml -> GetobjectHtml($this -> fields[pension]));
 	 $this -> assign("ARL",     $this -> objectsHtml -> GetobjectHtml($this -> fields[arl]));
 
      if($this -> Guardar)
