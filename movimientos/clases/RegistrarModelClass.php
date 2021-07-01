@@ -55,6 +55,7 @@ final class RegistrarModel extends Db{
 
 
   public function Save($usuario_id,$Campos,$dias,$dias_real,$periodicidad,$area_laboral,$centro_de_costo_id,$previsual,$diasNoRe,$diasRe,$Conex){
+	
 
 
     $liquidacion_novedad_id = $this -> DbgetMaxConsecutive("liquidacion_novedad","liquidacion_novedad_id",$Conex,false,1);
@@ -109,7 +110,8 @@ final class RegistrarModel extends Db{
 			WHERE c.estado='A' AND t.tipo_contrato_id=c.tipo_contrato_id AND (t.prestaciones_sociales=1 OR (t.salud=1 AND t.prestaciones_sociales=0)) AND c.fecha_inicio <= '$fecha_final'
 			AND c.contrato_id NOT IN (SELECT contrato_id FROM liquidacion_novedad WHERE fecha_inicial='$fecha_inicial' AND fecha_final='$fecha_final' AND estado!='A')
 			AND c.contrato_id = $contrato_id";
-			
+			//exit('dias reales' . $dias_real . '<br> dias remunerados' . $diasRe);
+			//exit($select);	
 	$result = $this -> DbFetchAll($select,$Conex,true);
 
 	$this -> Begin($Conex);
@@ -684,13 +686,13 @@ final class RegistrarModel extends Db{
   
   public function actualizarNovedad($Conex,$fecha_final,$contrato_id,$estado){
 	  
-	$consul_estado = $estado == 'P' ? "AND n.estado='A'" : "AND n.estado='P'"; 
+	$consul_estado = $estado == 'P' ? " n.estado='A'" : " n.estado='P'"; 
 	  
 	require_once("DetalleNovedadModelClass.php");	    
 	
-	$Model          = new DetalleNovedadModel();	 
+	$Model          = new DetalleNovedadModel();
 	
-	$select_novedad = "SELECT n.novedad_fija_id FROM novedad_fija n WHERE n.contrato_id=$contrato_id $consul_estado AND '$fecha_final' BETWEEN  n.fecha_inicial AND n.fecha_final";
+	$select_novedad = "SELECT n.novedad_fija_id FROM novedad_fija n WHERE $consul_estado AND n.contrato_id=$contrato_id  AND '$fecha_final' BETWEEN  n.fecha_inicial AND n.fecha_final";
 					   
 	$result_novedad = $this -> DbFetchAll($select_novedad,$Conex,true);
 	
@@ -1473,7 +1475,7 @@ final class RegistrarModel extends Db{
 				(SELECT CONCAT_WS(' ',c.numero_contrato,'-',t.primer_nombre,t.segundo_nombre,t.primer_apellido,t.segundo_apellido,t.razon_social) 
 					FROM empleado e, tercero t, contrato c  WHERE c.contrato_id=l.contrato_id AND e.empleado_id=c.empleado_id AND t.tercero_id=e.tercero_id)	AS contrato 
    			FROM liquidacion_novedad l
-			WHERE l.liquidacion_novedad_id=$liquidacion_novedad_id";
+			WHERE l.liquidacion_novedad_id=$liquidacion_novedad_id";//exit($select);
 				
 	$result = $this -> DbFetchAll($select,$Conex,true);
 	
@@ -1481,10 +1483,13 @@ final class RegistrarModel extends Db{
   }
 
   public function selectLiquidacion1($liquidacion_novedad_id,$Conex){
-		$select = "SELECT l.fecha_inicial,l.fecha_final,l.liquidacion_novedad_id,l.empleados,l.estado,l.consecutivo,l.periodicidad,l.area_laboral
-							FROM liquidacion_novedad l
-							WHERE l.liquidacion_novedad_id=$liquidacion_novedad_id";
-		$result = $this -> DbFetchAll($select,$Conex,$ErrDb = false);
+	$select = "SELECT l.fecha_inicial,l.fecha_final,l.liquidacion_novedad_id,l.empleados,l.estado,l.consecutivo,l.periodicidad,l.area_laboral,l.contrato_id,(SELECT CONCAT_WS(' ',c.numero_contrato,'-',t.primer_nombre,t.segundo_nombre,t.primer_apellido,t.segundo_apellido,t.razon_social) 
+					FROM empleado e, tercero t, contrato c  WHERE c.contrato_id=l.contrato_id AND e.empleado_id=c.empleado_id AND t.tercero_id=e.tercero_id) AS contrato 
+						FROM liquidacion_novedad l
+						WHERE l.liquidacion_novedad_id=$liquidacion_novedad_id";//exit($select);
+
+	$result = $this -> DbFetchAll($select,$Conex,$ErrDb = false);
+
 	
 		return $result;
 	}

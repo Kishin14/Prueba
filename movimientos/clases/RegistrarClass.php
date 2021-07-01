@@ -1131,8 +1131,10 @@ final class Registrar extends Controler
         $Liquidacion1 = $_REQUEST['liquidacion_novedad_id1'];
         
         if ($Liquidacion > 0) {
+          
             $Data = $Model->selectLiquidacion($Liquidacion, $this->getConex());
         } else {
+          
             $Data = $Model->selectLiquidacion1($Liquidacion1, $this->getConex());
         }
         
