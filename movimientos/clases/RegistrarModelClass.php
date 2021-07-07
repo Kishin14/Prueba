@@ -218,13 +218,19 @@ final class RegistrarModel extends Db{
 		if($dias_real<=$diasNoRe){
 			$dias     = 0;
 			$dias_sub = 0;
+			exit('test');
 		}elseif($dias_real<=$diasRe){
+			//exit('Dias realesaaa' . $dias_real . '<br> dias remunerados' . $diasRe);
 			$dias     = $dias_total-$dife_vacas-$result[$i]['dias_desc']-$diasNoRe;
 			$dias_sub = 0;
 			
 		}else{
 			$dias = $dias_total-$dife_vacas-$result[$i]['dias_desc']-$diasNoRe-$diasRe;
-			$dias_sub = $dias_total-$dife_vacas-$result[$i]['dias_desc']-$diasNoRe-$diasRe;
+			$dias_sub = $dias_total-$dife_vacas-$result[$i]['dias_desc']-$diasNoR-$diasRe;
+			//exit('Dias realesaaa1321321aa' . $dias_real . '<br> dias remunerados' . $diasRe.'<br> dias'.$dias.'<br> dias sub'.$dias_sub);
+
+			//exit('DIAS SUB '.$dias_sub.'<br>dias_total' . $dias_total . '<br> dife_vacas' . $dife_vacas.'<br> dias desc'.$result[$i]['dias_desc'].'<br> diasNoRe'.$diasNoRe.'<br> dias re'.$diasRe);
+
 
 			/*$select_comp = "SELECT l.fecha_final
 			FROM licencia l, tipo_incapacidad ti WHERE l.remunerado=0 AND l.estado!='I' AND  l.contrato_id=$contrato_id AND ti.tipo_incapacidad_id=l.tipo_incapacidad_id AND ti.tipo='L' AND  l.fecha_final = '$fecha_final'   ORDER BY  l.fecha_final DESC LIMIT 1";
@@ -732,7 +738,7 @@ final class RegistrarModel extends Db{
 		l.contrato_id=c.contrato_id AND 
 		ti.tipo_incapacidad_id=l.tipo_incapacidad_id AND 
 		ti.tipo='L' AND 
-		('$fecha_inicial' BETWEEN  l.fecha_inicial AND l.fecha_final OR '$fecha_final'  BETWEEN  l.fecha_inicial AND l.fecha_final OR l.fecha_inicial BETWEEN '$fecha_inicial' AND '$fecha_final') $consulta";
+		('$fecha_inicial' BETWEEN  l.fecha_inicial AND l.fecha_final OR '$fecha_final'  BETWEEN  l.fecha_inicial AND l.fecha_final OR l.fecha_inicial BETWEEN '$fecha_inicial' AND '$fecha_final') $consulta"; //exit($select);
 	$result = $this->DbFetchAll($select,$Conex,true);
 	return $result;
   }
