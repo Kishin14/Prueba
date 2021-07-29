@@ -52,6 +52,14 @@ function checkedAll() {
 			$("input[name=int_cesantias]").attr("checked", "");
 		}
 	});
+	
+	$("#checkedAllLiq").click(function () {
+		if ($(this).is(":checked")) {
+			$("input[name=liq_final]").attr("checked", "true");
+		} else {
+			$("input[name=liq_final]").attr("checked", "");
+		}
+	});
 }
 
 
@@ -117,18 +125,21 @@ function setSolicitud(){
 	detalle_ss_id_cesantias      = '';
 	detalle_ss_id_int_cesantias  = '';
 	detalle_ss_id_vacaciones     = '';
+	detalle_ss_id_liq            = '';
 	
 	detalle_valores_nomina         = '';
 	detalle_valores_primas         = '';
 	detalle_valores_cesantias      = '';
 	detalle_valores_int_cesantias  = '';
 	detalle_valores_vacaciones     = '';
+	detalle_valores_liq            = '';
 	
 	pago_saldo_nomina         = 0;
 	pago_saldo_primas         = 0;
 	pago_saldo_cesantias      = 0;
 	pago_saldo_int_cesantias  = 0;
 	pago_saldo_vacaciones     = 0;
+	pago_saldo_liq            = 0;
 	
 	var retorno               = 'false'; 
 	
@@ -178,6 +189,16 @@ function setSolicitud(){
 		
 		valor_ind= removeFormatCurrency($($(this).parent().parent()).find("input[name=pagar]").val());
 		pago_saldo_vacaciones = parseFloat(pago_saldo_vacaciones) + parseFloat(valor_ind);
+	});
+
+
+	$(document).find("input[name=liq_final]:checked").each(function(){
+
+		detalle_ss_id_liq   += $(this).val()+",";	
+		detalle_valores_liq += $($(this).parent().parent()).find("input[name=pagar]").val()+"=";	
+		
+		valor_ind      = removeFormatCurrency($($(this).parent().parent()).find("input[name=pagar]").val());
+		pago_saldo_liq = parseFloat(pago_saldo_liq) + parseFloat(valor_ind);
 	});
 
 	
@@ -292,6 +313,28 @@ function setSolicitud(){
 		parent.document.forms[0]['causaciones_abono_vacaciones'].value = '';
 		parent.document.forms[0]['valores_abono_vacaciones'].value     = '';
 		parent.document.forms[0]['valor_abono_vacaciones'].value       = 0;
+		//retorno += "No ha escogido una de las Vacaciones Pendientes. Por favor Seleccione una de las Vacaciones !!.";
+
+	}
+
+	
+	if(pago_saldo_liq>0 && $("#tableLiq tr").length > 2){
+		
+		retorno = 'true';
+		parent.document.forms[0]['causaciones_abono_liq'].value     = detalle_ss_id_liq;
+		parent.document.forms[0]['valores_abono_liq'].value  = detalle_valores_liq;
+		parent.document.forms[0]['valor_abono_liq'].value    = setFormatCurrency(pago_saldo_liq);
+		
+	}else if($("#tableLiq tr").length ==  2){
+		
+		parent.document.forms[0]['causaciones_abono_liq'].value     = '';
+		parent.document.forms[0]['valores_abono_liq'].value  = '';
+		parent.document.forms[0]['valor_abono_liq'].value    = 0;
+		
+	}else{
+		parent.document.forms[0]['causaciones_abono_liq'].value     = '';
+		parent.document.forms[0]['valores_abono_liq'].value  = '';
+		parent.document.forms[0]['valor_abono_liq'].value    = 0;
 		//retorno += "No ha escogido una de las Vacaciones Pendientes. Por favor Seleccione una de las Vacaciones !!.";
 
 	}
