@@ -27,47 +27,59 @@ final class Contrato extends Controler{
     $Layout -> SetLimpiar   ($Model -> getPermiso($this -> getActividadId(),CLEAR,$this -> getConex()));
 	
     $Layout -> SetCampos($this -> Campos);
-	
 
-	//// GRID ////
-	$Attributes = array(
-	  id		=>'tipo_contrato',
-	  title		=>'Listado de Tipos de Contratos',
-	  sortname	=>'descripcion',
-	  width		=>'1000',
-	  height	=>'200'
-	);
-
-	$Cols = array(
-		array(name=>'tipo_contrato_id',		index=>'tipo_contrato_id',		sorttype=>'text',	width=>'80',	align=>'center'),
-		array(name=>'nombre',				index=>'nombre',				sorttype=>'text',	width=>'100',	align=>'left'),
-		array(name=>'prefijo',				index=>'prefijo',				sorttype=>'text',	width=>'100',	align=>'left'),
-	  	array(name=>'descripcion',			index=>'descripcion',			sorttype=>'text',	width=>'150',	align=>'left'),
-	  	array(name=>'periodo_prueba',		index=>'periodo_prueba',		sorttype=>'text',	width=>'120',	align=>'center'),
-	  	array(name=>'indemnizacion',		index=>'indemnizacion',			sorttype=>'text',	width=>'120',	align=>'center'),
-	  	array(name=>'liquidacion',			index=>'liquidacion',			sorttype=>'text',	width=>'120',	align=>'center'),
-	  	array(name=>'prestaciones_sociales',index=>'prestaciones_sociales',	sorttype=>'text',	width=>'150',	align=>'center'), 
-	  	array(name=>'salud',				index=>'salud',					sorttype=>'text',	width=>'80',	align=>'left'), 
-	  	array(name=>'arl',					index=>'arl',					sorttype=>'text',	width=>'80',	align=>'left'), 
-	  	array(name=>'tipo',					index=>'tipo',					sorttype=>'text',	width=>'100',	align=>'left')
-	);
-	  
-    $Titles = array('CODIGO',
-    				'NOMBRE',
-					'PREFIJO',
-    				'DESCRIPCION',
-    				'PERIODO PRUEBA',
-    				'INDEMNIZACION',
-					'LIQUIDACION',
-					'PRESTACIONES SOCIALES',
-					'SALUD',
-					'ARL',
-					'TIPO'
-	);
-	
-	$Layout -> SetGridContrato($Attributes,$Titles,$Cols,$Model -> GetQueryContratoGrid());
 	$Layout -> RenderMain();
   
+  }
+  
+  protected function showGrid(){
+	  
+	require_once("ContratoLayoutClass.php");
+	require_once("ContratoModelClass.php");
+	
+	$Layout   = new ContratoLayout($this -> getTitleTab(),$this -> getTitleForm());
+    $Model    = new ContratoModel();
+	  
+	//// GRID ////
+	$Attributes = array(
+		id		=>'tipo_contrato',
+		title		=>'Listado de Tipos de Contratos',
+		sortname	=>'descripcion',
+		width		=>'1000',
+		height	=>'200'
+	  );
+  
+	  $Cols = array(
+		  array(name=>'tipo_contrato_id',		index=>'tipo_contrato_id',		sorttype=>'text',	width=>'80',	align=>'center'),
+		  array(name=>'nombre',				index=>'nombre',				sorttype=>'text',	width=>'100',	align=>'left'),
+		  array(name=>'prefijo',				index=>'prefijo',				sorttype=>'text',	width=>'100',	align=>'left'),
+			array(name=>'descripcion',			index=>'descripcion',			sorttype=>'text',	width=>'150',	align=>'left'),
+			array(name=>'periodo_prueba',		index=>'periodo_prueba',		sorttype=>'text',	width=>'120',	align=>'center'),
+			array(name=>'indemnizacion',		index=>'indemnizacion',			sorttype=>'text',	width=>'120',	align=>'center'),
+			array(name=>'liquidacion',			index=>'liquidacion',			sorttype=>'text',	width=>'120',	align=>'center'),
+			array(name=>'prestaciones_sociales',index=>'prestaciones_sociales',	sorttype=>'text',	width=>'150',	align=>'center'), 
+			array(name=>'salud',				index=>'salud',					sorttype=>'text',	width=>'80',	align=>'left'), 
+			array(name=>'arl',					index=>'arl',					sorttype=>'text',	width=>'80',	align=>'left'), 
+			array(name=>'tipo',					index=>'tipo',					sorttype=>'text',	width=>'100',	align=>'left')
+	  );
+		
+	  $Titles = array('CODIGO',
+					  'NOMBRE',
+					  'PREFIJO',
+					  'DESCRIPCION',
+					  'PERIODO PRUEBA',
+					  'INDEMNIZACION',
+					  'LIQUIDACION',
+					  'PRESTACIONES SOCIALES',
+					  'SALUD',
+					  'ARL',
+					  'TIPO'
+	  );
+	  
+	 $html = $Layout -> SetGridContrato($Attributes,$Titles,$Cols,$Model -> GetQueryContratoGrid());
+	 
+	 print $html;
+	  
   }
 
   protected function onclickValidateRow(){
@@ -288,6 +300,21 @@ final class Contrato extends Controler{
 	$this -> Campos[salud] = array(
 		name	=>'salud',
 		id		=>'salud',
+		type	=>'select',
+		Boostrap =>'si',
+		options	=> array(array(value=>'0',text=>'NO',selected=>'0'),array(value=>'1',text=>'SI')),
+		required=>'yes',
+	 	datatype=>array(
+			type	=>'alphanum',
+			length	=>'1'),
+		transaction=>array(
+			table	=>array('tipo_contrato'),
+			type	=>array('column'))
+	);
+
+	$this -> Campos[pension] = array(
+		name	=>'pension',
+		id		=>'pension',
 		type	=>'select',
 		Boostrap =>'si',
 		options	=> array(array(value=>'0',text=>'NO',selected=>'0'),array(value=>'1',text=>'SI')),

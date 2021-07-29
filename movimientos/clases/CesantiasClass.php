@@ -41,40 +41,52 @@ final class Cesantias extends Controler{
 
 		}
 
-	//// GRID ////
-	$Attributes = array(
-	  id		=>'cesantias',
-	  title		=>'Listado de Tipos de Cesantias',
-	  sortname	=>'liquidacion_cesantias_id',
-	  width		=>'auto',
-	  height	=>'200'
-	);
-
-	$Cols = array(
-		array(name=>'liquidacion_cesantias_id',	index=>'liquidacion_cesantias_id',	sorttype=>'text',	width=>'50',	align=>'center'),
-		array(name=>'empleado',				index=>'empleado',		sorttype=>'text',	width=>'200',	align=>'left'),
-		array(name=>'numero_identificacion',index=>'numero_identificacion',		sorttype=>'text',	width=>'200',	align=>'center'),
-		array(name=>'observaciones',		index=>'observaciones',	sorttype=>'text',	width=>'200',	align=>'left'),
-	  	array(name=>'fecha_liquidacion',	index=>'fecha_liquidacion',		sorttype=>'text',	width=>'100',	align=>'center'),
-	  	array(name=>'dias',			index=>'dias',		sorttype=>'text',	width=>'100',	align=>'center'),
-	    array(name=>'valor',				index=>'valor',				sorttype=>'text',	width=>'100',	align=>'center'),
-	  	array(name=>'estado',				index=>'estado',			sorttype=>'text',	width=>'120',	align=>'center')
-	);
-	  
-    $Titles = array('No',
-					'EMPELADO',
-					'NUMERO ID',
-    				'OBSERVACION',
-    				'FECHA LIQUIDACION',
-    				'DIAS',
-					'VALOR',
-					'ESTADO'
-	);
-	
-	$Layout -> SetGridCesantias($Attributes,$Titles,$Cols,$Model -> GetQueryCesantiasGrid());
-
 	$Layout -> RenderMain();
   
+  }
+  
+  protected function showGrid(){
+	  
+	require_once("CesantiasLayoutClass.php");
+	require_once("CesantiasModelClass.php");
+	
+	$Layout   = new CesantiasLayout($this -> getTitleTab(),$this -> getTitleForm());
+    $Model    = new CesantiasModel();
+	  
+	//// GRID ////
+	$Attributes = array(
+		id		=>'cesantias',
+		title		=>'Listado de Tipos de Cesantias',
+		sortname	=>'liquidacion_cesantias_id',
+		width		=>'auto',
+		height	=>'200'
+	  );
+  
+	  $Cols = array(
+		  array(name=>'liquidacion_cesantias_id',	index=>'liquidacion_cesantias_id',	sorttype=>'text',	width=>'50',	align=>'center'),
+		  array(name=>'empleado',				index=>'empleado',		sorttype=>'text',	width=>'200',	align=>'left'),
+		  array(name=>'numero_identificacion',index=>'numero_identificacion',		sorttype=>'text',	width=>'200',	align=>'center'),
+		  array(name=>'observaciones',		index=>'observaciones',	sorttype=>'text',	width=>'200',	align=>'left'),
+			array(name=>'fecha_liquidacion',	index=>'fecha_liquidacion',		sorttype=>'text',	width=>'100',	align=>'center'),
+			array(name=>'dias',			index=>'dias',		sorttype=>'text',	width=>'100',	align=>'center'),
+		  array(name=>'valor',				index=>'valor',				sorttype=>'text',	width=>'100',	align=>'center'),
+			array(name=>'estado',				index=>'estado',			sorttype=>'text',	width=>'120',	align=>'center')
+	  );
+		
+	  $Titles = array('No',
+					  'EMPELADO',
+					  'NUMERO ID',
+					  'OBSERVACION',
+					  'FECHA LIQUIDACION',
+					  'DIAS',
+					  'VALOR',
+					  'ESTADO'
+	  );
+	  
+	 $html =  $Layout -> SetGridCesantias($Attributes,$Titles,$Cols,$Model -> GetQueryCesantiasGrid());
+	 
+	 print $html;
+	  
   }
 
   protected function onclickValidateRow(){
@@ -282,8 +294,9 @@ final class Cesantias extends Controler{
 	 require_once("CesantiasModelClass.php");
 	$Model = new CesantiasModel();
 	$empleado_id 	= $_REQUEST['empleado_id'];
+	$fecha_liquidacion 	= $_REQUEST['fecha_liquidacion']!= '' ? $_REQUEST['fecha_liquidacion'] : date("Y-m-d") ;
 	
-	$Data = $Model -> getDataEmpleado($empleado_id,$this -> getOficinaId(),$this -> getConex());
+	$Data = $Model -> getDataEmpleado($empleado_id,$fecha_liquidacion,$this -> getOficinaId(),$this -> getConex());
 	
 	echo json_encode($Data);
 	 

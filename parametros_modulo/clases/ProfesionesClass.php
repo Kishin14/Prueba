@@ -28,30 +28,42 @@ final class Profesiones extends Controler{
 	
     $Layout -> SetCampos($this -> Campos);
 	
-
-	//// GRID ////
-	$Attributes = array(
-	  id		=>'profesion',
-	  title		=>'Listado de Profesiones',
-	  sortname	=>'nombre',
-	  width		=>'1000',
-	  height	=>'200'
-	);
-
-	$Cols = array(
-		array(name=>'profesion_id',		index=>'profesion_id',		sorttype=>'text',	width=>'100',	align=>'center'),
-		array(name=>'id_dane_profesion',index=>'id_dane_profesion',	sorttype=>'text',	width=>'150',	align=>'left'),
-	  	array(name=>'nombre',			index=>'nombre',			sorttype=>'text',	width=>'450',	align=>'left'),  
-	);
-	  
-    $Titles = array('CODIGO',
-    				'DANE',
-    				'NOMBRE',
-	);
-	
-	$Layout -> SetGridProfesiones($Attributes,$Titles,$Cols,$Model -> GetQueryProfesionesGrid());
 	$Layout -> RenderMain();
   
+  }
+  
+  protected function showGrid(){
+	  
+	require_once("ProfesionesLayoutClass.php");
+	require_once("ProfesionesModelClass.php");
+	
+	$Layout   = new ProfesionesLayout($this -> getTitleTab(),$this -> getTitleForm());
+    $Model    = new ProfesionesModel();
+	  
+	 //// GRID ////
+	$Attributes = array(
+		id		=>'profesion',
+		title		=>'Listado de Profesiones',
+		sortname	=>'nombre',
+		width		=>'1000',
+		height	=>'200'
+	  );
+  
+	  $Cols = array(
+		  array(name=>'profesion_id',		index=>'profesion_id',		sorttype=>'text',	width=>'100',	align=>'center'),
+		  array(name=>'id_dane_profesion',index=>'id_dane_profesion',	sorttype=>'text',	width=>'150',	align=>'left'),
+			array(name=>'nombre',			index=>'nombre',			sorttype=>'text',	width=>'450',	align=>'left'),  
+	  );
+		
+	  $Titles = array('CODIGO',
+					  'DANE',
+					  'NOMBRE',
+	  );
+	  
+	  $html = $Layout -> SetGridProfesiones($Attributes,$Titles,$Cols,$Model -> GetQueryProfesionesGrid());
+	 
+	 print $html;
+	  
   }
 
   protected function onclickValidateRow(){

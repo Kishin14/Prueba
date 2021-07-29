@@ -28,34 +28,46 @@ final class ARL extends Controler{
 	
     $Layout -> SetCampos($this -> Campos);
 	
-
-	//// GRID ////
-	$Attributes = array(
-	  id		=>'categoria_arl',
-	  title		=>'Listado de categorias ARL',
-	  sortname	=>'clase_riesgo',
-	  width		=>'auto',
-	  height	=>'200'
-	);
-
-	$Cols = array(
-		array(name=>'categoria_arl_id',	index=>'categoria_arl_id',	sorttype=>'text',	width=>'100',	align=>'center'),
-		array(name=>'clase_riesgo',		index=>'clase_riesgo',		sorttype=>'text',	width=>'250',	align=>'center'),
-		array(name=>'descripcion',		index=>'descripcion',		sorttype=>'text',	width=>'300',	align=>'center'),
-	  	array(name=>'porcentaje',		index=>'porcentaje',		sorttype=>'text',	width=>'150',	align=>'center'),
-	  	array(name=>'estado',			index=>'estado',			sorttype=>'text',	width=>'150',	align=>'center')
-	);
-	  
-    $Titles = array('CODIGO',
-    				'CLASE DE RIESGO',
-    				'DESCRIPCION',
-    				'PORCENTAJE',
-    				'ESTADO',
-	);
-	
-	$Layout -> SetGridARL($Attributes,$Titles,$Cols,$Model -> GetQueryARLGrid());
 	$Layout -> RenderMain();
   
+  }
+  
+  protected function showGrid(){
+	  
+	require_once("ARLLayoutClass.php");
+	require_once("ARLModelClass.php");
+	
+	$Layout   = new ARLLayout($this -> getTitleTab(),$this -> getTitleForm());
+    $Model    = new ARLModel();
+	  
+	 //// GRID ////
+	$Attributes = array(
+		id		=>'categoria_arl',
+		title		=>'Listado de categorias ARL',
+		sortname	=>'clase_riesgo',
+		width		=>'auto',
+		height	=>'200'
+	  );
+  
+	  $Cols = array(
+		  array(name=>'categoria_arl_id',	index=>'categoria_arl_id',	sorttype=>'text',	width=>'100',	align=>'center'),
+		  array(name=>'clase_riesgo',		index=>'clase_riesgo',		sorttype=>'text',	width=>'250',	align=>'center'),
+		  array(name=>'descripcion',		index=>'descripcion',		sorttype=>'text',	width=>'300',	align=>'center'),
+			array(name=>'porcentaje',		index=>'porcentaje',		sorttype=>'text',	width=>'150',	align=>'center'),
+			array(name=>'estado',			index=>'estado',			sorttype=>'text',	width=>'150',	align=>'center')
+	  );
+		
+	  $Titles = array('CODIGO',
+					  'CLASE DE RIESGO',
+					  'DESCRIPCION',
+					  'PORCENTAJE',
+					  'ESTADO',
+	  );
+	  
+	  $html = $Layout -> SetGridARL($Attributes,$Titles,$Cols,$Model -> GetQueryARLGrid());
+	 
+	 print $html;
+	  
   }
 
   protected function onclickValidateRow(){

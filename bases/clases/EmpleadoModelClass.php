@@ -150,10 +150,11 @@
 				tipo_vivienda,
 				(SELECT nombre FROM profesion WHERE profesion_id = e.profesion_id) AS profesion_id,
 				num_hijos,
-				IF(estado='A','ACTIVO','INACTIVO') AS estado,
-				(SELECT CONCAT(primer_nombre, ' ', segundo_nombre, ' ', primer_apellido, ' ', segundo_apellido) FROM convocado WHERE convocado_id = e.convocado_id) AS convocado_id
+				IF(e.estado='A','ACTIVO','INACTIVO') AS estado,
+				(SELECT CONCAT(primer_nombre, ' ', segundo_nombre, ' ', primer_apellido, ' ', segundo_apellido) FROM convocado WHERE convocado_id = e.convocado_id) AS convocado_id,
+				t.tipo_identificacion_id, t.numero_identificacion,t.digito_verificacion,t.tipo_persona_id,t.primer_apellido,t.segundo_apellido,t.primer_nombre,t.segundo_nombre
 			FROM
-				empleado e
+				empleado e, tercero t WHERE t.tercero_id=e.tercero_id
 			";
 			// $Query = "SELECT * FROM perfil";
 			return $Query;

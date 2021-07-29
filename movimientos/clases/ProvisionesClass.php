@@ -297,6 +297,47 @@ final class Provisiones extends Controler{
 	$Layout -> RenderMain();
   }
   
+  protected function showGrid(){
+	  
+	require_once("ProvisionesLayoutClass.php");
+    require_once("ProvisionesModelClass.php");
+	
+    $Layout   = new ProvisionesLayout($this -> getTitleTab(),$this -> getTitleForm());
+    $Model    = new ProvisionesModel();
+	  
+	 //// GRID ////
+	 $Attributes = array(
+		id		=>'Provisiones',
+		title		=>'Liquidacion Provisiones',
+		sortname	=>'fecha_inicial',
+		sortorder	=>'desc',
+		rowId		=>'liquidacion_provision_id',
+		width		=>'auto',
+		height	=>'250'
+	  );
+  
+	  $Cols = array(
+		array(name=>'consecutivo',			index=>'consecutivo',			sorttype=>'text',	width=>'90',	align=>'center'),
+		array(name=>'fecha_inicial',			index=>'fecha_inicial',			sorttype=>'date',	width=>'140',	align=>'center'),
+		array(name=>'fecha_final',			index=>'fecha_final',			sorttype=>'text',	width=>'140',	align=>'left'),
+		array(name=>'doc_contable',			index=>'doc_contable',			sorttype=>'date',	width=>'100',	align=>'left'),
+		array(name=>'estado',					index=>'estado',				sorttype=>'text',	width=>'100',	align=>'center')
+	  );
+  
+	  $Titles = array('CONSECUTIVO',
+					  'FECHA INICIAL',
+					  'FECHA FINAL',
+					  'DOCUMENTO',
+					  'ESTADO'
+	  );
+	  
+  
+	  $html = $Layout -> SetGridProvisiones($Attributes,$Titles,$Cols,$Model -> getQueryProvisionesGrid());
+	 
+	 print $html;
+	  
+  }
+  
     
   protected function onclickValidateRow(){
 

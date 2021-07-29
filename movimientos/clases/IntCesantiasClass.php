@@ -41,40 +41,53 @@ final class IntCesantias extends Controler{
 
 		}
 
-	//// GRID ////
-	$Attributes = array(
-	  id		=>'intcesantias',
-	  title		=>'Listado de Tipos de IntCesantias',
-	  sortname	=>'liquidacion_int_cesantias_id',
-	  width		=>'auto',
-	  height	=>'200'
-	);
-
-	$Cols = array(
-		array(name=>'liquidacion_int_cesantias_id',	index=>'liquidacion_int_cesantias_id',	sorttype=>'text',	width=>'50',	align=>'center'),
-		array(name=>'empleado',				index=>'empleado',		sorttype=>'text',	width=>'200',	align=>'left'),
-		array(name=>'numero_identificacion',index=>'numero_identificacion',		sorttype=>'text',	width=>'200',	align=>'center'),
-		array(name=>'observaciones',		index=>'observaciones',	sorttype=>'text',	width=>'200',	align=>'left'),
-	  	array(name=>'fecha_liquidacion',	index=>'fecha_liquidacion',		sorttype=>'text',	width=>'100',	align=>'center'),
-	  	array(name=>'dias',			index=>'dias',		sorttype=>'text',	width=>'100',	align=>'center'),
-	    array(name=>'valor',				index=>'valor',				sorttype=>'text',	width=>'100',	align=>'center'),
-	  	array(name=>'estado',				index=>'estado',			sorttype=>'text',	width=>'120',	align=>'center')
-	);
-	  
-    $Titles = array('No',
-					'EMPELADO',
-					'NUMERO ID',
-    				'OBSERVACION',
-    				'FECHA LIQUIDACION',
-    				'DIAS',
-					'VALOR',
-					'ESTADO'
-	);
-	
-	$Layout -> SetGridIntCesantias($Attributes,$Titles,$Cols,$Model -> GetQueryIntCesantiasGrid());
-
 	$Layout -> RenderMain();
   
+  }
+  
+  protected function showGrid(){
+	  
+	require_once("IntCesantiasLayoutClass.php");
+	require_once("IntCesantiasModelClass.php");
+	
+	$Layout   = new IntCesantiasLayout($this -> getTitleTab(),$this -> getTitleForm());
+    $Model    = new IntCesantiasModel();
+	  
+	 //// GRID ////
+	$Attributes = array(
+		id		=>'intcesantias',
+		title		=>'Listado de Tipos de IntCesantias',
+		sortname	=>'liquidacion_int_cesantias_id',
+		width		=>'auto',
+		height	=>'200'
+	  );
+  
+	  $Cols = array(
+		  array(name=>'liquidacion_int_cesantias_id',	index=>'liquidacion_int_cesantias_id',	sorttype=>'text',	width=>'50',	align=>'center'),
+		  array(name=>'empleado',				index=>'empleado',		sorttype=>'text',	width=>'200',	align=>'left'),
+		  array(name=>'numero_identificacion',index=>'numero_identificacion',		sorttype=>'text',	width=>'200',	align=>'center'),
+		  array(name=>'observaciones',		index=>'observaciones',	sorttype=>'text',	width=>'200',	align=>'left'),
+			array(name=>'fecha_liquidacion',	index=>'fecha_liquidacion',		sorttype=>'text',	width=>'100',	align=>'center'),
+			array(name=>'dias',			index=>'dias',		sorttype=>'text',	width=>'100',	align=>'center'),
+		  array(name=>'valor',				index=>'valor',				sorttype=>'text',	width=>'100',	align=>'center'),
+			array(name=>'estado',				index=>'estado',			sorttype=>'text',	width=>'120',	align=>'center')
+	  );
+		
+	  $Titles = array('No',
+					  'EMPELADO',
+					  'NUMERO ID',
+					  'OBSERVACION',
+					  'FECHA LIQUIDACION',
+					  'DIAS',
+					  'VALOR',
+					  'ESTADO'
+	  );
+	  
+	  $html = $Layout -> SetGridIntCesantias($Attributes,$Titles,$Cols,$Model -> GetQueryIntCesantiasGrid());
+  
+	 
+	 print $html;
+	  
   }
 
   protected function onclickValidateRow(){
@@ -272,8 +285,9 @@ final class IntCesantias extends Controler{
 	 require_once("IntCesantiasModelClass.php");
 	$Model = new IntCesantiasModel();
 	$empleado_id 	= $_REQUEST['empleado_id'];
-	
-	$Data = $Model -> getDataEmpleado($empleado_id,$this -> getOficinaId(),$this -> getConex());
+	$fecha_liquidacion 	= $_REQUEST['fecha_liquidacion']!= '' ? $_REQUEST['fecha_liquidacion'] : date("Y-m-d") ;
+
+	$Data = $Model -> getDataEmpleado($empleado_id,$fecha_liquidacion,$this -> getOficinaId(),$this -> getConex());
 	
 	echo json_encode($Data);
 	 

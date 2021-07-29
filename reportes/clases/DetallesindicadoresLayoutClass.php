@@ -81,7 +81,8 @@ final class DetallesindicadoresLayout extends View{
 
      $this -> TplInclude -> IncludeCss("../../../framework/css/jquery.autocomplete.css");	 	 
 
-     $this -> TplInclude -> IncludeCss("../../../framework/css/jquery.alerts.css");		 	 
+     $this -> TplInclude -> IncludeCss("../../../framework/css/jquery.alerts.css");
+	   $this -> TplInclude -> IncludeCss("../../../framework/css/jqgrid/redmond/jquery-ui-1.8.2.custom.css");		 		 	 
 
 	 
 
@@ -93,7 +94,8 @@ final class DetallesindicadoresLayout extends View{
 
      $this -> TplInclude -> IncludeJs("../../../framework/js/funcionesDetalle.js");
 
-     $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.alerts.js");	 		   	 
+     $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.alerts.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/jqgrid/jquery-ui-1.8.2.custom.min.js");	 	 		   	 
 
      $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.hotkeys.js");	 
 

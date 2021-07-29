@@ -27,26 +27,6 @@ final class Estudios extends Controler{
 	
     $Layout -> SetCampos($this -> Campos);
 	
-
-	//// GRID ////
-	$Attributes = array(
-	  id		=>'nivel_escolaridad',
-	  title		=>'Listado de Estudios',
-	  sortname	=>'nombre',
-	  width		=>'1000',
-	  height	=>'200'
-	);
-
-	$Cols = array(
-	  array(name=>'nivel_escolaridad_id',	index=>'nivel_escolaridad_id',	sorttype=>'text',	width=>'50',	align=>'center'),
-	  array(name=>'nombre',					index=>'nombre',				sorttype=>'text',	width=>'250',	align=>'left'),
-	  array(name=>'descripcion',			index=>'descripcion',			sorttype=>'text',	width=>'350',	align=>'left'),
-	  array(name=>'estado',					index=>'estado',				sorttype=>'text',	width=>'150',	align=>'left')
-	);
-	  
-    $Titles = array('CODIGO', 'NOMBRE','DESCRIPCION','ESTADO');
-	
-	$Layout -> SetGridEstudios($Attributes,$Titles,$Cols,$Model -> GetQueryEstudiosGrid());
 	$Layout -> RenderMain();
   
   }
@@ -55,6 +35,39 @@ final class Estudios extends Controler{
 	require_once("EstudiosModelClass.php");
     $Model = new EstudiosModel();
 	echo $Model -> ValidateRow($this -> getConex(),$this -> Campos);
+  }
+  
+  
+  protected function showGrid(){
+	  
+	require_once("EstudiosLayoutClass.php");
+	require_once("EstudiosModelClass.php");
+	
+	$Layout   = new EstudiosLayout($this -> getTitleTab(),$this -> getTitleForm());
+    $Model    = new EstudiosModel();
+	  
+	 //// GRID ////
+	$Attributes = array(
+		id		=>'nivel_escolaridad',
+		title		=>'Listado de Estudios',
+		sortname	=>'nombre',
+		width		=>'1000',
+		height	=>'200'
+	  );
+  
+	  $Cols = array(
+		array(name=>'nivel_escolaridad_id',	index=>'nivel_escolaridad_id',	sorttype=>'text',	width=>'50',	align=>'center'),
+		array(name=>'nombre',					index=>'nombre',				sorttype=>'text',	width=>'250',	align=>'left'),
+		array(name=>'descripcion',			index=>'descripcion',			sorttype=>'text',	width=>'350',	align=>'left'),
+		array(name=>'estado',					index=>'estado',				sorttype=>'text',	width=>'150',	align=>'left')
+	  );
+		
+	  $Titles = array('CODIGO', 'NOMBRE','DESCRIPCION','ESTADO');
+	  
+	  $html = $Layout -> SetGridEstudios($Attributes,$Titles,$Cols,$Model -> GetQueryEstudiosGrid());
+	 
+	 print $html;
+	  
   }
   
 

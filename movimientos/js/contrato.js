@@ -4,6 +4,7 @@ function setDataFormWithResponse(){
 	var parametros  = new Array({campos:"contrato_id",valores:parametrosId});
 	var forma       = document.forms[0];
 	var controlador = 'ContratoClass.php';
+	var tipo = '';
 
 	FindRow(parametros,forma,controlador,null,function(resp){
 										   
@@ -49,6 +50,60 @@ function setDataFormWithResponse(){
 		
 	});
 }
+
+function showTable(){
+  
+	var frame_grid =  document.getElementById('frame_grid');
+	
+	  //Se valida que el iFrame no exista
+	  if(frame_grid == null ){
+  
+	  var QueryString   = 'ACTIONCONTROLER=showGrid';
+  
+	  $.ajax({
+		url        : "ContratoClass.php?rand="+Math.random(),
+		data       : QueryString,
+		 async     : false,
+		beforeSend : function(){
+		showDivLoading();
+		},
+		success    : function(resp){
+		  console.log(resp);
+		  try{
+			
+			var iframe           = document.createElement('iframe');
+			iframe.id            ='frame_grid';
+			iframe.style.cssText = "border:0; height: 400px; background-color:transparent";
+			//iframe.scrolling   = 'no';
+			
+			document.body.appendChild(iframe); 
+			iframe.contentWindow.document.open();
+			iframe.contentWindow.document.write(resp);
+			iframe.contentWindow.document.close();
+			
+			$('#mostrar_grid').removeClass('btn btn-warning btn-sm');
+			$('#mostrar_grid').addClass('btn btn-secondary btn-sm');
+			$('#mostrar_grid').html('Ocultar tabla');
+			
+		  }catch(e){
+			
+			console.log(e);
+			
+		  }
+		  removeDivLoading();
+		} 
+	  });
+	  
+	}else{
+	  
+		$('#frame_grid').remove();
+		$('#mostrar_grid').removeClass('btn btn-secondary btn-sm');
+		$('#mostrar_grid').addClass('btn btn-warning btn-sm');
+		$('#mostrar_grid').html('Mostrar tabla');
+	  
+	}
+	
+  }
 
 
 function setDataEmpleado(empleado_id){
@@ -215,7 +270,7 @@ $(document).ready(function(){
 			  try{
 		 
 				  var responseArray       = $.parseJSON(response); 
-				  var tipo             	  = responseArray['tipo'];
+				  tipo             	  = responseArray['tipo'];
 				  var tiempo_contrato  	  = responseArray['tiempo_contrato'];
 				  var prestaciones_sociales= responseArray['prestaciones_sociales'];
 				  $('#tiempo_contrato').val(tiempo_contrato);
@@ -242,7 +297,7 @@ $(document).ready(function(){
 				  }
 				  
 				  if(!isNaN(tiempo_contrato)){ 
-					  calculaFechaFin(tiempo_contrato);
+					calculaFechaFin(tiempo_contrato,tipo);
 				  }
 
 			  }catch(e){
@@ -257,7 +312,7 @@ $(document).ready(function(){
   
   $('#fecha_inicio').change(function(){	  
 	  var tiempo_contrato = $('#tiempo_contrato').val();
-	  calculaFechaFin(tiempo_contrato);
+	  calculaFechaFin(tiempo_contrato,tipo);
 	});
 ///INICIO VALIDACION FECHAS DE REPORTE
  
@@ -326,7 +381,7 @@ $(document).ready(function(){
 });
 
 
-function calculaFechaFin(tiempo_contrato){
+function calculaFechaFin(tiempo_contrato,tipo_contrato = 'F'){
 
 	var fechai = $('#fecha_inicio').val();
 
@@ -345,8 +400,13 @@ function calculaFechaFin(tiempo_contrato){
 			  try{
 				  var responseArray       = $.parseJSON(response); 
 				  var fecha_fin        	  = responseArray['fechafin'];
-				 
+				  
+				  //Valida Contrato Indefinido
+				  
+				  var fecha_fin = tipo_contrato == 'I' ? '' : fecha_fin;
+				  
 				  $('#fecha_terminacion').val(fecha_fin);
+				 
 			  }catch(e){
 				 alertJquery(e);
 			  }

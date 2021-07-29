@@ -36,13 +36,15 @@ final class reporteIncapacidadesResultLayout extends View{
      $this -> TplInclude -> IncludeCss("../../../framework/css/general.css");
      $this -> TplInclude -> IncludeCss("../css/detalles.css");	 
      $this -> TplInclude -> IncludeCss("../../../framework/css/jquery.autocomplete.css");	 	 
-     $this -> TplInclude -> IncludeCss("../../../framework/css/jquery.alerts.css");		 	 
+     $this -> TplInclude -> IncludeCss("../../../framework/css/jquery.alerts.css");
+	   $this -> TplInclude -> IncludeCss("../../../framework/css/jqgrid/redmond/jquery-ui-1.8.2.custom.css");		 		 	 
 	 
      $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.js");
      $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.autocomplete.js");	
      $this -> TplInclude -> IncludeJs("../../../framework/js/funciones.js");
      $this -> TplInclude -> IncludeJs("../../../framework/js/funcionesDetalle.js");
-     $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.alerts.js");	 		   	 
+     $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.alerts.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/jqgrid/jquery-ui-1.8.2.custom.min.js");	 	 		   	 
      $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.hotkeys.js");	 
    	 $this -> TplInclude -> IncludeJs("../js/detalles.js");
 	  	  

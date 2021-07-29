@@ -19,7 +19,18 @@
 			//LISTA MENU
 			$Layout -> SetPeriodo($Model -> GetPeriodo($this -> getConex()));
 
-			//// GRID ////
+			
+			$Layout -> RenderMain();
+		}
+		
+		protected function showGrid(){
+	  
+			require_once("PensionalLayoutClass.php");
+			require_once("PensionalModelClass.php");
+			$Layout   = new PensionalLayout($this -> getTitleTab(),$this -> getTitleForm());
+			$Model    = new PensionalModel();
+			  
+			 //// GRID ////
 			$Attributes = array(
 				id		=>'fondo_pensional',
 				title	=>'Listado de Pensional',
@@ -41,9 +52,13 @@
 				'RANGO FINAL',
 				'PERIODO CONTABLE'
 			);
-			$Layout -> SetGridPensional($Attributes,$Titles,$Cols,$Model -> GetQueryPensionalGrid());
-			$Layout -> RenderMain();
-		}
+			
+			$html = $Layout -> SetGridPensional($Attributes,$Titles,$Cols,$Model -> GetQueryPensionalGrid());
+			 
+			 print $html;
+			  
+		  }
+		
 		protected function onclickValidateRow(){
 			require_once("PensionalModelClass.php");
 			$Model = new PensionalModel();

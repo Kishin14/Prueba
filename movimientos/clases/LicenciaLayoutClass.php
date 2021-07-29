@@ -45,7 +45,8 @@ final class LicenciaLayout extends View{
      $this -> TplInclude -> IncludeCss("../../../framework/css/ajax-dynamic-list.css");
      $this -> TplInclude -> IncludeCss("../../../framework/css/reset.css");
      $this -> TplInclude -> IncludeCss("../../../framework/css/general.css");	
-     $this -> TplInclude -> IncludeCss("../../../framework/css/jquery.alerts.css");	
+     $this -> TplInclude -> IncludeCss("../../../framework/css/jquery.alerts.css");
+	   $this -> TplInclude -> IncludeCss("../../../framework/css/jqgrid/redmond/jquery-ui-1.8.2.custom.css");		 	
 	 
      $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.js");
      $this -> TplInclude -> IncludeJs("../../../framework/js/jqueryform.js");
@@ -54,7 +55,8 @@ final class LicenciaLayout extends View{
      $this -> TplInclude -> IncludeJs("../../../framework/js/ajax-list.js");
      $this -> TplInclude -> IncludeJs("../../../framework/js/ajax-dynamic-list.js");
      $this -> TplInclude -> IncludeJs("../js/licencia.js");
-     $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.alerts.js");	 		 
+     $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.alerts.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/jqgrid/jquery-ui-1.8.2.custom.min.js");	 	 		 
 	 
      $this -> assign("CSSSYSTEM",			$this -> TplInclude -> GetCssInclude());
      $this -> assign("JAVASCRIPT",			$this -> TplInclude -> GetJsInclude());
@@ -100,9 +102,18 @@ final class LicenciaLayout extends View{
       require_once("../../../framework/clases/grid/JqGridClass.php");
 	  $TableGrid = new JqGrid();
  	  $TableGrid -> SetJqGrid($Attributes,$Titles,$Cols,$Query);
-      $this -> assign("GRIDNOVEDAD",$TableGrid -> RenderJqGrid());
-      $this -> assign("TABLEGRIDCSS",$TableGrid -> GetJqGridCss());
-      $this -> assign("TABLEGRIDJS",$TableGrid -> GetJqGridJs());
+     
+     $head = "'<head>".
+	 
+     $TableGrid -> GetJqGridJs()." ".
+     
+     $TableGrid -> GetJqGridCss()."
+     
+     </head>";
+     
+     $body = "<body>".$TableGrid -> RenderJqGrid()."</body>";
+     
+     return "<html>".$head." ".$body."</html>";
     }   
    
         

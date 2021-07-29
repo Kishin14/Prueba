@@ -31,6 +31,7 @@ final class LiqRetencionLayout extends View{
 		$this	->	fields		=	$campos;
 		$this	->	TplInclude	->	IncludeCss("../../../framework/css/jqgrid/redmond/jquery-ui-1.8.2.custom.css");
 		$this	->	TplInclude	->	IncludeCss("../../../framework/css/jquery.alerts.css");
+	   $this -> TplInclude -> IncludeCss("../../../framework/css/jqgrid/redmond/jquery-ui-1.8.2.custom.css");		 
 		$this	->	TplInclude	->	IncludeCss("../../../framework/css/ajax-dynamic-list.css");
 		$this	->	TplInclude	->	IncludeCss("../css/LiqRetencion.css");
 		$this	->	TplInclude	->	IncludeCss("../../../framework/css/reset.css");
@@ -46,6 +47,7 @@ final class LiqRetencionLayout extends View{
 		$this	->	TplInclude	->	IncludeJs("../../../framework/js/ajax-list.js");
 		$this	->	TplInclude	->	IncludeJs("../../../framework/js/ajax-dynamic-list.js");
 		$this	->	TplInclude	->	IncludeJs("../../../framework/js/jquery.alerts.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/jqgrid/jquery-ui-1.8.2.custom.min.js");	 
 		$this	->	TplInclude	->	IncludeJs("../../../framework/js/jqeffects/jquery.magnifier.js");
 		$this	->	TplInclude	->	IncludeJs("../../../framework/js/jquery.filestyle.js");
 		$this	->	TplInclude	->	IncludeJs("../../../framework/js/jqgrid/jquery-ui-1.8.2.custom.min.js");

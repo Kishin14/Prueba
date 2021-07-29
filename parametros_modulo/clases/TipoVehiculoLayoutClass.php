@@ -34,6 +34,7 @@ final class TipoVehiculoLayout extends View{
      $this -> TplInclude -> IncludeCss("../../../framework/css/reset.css");
      $this -> TplInclude -> IncludeCss("../../../framework/css/general.css");
      $this -> TplInclude -> IncludeCss("../../../framework/css/jquery.alerts.css");
+	   $this -> TplInclude -> IncludeCss("../../../framework/css/jqgrid/redmond/jquery-ui-1.8.2.custom.css");		 
 	
 	 $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.js");
      $this -> TplInclude -> IncludeJs("../../../framework/js/jqcalendar/jquery.ui.datepicker.js");
@@ -47,6 +48,7 @@ final class TipoVehiculoLayout extends View{
      $this -> TplInclude -> IncludeJs("../js/vehiculo.js");
      $this -> TplInclude -> IncludeJs("../../../framework/js/jqeffects/jquery.magnifier.js");
      $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.alerts.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/jqgrid/jquery-ui-1.8.2.custom.min.js");	 
 	 $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.filestyle.js");
 	
      $this -> assign("CSSSYSTEM",			$this -> TplInclude -> GetCssInclude());
@@ -92,9 +94,17 @@ final class TipoVehiculoLayout extends View{
       require_once("../../../framework/clases/grid/JqGridClass.php");
 	  $TableGrid = new JqGrid();
  	  $TableGrid -> SetJqGrid($Attributes,$Titles,$Cols,$Query);
-      $this -> assign("GRIDPARAMETROS",$TableGrid -> RenderJqGrid());
-      $this -> assign("TABLEGRIDCSS",$TableGrid -> GetJqGridCss());
-      $this -> assign("TABLEGRIDJS",$TableGrid -> GetJqGridJs());
+     $head = "'<head>".
+	 
+     $TableGrid -> GetJqGridJs()." ".
+     
+     $TableGrid -> GetJqGridCss()."
+     
+     </head>";
+     
+     $body = "<body>".$TableGrid -> RenderJqGrid()."</body>";
+     
+     return "<html>".$head." ".$body."</html>";
     }
      
     public function RenderMain(){

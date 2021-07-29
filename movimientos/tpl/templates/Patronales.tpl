@@ -6,9 +6,9 @@
    <link rel="stylesheet" href="../../../framework/css/bootstrap1.css">
    </head><body>
     {$JAVASCRIPT}
-    {$TABLEGRIDJS}
+   
     {$CSSSYSTEM}
-    {$TABLEGRIDCSS}     
+   
     {$TITLETAB}
 
     <fieldset>
@@ -73,7 +73,7 @@
       {$FORM1END}
     </fieldset>
 
-    <fieldset>{$GRIDLIQ_NOVEDAD}</fieldset>
+    <fieldset><button type="button" class="btn btn-warning btn-sm" id="mostrar_grid"  onclick="showTable()" style="float:right;">Mostrar tabla</button></fieldset>
     <div id="divAnulacion" style="display:none;">
       <form onSubmit="return false">
         <table>              

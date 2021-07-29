@@ -4,9 +4,9 @@
     <link rel="stylesheet" href="../../../framework/css/bootstrap1.css">
     <script src="../../../framework/clases/tinymce_4.4.1_dev/tinymce/js/tinymce/tinymce.min.js"></script> 
     {$JAVASCRIPT}
-    {$TABLEGRIDJS}
+   
     {$CSSSYSTEM}
-    {$TABLEGRIDCSS}
+    
     {$TITLETAB}  
 
 </head>
@@ -64,9 +64,10 @@
                 <td colspan="4" align="center">{$GUARDAR}&nbsp;{$ACTUALIZAR}&nbsp;{$BORRAR}&nbsp;{$LIMPIAR}</td>
             </tr>
         </table>
+        <button type="button" class="btn btn-warning btn-sm" id="mostrar_grid"  onclick="showTable()" style="float:right;">Mostrar tabla</button>
     {$FORM1END}
     </fieldset>
-    <fieldset>{$GRIDPARAMETROS}</fieldset>
+   
 
 </body>
 </html>

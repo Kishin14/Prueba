@@ -28,7 +28,20 @@ final class reportesContratosModel extends Db{
 	return $opciones;
    }
    
-  public function getReporteMC1($desde,$hasta,$Conex){ 	   	
+  public function getReporteMC1($desde,$hasta,$Conex){ 	  
+	  
+		
+	if($desde!='NULL' ){
+		$consul_desde = " AND c.fecha_inicio >= '$desde' ";
+	}else{
+		$consul_desde = "";
+	}
+
+	if($hasta!='NULL' ){
+		$consul_hasta = " AND c.fecha_inicio >= '$hasta' ";
+	}else{
+		$consul_hasta = "";
+	}
  
 	    $select = "SELECT
 				 c.numero_contrato,
@@ -46,14 +59,27 @@ final class reportesContratosModel extends Db{
 				CASE periodicidad WHEN 'H' THEN 'HORAS' WHEN 'D' THEN 'DIAS' WHEN 'S' THEN 'SEMANAL' WHEN 'Q' THEN 'QUINCENAL' ELSE 'MENSUAL' END AS periodicidad,
 				(SELECT nombre FROM causal_despido ca WHERE ca.causal_despido_id=c.causal_despido_id)AS causal_despido,
 				CASE estado WHEN 'A' THEN 'ACTIVO' WHEN 'R' THEN 'RETIRADO' WHEN 'F' THEN 'FINALIZADO' ELSE 'ANULADA' END AS estado
-				FROM contrato c WHERE  c.fecha_inicio BETWEEN '$desde' AND '$hasta' ORDER BY c.numero_contrato";	  
+				FROM contrato c WHERE c.contrato_id>=0 $consul_desde $consul_hasta ORDER BY c.numero_contrato";	  
 		  
 		  //echo $select;		  
 		  $results = $this -> DbFetchAll($select,$Conex);
 		  return $results;
   } 
   
-	public function getReporteMC2($empleado_id,$desde,$hasta,$Conex){ 	   	
+	public function getReporteMC2($empleado_id,$desde,$hasta,$Conex){ 	
+		
+			
+	if($desde!='NULL' ){
+		$consul_desde = " AND c.fecha_inicio >= '$desde' ";
+	}else{
+		$consul_desde = "";
+	}
+
+	if($hasta!='NULL' ){
+		$consul_hasta = " AND c.fecha_inicio >= '$hasta' ";
+	}else{
+		$consul_hasta = "";
+	}
  
 	    $select = "SELECT
 				 c.numero_contrato,
@@ -71,14 +97,27 @@ final class reportesContratosModel extends Db{
 				CASE periodicidad WHEN 'H' THEN 'HORAS' WHEN 'D' THEN 'DIAS' WHEN 'S' THEN 'SEMANAL' WHEN 'Q' THEN 'QUINCENAL' ELSE 'MENSUAL' END AS periodicidad,
 				(SELECT nombre FROM causal_despido ca WHERE ca.causal_despido_id=c.causal_despido_id)AS causal_despido,
 				CASE estado WHEN 'A' THEN 'ACTIVO' WHEN 'R' THEN 'RETIRADO' WHEN 'F' THEN 'FINALIZADO' ELSE 'ANULADA' END AS estado
-				FROM contrato c WHERE c.empleado_id IN ($empleado_id) AND c.fecha_inicio BETWEEN '$desde' AND '$hasta' ORDER BY c.numero_contrato";	  
+				FROM contrato c WHERE c.empleado_id IN ($empleado_id) $consul_desde $consul_hasta  ORDER BY c.numero_contrato";	  
 		  
 		  //echo $select;		  
 		  $results = $this -> DbFetchAll($select,$Conex);
 		  return $results;
   } 
 
-	public function getReporteMC3($cargo_id,$desde,$hasta,$Conex){ 	   	
+	public function getReporteMC3($cargo_id,$desde,$hasta,$Conex){ 	  
+		
+			
+	if($desde!='NULL' ){
+		$consul_desde = " AND c.fecha_inicio >= '$desde' ";
+	}else{
+		$consul_desde = "";
+	}
+
+	if($hasta!='NULL' ){
+		$consul_hasta = " AND c.fecha_inicio >= '$hasta' ";
+	}else{
+		$consul_hasta = "";
+	}
  
 	    $select = "SELECT 
 				 c.numero_contrato,
@@ -96,14 +135,27 @@ final class reportesContratosModel extends Db{
 				CASE periodicidad WHEN 'H' THEN 'HORAS' WHEN 'D' THEN 'DIAS' WHEN 'S' THEN 'SEMANAL' WHEN 'Q' THEN 'QUINCENAL' ELSE 'MENSUAL' END AS periodicidad,
 				(SELECT nombre FROM causal_despido ca WHERE ca.causal_despido_id=c.causal_despido_id)AS causal_despido,
 				CASE estado WHEN 'A' THEN 'ACTIVO' WHEN 'R' THEN 'RETIRADO' WHEN 'F' THEN 'FINALIZADO' ELSE 'ANULADA' END AS estado
-				FROM contrato c WHERE  c.cargo_id IN ($cargo_id) AND c.fecha_inicio BETWEEN '$desde' AND '$hasta' ORDER BY c.numero_contrato";	  
+				FROM contrato c WHERE  c.cargo_id IN ($cargo_id) $consul_desde $consul_hasta  ORDER BY c.numero_contrato";	  
 		  
 		  //echo $select;		  
 		  $results = $this -> DbFetchAll($select,$Conex);
 		  return $results;
   } 
 
-public function getReporteMC4($empleado_id,$cargo_id,$desde,$hasta,$Conex){ 	   	
+public function getReporteMC4($empleado_id,$cargo_id,$desde,$hasta,$Conex){ 	 
+	
+		
+	if($desde!='NULL' ){
+		$consul_desde = " AND c.fecha_inicio >= '$desde' ";
+	}else{
+		$consul_desde = "";
+	}
+
+	if($hasta!='NULL' ){
+		$consul_hasta = " AND c.fecha_inicio >= '$hasta' ";
+	}else{
+		$consul_hasta = "";
+	}
  
 	    $select = "SELECT
 				 c.numero_contrato,
@@ -121,7 +173,7 @@ public function getReporteMC4($empleado_id,$cargo_id,$desde,$hasta,$Conex){
 				CASE periodicidad WHEN 'H' THEN 'HORAS' WHEN 'D' THEN 'DIAS' WHEN 'S' THEN 'SEMANAL' WHEN 'Q' THEN 'QUINCENAL' ELSE 'MENSUAL' END AS periodicidad,
 				(SELECT nombre FROM causal_despido ca WHERE ca.causal_despido_id=c.causal_despido_id)AS causal_despido,
 				CASE estado WHEN 'A' THEN 'ACTIVO' WHEN 'R' THEN 'RETIRADO' WHEN 'F' THEN 'FINALIZADO' ELSE 'ANULADA' END AS estado
-				FROM contrato c WHERE c.empleado_id IN ($empleado_id) AND c.cargo_id IN ($cargo_id) AND c.fecha_inicio BETWEEN '$desde' AND '$hasta' ORDER BY c.numero_contrato";	  
+				FROM contrato c WHERE c.empleado_id IN ($empleado_id) AND c.cargo_id IN ($cargo_id) $consul_desde $consul_hasta  ORDER BY c.numero_contrato";	  
 		  
 		  //echo $select;		  
 		  $results = $this -> DbFetchAll($select,$Conex);

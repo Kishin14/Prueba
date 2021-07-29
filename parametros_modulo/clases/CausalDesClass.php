@@ -29,32 +29,44 @@ final class CausalDes extends Controler{
 	
     $Layout -> SetCampos($this -> Campos);
 	
-
-	//// GRID ////
-	$Attributes = array(
-	  id		=>'causal_despido',
-	  title		=>'Listado de Causas de Despido',
-	  sortname	=>'nombre',
-	  width		=>'600',
-	  height	=>'200'
-	);
-
-	$Cols = array(
-		array(name=>'causal_despido_id',	index=>'causal_despido_id',	sorttype=>'text',	width=>'50',	align=>'center'),
-		array(name=>'nombre',				index=>'nombre',			sorttype=>'text',	width=>'300',	align=>'left'),
-	  	array(name=>'tipo_causal',			index=>'tipo_causal',		sorttype=>'text',	width=>'100',	align=>'center'),
-	  	array(name=>'estado',				index=>'estado',			sorttype=>'text',	width=>'100',	align=>'center')
-	);
-	  
-    $Titles = array('CODIGO',
-    				'NOMBRE',
-    				'TIPO CAUSAL',					
-    				'ESTADO'
-	);
-	
-	$Layout -> SetGridCausalDes($Attributes,$Titles,$Cols,$Model -> GetQueryCausalDesGrid());
 	$Layout -> RenderMain();
   
+  }
+  
+  protected function showGrid(){
+	  
+	require_once("CausalDesLayoutClass.php");
+	require_once("CausalDesModelClass.php");
+	
+	$Layout   = new CausalDesLayout($this -> getTitleTab(),$this -> getTitleForm());
+    $Model    = new CausalDesModel();
+	  
+	//// GRID ////
+	$Attributes = array(
+		id		=>'causal_despido',
+		title		=>'Listado de Causas de Despido',
+		sortname	=>'nombre',
+		width		=>'600',
+		height	=>'200'
+	  );
+  
+	  $Cols = array(
+		  array(name=>'causal_despido_id',	index=>'causal_despido_id',	sorttype=>'text',	width=>'50',	align=>'center'),
+		  array(name=>'nombre',				index=>'nombre',			sorttype=>'text',	width=>'300',	align=>'left'),
+			array(name=>'tipo_causal',			index=>'tipo_causal',		sorttype=>'text',	width=>'100',	align=>'center'),
+			array(name=>'estado',				index=>'estado',			sorttype=>'text',	width=>'100',	align=>'center')
+	  );
+		
+	  $Titles = array('CODIGO',
+					  'NOMBRE',
+					  'TIPO CAUSAL',					
+					  'ESTADO'
+	  );
+	  
+	  $html =  $Layout -> SetGridCausalDes($Attributes,$Titles,$Cols,$Model -> GetQueryCausalDesGrid());
+	 
+	 print $html;
+	  
   }
 
   protected function onclickValidateRow(){

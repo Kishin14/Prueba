@@ -5,7 +5,13 @@ require_once("../../../framework/clases/PermisosFormClass.php");
 
 final class Imp_LiquidacionModel extends Db{ 
   
-  public function getLiquidacion($select_deb_total,$select_cre_total,$select_deb,$select_cre,$select_debExt,$select_creExt,$select_sal,$diasIncapacidad,$diasLicencia,$oficina_id,$empresa_id,$Conex){
+  public function getLiquidacion($contrato_id,$select_deb_total,$select_cre_total,$select_deb,$select_cre,$select_debExt,$select_creExt,$select_sal,$diasIncapacidad,$diasLicencia,$oficina_id,$empresa_id,$Conex){
+
+	$condicion_contrato = '';
+
+	if(is_numeric($contrato_id)){
+		$condicion_contrato = " AND ln.contrato_id = $contrato_id";
+	}
  
     $liquidacion_novedad_id = $this -> requestDataForQuery('liquidacion_novedad_id','integer');
 	
@@ -34,7 +40,7 @@ final class Imp_LiquidacionModel extends Db{
 				FROM liquidacion_novedad ln, detalle_liquidacion_novedad dl
 				WHERE ln.fecha_inicial = (SELECT fecha_inicial FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id ) 
 				AND ln.fecha_final = (SELECT fecha_final FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id )  AND ln.area_laboral=(SELECT area_laboral FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id) AND ln.periodicidad=(SELECT periodicidad FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id)
-				AND dl.liquidacion_novedad_id=ln.liquidacion_novedad_id AND ln.estado!='A' GROUP BY ln.contrato_id ORDER BY empleado";
+				AND dl.liquidacion_novedad_id=ln.liquidacion_novedad_id AND ln.estado!='A' $condicion_contrato GROUP BY ln.contrato_id ORDER BY empleado";
 				
 		  $result = $this -> DbFetchAll($select,$Conex,true); 
 		// INCAPACIDADES
@@ -87,7 +93,14 @@ final class Imp_LiquidacionModel extends Db{
 	//die(print_r($result));
 	return $result;
   }
-  public function getDiasIncapacidad($liquidacion_novedad_id,$fecha_inicial,$fecha_final,$Conex){
+  public function getDiasIncapacidad($contrato_id,$liquidacion_novedad_id,$fecha_inicial,$fecha_final,$Conex){
+
+	$condicion_contrato = '';
+
+	if(is_numeric($contrato_id)){
+		$condicion_contrato = " AND ln.contrato_id = $contrato_id";
+	}
+
 	$select = "SELECT 
 	
 		IF('$fecha_inicial'>l.fecha_inicial,'$fecha_inicial',l.fecha_inicial) AS fecha_inicial, 
@@ -119,13 +132,22 @@ final class Imp_LiquidacionModel extends Db{
 		
 		ln.area_laboral = (SELECT area_laboral FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id) AND
 		
-		ln.periodicidad = (SELECT periodicidad FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id)"; 
+		ln.periodicidad = (SELECT periodicidad FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id) 
+		
+		$condicion_contrato";
 		
 		$result = $this -> DbFetchAll($select,$Conex,true);
 	return $result;
   }
 
-  public function getDiasLicencia($liquidacion_novedad_id,$fecha_inicial,$fecha_final,$Conex){
+  public function getDiasLicencia($contrato_id,$liquidacion_novedad_id,$fecha_inicial,$fecha_final,$Conex){
+
+	$condicion_contrato = '';
+
+	if(is_numeric($contrato_id)){
+		$condicion_contrato = " AND ln.contrato_id = $contrato_id";
+	}
+
 	$select = "SELECT 
 	
 		IF('$fecha_inicial'>l.fecha_inicial,'$fecha_inicial',l.fecha_inicial) AS fecha_inicial, 
@@ -157,7 +179,9 @@ final class Imp_LiquidacionModel extends Db{
 		
 		ln.area_laboral = (SELECT area_laboral FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id) AND
 		
-		ln.periodicidad = (SELECT periodicidad FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id)"; 
+		ln.periodicidad = (SELECT periodicidad FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id) 
+		
+		$condicion_contrato"; //exit($select);
 		
 		$result = $this -> DbFetchAll($select,$Conex,true);
 	return $result;
@@ -322,7 +346,13 @@ final class Imp_LiquidacionModel extends Db{
 	return $result;
   }
   
-  public function getTotales($select_tot_deb,$select_tot_cre,$select_tot_debExt,$select_tot_creExt,$select_tot_sal,$empresa_id,$Conex){
+  public function getTotales($contrato_id,$select_tot_deb,$select_tot_cre,$select_tot_debExt,$select_tot_creExt,$select_tot_sal,$empresa_id,$Conex){
+
+	$condicion_contrato = '';
+
+	if(is_numeric($contrato_id)){
+		$condicion_contrato = " AND ln.contrato_id = $contrato_id";
+	}
  
 	$liquidacion_novedad_id = $this -> requestDataForQuery('liquidacion_novedad_id','integer');
 	
@@ -338,7 +368,7 @@ final class Imp_LiquidacionModel extends Db{
 				FROM liquidacion_novedad ln, detalle_liquidacion_novedad dl
 				WHERE ln.fecha_inicial = (SELECT fecha_inicial FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id ) 
 				AND ln.fecha_final = (SELECT fecha_final FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id )  AND ln.area_laboral=(SELECT area_laboral FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id) AND ln.periodicidad=(SELECT periodicidad FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id)
-				AND dl.liquidacion_novedad_id=ln.liquidacion_novedad_id AND ln.estado!='A'";
+				AND dl.liquidacion_novedad_id=ln.liquidacion_novedad_id AND ln.estado!='A' $condicion_contrato"; 
 
 				
 	  	$result = $this -> DbFetchAll($select,$Conex,true); 

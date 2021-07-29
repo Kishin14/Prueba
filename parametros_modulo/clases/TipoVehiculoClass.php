@@ -29,32 +29,44 @@ final class TipoVehiculo extends Controler{
 	
     $Layout -> SetCampos($this -> Campos);
 	
-
-	//// GRID ////
-	$Attributes = array(
-	  id		=>'tipo_vehiculo_nomina',
-	  title		=>'Listado de Tipos de Vehículos',
-	  sortname	=>'nombre',
-	  width		=>'auto',
-	  height	=>'200'
-	);
-
-	$Cols = array(
-		array(name=>'nombre',		index=>'nombre',		sorttype=>'text',	width=>'300',	align=>'left'),
-	  	array(name=>'codigo',		index=>'codigo',		sorttype=>'text',	width=>'100',	align=>'left'), 
-		array(name=>'servicio',		index=>'servicio',		sorttype=>'text',	width=>'100',	align=>'left'),
-		array(name=>'tipo',			index=>'tipo',			sorttype=>'text',	width=>'150',	align=>'center'),
-	);
-	  
-    $Titles = array('NOMBRE',
-    				'CODIGO',
-					'SERVICIO',
-					'TIPO'
-	);
-	
-	$Layout -> SetGridTipoVehiculo($Attributes,$Titles,$Cols,$Model -> GetQueryTipoVehiculoGrid());
 	$Layout -> RenderMain();
   
+  }
+  
+  protected function showGrid(){
+	  
+	require_once("TipoVehiculoLayoutClass.php");
+	require_once("TipoVehiculoModelClass.php");
+	
+	$Layout   = new TipoVehiculoLayout($this -> getTitleTab(),$this -> getTitleForm());
+    $Model    = new TipoVehiculoModel();
+	  
+	//// GRID ////
+	$Attributes = array(
+		id		=>'tipo_vehiculo_nomina',
+		title		=>'Listado de Tipos de Vehículos',
+		sortname	=>'nombre',
+		width		=>'auto',
+		height	=>'200'
+	  );
+  
+	  $Cols = array(
+		  array(name=>'nombre',		index=>'nombre',		sorttype=>'text',	width=>'300',	align=>'left'),
+			array(name=>'codigo',		index=>'codigo',		sorttype=>'text',	width=>'100',	align=>'left'), 
+		  array(name=>'servicio',		index=>'servicio',		sorttype=>'text',	width=>'100',	align=>'left'),
+		  array(name=>'tipo',			index=>'tipo',			sorttype=>'text',	width=>'150',	align=>'center'),
+	  );
+		
+	  $Titles = array('NOMBRE',
+					  'CODIGO',
+					  'SERVICIO',
+					  'TIPO'
+	  );
+	  
+	  $html = $Layout -> SetGridTipoVehiculo($Attributes,$Titles,$Cols,$Model -> GetQueryTipoVehiculoGrid());
+	 
+	 print $html;
+	  
   }
 
   protected function onclickValidateRow(){

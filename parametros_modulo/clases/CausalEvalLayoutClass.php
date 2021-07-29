@@ -127,6 +127,7 @@ final class CausalEvalLayout extends View{
 
 
      $this -> TplInclude -> IncludeCss("../../../framework/css/jquery.alerts.css");
+	   $this -> TplInclude -> IncludeCss("../../../framework/css/jqgrid/redmond/jquery-ui-1.8.2.custom.css");		 
 
 
 
@@ -179,6 +180,7 @@ final class CausalEvalLayout extends View{
 
 
      $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.alerts.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/jqgrid/jquery-ui-1.8.2.custom.min.js");	 
 
 
 
@@ -292,15 +294,17 @@ final class CausalEvalLayout extends View{
 
 
 
-      $this -> assign("GRIDPARAMETROS",$TableGrid -> RenderJqGrid());
-
-
-
-      $this -> assign("TABLEGRIDCSS",$TableGrid -> GetJqGridCss());
-
-
-
-      $this -> assign("TABLEGRIDJS",$TableGrid -> GetJqGridJs());
+     $head = "'<head>".
+	 
+	 $TableGrid -> GetJqGridJs()." ".
+	 
+	 $TableGrid -> GetJqGridCss()."
+	 
+	 </head>";
+	 
+	 $body = "<body>".$TableGrid -> RenderJqGrid()."</body>";
+	 
+	 return "<html>".$head." ".$body."</html>";
 
 
 

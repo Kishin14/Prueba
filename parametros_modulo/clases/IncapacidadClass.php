@@ -64,6 +64,51 @@ final class Incapacidad extends Controler{
 	$Layout -> RenderMain();
   
   }
+  
+  
+  protected function showGrid(){
+	  
+	require_once("IncapacidadLayoutClass.php");
+	require_once("IncapacidadModelClass.php");
+	
+	$Layout   = new IncapacidadLayout($this -> getTitleTab(),$this -> getTitleForm());
+    $Model    = new IncapacidadModel();
+	  
+	 //// GRID ////
+	$Attributes = array(
+		id		=>'tipo_incapacidad',
+		title		=>'Listado de Tipos de Incapacidades',
+		sortname	=>'tipo_incapacidad_id',
+		width		=>'auto',
+		height	=>'200'
+	  );
+  
+	  $Cols = array(
+		  array(name=>'tipo_incapacidad_id',	index=>'tipo_incapacidad_id',	sorttype=>'text',	width=>'50',	align=>'center'),
+		  array(name=>'nombre',				index=>'nombre',				sorttype=>'text',	width=>'300',	align=>'left'),
+		  array(name=>'tipo',					index=>'tipo',					sorttype=>'text',	width=>'100',	align=>'left'),	
+		  array(name=>'diagnostico',			index=>'diagnostico',			sorttype=>'text',	width=>'100',	align=>'left'),	
+		  array(name=>'descuento',			index=>'descuento',				sorttype=>'text',	width=>'100',	align=>'left'),	
+		  array(name=>'dia',					index=>'dia',					sorttype=>'text',	width=>'100',	align=>'left'),	
+		  array(name=>'porcentaje',			index=>'porcentaje',			sorttype=>'text',	width=>'100',	align=>'left'),	
+			array(name=>'estado',				index=>'estado',				sorttype=>'text',	width=>'50',	align=>'center')
+	  );
+		
+	  $Titles = array('CODIGO',
+					  'NOMBRE',
+					  'TIPO',	
+					  'DIAGNOSTICO',	
+					  'PAGO PARCIAL',	
+					  'DIA',	
+					  'PORCENTAJE',	
+					  'ESTADO'
+	  );
+	  
+	  $html = $Layout -> SetGridIncapacidad($Attributes,$Titles,$Cols,$Model -> GetQueryIncapacidadGrid());
+	 
+	 print $html;
+	  
+  }
 
   protected function onclickValidateRow(){
 	require_once("IncapacidadModelClass.php");

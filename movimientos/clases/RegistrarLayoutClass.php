@@ -37,7 +37,8 @@ final class RegistrarLayout extends View{
      $this -> TplInclude -> IncludeCss("../../../framework/css/ajax-dynamic-list.css");
      $this -> TplInclude -> IncludeCss("../../../framework/css/reset.css");
      $this -> TplInclude -> IncludeCss("../../../framework/css/general.css"); 
-     $this -> TplInclude -> IncludeCss("../../../framework/css/jquery.alerts.css");	
+     $this -> TplInclude -> IncludeCss("../../../framework/css/jquery.alerts.css");
+	   $this -> TplInclude -> IncludeCss("../../../framework/css/jqgrid/redmond/jquery-ui-1.8.2.custom.css");		 	
  
      $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.js");
      $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.filestyle.js");
@@ -51,6 +52,7 @@ final class RegistrarLayout extends View{
      $this -> TplInclude -> IncludeJs("../../../framework/js/jquery-uploader/jquery.uploadify.v2.1.0.min.js");
      $this -> TplInclude -> IncludeJs("../js/Registrar.js");
      $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.alerts.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/jqgrid/jquery-ui-1.8.2.custom.min.js");	 
 	 
      $this -> assign("CSSSYSTEM",		$this -> TplInclude -> GetCssInclude());
      $this -> assign("JAVASCRIPT",		$this -> TplInclude -> GetJsInclude());
@@ -128,9 +130,18 @@ final class RegistrarLayout extends View{
 
      $TableGrid = new JqGrid();
      $TableGrid -> SetJqGrid($Attributes,$Titles,$Cols,$Query,$SubAttributes,$SubTitles,$SubCols,$SubQuery);
-     $this -> assign("GRIDLIQ_NOVEDAD",$TableGrid -> RenderJqGrid());
-     $this -> assign("TABLEGRIDCSS",$TableGrid -> GetJqGridCss());
-     $this -> assign("TABLEGRIDJS",$TableGrid -> GetJqGridJs());
+      
+      $head = "'<head>".
+    
+      $TableGrid -> GetJqGridJs()." ".
+      
+      $TableGrid -> GetJqGridCss()."
+      
+      </head>";
+      
+      $body = "<body>".$TableGrid -> RenderJqGrid()."</body>";
+      
+      return "<html>".$head." ".$body."</html>";
 
    }
 

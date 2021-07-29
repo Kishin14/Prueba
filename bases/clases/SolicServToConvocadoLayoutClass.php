@@ -11,11 +11,13 @@ final class SolicServToConvocadoLayout extends View{
      $this -> TplInclude -> IncludeCss("../../../framework/css/reset.css");
      $this -> TplInclude -> IncludeCss("../../../framework/css/general.css");
      $this -> TplInclude -> IncludeCss("../../../framework/css/jquery.alerts.css");
+	   $this -> TplInclude -> IncludeCss("../../../framework/css/jqgrid/redmond/jquery-ui-1.8.2.custom.css");		 
 	 
      $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.js");
      $this -> TplInclude -> IncludeJs("../../../framework/js/funciones.js");
      $this -> TplInclude -> IncludeJs("../js/SolicServToConvocado.js");
      $this -> TplInclude -> IncludeJs("../../../framework/js/jquery.alerts.js");
+     $this -> TplInclude -> IncludeJs("../../../framework/js/jqgrid/jquery-ui-1.8.2.custom.min.js");	 
 	 
 	 $this -> assign("CSSSYSTEM",	  $this -> TplInclude -> GetCssInclude());
      $this -> assign("JAVASCRIPT",	  $this -> TplInclude -> GetJsInclude());

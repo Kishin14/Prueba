@@ -63,6 +63,52 @@
 			$Layout -> SetGridPrueba($Attributes,$Titles,$Cols,$Model -> GetQueryPruebaGrid());
 			$Layout -> RenderMain();
 		}
+		
+		
+		protected function showGrid(){
+	  
+			require_once("PruebaLayoutClass.php");
+			require_once("PruebaModelClass.php");
+
+			$Layout   = new PruebaLayout($this -> getTitleTab(),$this -> getTitleForm());
+			$Model    = new PruebaModel();
+			
+			 //// GRID ////
+			$Attributes = array(
+				id		=>'prueba',
+				title	=>'Listado de Pruebas',
+				sortname=>'prueba_id',
+				width	=>'auto',
+				height	=>'250'
+			);
+
+			$Cols = array(
+				array(name=>'prueba_id',			index=>'prueba_id',			sorttype=>'text',	width=>'80',	align=>'center'),
+				array(name=>'nombre',				index=>'nombre',			sorttype=>'text',	width=>'150',	align=>'center'),
+				array(name=>'observacion',			index=>'observacion',		sorttype=>'text',	width=>'150',	align=>'center'),
+				array(name=>'resultado',			index=>'resultado',			sorttype=>'text',	width=>'150',	align=>'center'),
+				array(name=>'aprobado',			    index=>'aprobado',			sorttype=>'text',	width=>'100',	align=>'center'),
+				array(name=>'base',					index=>'base',				sorttype=>'text',	width=>'150',	align=>'center'),
+				array(name=>'convocado_id',		    index=>'convocado_id',	    sorttype=>'text',	width=>'300',	align=>'center'),
+				array(name=>'fecha',				index=>'fecha',				sorttype=>'text',	width=>'150',	align=>'center')
+			);
+
+			$Titles = array(
+				'CONVOCADO',
+				'NOMBRE',
+				'OBSERVACION',
+				'RESULTADO',
+				'APROBADO',
+				'BASE',
+				'NOMBRE CONVOCADO',
+				'FECHA'
+			);
+
+			$html = $Layout -> SetGridPrueba($Attributes,$Titles,$Cols,$Model -> GetQueryPruebaGrid());
+			 
+			 print $html;
+			  
+		  }
 
 		protected function onclickValidateRow(){
 			require_once("PruebaModelClass.php");

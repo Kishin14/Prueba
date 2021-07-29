@@ -29,10 +29,18 @@
 		/*	$Layout -> SetCosto($Model -> GetCosto($this -> getConex()));*/
 			$Layout -> SetDoc($Model -> GetDoc($this -> getConex()));
 
+			$Layout -> RenderMain();
+		}
+		
+		protected function showGrid(){
+	  
+			require_once("DocumentoLayoutClass.php");
+			require_once("DocumentoModelClass.php");
 
-
-
-			//// GRID ////
+			$Layout   = new DocumentoLayout($this -> getTitleTab(),$this -> getTitleForm());
+			$Model    = new DocumentoModel();
+			  
+			 	//// GRID ////
 			$Attributes = array(
 				id		=>'contrato',
 				title	=>'Lista de Documentos',
@@ -61,9 +69,11 @@
 				
 			);
 
-			$Layout -> SetGridContrato($Attributes,$Titles,$Cols,$Model -> GetQueryContratoGrid());
-			$Layout -> RenderMain();
-		}
+			$html = $Layout -> SetGridContrato($Attributes,$Titles,$Cols,$Model -> GetQueryContratoGrid());
+			 
+			 print $html;
+			  
+		  }
 
 		protected function onclickValidateRow(){
 			require_once("DocumentoModelClass.php");
