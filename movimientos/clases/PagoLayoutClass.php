@@ -168,15 +168,26 @@ final class PagoLayout extends View
 
     }
 
-    public function SetGridPago($Attributes, $Titles, $Cols, $Query)
-    {
-        require_once "../../../framework/clases/grid/JqGridClass.php";
-        $TableGrid = new JqGrid();
-        $TableGrid->SetJqGrid($Attributes, $Titles, $Cols, $Query);
-        $this->assign("GRIDPAGO", $TableGrid->RenderJqGrid());
-        $this->assign("TABLEGRIDCSS", $TableGrid->GetJqGridCss());
-        $this->assign("TABLEGRIDJS", $TableGrid->GetJqGridJs());
-    }
+   
+    public function SetGridPago($Attributes,$Titles,$Cols,$Query){
+
+      require_once("../../../framework/clases/grid/JqGridClass.php");
+      $TableGrid = new JqGrid();
+      $TableGrid -> SetJqGrid($Attributes,$Titles,$Cols,$Query);
+      
+      $head = "'<head>".
+    
+      $TableGrid -> GetJqGridJs()." ".
+      
+      $TableGrid -> GetJqGridCss()."
+      
+      </head>";
+      
+      $body = "<body>".$TableGrid -> RenderJqGrid()."</body>";
+      
+      return "<html>".$head." ".$body."</html>";
+      
+    } 
 
     public function RenderMain()
     {
