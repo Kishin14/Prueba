@@ -839,7 +839,7 @@ final class PagoModel extends Db
 									i.concepto,
 									(SELECT TRIM(nombre) FROM puc WHERE puc_id=c.puc_id) AS nombre_puc
 									FROM liquidacion_definitiva l,   puc c, liq_def_puc i
-									WHERE l.liquidacion_definitiva_id=$causaciones AND i.liquidacion_definitiva_id=l.liquidacion_definitiva_id  AND i.credito > 0  AND c.puc_id=i.puc_id ";
+									WHERE l.liquidacion_definitiva_id=$causaciones AND i.liquidacion_definitiva_id=l.liquidacion_definitiva_id  AND i.credito > 0  AND c.puc_id=i.puc_id ORDER BY i.liq_def_puc_id DESC LIMIT 1";
  
 				 $result_contra = $this->DbFetchAll($select_contra, $Conex, true);
  
