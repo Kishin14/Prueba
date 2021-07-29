@@ -43,6 +43,7 @@ final class PagoLayout extends View
         $this->TplInclude->IncludeCss("../../../framework/css/reset.css");
         $this->TplInclude->IncludeCss("../../../framework/css/general.css");
         $this->TplInclude->IncludeCss("../../../framework/css/jquery.alerts.css");
+        $this -> TplInclude -> IncludeCss("../../../framework/css/jqgrid/redmond/jquery-ui-1.8.2.custom.css");
         $this->TplInclude->IncludeCss("../css/pago.css");
 
         $this->TplInclude->IncludeJs("../../../framework/js/jquery.js");
@@ -53,6 +54,7 @@ final class PagoLayout extends View
         $this->TplInclude->IncludeJs("../../../framework/js/funciones.js");
         $this->TplInclude->IncludeJs("../../../framework/js/general.js");
         $this->TplInclude->IncludeJs("../../../framework/js/ajax-list.js");
+        $this->TplInclude->IncludeJs("../../../framework/js/jqgrid/jquery-ui-1.8.2.custom.min.js");
         $this->TplInclude->IncludeJs("../../../framework/js/ajax-dynamic-list.js");
         $this->TplInclude->IncludeJs("../js/pago.js");
         $this->TplInclude->IncludeJs("../../../framework/js/jqeffects/jquery.magnifier.js");
