@@ -472,6 +472,7 @@ function OnclickContabilizar(){
 	var valor_cesantias		 		= $("#valor_abono_cesantias").val();
 	var valor_vacaciones	 		= $("#valor_abono_vacaciones").val();
 	var valor_int_cesantias	 		= $("#valor_abono_int_cesantias").val();
+	var valor_liq	 		        = $("#valor_abono_liq").val();
 	var QueryString 		 		= "ACTIONCONTROLER=getTotalDebitoCredito&abono_nomina_id="+abono_nomina_id;	
 
 	if(parseInt(abono_nomina_id)>0){
@@ -492,7 +493,14 @@ function OnclickContabilizar(){
 					 $("#totalDebito").html(totalDebito);
 					 $("#totalCredito").html(totalCredito);	
 					 
-					 if(parseFloat(totalDebito) == parseFloat(totalCredito) && (parseFloat(removeFormatCurrency(valor))>0 || parseFloat(removeFormatCurrency(valor_primas))>0 || parseFloat(removeFormatCurrency(valor_cesantias))>0 || parseFloat(removeFormatCurrency(valor_vacaciones))>0 || parseFloat(removeFormatCurrency(valor_int_cesantias))>0)){
+					 if(parseFloat(totalDebito) == parseFloat(totalCredito) && 
+					 
+					 (parseFloat(removeFormatCurrency(valor))>0 || 
+					 parseFloat(removeFormatCurrency(valor_primas))>0 || 
+					 parseFloat(removeFormatCurrency(valor_cesantias))>0 || 
+					 parseFloat(removeFormatCurrency(valor_vacaciones))>0 || 
+					 parseFloat(removeFormatCurrency(valor_liq))>0 || 
+					 parseFloat(removeFormatCurrency(valor_int_cesantias))>0)){
 						var QueryString = "ACTIONCONTROLER=getContabilizar&abono_nomina_id="+abono_nomina_id+"&ingreso_abono_nomina="+ingreso_abono_nomina;	
 	
 						$.ajax({
@@ -517,8 +525,18 @@ function OnclickContabilizar(){
 								}
 							}
 						});
-					 }else if(parseFloat(totalDebito)==parseFloat(totalCredito) && (parseFloat(totalCredito)!=parseFloat(removeFormatCurrency(valor)) || parseFloat(totalCredito)!=parseFloat(removeFormatCurrency(valor_primas)) || parseFloat(totalCredito)!=parseFloat(removeFormatCurrency(valor_cesantias)) || parseFloat(totalCredito)!=parseFloat(removeFormatCurrency(valor_vacaciones)) || parseFloat(totalCredito)!=parseFloat(removeFormatCurrency(valor_int_cesantias)))){
+					 }else if(parseFloat(totalDebito)==parseFloat(totalCredito) && (
+						 parseFloat(totalCredito)!=parseFloat(removeFormatCurrency(valor)) || 
+						 parseFloat(totalCredito)!=parseFloat(removeFormatCurrency(valor_primas)) || 
+						 parseFloat(totalCredito)!=parseFloat(removeFormatCurrency(valor_cesantias)) || 
+						 parseFloat(totalCredito)!=parseFloat(removeFormatCurrency(valor_vacaciones)) || 
+						 parseFloat(totalCredito)!=parseFloat(removeFormatCurrency(valor_liq)) ||
+						 parseFloat(totalCredito)!=parseFloat(removeFormatCurrency(valor_int_cesantias))
+						 
+						 )){
+
 						alertJquery('El valor del registro no coincide con las sumas :<b>NO SE CONTABILIZARA</b>','Contabilizacion'); 
+						
 					 }else{
 						alertJquery('No existen sumas iguales :<b>NO SE CONTABILIZARA</b>','Contabilizacion'); 
 					 }

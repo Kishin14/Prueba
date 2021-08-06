@@ -624,6 +624,46 @@ final class Pago extends Controler{
 			type	=>array('column'))
 	);
 
+	$this -> Campos[causaciones_abono_liq] = array(
+		name	=>'causaciones_abono_liq',
+		id		=>'causaciones_abono_liq',
+		type	=>'hidden',
+		datatype=>array(
+			type	=>'alphanum',
+			length	=>'350'),
+		transaction=>array(
+			table	=>array('abono_nomina'),
+			type	=>array('column'))
+	);
+
+	$this -> Campos[valores_abono_liq] = array(
+		name	=>'valores_abono_liq',
+		id		=>'valores_abono_liq',
+		type	=>'hidden',
+		datatype=>array(
+			type	=>'alphanum',
+			length	=>'350'),
+		transaction=>array(
+			table	=>array('abono_nomina'),
+			type	=>array('column'))
+	);
+
+	$this -> Campos[valor_abono_liq] = array(
+		name	=>'valor_abono_liq',
+		id		=>'valor_abono_liq',
+		type	=>'text',
+		Boostrap =>'si',
+		readonly=>'yes',
+	 	datatype=>array(
+			type	=>'numeric',
+			length	=>'20',
+			presicion=>3),
+		transaction=>array(
+			table	=>array('abono_nomina'),
+			type	=>array('column'))		
+		
+	);
+
 
 	$this -> Campos[usuario_id] = array(
 		name	=>'usuario_id',

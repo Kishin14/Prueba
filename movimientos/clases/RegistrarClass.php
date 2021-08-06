@@ -566,13 +566,15 @@ final class Registrar extends Controler
             }
 
             $fechas = $Model->FechasLicenRe($fecha_inicial, $fecha_final, $this->getConex(),$contrato_id);
-
+           
             if(count($fechas)>0){
 
                 $fecha_inicialRe = $fechas[0]['fecha_inicial'];
                 $fecha_finalRe = $fechas[0]['fecha_final'];
 
-                $diasRe = $this->restaFechasCont($fecha_inicialRe, $fecha_finalRe);
+                $diasRe1 = $this->groupArrayDias($fechas, 'contrato_id');
+                $diasRe = $diasRe1[0]['dias'];
+                //$diasRe = $this->restaFechasCont($fecha_inicialRe, $fecha_finalRe);
             }else{
                 $diasRe = 0;
             }
@@ -585,7 +587,9 @@ final class Registrar extends Controler
                 $fecha_inicialNoRe = $fechas[0]['fecha_inicial'];
                 $fecha_finalNoRe = $fechas[0]['fecha_final'];
 
-                $diasNoRe = $this->restaFechasCont($fecha_inicialNoRe, $fecha_finalNoRe);
+                $diasNoRe1 = $this->groupArrayDias($fechas, 'contrato_id');
+                $diasNoRe = $diasNoRe[0]['dias'];
+                //$diasNoRe = $this->restaFechasCont($fecha_inicialNoRe, $fecha_finalNoRe);
             }else{
                 $diasNoRe = 0;
             }
@@ -735,7 +739,9 @@ final class Registrar extends Controler
                     $diasIncapacidad = $this->groupArrayDias($diasIncapacidad, 'contrato_id');
 
                     $diasLicencia = $Model -> getDiasLicencia($contrato_id,$liquidacion_novedad_id,$fecha_inicial,$fecha_final,$this->getConex());
+                    
                     $diasLicencia = $this->groupArrayDias($diasLicencia, 'contrato_id');
+                    
                     
                     $Layout->setLiquidacion($con_deb1, $con_cre1, $con_debExt1, $con_creExt1, $con_sal1, $Model->getLiquidacion($contrato_id,$select_deb_total, $select_cre_total, $select_deb, $select_cre, $select_debExt, $select_creExt, $select_sal,$diasIncapacidad,$diasLicencia,$this->getOficinaId(), $this->getEmpresaId(), $this->getConex()), $Model->getTotales($contrato_id,$select_tot_deb, $select_tot_cre, $select_tot_debExt, $select_tot_creExt, $select_tot_sal, $this->getEmpresaId(), $this->getConex()));
 
@@ -1131,8 +1137,10 @@ final class Registrar extends Controler
         $Liquidacion1 = $_REQUEST['liquidacion_novedad_id1'];
         
         if ($Liquidacion > 0) {
+          
             $Data = $Model->selectLiquidacion($Liquidacion, $this->getConex());
         } else {
+          
             $Data = $Model->selectLiquidacion1($Liquidacion1, $this->getConex());
         }
         

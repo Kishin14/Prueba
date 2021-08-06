@@ -730,14 +730,14 @@ function onclickCancellation(formulario){
 	       },
 	       success : function(response){
 			 
-             Reset(formularioPrincipal);	
-             RegistrarOnReset();		
-			 removeDivLoading();
-             $("#divAnulacion").dialog('close');			 
-			 
-			 formSubmitted = false;
-						  
-		     if($.trim(response) == 'true'){
+			   
+			   formSubmitted = false;
+			   removeDivLoading();
+			   $("#divAnulacion").dialog('close');			 
+			   
+			   if($.trim(response) == 'true'){
+				 Reset(formularioPrincipal);	
+				 RegistrarOnReset();		
 				 
 			    alertJquery('Liquidacion Anulada','Anulado Exitosamente');
 			 
@@ -760,7 +760,7 @@ function onclickCancellation(formulario){
 	 var estado    = document.getElementById("estado").value;
 	 var empleados = document.getElementById("empleados").value;
 	 var contrato    = document.getElementById("contrato").value;
-	 
+
 	 if(parseInt(liquidacion_novedad_id) > 0 && (empleados=='U' || (empleados=='T' && contrato==''))){		
 
 	    $("input[name=anular]").each(function(){ this.disabled = false; });

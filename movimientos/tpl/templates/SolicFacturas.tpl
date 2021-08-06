@@ -218,6 +218,49 @@
           {/foreach}	
         </tbody>
       </table>
+
+      <!------------------------------------------------   LIQUIDACION FINAL   -------------------------------------------------------->
+       <br><br>
+      <table align="center" id="tableLiq" width="99%">
+        <thead>
+          <tr>
+            <th colspan="10">SALDOS LIQUIDACION FINAL</th>
+          </tr>
+          <tr>
+            <th><input type="checkbox" id="checkedAllLiq"></th>
+            <th>LIQ_#</th>
+            <th>CONTRATO</th>
+            <th>EMPLEADO</th>
+            <th>FECHA INICIO</th>           
+            <th>FECHA FINAL</th>           
+            <th>VALOR NETO</th> 
+            <th>SALDO</th>        
+            <th>ABONOS</th>
+            <th>VALOR A PAGAR</th>        
+          </tr>
+        </thead>
+        <tbody>
+          {foreach name=detalles from=$DETALLESLIQFINAL item=i}
+          <tr>
+            <td>       
+                <input type="checkbox" name="liq_final" onClick="checkRow(this);"  value="{$i.liquidacion_definitiva_id}" />
+                <input type="hidden" name="liquidacion_definitiva_id" value="{$i.liquidacion_definitiva_id}" class="required" /> 
+                <input type="hidden" name="abonos_nc" value="{$i.abonos_nc}"  /> 
+
+            </td>
+            <td>{$i.consecutivo_id}</td>
+            <td>{$i.contrato}</td>
+            <td>{$i.empleado}&nbsp;</td>
+            <td>{$i.fecha_inicio}</td>
+            <td>{$i.fecha_final}</td>
+            <td class="no_requerido"><input type="text" name="valor_neto" class="numeric no_requerido" value="{$i.valor_neto}" size="13" readonly /></td>
+            <td class="no_requerido"><input type="text" name="saldo" class="numeric no_requerido" value="{$i.saldo}" size="13" readonly /></td>            
+            <td class="no_requerido"><input type="text" name="abonos" class="numeric no_requerido" value="{if $i.abonos eq ''}0{else}{$i.abonos}{/if}" size="13" readonly /></td>            
+            <td><input type="text" name="pagar" class="numeric required" value="{$i.saldo}" size="13" /></td>            
+          </tr> 
+          {/foreach}	
+        </tbody>
+      </table>
       
   </body>
 </html>

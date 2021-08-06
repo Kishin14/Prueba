@@ -181,7 +181,7 @@ final class Imp_LiquidacionModel extends Db{
 		
 		ln.periodicidad = (SELECT periodicidad FROM liquidacion_novedad WHERE liquidacion_novedad_id=$liquidacion_novedad_id) 
 		
-		$condicion_contrato";
+		$condicion_contrato"; //exit($select);
 		
 		$result = $this -> DbFetchAll($select,$Conex,true);
 	return $result;
