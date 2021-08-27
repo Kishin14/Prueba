@@ -19,7 +19,7 @@
                 	<td colspan="5">
                       <table  border="0" cellspacing="0" width="100%"> 
                         <tr>
-                            <th align="left" valign="top"><img src="{$LOGO}?123" width="280" height="100" /></th><th align="center">&nbsp;{$NOMBREEMPRESA}<br>{$NITEMPRESA}<br> {$OFICINA}</th><th width="10%">&nbsp;</th>
+                            <th align="left" valign="top"><img src="{$LOGO}?123" width="280" height="100" /></th><th align="center">&nbsp;{$NOMBREEMPRESA}<br>{$NITEMPRESA}<br> {$OFICINA}<br>LIQUIDACION N° {$CONSECUTIVO}</th><th width="10%">&nbsp;</th>
                         </tr>
                       </table><br />
                     </td>
@@ -68,7 +68,7 @@
                 	<td colspan="5">
                       <table  border="0" cellspacing="0" width="100%"> 
                        <tr>
-                            <th align="left" valign="top"><img src="{$LOGO}?123" width="280" height="100" /></th><th align="center">&nbsp;{$NOMBREEMPRESA}<br>{$NITEMPRESA}<br> {$OFICINA}</th><th width="10%">&nbsp;</th>
+                            <th align="left" valign="top"><img src="{$LOGO}?123" width="280" height="100" /></th><th align="center">&nbsp;{$NOMBREEMPRESA}<br>{$NITEMPRESA}<br> {$OFICINA}<br>LIQUIDACION N° {$CONSECUTIVO}</th><th width="10%">&nbsp;</th>
                         </tr>
                       </table><br />
                     </td>
@@ -131,7 +131,7 @@
 
           <table  border="0" cellspacing="0" width="99%"> 
             <tr>
-                <th align="left" valign="top"><img src="{$LOGO}?123" width="280" height="100" /></th><th align="center">&nbsp;{$NOMBREEMPRESA}<br>{$NITEMPRESA}<br> {$OFICINA}</th><th width="10%">&nbsp;</th>
+                <th align="left" valign="top"><img src="{$LOGO}?123" width="280" height="100" /></th><th align="center">&nbsp;{$NOMBREEMPRESA}<br>{$NITEMPRESA}<br> {$OFICINA}<br>LIQUIDACION N° {$CONSECUTIVO}</th><th width="10%">&nbsp;</th>
             </tr>
           </table>
           <table class="cellTotal" border="1" cellspacing="0" width="99%">

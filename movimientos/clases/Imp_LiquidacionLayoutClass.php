@@ -33,6 +33,7 @@ final class Imp_LiquidacionLayout extends View{
 	 $this -> assign("NOMBREEMPRESA",$liquidacion[0]['nombre_empresa']); 	 
 	 $this -> assign("NITEMPRESA",   $liquidacion[0]['nit_empresa']); 
 	 $this -> assign("OFICINA",      $liquidacion[0]['oficina']); 	 
+	 $this -> assign("CONSECUTIVO",  $liquidacion[0]['consecutivo']); 	 
 
 	 $this -> assign("CONCDEBITO1", $con_deb1); 
 	 $this -> assign("CONCCREDITO1",$con_cre1); 
