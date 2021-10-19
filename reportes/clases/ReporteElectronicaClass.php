@@ -36,7 +36,41 @@ final class ReporteElectronica extends Controler{
     $print = new Imp_Documento($this -> getConex());
     $print -> printOut();  
   }*/
-  
+
+  protected function generateView(){
+    require_once("ReporteElectronicaLayoutClass.php");
+    require_once("ReporteElectronicaModelClass.php");
+      
+    $Layout         = new ReporteElectronicaLayout($this -> getTitleTab(),$this -> getTitleForm());
+    $Model      	= new ReporteElectronicaModel();	
+    $desde			= $_REQUEST['desde'];
+    $hasta			= $_REQUEST['hasta'];
+    $si_empleado	= $_REQUEST['si_empleado'];
+    $empleado_id	= $_REQUEST['empleado_id'];	
+
+    $Layout -> setCssInclude("../../../framework/css/reset.css");			
+    $Layout -> setCssInclude("../css/reportes.css");						
+    $Layout -> setCssInclude("../css/reportes.css","print");
+    $Layout -> setJsInclude("../../../framework/js/jquery-1.4.4.min.js");    	
+    $Layout -> setJsInclude("../../../framework/js/funciones.js");
+    $Layout -> setJsInclude("../../../transporte/reportes/js/detalles.js");
+    $Layout -> assign("CSSSYSTEM",$Layout -> getCssInclude());		
+    $Layout -> assign("JAVASCRIPT",$Layout -> getJsInclude());		
+
+    $Layout -> setVar('EMPRESA',$empresa);	
+    $Layout -> setVar('NIT',$nitEmpresa);	
+    $Layout -> setVar('CENTROS',$centrosTxt);													
+    $Layout -> setVar('DESDE',$desde);															
+    $Layout -> setVar('HASTA',$hasta);
+    $Layout -> setVar('estado_id',$estado_id);
+
+    $Layout -> setVar('parametros',$parametros); 
+    $Layout -> setVar('DETALLESTRAZABILIDAD',$array); 
+    $Layout -> setVar('USUARIO',$this -> getUsuarioNombres());		  	  	  	  	  
+
+    $Layout -> RenderLayout('ReporteElectronicaResultado.tpl');	  
+  }    
+    
   protected function generateFileexcel(){
   
     require_once("ReporteElectronicaModelClass.php");
@@ -74,9 +108,6 @@ final class ReporteElectronica extends Controler{
   
   //DEFINICION CAMPOS DE FORMULARIO
   protected function setCampos(){    
-
-
-
 
 	$this -> Campos[desde] = array(
 		name	=>'desde',
@@ -166,7 +197,7 @@ final class ReporteElectronica extends Controler{
 			setId	=>'empleado_id')
 	);	
 
-/////// BOTONES 
+    /////// BOTONES 
 
 	$this -> Campos[generar] = array(
 		name	=>'generar',

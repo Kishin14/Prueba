@@ -109,7 +109,7 @@ function cargo_si(){
 function OnclickGenerar(formulario){
 	
 	if(ValidaRequeridos(formulario)){
-		 var QueryString = "ReporteElectronicaClass.php?"+FormSerialize(formulario);
+		 var QueryString = "ReporteElectronicaClass.php?ACTIONCONTROLER=generateView&"+FormSerialize(formulario);
 		 $("#frameReporte").attr("src",QueryString);
 		 showDivLoading();	 	   
 		 $("#frameReporte").load(function(response){removeDivLoading();});		
