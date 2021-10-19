@@ -81,26 +81,19 @@ final class ReporteElectronica extends Controler{
     $si_empleado			= $_REQUEST['si_empleado'];
 	$empleado_id			= $_REQUEST['empleado_id'];	
 	
-	/*if($tipo == 'MC'){
-      	 $nombre = 'Rep_Ant_MC'.date('Ymd');  
-    }elseif($tipo == 'DU'){
-			 $nombre = 'Rep_Ant_DU'.date('Ymd');
-	}elseif($tipo == 'DP'){
-	  		    $nombre = 'Rep_Ant_DP'.date('Ymd');	
-	}*/
-	$nombre = 'Rep_Cont'.date(' - Y - m - d');  
+	$nombre = 'Rep_NomElec'.date('Ymd');  
 	
-	if($si_empleado=='ALL')
-	//esta es cuando es todos los empleados
-		$data = $Model -> getReporteMC1($desde,$hasta,$this -> getConex());
+	if($si_empleado=='ALL'){
+        //esta es cuando es todos los empleados
+        $data = $Model -> getReporteMC1($desde,$hasta,$this -> getConex());
 		
-	else if($si_empleado==1 )
-	//esta es cuando es un solo empleado
+    }elseif($si_empleado==1 ){
+	   //esta es cuando es un solo empleado
 		$data = $Model -> getReporteMC2($empleado_id,$desde,$hasta,$this -> getConex());
 				
+    }
 	
-	
-   	$ruta  = $this -> arrayToExcel("Reporte",$nombre,$data,null,"string");	
+   	$ruta  = $this -> arrayToExcel("Rep_NomElec",$nombre,$data,null,"string");	
 	
     $this -> ForceDownload($ruta,$nombre.'.xls');
 	  
