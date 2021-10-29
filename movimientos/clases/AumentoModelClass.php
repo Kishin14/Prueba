@@ -395,15 +395,7 @@
 
 	public function selectDataActualizar($contrato_id,$Conex){
   
-  /*$select1 = "SELECT (SELECT numero_meses FROM solicitud WHERE solicitud_id=$solicitud_id) AS cuotas_canon,
-				 fecha_inicio AS fecha_inicio_actualiza,
-				fecha_final AS fecha_final_actualiza
-		FROM fianza_canon WHERE solicitud_id=$solicitud_id ORDER BY fecha_inicio DESC LIMIT 1";
-	$resultado1 = $this -> DbFetchAll($select1,$Conex,true);
-		$numero_meses_actualiza = $resultado1[0]["cuotas_canon"];
-		$fecha_final_actualiza = $resultado1[0]["fecha_final_actualiza"];
-		$fecha_inicio_actualiza = $resultado1[0]["fecha_inicio_actualiza"];*/
-  
+
   
     $select = "SELECT
 							s.contrato_id,CONCAT(s.prefijo,' - ',s.numero_contrato)AS numero_contrato,
