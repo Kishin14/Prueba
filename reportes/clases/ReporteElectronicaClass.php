@@ -48,6 +48,8 @@ final class ReporteElectronica extends Controler{
     $si_empleado	= $_REQUEST['si_empleado'];
     $empleado_id	= $_REQUEST['empleado_id'];	
 
+	$data = $Model -> getReporte($desde,$hasta,$empleado_id,$this -> getConex());
+
     $Layout -> setCssInclude("../../../framework/css/reset.css");			
     $Layout -> setCssInclude("../css/reportes.css");						
     $Layout -> setCssInclude("../css/reportes.css","print");
@@ -65,7 +67,7 @@ final class ReporteElectronica extends Controler{
     $Layout -> setVar('estado_id',$estado_id);
 
     $Layout -> setVar('parametros',$parametros); 
-    $Layout -> setVar('DETALLESTRAZABILIDAD',$array); 
+    $Layout -> setVar('DETALLESTRAZABILIDAD',$data); 
     $Layout -> setVar('USUARIO',$this -> getUsuarioNombres());		  	  	  	  	  
 
     $Layout -> RenderLayout('ReporteElectronicaResultado.tpl');	  

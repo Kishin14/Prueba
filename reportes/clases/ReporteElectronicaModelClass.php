@@ -28,10 +28,11 @@ final class ReporteElectronicaModel extends Db {
     }
 	  //Generar exel todos los empleados
 
-    public function getReporteMC1($desde, $hasta, $Conex) {
+    public function getReporte($desde, $hasta,$empleado_id, $Conex) {
 
-       $select = "SELECT h.*,(SELECT CONCAT_WS(' ', t.primer_nombre,t.segundo_nombre,t.primer_apellido,t.segundo_apellido) FROM tercero t, empleado e, contrato c
-      			 WHERE t.tercero_id=e.tercero_id AND c.empleado_id=e.empleado_id AND c.contrato_id = h.contrato_id)AS contrato_id From hora_extra h ";
+       $select = "SELECT CONCAT_WS(' ', t.primer_nombre,t.segundo_nombre,t.primer_apellido,t.segundo_apellido)AS empleado,(SUM d.debito)AS sueldo,(SELECT debito FROM detalle_liquidacion_novedad WHERE concepto='SALARIO')AS salario,
+	   			FROM tercero t, empleado e, contrato c, liquidacion_novedad l, detalle_liquidacion_novedad d
+      			WHERE t.tercero_id=e.tercero_id AND c.empleado_id=e.empleado_id AND c.contrato_id = l.contrato_id AND d.liquidacion_novedad_id=l.liquidacion_novedad_id";
 		//exit($select);
 		$results = $this -> DbFetchAll($select,$Conex);
 		$i=0;
