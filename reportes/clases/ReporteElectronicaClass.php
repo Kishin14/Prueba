@@ -46,9 +46,10 @@ final class ReporteElectronica extends Controler{
     $desde			= $_REQUEST['desde'];
     $hasta			= $_REQUEST['hasta'];
     $si_empleado	= $_REQUEST['si_empleado'];
-    $empleado_id	= $_REQUEST['empleado_id'];	
+    $empleado_id	= $_REQUEST['empleado_id']>0 ? $_REQUEST['empleado_id'] : '';	
+    $empresa_id     = $this->getEmpresaId();
 
-	$data = $Model -> getReporte($desde,$hasta,$empleado_id,$this -> getConex());
+	$data = $Model -> getReporte($desde,$hasta,$empresa_id,$empleado_id,$this -> getConex());
 
     $Layout -> setCssInclude("../../../framework/css/reset.css");			
     $Layout -> setCssInclude("../css/reportes.css");						
@@ -64,10 +65,9 @@ final class ReporteElectronica extends Controler{
     $Layout -> setVar('CENTROS',$centrosTxt);													
     $Layout -> setVar('DESDE',$desde);															
     $Layout -> setVar('HASTA',$hasta);
-    $Layout -> setVar('estado_id',$estado_id);
 
     $Layout -> setVar('parametros',$parametros); 
-    $Layout -> setVar('DETALLESTRAZABILIDAD',$data); 
+    $Layout -> setVar('DETALLES',$data); 
     $Layout -> setVar('USUARIO',$this -> getUsuarioNombres());		  	  	  	  	  
 
     $Layout -> RenderLayout('ReporteElectronicaResultado.tpl');	  
@@ -81,22 +81,12 @@ final class ReporteElectronica extends Controler{
 	$desde					= $_REQUEST['desde'];
 	$hasta					= $_REQUEST['hasta'];
     $si_empleado			= $_REQUEST['si_empleado'];
-	$empleado_id			= $_REQUEST['empleado_id'];	
+	$empleado_id	        = $_REQUEST['empleado_id']>0 ? $_REQUEST['empleado_id'] : '';
+    $empresa_id             = $this->getEmpresaId(); 
 	
-	$nombre = 'Rep_NomElec'.date('Ymd');  
-	
-	if($si_empleado=='ALL'){
-        //esta es cuando es todos los empleados
-        $data = $Model -> getReporteMC1($desde,$hasta,$this -> getConex());
-		
-    }elseif($si_empleado==1 ){
-	   //esta es cuando es un solo empleado
-		$data = $Model -> getReporteMC2($empleado_id,$desde,$hasta,$this -> getConex());
-				
-    }
-	
+	$nombre = 'Rep_NomElec'.date('Ymd_Hi');  
+    $data = $Model -> getReporte($desde,$hasta,$empresa_id,$empleado_id,$this -> getConex());
    	$ruta  = $this -> arrayToExcel("Rep_NomElec",$nombre,$data,null,"string");	
-	
     $this -> ForceDownload($ruta,$nombre.'.xls');
 	  
   }    

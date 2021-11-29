@@ -22,15 +22,22 @@ font-weight:bold;
 }
 
 .total{
-border-left:1px solid;
-border-top:1px solid; 
-border-bottom:1px solid;
-border-right:1px solid;
+    margin: 10px;
+    border-left:1px solid;
+    border-top:1px solid; 
+    border-bottom:1px solid;
+    border-right:1px solid;
+}
+.total th{
+    font-size:14px;
+    font-weight:bold;
+    padding: 5px;    
 }
 
 .total td{
- font-size:14px;
- font-weight:bold;
+    font-size:14px;
+    font-weight:bold;
+    padding: 5px;    
 }
 
 .footer{
