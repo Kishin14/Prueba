@@ -40,7 +40,7 @@ $(document).ready(function(){
 	   var si_empleado   = $("#si_empleado").val();	 
 	   var empleado_id   = $("#empleado_id").val();		   
 	   
-       var QueryString = "ReporteElectronicaClass.php?ACTIONCONTROLER=generateFileexcel&desde="+desde+"&hasta="+hasta+"&si_empleado="+si_empleado+"&empleado_id="+empleado_id+"&rand="+Math.random();
+       var QueryString = "ReporteElectronicaClass.php?ACTIONCONTROLER=generateView&download=true&desde="+desde+"&hasta="+hasta+"&si_empleado="+si_empleado+"&empleado_id="+empleado_id+"&rand="+Math.random();
 						 
 	   document.location.href = QueryString;	
 	 }								

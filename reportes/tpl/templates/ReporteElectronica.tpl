@@ -40,7 +40,7 @@
                                 {$GENERAR}&nbsp;
                                 {$IMPRIMIR}&nbsp;
                                 {$LIMPIAR}&nbsp;
-                                <input type="button" class="btn btn-primary" name="enviar_reporte" id="enviar_reporte" value="Enviar Reporte" />&nbsp;
+                                <input type="button" disabled class="btn btn-primary" name="enviar_reporte" id="enviar_reporte" value="Enviar Reporte" />&nbsp;
                                 <input type="button" class="btn btn-primary" name="generar_excel" id="generar_excel" value="Generar Archivo Excel>>" /></td>
                             <td width="20%"></td>
                         </tr>

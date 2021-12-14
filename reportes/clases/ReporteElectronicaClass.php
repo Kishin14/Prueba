@@ -69,8 +69,13 @@ final class ReporteElectronica extends Controler{
     $Layout -> setVar('parametros',$parametros); 
     $Layout -> setVar('DETALLES',$data); 
     $Layout -> setVar('USUARIO',$this -> getUsuarioNombres());		  	  	  	  	  
-
-    $Layout -> RenderLayout('ReporteElectronicaResultado.tpl');	  
+	$download = $this -> requestData('download');
+	
+	if($download == 'true'){
+	    $Layout -> exportToExcel('ReporteElectronicaResultado.tpl'); 		
+    }else{
+        $Layout -> RenderLayout('ReporteElectronicaResultado.tpl');	  
+    }
   }    
     
   protected function generateFileexcel(){
