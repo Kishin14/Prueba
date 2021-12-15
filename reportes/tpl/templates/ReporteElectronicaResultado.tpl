@@ -23,7 +23,7 @@
       <th colspan="{$cols_total}" align="center">&nbsp;NOMINA DEL {$DESDE} AL {$HASTA} </th>
     </tr>
     <tr>
-        <th  >TIPO IDENTIFICACION</th>
+        <th  >TIPO IDENTIFICACION</th> 
         <th  >IDENTIFICACION</th>
         <th  >PRIMER NOMBRE</th>
         <th  >OTROS NOMBRES</th>
@@ -76,7 +76,9 @@
         <th  >AUXILIO TRANSPORTE</th>
         <th  >VIATICOS SALARIALES</th>
         <th  >VIATICOS NO SALARIALES</th>
+        <th  >DEDUCCION SALUD</th>
         <th  >PORCENTAJE SALUD</th>
+        <th  >DEDUCCION PENSION</th>
         <th  >PORCENTAJE PENSION</th>
         <th  >DEDUCCION SOLIDARIDAD PENSIONAL</th>
         <th  >PORCENTAJE SOLIDARIDAD PENSIONAL</th>
@@ -107,8 +109,13 @@
         <th  >HORA INICIO EXTRA DIURNO FESTIVO</th>
         <th  >HORA FIN EXTRA DIURNO FESTIVO</th>
         <th  >CANTIDAD HORAS EXTRA DIURNO FESTIVO</th>
-        <th  >VALOR HORA EXTRA DIURNO FESTIVO</th>
+        <th  >VALOR EXTRA DIURNO FESTIVO</th>
         <th  >PORCENTAJE HORA EXTRA DIURNO FESTIVO</th>
+        <th  >HORA INICIO RECARGO DIURNO FESTIVO</th>
+        <th  >HORA FIN RECARGO DIURNO FESTIVO</th>
+        <th  >CANTIDAD HORAS RECARGO DIURNO FESTIVO</th>
+        <th  >VALOR RECARGO DIURNO FESTIVO</th>
+        <th  >PORCENTAJE RECARGO DIURNO FESTIVO</th>
         <th  >HORA INICIO EXTRA NOCTURNO FESTIVO</th>
         <th  >HORA FIN EXTRA NOCTURNO FESTIVO</th>
         <th  >CANTIDAD HORAS EXTRA NOCTURNO</th>
@@ -140,7 +147,7 @@
         <th  >FECHA INICIO LICENCIA NO REMUNERADA</th>
         <th  >FECHA FINAL LICENCIA NO REMUNERADA</th>
         <th  >CANTIDAD DIAS LICENCIA NO REMUNERADA</th>
-        <th  >VALOR LICENCIA NO REMUNERADA</th>
+        {* <th  >VALOR LICENCIA NO REMUNERADA</th> *}
         <th  >TIPO LICENCIA NO REMUNERADA</th>
         <th  >INICIO HUELGA</th>
         <th  >FIN HUELGA</th>
@@ -186,6 +193,7 @@
         <th  >DEUDA</th>
         <th  >EDUCACION</th>
         <th  >EMBARGO</th>
+        <th  >PENSION VOLUNTARIA</th>
         <th  >PLAN COMPLEMENTARIO SALUD</th>
         <th  >REINTEGRO DEL TRABAJADOR</th>
         <th  >RETENCION EN LA FUENTE</th>
@@ -262,7 +270,9 @@
             <td align="center" >{$d.auxilio_transporte}</td>
             <td align="center" >{$d.viatico_manu_alo_s}</td>
             <td align="center" >{$d.viatico_manu_alo_ns}</td>
+            <td align="center" >{$d.deduccion_salud}</td>
             <td align="center" >{$d.porcentaje_salud}</td>
+            <td align="center" >{$d.deduccion_pension}</td>
             <td align="center" >{$d.porcentaje_pension}</td>
             <td align="center" >{$d.deduccion_solidaridad_pensional}</td>
             <td align="center" >{$d.porcentaje_solidaridad_pensional}</td>
@@ -295,6 +305,11 @@
             <td align="center" >{$d.cantidad_horasE_diurnofes}</td>
             <td align="center" >{$d.valor_horasE_diurnofes}</td>
             <td align="center" >{$d.porcentaje_extra_diurnofes}</td>
+            <td align="center" >{$d.horaInicio_recargo_diurnofes}</td>
+            <td align="center" >{$d.horaFin_recargo_diurnofes}</td>
+            <td align="center" >{$d.cantidad_horasR_diurnofes}</td>
+            <td align="center" >{$d.valor_horasR_diurnofes}</td>
+            <td align="center" >{$d.porcentaje_recargo_diurnofes}</td>
             <td align="center" >{$d.horaInicio_Extra_nocturnofes}</td>
             <td align="center" >{$d.horaFin_extra_nocturnofes}</td>
             <td align="center" >{$d.cantidad_horasE_nocturnofes}</td>
@@ -326,7 +341,7 @@
             <td align="center" >{$d.fecha_inicio_licenciaNR}</td>
             <td align="center" >{$d.fecha_final_licenciaNR}</td>
             <td align="center" >{$d.dias_licenciaNR}</td>
-            <td align="center" >{$d.valor_licenciaNR}</td>
+            {* <td align="center" >{$d.valor_licenciaNR}</td> *}
             <td align="center" >{$d.tipo_licenciaNR}</td>
             <td align="center" >{$d.inicio_huelga}</td>
             <td align="center" >{$d.fin_huelga}</td>
@@ -372,6 +387,7 @@
             <td align="center" >{$d.deuda}</td>
             <td align="center" >{$d.educacion}</td>
             <td align="center" >{$d.embargo}</td>
+            <td align="center" >{$d.pension_voluntaria}</td>
             <td align="center" >{$d.plan_complementario_salud}</td>
             <td align="center" >{$d.reintegro_de_trabajador}</td>
             <td align="center" >{$d.retencion_fuente}</td>

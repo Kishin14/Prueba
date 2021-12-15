@@ -29,7 +29,8 @@ final class ReporteElectronicaModel extends Db {
 	  
 
     public function getReporte($desde, $hasta,$empresa_id,$empleado_id='', $Conex) {
-        $select = "SELECT ln.*,
+		
+		$select .= "SELECT ln.*,
             (SELECT CONCAT_WS(' ',t.razon_social,t.primer_nombre,t.segundo_nombre,t.primer_apellido,t.segundo_apellido)AS nombre_emp FROM empresa e, tercero t WHERE e.empresa_id = $empresa_id AND e.tercero_id=t.tercero_id) AS nombre_empresa,
             (SELECT CONCAT_WS(' - ',t.numero_identificacion,t.digito_verificacion)AS nit_emp FROM empresa e, tercero t WHERE e.empresa_id = $empresa_id AND e.tercero_id=t.tercero_id) AS nit_empresa,					
             (SELECT ti.codigo FROM  tipo_identificacion ti  WHERE  ti.tipo_identificacion_id=t.tipo_identificacion_id) AS tipoidentificacion, 
@@ -83,15 +84,21 @@ final class ReporteElectronicaModel extends Db {
 
 			SUM(IF(dl.concepto LIKE '%ALOJAMIENTO%',dl.debito,0)) viatico_manu_alo_ns,
 
-			SUM(IF(dl.concepto IN('SALUD'),dl.credito,0)) AS deduccion_salud,'4' porcentaje_salud,
+			SUM(IF(dl.concepto IN('SALUD'),dl.credito,0)) AS deduccion_salud,
+			
+			(SELECT dp.desc_emple_salud FROM datos_periodo dp
+				INNER JOIN periodo_contable pc ON dp.periodo_contable_id = pc.periodo_contable_id
+				WHERE anio = SUBSTRING('$desde', 1, 4)) porcentaje_salud,
 
-			SUM(IF(dl.concepto IN('PENSION'),dl.credito,0)) AS deduccion_pension,'4' porcentaje_pension,
+			SUM(IF(dl.concepto IN('PENSION'),dl.credito,0)) AS deduccion_pension,
+			
+			(SELECT dp.desc_emple_pension FROM datos_periodo dp
+				INNER JOIN periodo_contable pc ON dp.periodo_contable_id = pc.periodo_contable_id
+				WHERE anio = SUBSTRING('$desde', 1, 4)) porcentaje_pension,
 
-			IF(SUM(IF(dl.concepto IN('SALARIO'),dl.debito,0)) >= 908526*4,SUM(IF(dl.concepto IN('SALARIO'),dl.debito,0)) * 0.01,0) deduccion_solidaridad_pensional,
-			IF(SUM(IF(dl.concepto IN('SALARIO'),dl.debito,0)) >= 908526*4,SUM(IF(dl.concepto IN('SALARIO'),dl.debito,0)) * 0.01,0) deduccion_subsistencia,
+			'' deduccion_solidaridad_pensional,'' deduccion_subsistencia,
 
-			IF(SUM(IF(dl.concepto IN('SALARIO'),dl.debito,0)) >= 908526*4,1,0) porcentaje_solidaridad_pensional,
-			IF(SUM(IF(dl.concepto IN('SALARIO'),dl.debito,0)) >= 908526*4,1,0) porcentaje_subsistencia,
+			'' porcentaje_solidaridad_pensional,'' porcentaje_subsistencia,
 
             (SELECT f_getDays360(IF(c.fecha_inicio>'$desde',c.fecha_inicio,'$desde'),'$hasta')) dias_prima,
 						
@@ -134,7 +141,7 @@ final class ReporteElectronicaModel extends Db {
             '100' porcentaje_extra_diurnofes,
 
             '' horaInicio_recargo_diurnofes, '' horaFin_recargo_diurnofes,'0' cantidad_horasR_diurnofes, '0' valor_horasR_diurnofes,
-            '75' porcentaje_extra_diurnofes,
+            '75' porcentaje_recargo_diurnofes,
 
             '' horaInicio_Extra_nocturnofes, '' horaFin_extra_nocturnofes,
             IFNULL((SELECT he.horas_nocturnas_fes FROM hora_extra he 
@@ -264,7 +271,7 @@ final class ReporteElectronicaModel extends Db {
 									 INNER JOIN liquidacion_novedad liqn ON liqn.liquidacion_novedad_id = dln.liquidacion_novedad_id
 									 INNER JOIN concepto_area ca ON dln.concepto_area_id = ca.concepto_area_id
 									 WHERE ca.descripcion LIKE '%REINTEGRO%'  AND dln.liquidacion_novedad_id=liqn.liquidacion_novedad_id
-												AND liqn.fecha_inicial BETWEEN '2021-09-01' AND '2021-09-30' AND liqn.fecha_final BETWEEN '2021-09-01' AND '2021-09-30'
+												AND liqn.fecha_inicial BETWEEN '$desde' AND '$hasta' AND liqn.fecha_final BETWEEN '$desde' AND '$hasta'
 												AND dln.tercero_id = t.tercero_id AND liqn.contrato_id =c.contrato_id) reintegro_de_empresa,
 
 						(SELECT SUM(CASE WHEN ca.tipo_novedad = 'V' THEN dln.debito ELSE 0 END)-SUM(CASE WHEN ca.tipo_novedad = 'D' THEN dln.credito ELSE 0 END)
@@ -272,7 +279,7 @@ final class ReporteElectronicaModel extends Db {
 									 INNER JOIN liquidacion_novedad liqn ON liqn.liquidacion_novedad_id = dln.liquidacion_novedad_id
 									 INNER JOIN concepto_area ca ON dln.concepto_area_id = ca.concepto_area_id
 									 WHERE ca.descripcion LIKE '%TELETRABAJO%'  AND dln.liquidacion_novedad_id=liqn.liquidacion_novedad_id
-												AND liqn.fecha_inicial BETWEEN '2021-09-01' AND '2021-09-30' AND liqn.fecha_final BETWEEN '2021-09-01' AND '2021-09-30'
+												AND liqn.fecha_inicial BETWEEN '$desde' AND '$hasta' AND liqn.fecha_final BETWEEN '$desde' AND '$hasta'
 												AND dln.tercero_id = t.tercero_id AND liqn.contrato_id =c.contrato_id) valor_teletrabajo, 
 
 						(SELECT SUM(CASE WHEN ca.tipo_novedad = 'V' THEN dln.debito ELSE 0 END)-SUM(CASE WHEN ca.tipo_novedad = 'D' THEN dln.credito ELSE 0 END)
@@ -280,7 +287,7 @@ final class ReporteElectronicaModel extends Db {
 									 INNER JOIN liquidacion_novedad liqn ON liqn.liquidacion_novedad_id = dln.liquidacion_novedad_id
 									 INNER JOIN concepto_area ca ON dln.concepto_area_id = ca.concepto_area_id
 									 WHERE ca.descripcion LIKE '%AUXILIO SALARIAL%'  AND dln.liquidacion_novedad_id=liqn.liquidacion_novedad_id
-												AND liqn.fecha_inicial BETWEEN '2021-09-01' AND '2021-09-30' AND liqn.fecha_final BETWEEN '2021-09-01' AND '2021-09-30'
+												AND liqn.fecha_inicial BETWEEN '$desde' AND '$hasta' AND liqn.fecha_final BETWEEN '$desde' AND '$hasta'
 												AND dln.tercero_id = t.tercero_id AND liqn.contrato_id =c.contrato_id) auxilioS,
 
 						(SELECT SUM(CASE WHEN ca.tipo_novedad = 'V' THEN dln.debito ELSE 0 END)-SUM(CASE WHEN ca.tipo_novedad = 'D' THEN dln.credito ELSE 0 END)
@@ -288,7 +295,7 @@ final class ReporteElectronicaModel extends Db {
 									 INNER JOIN liquidacion_novedad liqn ON liqn.liquidacion_novedad_id = dln.liquidacion_novedad_id
 									 INNER JOIN concepto_area ca ON dln.concepto_area_id = ca.concepto_area_id
 									 WHERE ca.descripcion LIKE '%AUXILIO NO SALARIAL%'  AND dln.liquidacion_novedad_id=liqn.liquidacion_novedad_id
-												AND liqn.fecha_inicial BETWEEN '2021-09-01' AND '2021-09-30' AND liqn.fecha_final BETWEEN '2021-09-01' AND '2021-09-30'
+												AND liqn.fecha_inicial BETWEEN '$desde' AND '$hasta' AND liqn.fecha_final BETWEEN '$desde' AND '$hasta'
 												AND dln.tercero_id = t.tercero_id AND liqn.contrato_id =c.contrato_id) auxilioNS,
 
 						SUM(IF(dl.concepto='INGRESO NO SALARIAL',dl.credito,0)) AS bonificacion_no_salarial,
@@ -298,7 +305,7 @@ final class ReporteElectronicaModel extends Db {
 									 INNER JOIN liquidacion_novedad liqn ON liqn.liquidacion_novedad_id = dln.liquidacion_novedad_id
 									 INNER JOIN concepto_area ca ON dln.concepto_area_id = ca.concepto_area_id
 									 WHERE ca.descripcion LIKE '%BONIFICACION SALARIAL%'  AND dln.liquidacion_novedad_id=liqn.liquidacion_novedad_id
-												AND liqn.fecha_inicial BETWEEN '2021-09-01' AND '2021-09-30' AND liqn.fecha_final BETWEEN '2021-09-01' AND '2021-09-30'
+												AND liqn.fecha_inicial BETWEEN '$desde' AND '$hasta' AND liqn.fecha_final BETWEEN '$desde' AND '$hasta'
 												AND dln.tercero_id = t.tercero_id AND liqn.contrato_id =c.contrato_id) bonificacionS,
 
 						(SELECT SUM(CASE WHEN ca.tipo_novedad = 'V' THEN dln.debito ELSE 0 END)-SUM(CASE WHEN ca.tipo_novedad = 'D' THEN dln.credito ELSE 0 END)
@@ -306,7 +313,7 @@ final class ReporteElectronicaModel extends Db {
 									 INNER JOIN liquidacion_novedad liqn ON liqn.liquidacion_novedad_id = dln.liquidacion_novedad_id
 									 INNER JOIN concepto_area ca ON dln.concepto_area_id = ca.concepto_area_id
 									 WHERE ca.descripcion LIKE '%ALIMENTACION NO SALARIAL%'  AND dln.liquidacion_novedad_id=liqn.liquidacion_novedad_id
-												AND liqn.fecha_inicial BETWEEN '2021-09-01' AND '2021-09-30' AND liqn.fecha_final BETWEEN '2021-09-01' AND '2021-09-30'
+												AND liqn.fecha_inicial BETWEEN '$desde' AND '$hasta' AND liqn.fecha_final BETWEEN '$desde' AND '$hasta'
 												AND dln.tercero_id = t.tercero_id AND liqn.contrato_id =c.contrato_id) pAlimentacionNs,
 
 						(SELECT SUM(CASE WHEN ca.tipo_novedad = 'V' THEN dln.debito ELSE 0 END)-SUM(CASE WHEN ca.tipo_novedad = 'D' THEN dln.credito ELSE 0 END)
@@ -314,7 +321,7 @@ final class ReporteElectronicaModel extends Db {
 									 INNER JOIN liquidacion_novedad liqn ON liqn.liquidacion_novedad_id = dln.liquidacion_novedad_id
 									 INNER JOIN concepto_area ca ON dln.concepto_area_id = ca.concepto_area_id
 									 WHERE ca.descripcion LIKE '%ALIMENTACION SALARIAL%'  AND dln.liquidacion_novedad_id=liqn.liquidacion_novedad_id
-												AND liqn.fecha_inicial BETWEEN '2021-09-01' AND '2021-09-30' AND liqn.fecha_final BETWEEN '2021-09-01' AND '2021-09-30'
+												AND liqn.fecha_inicial BETWEEN '$desde' AND '$hasta' AND liqn.fecha_final BETWEEN '$desde' AND '$hasta'
 												AND dln.tercero_id = t.tercero_id AND liqn.contrato_id =c.contrato_id) pAlimentacionS,
 
 						'' pagosS,'' pagosNs,
@@ -324,7 +331,7 @@ final class ReporteElectronicaModel extends Db {
 									 INNER JOIN liquidacion_novedad liqn ON liqn.liquidacion_novedad_id = dln.liquidacion_novedad_id
 									 INNER JOIN concepto_area ca ON dln.concepto_area_id = ca.concepto_area_id
 									 WHERE ca.descripcion LIKE '%COMPENSACION E%'  AND dln.liquidacion_novedad_id=liqn.liquidacion_novedad_id
-												AND liqn.fecha_inicial BETWEEN '2021-09-01' AND '2021-09-30' AND liqn.fecha_final BETWEEN '2021-09-01' AND '2021-09-30'
+												AND liqn.fecha_inicial BETWEEN '$desde' AND '$hasta' AND liqn.fecha_final BETWEEN '$desde' AND '$hasta'
 												AND dln.tercero_id = t.tercero_id AND liqn.contrato_id =c.contrato_id) compensacion_ordinaria,
 						
 						(SELECT SUM(CASE WHEN ca.tipo_novedad = 'V' THEN dln.debito ELSE 0 END)-SUM(CASE WHEN ca.tipo_novedad = 'D' THEN dln.credito ELSE 0 END)
@@ -332,7 +339,7 @@ final class ReporteElectronicaModel extends Db {
 									 INNER JOIN liquidacion_novedad liqn ON liqn.liquidacion_novedad_id = dln.liquidacion_novedad_id
 									 INNER JOIN concepto_area ca ON dln.concepto_area_id = ca.concepto_area_id
 									 WHERE ca.descripcion LIKE '%COMPENSACION O%'  AND dln.liquidacion_novedad_id=liqn.liquidacion_novedad_id
-												AND liqn.fecha_inicial BETWEEN '2021-09-01' AND '2021-09-30' AND liqn.fecha_final BETWEEN '2021-09-01' AND '2021-09-30'
+												AND liqn.fecha_inicial BETWEEN '$desde' AND '$hasta' AND liqn.fecha_final BETWEEN '$desde' AND '$hasta'
 												AND dln.tercero_id = t.tercero_id AND liqn.contrato_id =c.contrato_id) compensacion_extraordinaria,
 
 						'' descripcion_concepto,'' concepto_no_salarial,'' concepto_salarial,
@@ -342,7 +349,7 @@ final class ReporteElectronicaModel extends Db {
 									 INNER JOIN liquidacion_novedad liqn ON liqn.liquidacion_novedad_id = dln.liquidacion_novedad_id
 									 INNER JOIN concepto_area ca ON dln.concepto_area_id = ca.concepto_area_id
 									 WHERE ca.descripcion LIKE '%AHORRO%'  AND dln.liquidacion_novedad_id=liqn.liquidacion_novedad_id
-												AND liqn.fecha_inicial BETWEEN '2021-09-01' AND '2021-09-30' AND liqn.fecha_final BETWEEN '2021-09-01' AND '2021-09-30'
+												AND liqn.fecha_inicial BETWEEN '$desde' AND '$hasta' AND liqn.fecha_final BETWEEN '$desde' AND '$hasta'
 												AND dln.tercero_id = t.tercero_id AND liqn.contrato_id =c.contrato_id) afc,
 						
 						(SELECT SUM(CASE WHEN ca.tipo_novedad = 'V' THEN dln.debito ELSE 0 END)-SUM(CASE WHEN ca.tipo_novedad = 'D' THEN dln.credito ELSE 0 END)
@@ -350,7 +357,7 @@ final class ReporteElectronicaModel extends Db {
 									 INNER JOIN liquidacion_novedad liqn ON liqn.liquidacion_novedad_id = dln.liquidacion_novedad_id
 									 INNER JOIN concepto_area ca ON dln.concepto_area_id = ca.concepto_area_id
 									 WHERE ca.descripcion LIKE '%COOPERATIVA%'  AND dln.liquidacion_novedad_id=liqn.liquidacion_novedad_id
-												AND liqn.fecha_inicial BETWEEN '2021-09-01' AND '2021-09-30' AND liqn.fecha_final BETWEEN '2021-09-01' AND '2021-09-30'
+												AND liqn.fecha_inicial BETWEEN '$desde' AND '$hasta' AND liqn.fecha_final BETWEEN '$desde' AND '$hasta'
 												AND dln.tercero_id = t.tercero_id AND liqn.contrato_id =c.contrato_id) cooperativa,
 			
 						(SELECT SUM(CASE WHEN ca.tipo_novedad = 'V' THEN dln.debito ELSE 0 END)-SUM(CASE WHEN ca.tipo_novedad = 'D' THEN dln.credito ELSE 0 END)
@@ -358,7 +365,7 @@ final class ReporteElectronicaModel extends Db {
 									 INNER JOIN liquidacion_novedad liqn ON liqn.liquidacion_novedad_id = dln.liquidacion_novedad_id
 									 INNER JOIN concepto_area ca ON dln.concepto_area_id = ca.concepto_area_id
 									 WHERE ca.descripcion LIKE '%DEUDA%'  AND dln.liquidacion_novedad_id=liqn.liquidacion_novedad_id
-												AND liqn.fecha_inicial BETWEEN '2021-09-01' AND '2021-09-30' AND liqn.fecha_final BETWEEN '2021-09-01' AND '2021-09-30'
+												AND liqn.fecha_inicial BETWEEN '$desde' AND '$hasta' AND liqn.fecha_final BETWEEN '$desde' AND '$hasta'
 												AND dln.tercero_id = t.tercero_id AND liqn.contrato_id =c.contrato_id) deuda,
 						
 						(SELECT SUM(CASE WHEN ca.tipo_novedad = 'V' THEN dln.debito ELSE 0 END)-SUM(CASE WHEN ca.tipo_novedad = 'D' THEN dln.credito ELSE 0 END)
@@ -366,7 +373,7 @@ final class ReporteElectronicaModel extends Db {
 									 INNER JOIN liquidacion_novedad liqn ON liqn.liquidacion_novedad_id = dln.liquidacion_novedad_id
 									 INNER JOIN concepto_area ca ON dln.concepto_area_id = ca.concepto_area_id
 									 WHERE ca.descripcion LIKE '%EDUCACION%'  AND dln.liquidacion_novedad_id=liqn.liquidacion_novedad_id
-												AND liqn.fecha_inicial BETWEEN '2021-09-01' AND '2021-09-30' AND liqn.fecha_final BETWEEN '2021-09-01' AND '2021-09-30'
+												AND liqn.fecha_inicial BETWEEN '$desde' AND '$hasta' AND liqn.fecha_final BETWEEN '$desde' AND '$hasta'
 												AND dln.tercero_id = t.tercero_id AND liqn.contrato_id =c.contrato_id) educacion,
 			
 						(SELECT SUM(CASE WHEN ca.tipo_novedad = 'V' THEN dln.debito ELSE 0 END)-SUM(CASE WHEN ca.tipo_novedad = 'D' THEN dln.credito ELSE 0 END)
@@ -374,15 +381,17 @@ final class ReporteElectronicaModel extends Db {
 									 INNER JOIN liquidacion_novedad liqn ON liqn.liquidacion_novedad_id = dln.liquidacion_novedad_id
 									 INNER JOIN concepto_area ca ON dln.concepto_area_id = ca.concepto_area_id
 									 WHERE ca.descripcion LIKE '%EMBARGO%'  AND dln.liquidacion_novedad_id=liqn.liquidacion_novedad_id
-												AND liqn.fecha_inicial BETWEEN '2021-09-01' AND '2021-09-30' AND liqn.fecha_final BETWEEN '2021-09-01' AND '2021-09-30'
+												AND liqn.fecha_inicial BETWEEN '$desde' AND '$hasta' AND liqn.fecha_final BETWEEN '$desde' AND '$hasta'
 												AND dln.tercero_id = t.tercero_id AND liqn.contrato_id =c.contrato_id) embargo,	
+
+						''	pension_voluntaria,					
 
 						(SELECT SUM(CASE WHEN ca.tipo_novedad = 'V' THEN dln.debito ELSE 0 END)-SUM(CASE WHEN ca.tipo_novedad = 'D' THEN dln.credito ELSE 0 END)
 									FROM detalle_liquidacion_novedad dln
 									 INNER JOIN liquidacion_novedad liqn ON liqn.liquidacion_novedad_id = dln.liquidacion_novedad_id
 									 INNER JOIN concepto_area ca ON dln.concepto_area_id = ca.concepto_area_id
 									 WHERE ca.descripcion LIKE '%COMPLEMENTARIO SALUD%'  AND dln.liquidacion_novedad_id=liqn.liquidacion_novedad_id
-												AND liqn.fecha_inicial BETWEEN '2021-09-01' AND '2021-09-30' AND liqn.fecha_final BETWEEN '2021-09-01' AND '2021-09-30'
+												AND liqn.fecha_inicial BETWEEN '$desde' AND '$hasta' AND liqn.fecha_final BETWEEN '$desde' AND '$hasta'
 												AND dln.tercero_id = t.tercero_id AND liqn.contrato_id =c.contrato_id) plan_complementario_salud,
 		
 						(SELECT SUM(CASE WHEN ca.tipo_novedad = 'D' THEN dln.credito ELSE 0 END)
@@ -390,7 +399,7 @@ final class ReporteElectronicaModel extends Db {
 									 INNER JOIN liquidacion_novedad liqn ON liqn.liquidacion_novedad_id = dln.liquidacion_novedad_id
 									 INNER JOIN concepto_area ca ON dln.concepto_area_id = ca.concepto_area_id
 									 WHERE ca.descripcion LIKE '%REINTEGRO%'  AND dln.liquidacion_novedad_id=liqn.liquidacion_novedad_id
-												AND liqn.fecha_inicial BETWEEN '2021-09-01' AND '2021-09-30' AND liqn.fecha_final BETWEEN '2021-09-01' AND '2021-09-30'
+												AND liqn.fecha_inicial BETWEEN '$desde' AND '$hasta' AND liqn.fecha_final BETWEEN '$desde' AND '$hasta'
 												AND dln.tercero_id = t.tercero_id AND liqn.contrato_id =c.contrato_id) reintegro_de_trabajador,
 
 						'' retencion_fuente,
@@ -400,7 +409,7 @@ final class ReporteElectronicaModel extends Db {
 									 INNER JOIN liquidacion_novedad liqn ON liqn.liquidacion_novedad_id = dln.liquidacion_novedad_id
 									 INNER JOIN concepto_area ca ON dln.concepto_area_id = ca.concepto_area_id
 									 WHERE ca.descripcion LIKE '%ANTICIPO%'  AND dln.liquidacion_novedad_id=liqn.liquidacion_novedad_id
-												AND liqn.fecha_inicial BETWEEN '2021-09-01' AND '2021-09-30' AND liqn.fecha_final BETWEEN '2021-09-01' AND '2021-09-30'
+												AND liqn.fecha_inicial BETWEEN '$desde' AND '$hasta' AND liqn.fecha_final BETWEEN '$desde' AND '$hasta'
 												AND dln.tercero_id = t.tercero_id AND liqn.contrato_id =c.contrato_id) anticipo_nomina,
 
 						(SELECT SUM(CASE WHEN ca.tipo_novedad = 'D' THEN dln.credito ELSE 0 END)
@@ -408,7 +417,7 @@ final class ReporteElectronicaModel extends Db {
 									 INNER JOIN liquidacion_novedad liqn ON liqn.liquidacion_novedad_id = dln.liquidacion_novedad_id
 									 INNER JOIN concepto_area ca ON dln.concepto_area_id = ca.concepto_area_id
 									 WHERE ca.descripcion LIKE '%LIBRANZA%'  AND dln.liquidacion_novedad_id=liqn.liquidacion_novedad_id
-												AND liqn.fecha_inicial BETWEEN '2021-09-01' AND '2021-09-30' AND liqn.fecha_final BETWEEN '2021-09-01' AND '2021-09-30'
+												AND liqn.fecha_inicial BETWEEN '$desde' AND '$hasta' AND liqn.fecha_final BETWEEN '$desde' AND '$hasta'
 												AND dln.tercero_id = t.tercero_id AND liqn.contrato_id =c.contrato_id) deduccion_libranza,'' descripcion_libranza,
 
 						(SELECT SUM(CASE WHEN ca.tipo_novedad = 'D' THEN dln.credito ELSE 0 END)
@@ -416,7 +425,7 @@ final class ReporteElectronicaModel extends Db {
 									 INNER JOIN liquidacion_novedad liqn ON liqn.liquidacion_novedad_id = dln.liquidacion_novedad_id
 									 INNER JOIN concepto_area ca ON dln.concepto_area_id = ca.concepto_area_id
 									 WHERE ca.descripcion LIKE '%PAGO TERCERO%'  AND dln.liquidacion_novedad_id=liqn.liquidacion_novedad_id
-												AND liqn.fecha_inicial BETWEEN '2021-09-01' AND '2021-09-30' AND liqn.fecha_final BETWEEN '2021-09-01' AND '2021-09-30'
+												AND liqn.fecha_inicial BETWEEN '$desde' AND '$hasta' AND liqn.fecha_final BETWEEN '$desde' AND '$hasta'
 												AND dln.tercero_id = t.tercero_id AND liqn.contrato_id =c.contrato_id) pago_a_tercero,
 						
 						(SELECT SUM(CASE WHEN ca.tipo_novedad = 'D' THEN dln.credito ELSE 0 END)
@@ -424,7 +433,7 @@ final class ReporteElectronicaModel extends Db {
 									 INNER JOIN liquidacion_novedad liqn ON liqn.liquidacion_novedad_id = dln.liquidacion_novedad_id
 									 INNER JOIN concepto_area ca ON dln.concepto_area_id = ca.concepto_area_id
 									 WHERE ca.descripcion LIKE '%SANCION PUBLICA%'  AND dln.liquidacion_novedad_id=liqn.liquidacion_novedad_id
-												AND liqn.fecha_inicial BETWEEN '2021-09-01' AND '2021-09-30' AND liqn.fecha_final BETWEEN '2021-09-01' AND '2021-09-30'
+												AND liqn.fecha_inicial BETWEEN '$desde' AND '$hasta' AND liqn.fecha_final BETWEEN '$desde' AND '$hasta'
 												AND dln.tercero_id = t.tercero_id AND liqn.contrato_id =c.contrato_id) sancion_publica,
 
 
@@ -433,7 +442,7 @@ final class ReporteElectronicaModel extends Db {
 									 INNER JOIN liquidacion_novedad liqn ON liqn.liquidacion_novedad_id = dln.liquidacion_novedad_id
 									 INNER JOIN concepto_area ca ON dln.concepto_area_id = ca.concepto_area_id
 									 WHERE ca.descripcion LIKE '%SANCION PRIVADA%'  AND dln.liquidacion_novedad_id=liqn.liquidacion_novedad_id
-												AND liqn.fecha_inicial BETWEEN '2021-09-01' AND '2021-09-30' AND liqn.fecha_final BETWEEN '2021-09-01' AND '2021-09-30'
+												AND liqn.fecha_inicial BETWEEN '$desde' AND '$hasta' AND liqn.fecha_final BETWEEN '$desde' AND '$hasta'
 												AND dln.tercero_id = t.tercero_id AND liqn.contrato_id =c.contrato_id) sancion_privada,
 
 						(SELECT SUM(CASE WHEN ca.tipo_novedad = 'D' THEN dln.credito ELSE 0 END)
@@ -441,7 +450,7 @@ final class ReporteElectronicaModel extends Db {
 									 INNER JOIN liquidacion_novedad liqn ON liqn.liquidacion_novedad_id = dln.liquidacion_novedad_id
 									 INNER JOIN concepto_area ca ON dln.concepto_area_id = ca.concepto_area_id
 									 WHERE ca.descripcion LIKE '%PAGO SINDICATO%'  AND dln.liquidacion_novedad_id=liqn.liquidacion_novedad_id
-												AND liqn.fecha_inicial BETWEEN '2021-09-01' AND '2021-09-30' AND liqn.fecha_final BETWEEN '2021-09-01' AND '2021-09-30'
+												AND liqn.fecha_inicial BETWEEN '$desde' AND '$hasta' AND liqn.fecha_final BETWEEN '$desde' AND '$hasta'
 												AND dln.tercero_id = t.tercero_id AND liqn.contrato_id =c.contrato_id) pago_sindicato,
 
 						'' porcentaje_sindicato,
@@ -451,7 +460,7 @@ final class ReporteElectronicaModel extends Db {
 									 INNER JOIN liquidacion_novedad liqn ON liqn.liquidacion_novedad_id = dln.liquidacion_novedad_id
 									 INNER JOIN concepto_area ca ON dln.concepto_area_id = ca.concepto_area_id
 									 WHERE ca.descripcion LIKE '%OTRO DEDUCCION%'  AND dln.liquidacion_novedad_id=liqn.liquidacion_novedad_id
-												AND liqn.fecha_inicial BETWEEN '2021-09-01' AND '2021-09-30' AND liqn.fecha_final BETWEEN '2021-09-01' AND '2021-09-30'
+												AND liqn.fecha_inicial BETWEEN '$desde' AND '$hasta' AND liqn.fecha_final BETWEEN '$desde' AND '$hasta'
 												AND dln.tercero_id = t.tercero_id AND liqn.contrato_id =c.contrato_id) otra_deduccion,
 
 
@@ -470,7 +479,7 @@ final class ReporteElectronicaModel extends Db {
             AND u.ubicacion_id=of.ubicacion_id
             GROUP BY ln.contrato_id
             ORDER BY CONCAT_WS(' ',t.primer_nombre, t.segundo_nombre,t.primer_apellido,t.segundo_apellido)   ASC, ln.fecha_final DESC";
-        
+		
 		$result = $this -> DbFetchAll($select,$Conex,true);
 		
 		return $result;
