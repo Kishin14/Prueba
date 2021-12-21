@@ -30,7 +30,7 @@ final class ReporteElectronicaModel extends Db {
 
     public function getReporte($desde, $hasta,$empresa_id,$empleado_id='', $Conex) {
 		
-		$select .= "SELECT ln.*,
+		$select = "SELECT ln.*,
             (SELECT CONCAT_WS(' ',t.razon_social,t.primer_nombre,t.segundo_nombre,t.primer_apellido,t.segundo_apellido)AS nombre_emp FROM empresa e, tercero t WHERE e.empresa_id = $empresa_id AND e.tercero_id=t.tercero_id) AS nombre_empresa,
             (SELECT CONCAT_WS(' - ',t.numero_identificacion,t.digito_verificacion)AS nit_emp FROM empresa e, tercero t WHERE e.empresa_id = $empresa_id AND e.tercero_id=t.tercero_id) AS nit_empresa,					
             (SELECT ti.codigo FROM  tipo_identificacion ti  WHERE  ti.tipo_identificacion_id=t.tipo_identificacion_id) AS tipoidentificacion, 
@@ -52,7 +52,7 @@ final class ReporteElectronicaModel extends Db {
             c.fecha_terminacion_real AS fecharetiro,
             DATE(ln.fecha_registro) AS fechaEmision,
             CASE ln.periodicidad WHEN 'Q' THEN '4' WHEN 'M' THEN '5' WHEN 'S' THEN '1' WHEN 'T' THEN IF(DATEDIFF(ln.fecha_final, ln.fecha_inicial) BETWEEN 13 AND 16,'Q','M') END AS periodoNomina,
-            (SELECT CONCAT_WS('-',pn.prefijo,ln.consecutivo_nom) FROM param_nomina_electronica pn WHERE pn.param_nom_electronica_id=ln.param_nom_electronica_id) AS rangoNum,
+            (SELECT CONCAT_WS('-',pn.prefijo,pn.rango_comienza) FROM param_nomina_electronica pn WHERE pn.param_nom_electronica_id=ln.param_nom_electronica_id) AS rangoNum,
             'COP' AS tipoMoneda,
             '' AS trm,
             '0.00' AS redondeo,
@@ -102,14 +102,28 @@ final class ReporteElectronicaModel extends Db {
 
             (SELECT f_getDays360(IF(c.fecha_inicio>'$desde',c.fecha_inicio,'$desde'),'$hasta')) dias_prima,
 						
-			ROUND((SUM(IF(dl.concepto NOT IN('SALUD','PENSION'),dl.debito,0))/360)*(SELECT f_getDays360(IF(c.fecha_inicio>'$desde',c.fecha_inicio,'$desde'),'$hasta')),2) pago_prima,
+			ROUND((SUM(IF(dl.concepto LIKE '%SALARIO%' OR dl.concepto LIKE '%TRANSPORTE%',dl.debito,0))/360)*(SELECT f_getDays360(IF(c.fecha_inicio>'$desde',c.fecha_inicio,'$desde'),'$hasta')),2) pago_prima,
 			'0' prima_no_salarial,
 
-			ROUND((SUM(IF(dl.concepto NOT IN('SALUD','PENSION'),dl.debito,0))/360)*(SELECT f_getDays360(IF(c.fecha_inicio>'$desde',c.fecha_inicio,'$desde'),'$hasta')),2) pago_cesantias,
+			ROUND((SUM(IF(dl.concepto LIKE '%SALARIO%' OR dl.concepto LIKE '%TRANSPORTE%',dl.debito,0))/360)*(SELECT f_getDays360(IF(c.fecha_inicio>'$desde',c.fecha_inicio,'$desde'),'$hasta')),2) pago_cesantias,
 
-			ROUND(((SUM(IF(dl.concepto NOT IN('SALUD','PENSION'),dl.debito,0))*POW((SELECT f_getDays360(IF(c.fecha_inicio>'$desde',c.fecha_inicio,'$desde'),'$hasta')),2)*0.12)/129600),2) valor_intereses_cesantias,
+			Round((SUM(IF(dl.concepto LIKE '%SALARIO%' OR dl.concepto LIKE '%TRANSPORTE%',dl.debito,0))/360)*
+			(SELECT f_getDays360(IF(c.fecha_inicio>'$desde',c.fecha_inicio,'$desde'),'$hasta'))*
+			(SELECT dp.desc_empre_int_cesantias FROM datos_periodo dp
+				INNER JOIN periodo_contable pc ON dp.periodo_contable_id = pc.periodo_contable_id
+				WHERE anio = SUBSTRING('$desde', 1, 4))/100, 2) valor_intereses_cesantias,
 
-			'12' porcentaje_intereses_cesantias, '0' monto_comision, 
+				(SELECT dp.desc_empre_int_cesantias FROM datos_periodo dp
+				INNER JOIN periodo_contable pc ON dp.periodo_contable_id = pc.periodo_contable_id
+				WHERE anio = SUBSTRING('$desde', 1, 4)) porcentaje_intereses_cesantias, 
+				
+				(SELECT SUM(CASE WHEN ca.tipo_novedad = 'V' THEN dln.debito ELSE 0 END)-SUM(CASE WHEN ca.tipo_novedad = 'D' THEN dln.credito ELSE 0 END)
+									FROM detalle_liquidacion_novedad dln
+									 INNER JOIN liquidacion_novedad liqn ON liqn.liquidacion_novedad_id = dln.liquidacion_novedad_id
+									 INNER JOIN concepto_area ca ON dln.concepto_area_id = ca.concepto_area_id
+									 WHERE ca.descripcion LIKE '%COMISION%'  AND dln.liquidacion_novedad_id=liqn.liquidacion_novedad_id
+												AND liqn.fecha_inicial BETWEEN '$desde' AND '$hasta' AND liqn.fecha_final BETWEEN '$desde' AND '$hasta'
+												AND dln.tercero_id = t.tercero_id AND liqn.contrato_id =c.contrato_id) monto_comision, 
             
             '' horaInicio_extra_diurno, '' horaFin_extra_diurno,
 
@@ -117,65 +131,82 @@ final class ReporteElectronicaModel extends Db {
             WHERE he.contrato_id = c.contrato_id AND (he.fecha_inicial>='$desde' AND he.fecha_final <= '$hasta')),0) cantidad_horasE_diurnas,
             IFNULL((SELECT he.vr_horas_diurnas FROM hora_extra he 
                         WHERE he.contrato_id = c.contrato_id AND (he.fecha_inicial>='$desde' AND he.fecha_final <= '$hasta')),0) valor_horasE_diurnas,
-                '25' porcentaje_extra_diurno,
+
+						(SELECT dp.val_hr_ext_diurna FROM datos_periodo dp
+				INNER JOIN periodo_contable pc ON dp.periodo_contable_id = pc.periodo_contable_id
+				WHERE anio = SUBSTRING('$desde', 1, 4)) porcentaje_extra_diurno,
 
             '' horaInicio_extra_nocturno, '' horaFin_extra_nocturno,
             IFNULL((SELECT he.horas_nocturnas FROM hora_extra he 
                     WHERE he.contrato_id = c.contrato_id AND (he.fecha_inicial>='$desde' AND he.fecha_final <= '$hasta')),0) cantidad_horasE_nocturno,
             IFNULL((SELECT he.vr_horas_nocturnas FROM hora_extra he 
                     WHERE he.contrato_id = c.contrato_id AND (he.fecha_inicial>='$desde' AND he.fecha_final <= '$hasta')),0) valor_horasE_nocturno,
-            '75' porcentaje_extra_nocturno,
+            
+					(SELECT dp.val_hr_ext_nocturna FROM datos_periodo dp
+				INNER JOIN periodo_contable pc ON dp.periodo_contable_id = pc.periodo_contable_id
+				WHERE anio = SUBSTRING('$desde', 1, 4)) porcentaje_extra_nocturno,
             
             '' horaInicio_recargo_nocturno, '' horaFin_recargo_nocturno,
             IFNULL((SELECT he.horas_recargo_noc FROM hora_extra he 
                     WHERE he.contrato_id = c.contrato_id AND (he.fecha_inicial>='$desde' AND he.fecha_final <= '$hasta')),0) cantidad_horasR_nocturno,
             IFNULL((SELECT he.vr_horas_recargo_noc FROM hora_extra he 
                     WHERE he.contrato_id = c.contrato_id AND (he.fecha_inicial>='$desde' AND he.fecha_final <= '$hasta')),0) valor_horasR_nocturno,
-            '35' porcentaje_recargo_nocturno,
+					
+					(SELECT dp.val_recargo_nocturna FROM datos_periodo dp
+				INNER JOIN periodo_contable pc ON dp.periodo_contable_id = pc.periodo_contable_id
+				WHERE anio = SUBSTRING('$desde', 1, 4)) porcentaje_recargo_nocturno,
             
             '' horaInicio_Extra_diurnofes, '' horaFin_extra_diurnofes,
             IFNULL((SELECT he.horas_diurnas_fes FROM hora_extra he 
                     WHERE he.contrato_id = c.contrato_id AND (he.fecha_inicial>='$desde' AND he.fecha_final <= '$hasta')),0) cantidad_horasE_diurnofes,
             IFNULL((SELECT he.vr_horas_recargo_noc FROM hora_extra he 
                     WHERE he.contrato_id = c.contrato_id AND (he.fecha_inicial>='$desde' AND he.fecha_final <= '$hasta')),0) valor_horasE_diurnofes,
-            '100' porcentaje_extra_diurnofes,
+            
+					(SELECT dp.val_hr_ext_festiva_diurna FROM datos_periodo dp
+				INNER JOIN periodo_contable pc ON dp.periodo_contable_id = pc.periodo_contable_id
+				WHERE anio = SUBSTRING('$desde', 1, 4)) porcentaje_extra_diurnofes,
 
             '' horaInicio_recargo_diurnofes, '' horaFin_recargo_diurnofes,'0' cantidad_horasR_diurnofes, '0' valor_horasR_diurnofes,
-            '75' porcentaje_recargo_diurnofes,
+            '' porcentaje_recargo_diurnofes,
 
             '' horaInicio_Extra_nocturnofes, '' horaFin_extra_nocturnofes,
             IFNULL((SELECT he.horas_nocturnas_fes FROM hora_extra he 
                     WHERE he.contrato_id = c.contrato_id AND (he.fecha_inicial>='$desde' AND he.fecha_final <= '$hasta')),0) cantidad_horasE_nocturnofes,
             IFNULL((SELECT he.vr_horas_nocturnas_fes FROM hora_extra he 
                     WHERE he.contrato_id = c.contrato_id AND (he.fecha_inicial>='$desde' AND he.fecha_final <= '$hasta')),0) valor_horasE_nocturnofes,
-            '150' porcentaje_extra_nocturnofes,
+					
+					(SELECT dp.val_hr_ext_festiva_nocturna FROM datos_periodo dp
+				INNER JOIN periodo_contable pc ON dp.periodo_contable_id = pc.periodo_contable_id
+				WHERE anio = SUBSTRING('$desde', 1, 4)) porcentaje_extra_nocturnofes,
 
             '' horaInicio_recargo_nocturnofes, '' horaFin_recargo_nocturnofes,'0' cantidad_horasR_nocturnofes, '0' valor_horasR_nocturnofes,
-            '110' porcentaje_extra_nocturnofes,
+            (SELECT dp.val_recargo_dominical FROM datos_periodo dp
+				INNER JOIN periodo_contable pc ON dp.periodo_contable_id = pc.periodo_contable_id
+				WHERE anio = SUBSTRING('$desde', 1, 4)) porcentaje_extra_nocturnofes,
 
             IFNULL((SELECT lq.fecha_dis_inicio FROM liquidacion_vacaciones lq 
-                WHERE lq.contrato_id = c.contrato_id AND lq.fecha_dis_inicio>='$desde' AND lq.fecha_dis_inicio>='$hasta'),'') fecha_inicio_vacaciones,
+                WHERE lq.contrato_id = c.contrato_id AND lq.fecha_dis_inicio>='$desde' AND lq.fecha_dis_inicio<='$hasta'),'') fecha_inicio_vacaciones,
 
             IFNULL((SELECT lq.fecha_reintegro FROM liquidacion_vacaciones lq 
-                WHERE lq.contrato_id = c.contrato_id AND lq.fecha_reintegro>='$desde' AND lq.fecha_reintegro>='$hasta'),'') fecha_final_vacaciones,
+                WHERE lq.contrato_id = c.contrato_id AND lq.fecha_reintegro>='$desde' AND lq.fecha_reintegro<='$hasta'),'') fecha_final_vacaciones,
 
             IFNULL((SELECT lq.dias FROM liquidacion_vacaciones lq 
-                WHERE lq.contrato_id = c.contrato_id AND lq.fecha_dis_final>='$desde' AND lq.fecha_dis_final>='$hasta'),'') dias_vacaciones,
+                WHERE lq.contrato_id = c.contrato_id AND lq.fecha_dis_final>='$desde' AND lq.fecha_dis_final<='$hasta'),'') dias_vacaciones,
 
             IFNULL((SELECT lq.valor FROM liquidacion_vacaciones lq 
-                WHERE lq.contrato_id = c.contrato_id AND lq.fecha_dis_final>='$desde' AND lq.fecha_dis_final>='$hasta'),'') valor_liquidacion_vacaciones,
+                WHERE lq.contrato_id = c.contrato_id AND lq.fecha_dis_final>='$desde' AND lq.fecha_dis_final<='$hasta'),'') valor_liquidacion_vacaciones,
             
             IF((SELECT lq.dias FROM liquidacion_vacaciones lq 
-                WHERE lq.contrato_id = c.contrato_id AND lq.fecha_dis_final>='$desde' AND lq.fecha_dis_final>='$hasta')>1,'1','')  tipo_vacaciones,
+                WHERE lq.contrato_id = c.contrato_id AND lq.fecha_dis_final>='$desde' AND lq.fecha_dis_final<='$hasta')>1,'1','')  tipo_vacaciones,
 
             IFNULL((SELECT lq.dias_pagados FROM liquidacion_vacaciones lq 
-                WHERE lq.contrato_id = c.contrato_id AND lq.fecha_dis_final>='$desde' AND lq.fecha_dis_final>='$hasta'),'') dias_compensados_vacaciones,
+                WHERE lq.contrato_id = c.contrato_id AND lq.fecha_dis_final>='$desde' AND lq.fecha_dis_final<='$hasta'),'') dias_compensados_vacaciones,
 
             IFNULL((SELECT lq.valor_pagos FROM liquidacion_vacaciones lq 
-                WHERE lq.contrato_id = c.contrato_id AND lq.fecha_dis_final>='$desde' AND lq.fecha_dis_final>='$hasta'),'') valor_vacaciones_compensadas,
+                WHERE lq.contrato_id = c.contrato_id AND lq.fecha_dis_final>='$desde' AND lq.fecha_dis_final<='$hasta'),'') valor_vacaciones_compensadas,
 
             IF((SELECT lq.dias_pagados FROM liquidacion_vacaciones lq 
-                WHERE lq.contrato_id = c.contrato_id AND lq.fecha_dis_final>='$desde' AND lq.fecha_dis_final>='$hasta')>1,'2','')  tipo_vacaciones_compensadas,
+                WHERE lq.contrato_id = c.contrato_id AND lq.fecha_dis_final>='$desde' AND lq.fecha_dis_final<='$hasta')>1,'2','')  tipo_vacaciones_compensadas,
 
             IFNULL((SELECT li.fecha_inicial FROM licencia li
                 WHERE tipo_incapacidad_id = 1 AND li.contrato_id = c.contrato_id AND li.fecha_inicial>='$desde' AND li.fecha_inicial>='$hasta'),'') fecha_inicio_licenciaM,

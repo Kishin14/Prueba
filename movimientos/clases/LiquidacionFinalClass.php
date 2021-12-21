@@ -197,13 +197,17 @@ final class LiquidacionFinal extends Controler
             $valor_prom_devengado = ($sum_devengado/$meses_ces);
             if($variacion_sal == 1){
                 if($valor_prom_devengado < $salario_minimo){
-                    $valor_cesan = intval((($salario_minimo + $subsidio_transporte + $valor_base_salarial) * $dias_ces) / 360);
+                    $valor_cesan = intval((($salario_minimo + $subsidio_transporte) * $dias_ces) / 360);
+                    
                 }else{
-                    $valor_cesan = intval((($sueldo_base + $valor_base_salarial + $subsidio_transporte) * $dias_ces) / 360);
+                    $valor_cesan = intval((($sueldo_base + $subsidio_transporte) * $dias_ces) / 360);
                 }
             }else{
-                $valor_cesan = intval((($sueldo_base + $valor_base_salarial + $subsidio_transporte) * $dias_ces) / 360);
+                $valor_cesan = intval((($sueldo_base + $subsidio_transporte) * $dias_ces) / 360);
             }
+
+            // exit('SAL MIN: '.$salario_minimo. ' - SUBS: '.$subsidio_transporte. ' - DIAS: '.$dias_ces .' - BASE SAL'.$valor_base_salarial );
+            
 
             $datos[$x]['concepto'] = 'CESANTIAS';
             $datos[$x]['dias'] = $dias_ces > 0 ? $dias_ces : $dias;
@@ -316,7 +320,9 @@ final class LiquidacionFinal extends Controler
                 $dias_ices = $dias;
             }
 
-            $valor_icesan = intval((($valor_cesan * 0.12) * $dias_ices) / 360);
+            $valor_icesan = intval(($valor_cesan * 0.12));
+
+            // exit('VALOR: '.$valor_cesan. ' - DIAS: '.$dias_ices);
             
             $datos[$x]['concepto'] = 'INT. CESANTIAS';
             $datos[$x]['dias'] = $dias_ices;
@@ -546,6 +552,7 @@ final class LiquidacionFinal extends Controler
                 $dias_deb_vac = $this->restaFechasCont($fecha_ultima, $_REQUEST['fecha_final']);
             }
             
+            
             $valor_vacas = intval((($sueldo_base) * $dias_deb_vac) / 720);
             $desde_vacas = $data_vaca[0]['fecha_ultima'] != '' ? $data_vaca[0]['fecha_ultima'] : $_REQUEST['fecha_inicio'];
             $datos[$x]['concepto'] = 'PRIMA VACACIONES';
@@ -557,6 +564,7 @@ final class LiquidacionFinal extends Controler
             $datos[$x]['fecha_fin'] = $_REQUEST['fecha_final'];
             $datos[$x]['empresa_id'] = 'NULL';
             $x++;
+
 
             //datos contabilizar vacaciones
             $puc_provision_vacaciones = $result_parametros[0]['puc_vac_prov_id'];
