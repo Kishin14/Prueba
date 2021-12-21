@@ -316,9 +316,11 @@ final class LiquidacionFinalModel extends Db
             l.contrato_id = $contrato_id AND 
             l.estado!='I' AND 
             dl.liquidacion_vacaciones_id=l.liquidacion_vacaciones_id ";
+
             
             $result = $this->DbFetchAll($select, $Conex, true);
 
+    
         } else {
             $result = array();
         }
@@ -576,12 +578,22 @@ final class LiquidacionFinalModel extends Db
     public function getDetallesSalario($contrato_id, $Conex)
     {
 
+        $fecha_final= $_REQUEST['fecha_final'];
         if ($contrato_id > 0) {
 
-            $select = "SELECT ADDDATE(l.fecha_final, INTERVAL 1 DAY) AS fecha_liquidacion 
+            $select = "SELECT l.fecha_final, ADDDATE(l.fecha_final, INTERVAL 1 DAY) AS fecha_liquidacion 
             FROM liquidacion_novedad l
             WHERE l.contrato_id = $contrato_id AND l.estado='C' ORDER BY l.fecha_final DESC LIMIT 1";
             $result = $this->DbFetchAll($select, $Conex, true);
+
+            $fecha_liq = $result[0]['fecha_liquidacion'];
+            $fecha_ult_liq = $result[0]['fecha_final'];
+
+            $select_dif = "SELECT ADDDATE(fecha_dis_final, INTERVAL 1 DAY) AS fecha_liquidacion 
+            
+             FROM liquidacion_vacaciones WHERE fecha_dis_inicio BETWEEN '$fecha_liq' AND '$fecha_final' ORDER BY liquidacion_vacaciones_id DESC LIMIT 1"; //echo $select_dif;
+            $result = $this->DbFetchAll($select_dif, $Conex, true);
+            
 
         } else {
             $result = array();
