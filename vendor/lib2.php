@@ -1,2 +1,2 @@
 <saludo>Holanda</saludo>
-<despedida>Chaos</despedida>
+<despedida>Adios</despedida>
