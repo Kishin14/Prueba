@@ -1,0 +1,4 @@
+      $this -> DbUpdateTable("tercero",$Campos,$Conex,true,false);  
+        $this -> DbUpdateTable("usuario",$Campos,$Conex,true,false);	
+  	   $this -> DbDeleteTable("usuario",$Campos,$Conex,true,false);
+      $this -> DbInsertTable("oficina",$Campos,$Conex,true,false);
