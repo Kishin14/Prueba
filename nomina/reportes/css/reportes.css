@@ -1,0 +1,46 @@
+/* CSS Document */
+
+*{
+font-size:12px;
+font-family:Arial, Helvetica, sans-serif;
+}
+#frameReporte{
+	height:400px;
+}
+.header{
+  font-size:12;
+  font-weight:bold;
+}
+
+.title{
+font-size:14px;
+border-left:1px solid;
+border-top:1px solid; 
+border-bottom:1px solid;
+border-right:1px solid;
+font-weight:bold;
+}
+
+.total{
+    margin: 10px;
+    border-left:1px solid;
+    border-top:1px solid; 
+    border-bottom:1px solid;
+    border-right:1px solid;
+}
+.total th{
+    font-size:14px;
+    font-weight:bold;
+    padding: 5px;    
+}
+
+.total td{
+    font-size:14px;
+    font-weight:bold;
+    padding: 5px;    
+}
+
+.footer{
+font-size:12px;
+font-weight:bold;
+}
