@@ -1,0 +1,10 @@
+	$insert = "INSERT INTO tercero(tercero_id,tipo_identificacion_id,tipo_persona_id,numero_identificacion,
+		$insert = "INSERT INTO usuario (usuario_id,tercero_id,cargo,usuario,email,estado,password) VALUES 
+ 				  $insert = "INSERT INTO empresa_usuario (empresa_usuario_id,usuario_id,empresa_id) VALUES 
+	   $insert = "INSERT INTO usuario (usuario_id,tercero_id,cargo,usuario,email,estado,password) VALUES ($usuario_id,$tercero_id,$cargo,$usuario,$email,$estado,'$password')";
+ 		  $insert = "INSERT INTO empresa_usuario (empresa_usuario_id,usuario_id,empresa_id) VALUES ($empresa_usuario_id + 1,$usuario_id,$empresa_id)";
+				 $insert = "INSERT INTO opciones_actividad (consecutivo,usuario_id,oficina_id) VALUES (1,(SELECT usuario_id FROM 
+				$insert = "INSERT INTO opciones_actividad (opciones_actividad_id,consecutivo,usuario_id,oficina_id) VALUES 
+                      $insert = "INSERT INTO permiso_opcion_actividad (permiso_opcion_actividad_id,opciones_actividad_id,permiso_id) 
+    $Layout -> setGuardar($Model -> getPermiso($this -> getActividadId(),'INSERT',$this -> getConex()));   
+    $Layout -> setGuardar	($Model -> getPermiso($this -> getActividadId(),'INSERT',$this -> getConex()));   
