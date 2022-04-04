@@ -1,0 +1,2 @@
+    $Layout -> setActualizar($Model -> getPermiso($this -> getActividadId(),'UPDATE',$this -> getConex()));
+	$update = "UPDATE usuario SET password = '$pass' WHERE usuario_id = $usuario_id";
