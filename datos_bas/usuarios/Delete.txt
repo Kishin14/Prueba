@@ -1,7 +1,0 @@
-        $delete = "DELETE FROM empresa_usuario WHERE usuario_id = $usuario_id AND empresa_id NOT IN ($empresas)";
-       $delete = "DELETE FROM empresa_usuario WHERE usuario_id = $usuario_id";
-	     $delete = "DELETE FROM permiso_opcion_actividad WHERE opciones_actividad_id IN (SELECT opciones_actividad_id FROM 
-		 $delete = "DELETE FROM opciones_actividad WHERE usuario_id = (SELECT usuario_id FROM empresa_usuario WHERE 
-	  $delete = "DELETE FROM permiso_opcion_actividad WHERE opciones_actividad_id IN (SELECT opciones_actividad_id FROM 
-         $delete = "DELETE FROM opciones_actividad WHERE consecutivo != 1 AND oficina_id = $oficina_id AND usuario_id = 
-    $Layout -> setBorrar	($Model -> getPermiso($this -> getActividadId(),'DELETE',$this -> getConex()));     
